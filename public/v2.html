@@ -860,6 +860,241 @@
     .view { display: none; }
     .view.active { display: block; }
 
+    /* ====== CHAT ====== */
+    .chat-container { max-width: 720px; }
+
+    .chat-messages {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 20px;
+      max-height: 500px;
+      overflow-y: auto;
+      padding-right: 8px;
+    }
+
+    .chat-msg {
+      padding: 16px 20px;
+      border-radius: var(--radius);
+      font-size: 14px;
+      line-height: 1.7;
+      max-width: 88%;
+    }
+
+    .chat-msg.user {
+      background: var(--blue);
+      color: white;
+      align-self: flex-end;
+      border-bottom-right-radius: 4px;
+    }
+
+    .chat-msg.assistant {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      align-self: flex-start;
+      border-bottom-left-radius: 4px;
+    }
+
+    .chat-msg.assistant .sources {
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .chat-msg.assistant .sources a {
+      color: var(--blue);
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .chat-input-wrap {
+      display: flex;
+      gap: 10px;
+    }
+
+    .chat-input {
+      flex: 1;
+      padding: 14px 18px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 14px;
+      outline: none;
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    .chat-input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px var(--blue-50); }
+
+    .chat-send {
+      padding: 14px 24px;
+      background: var(--blue);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .chat-send:hover { background: var(--blue-hover); }
+    .chat-send:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .chat-typing {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 12px 18px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .chat-typing .dot {
+      width: 6px; height: 6px;
+      background: var(--text-muted);
+      border-radius: 50%;
+      animation: blink 1.4s infinite both;
+    }
+
+    .chat-typing .dot:nth-child(2) { animation-delay: 0.2s; }
+    .chat-typing .dot:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes blink { 0%, 80%, 100% { opacity: 0.3; } 40% { opacity: 1; } }
+
+    /* ====== HYBRID SEARCH RESULTS ====== */
+    .search-result {
+      display: flex;
+      gap: 14px;
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      cursor: pointer;
+      transition: all 0.15s;
+      margin-bottom: 10px;
+    }
+
+    .search-result:hover { border-color: var(--blue); box-shadow: var(--shadow-sm); }
+
+    .search-result-thumb {
+      width: 56px; height: 56px;
+      border-radius: 10px;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .search-result-score {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: var(--blue-50);
+      color: var(--blue);
+      font-weight: 600;
+    }
+
+    .search-result-type {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 3px;
+      background: var(--surface-2);
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .search-timing {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    /* ====== QUIZ ADAPTIVE ====== */
+    .quiz-profile-bar {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .quiz-pillar-chip {
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: var(--surface-2);
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .quiz-pillar-chip .theta-bar {
+      width: 40px; height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .quiz-pillar-chip .theta-fill {
+      height: 100%;
+      background: var(--blue);
+      border-radius: 2px;
+    }
+
+    .quiz-strategy-tag {
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-weight: 500;
+    }
+
+    .quiz-strategy-tag.exploration { background: #fef3c7; color: #92400e; }
+    .quiz-strategy-tag.exploitation { background: #dbeafe; color: #1e40af; }
+
+    .quiz-reco-card {
+      margin-top: 14px;
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--blue-50);
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .quiz-reco-card:hover { border-color: var(--blue); }
+
+    /* ====== SIMILAR EPISODES ====== */
+    .similar-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .similar-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.15s;
+      font-size: 13px;
+    }
+
+    .similar-item:hover { border-color: var(--blue); background: var(--blue-50); }
+
+    .similar-score {
+      font-size: 11px;
+      color: var(--blue);
+      font-weight: 600;
+      min-width: 36px;
+    }
+
     /* ====== RESPONSIVE ====== */
     @media (max-width: 900px) {
       .hero h1 { font-size: 28px; }
@@ -887,6 +1122,8 @@
         <button class="nav-link" onclick="go('episodes',this)">Episodes</button>
         <button class="nav-link" onclick="go('paths',this)">Parcours</button>
         <button class="nav-link" onclick="go('experts',this)">Experts</button>
+        <button class="nav-link" onclick="go('search',this)">Recherche</button>
+        <button class="nav-link" onclick="go('chat',this)">Assistant</button>
         <button class="nav-link" onclick="go('quiz',this)">Quiz</button>
         <button class="nav-link" onclick="go('graph',this)">Graphe</button>
         <button class="nav-link" onclick="go('reco',this)">Pour vous</button>
@@ -902,14 +1139,14 @@
   <section class="hero" id="hero-section">
     <div class="hero-inner">
       <h1>Prenez le controle<br>de votre argent</h1>
-      <p>Le premier podcast francais sur les finances personnelles, transforme en plateforme educative interactive. Parcours pedagogiques, quiz, recommandations sur mesure.</p>
+      <p>Le premier podcast francais sur les finances personnelles, transforme en plateforme educative interactive. Recherche semantique IA, assistant conversationnel, quiz adaptatif, 310 episodes analyses.</p>
       <div class="hero-stats">
         <div><div class="hero-stat-value" id="hs-ep">307</div><div class="hero-stat-label">episodes</div></div>
         <div><div class="hero-stat-value" id="hs-ex">28</div><div class="hero-stat-label">experts</div></div>
         <div><div class="hero-stat-value" id="hs-q">614</div><div class="hero-stat-label">quiz</div></div>
         <div><div class="hero-stat-value" id="hs-p">6</div><div class="hero-stat-label">parcours</div></div>
       </div>
-      <button class="hero-cta" onclick="go('paths')">Commencer un parcours →</button>
+      <button class="hero-cta" onclick="go('chat')">Poser une question a l'assistant →</button>
     </div>
   </section>
 
@@ -975,12 +1212,47 @@
       </section>
     </div>
 
-    <!-- QUIZ -->
+    <!-- SEARCH (hybrid) -->
+    <div class="view" id="v-search">
+      <section class="section">
+        <div class="section-title" style="margin-bottom:4px">Recherche semantique</div>
+        <div class="section-subtitle" style="margin-bottom:20px">Trouvez les episodes par sens, pas seulement par mots-cles</div>
+        <div class="search-wrap">
+          <span class="search-icon">🔍</span>
+          <input class="search-input" type="text" placeholder="Ex: comment investir en SCPI quand on debute..." id="hybrid-search-input" onkeydown="if(event.key==='Enter')doHybridSearch()">
+        </div>
+        <div style="display:flex;gap:8px;margin-bottom:20px">
+          <button class="reco-btn" style="width:auto;padding:10px 28px" onclick="doHybridSearch()">Rechercher</button>
+        </div>
+        <div id="hybrid-search-results"></div>
+      </section>
+    </div>
+
+    <!-- CHAT (RAG) -->
+    <div class="view" id="v-chat">
+      <section class="section">
+        <div class="section-title" style="margin-bottom:4px">Assistant La Martingale</div>
+        <div class="section-subtitle" style="margin-bottom:20px">Posez vos questions sur l'investissement. L'assistant repond en citant les episodes pertinents.</div>
+        <div class="chat-container">
+          <div class="chat-messages" id="chat-messages">
+            <div class="chat-msg assistant">
+              Bonjour ! Je suis l'assistant La Martingale. Posez-moi n'importe quelle question sur l'investissement, la finance personnelle ou le patrimoine. Je vous repondrai en m'appuyant sur les 310 episodes du podcast.<br><br>
+              <em style="color:var(--text-muted)">Exemples : "Quels episodes pour debuter en SCPI ?", "Comment optimiser sa fiscalite immobiliere ?", "Bitcoin est-il un bon investissement ?"</em>
+            </div>
+          </div>
+          <div class="chat-input-wrap">
+            <input class="chat-input" type="text" placeholder="Posez votre question..." id="chat-input" onkeydown="if(event.key==='Enter'&&!event.shiftKey)sendChat()">
+            <button class="chat-send" id="chat-send-btn" onclick="sendChat()">Envoyer</button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- QUIZ (adaptatif) -->
     <div class="view" id="v-quiz">
       <section class="section">
-        <div class="section-title" style="margin-bottom:4px">Quiz</div>
-        <div class="section-subtitle" style="margin-bottom:20px">Testez vos connaissances financieres</div>
-        <div class="filters" id="quiz-filters"></div>
+        <div class="section-title" style="margin-bottom:4px">Quiz adaptatif</div>
+        <div class="section-subtitle" style="margin-bottom:20px">L'IA adapte la difficulte et le theme a votre niveau. Plus vous repondez, plus les questions sont pertinentes.</div>
         <div class="quiz-wrap" id="quiz-area"></div>
       </section>
     </div>
@@ -1101,7 +1373,7 @@
       renderHomeEp();
       renderHomeExperts(experts.experts);
       buildEpFilters(stats);
-      buildQuizFilters();
+      // Quiz filters removed — adaptive quiz handles pillar selection
       buildRecoForm();
       updHdr();
     }
@@ -1249,71 +1521,243 @@
     }
 
     // ===== QUIZ =====
-    let qz=[], qi=0, qc=0, qa=false, qLoaded=false;
+    // ===== HYBRID SEARCH =====
+    let searchDebounce = null;
 
-    function buildQuizFilters() {
-      document.getElementById('quiz-filters').innerHTML = `
-        <button class="filter-pill active" onclick="loadQ('')">Tous</button>
-        <button class="filter-pill" onclick="loadQ('IMMOBILIER')">Immobilier</button>
-        <button class="filter-pill" onclick="loadQ('BOURSE')">Bourse</button>
-        <button class="filter-pill" onclick="loadQ('CRYPTO')">Crypto</button>
-        <button class="filter-pill" onclick="loadQ('ALTERNATIFS')">Alternatifs</button>
-      `;
-    }
+    async function doHybridSearch() {
+      const q = document.getElementById('hybrid-search-input').value.trim();
+      if (!q || q.length < 2) return;
+      const el = document.getElementById('hybrid-search-results');
+      el.innerHTML = '<div style="color:var(--text-muted);padding:20px">Recherche semantique en cours...</div>';
 
-    async function loadQ(pillar) {
-      let url=`${API}/quiz?limit=10`;
-      if(pillar) url+=`&pillar=${pillar}`;
-      const d=await F(url);
-      qz=d.questions; qi=0; qc=0; qLoaded=true;
-      document.querySelectorAll('#quiz-filters .filter-pill').forEach(b=>b.classList.remove('active'));
-      event?.target?.classList.add('active');
-      renderQ();
-    }
-
-    function renderQ() {
-      const el=document.getElementById('quiz-area');
-      if(!qz.length){el.innerHTML='<p style="color:var(--text-muted)">Aucune question. <button class="reco-btn" style="width:auto;padding:8px 20px;margin-left:8px" onclick="loadQ(\'\')">Charger</button></p>';return;}
-      if(qi>=qz.length){
-        const pct=Math.round(qc/qz.length*100);
-        el.innerHTML=`<div class="quiz-q-card" style="text-align:center;padding:48px">
-          <div style="font-size:48px;font-weight:700;color:var(--blue)">${qc}/${qz.length}</div>
-          <div style="font-size:16px;color:var(--text-muted);margin:8px 0 24px">${pct}% de bonnes reponses${pct>=80?' — Excellent !':pct>=50?' — Bien joue !':' — Continuez !'}</div>
-          <button class="reco-btn" style="width:auto;padding:10px 28px" onclick="loadQ('')">Nouveau quiz</button>
-        </div>`;return;
+      try {
+        const d = await F(`${API}/search/hybrid?q=${encodeURIComponent(q)}&limit=10`);
+        el.innerHTML = `
+          <div class="search-timing">${d.results.length} resultats en ${d.timing_ms}ms (recherche hybride semantique + lexicale)</div>
+          ${d.results.map(r => `
+            <div class="search-result" onclick="showEpM(${r.episode_number})">
+              ${r.thumbnail ? `<img class="search-result-thumb" src="${r.thumbnail}" alt="">` : `<div style="width:56px;height:56px;border-radius:10px;background:var(--blue-50);display:flex;align-items:center;justify-content:center;color:var(--blue);font-weight:700;flex-shrink:0">#${r.episode_number}</div>`}
+              <div style="flex:1;min-width:0">
+                <div style="font-weight:600;font-size:14px;margin-bottom:2px">#${r.episode_number} — ${r.title}</div>
+                <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px">${r.guest} · <span style="color:${PC[r.pillar]}">●</span> ${PN[r.pillar]}</div>
+                ${r.abstract ? `<div style="font-size:12px;color:var(--text-secondary);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${r.abstract}</div>` : ''}
+              </div>
+              <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-end;flex-shrink:0">
+                <span class="search-result-score">${(r.score * 100).toFixed(1)}</span>
+                <span class="search-result-type">${r.match_type}</span>
+              </div>
+            </div>
+          `).join('')}
+        `;
+      } catch (e) {
+        el.innerHTML = `<div style="color:var(--danger);padding:20px">Erreur : ${e.message}. La recherche semantique necessite la base de donnees.</div>`;
       }
-      const q=qz[qi], prog=(qi/qz.length*100).toFixed(0);
-      el.innerHTML=`
-        <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--text-muted);margin-bottom:8px">
-          <span>Question ${qi+1}/${qz.length}</span><span style="color:var(--blue);font-weight:600">${qc} correct${qc!==1?'s':''}</span>
+    }
+
+    // ===== CHAT RAG =====
+    let chatHistory = [];
+
+    async function sendChat() {
+      const input = document.getElementById('chat-input');
+      const btn = document.getElementById('chat-send-btn');
+      const msg = input.value.trim();
+      if (!msg) return;
+
+      input.value = '';
+      btn.disabled = true;
+
+      // Add user message
+      const msgsEl = document.getElementById('chat-messages');
+      msgsEl.innerHTML += `<div class="chat-msg user">${escapeHtml(msg)}</div>`;
+      msgsEl.innerHTML += `<div class="chat-typing" id="chat-typing"><div class="dot"></div><div class="dot"></div><div class="dot"></div> Recherche dans 310 episodes...</div>`;
+      msgsEl.scrollTop = msgsEl.scrollHeight;
+
+      try {
+        const d = await fetch(`${API}/chat`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: msg }),
+        }).then(r => r.json());
+
+        document.getElementById('chat-typing')?.remove();
+
+        const sourcesHtml = d.sources?.length ? `
+          <div class="sources">
+            <strong>Sources :</strong><br>
+            ${d.sources.map(s => `<a onclick="closeM();showEpM(${s.episode_number})">#${s.episode_number} ${s.title}</a>`).join('<br>')}
+          </div>
+        ` : '';
+
+        msgsEl.innerHTML += `<div class="chat-msg assistant">${formatChatResponse(d.response)}${sourcesHtml}</div>`;
+        msgsEl.scrollTop = msgsEl.scrollHeight;
+      } catch (e) {
+        document.getElementById('chat-typing')?.remove();
+        msgsEl.innerHTML += `<div class="chat-msg assistant" style="border-color:var(--danger)">Erreur : ${e.message}</div>`;
+      }
+      btn.disabled = false;
+      input.focus();
+    }
+
+    function escapeHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function formatChatResponse(text) {
+      return text
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\n\n/g, '<br><br>')
+        .replace(/\n/g, '<br>')
+        .replace(/#(\d+)/g, '<a style="color:var(--blue);cursor:pointer" onclick="showEpM($1)">#$1</a>');
+    }
+
+    // ===== QUIZ ADAPTATIF =====
+    let qLoaded = false;
+    let quizProfile = null;
+    let currentAdaptiveQ = null;
+
+    function initQuizProfile() {
+      const saved = localStorage.getItem('lm_quiz_profile');
+      if (saved) { try { return JSON.parse(saved); } catch {} }
+      const pillars = Object.keys(PN);
+      return {
+        scores: Object.fromEntries(pillars.map(p => [p, 50])),
+        counts: Object.fromEntries(pillars.map(p => [p, 0])),
+        theta: Object.fromEntries(pillars.map(p => [p, 0])),
+        history: [],
+      };
+    }
+
+    function saveQuizProfile() {
+      if (quizProfile) localStorage.setItem('lm_quiz_profile', JSON.stringify(quizProfile));
+    }
+
+    async function loadAdaptiveQuiz() {
+      if (!quizProfile) quizProfile = initQuizProfile();
+      qLoaded = true;
+      const el = document.getElementById('quiz-area');
+      el.innerHTML = '<div style="color:var(--text-muted);padding:20px">Chargement de la question optimale...</div>';
+
+      try {
+        const d = await fetch(`${API}/quiz/next`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ profile: quizProfile }),
+        }).then(r => r.json());
+
+        if (d.done) {
+          el.innerHTML = `<div class="quiz-q-card" style="text-align:center;padding:48px">
+            <div style="font-size:32px;font-weight:700;color:var(--blue)">Bravo !</div>
+            <div style="font-size:16px;color:var(--text-muted);margin:8px 0 24px">Vous avez repondu a toutes les questions disponibles.</div>
+            <button class="reco-btn" style="width:auto;padding:10px 28px" onclick="quizProfile.history=[];saveQuizProfile();loadAdaptiveQuiz()">Recommencer</button>
+          </div>`;
+          return;
+        }
+
+        currentAdaptiveQ = d;
+        renderAdaptiveQ(d);
+      } catch (e) {
+        // Fallback to classic quiz if API unavailable
+        el.innerHTML = `<div style="color:var(--danger);padding:20px">Quiz adaptatif indisponible (${e.message}). Chargement du quiz classique...</div>`;
+        loadClassicQuiz();
+      }
+    }
+
+    function renderAdaptiveQ(q) {
+      const el = document.getElementById('quiz-area');
+      const totalAnswered = Object.values(quizProfile.counts).reduce((a, b) => a + b, 0);
+
+      el.innerHTML = `
+        <div class="quiz-profile-bar">
+          ${Object.entries(quizProfile.scores).filter(([k]) => quizProfile.counts[k] > 0).map(([k, v]) => `
+            <div class="quiz-pillar-chip">
+              <span style="color:${PC[k]}">●</span> ${PN[k]}
+              <div class="theta-bar"><div class="theta-fill" style="width:${v}%"></div></div>
+              ${Math.round(v)}
+            </div>
+          `).join('')}
         </div>
-        <div class="quiz-bar"><div class="quiz-bar-fill" style="width:${prog}%"></div></div>
+
+        <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--text-muted);margin-bottom:12px">
+          <span>${totalAnswered} question${totalAnswered!==1?'s':''} repondue${totalAnswered!==1?'s':''}</span>
+          <span class="quiz-strategy-tag ${q.strategy}">${q.strategy === 'exploration' ? 'Exploration' : 'Exploitation'} · ${PN[q.target_pillar]}</span>
+        </div>
+
         <div class="quiz-q-card">
           <div style="font-size:11px;color:var(--text-muted);margin-bottom:12px">
-            <span style="color:${PC[q.pillar]||'#999'}">●</span> Episode #${q.episode_id} · ${PN[q.pillar]||q.pillar}
+            <span style="color:${PC[q.pillar]||'#999'}">●</span> ${PN[q.pillar]||q.pillar} · ${q.difficulty}
           </div>
           <div class="quiz-q-text">${q.question}</div>
           <div class="quiz-opts" id="q-opts">
-            ${q.options.map((o,i)=>`<div class="quiz-opt" onclick="ansQ(${i})" data-i="${i}">${o}</div>`).join('')}
+            ${q.options.map((o, i) => `<div class="quiz-opt" onclick="answerAdaptive(${q.id},${i})" data-i="${i}">${o}</div>`).join('')}
           </div>
-          <div class="quiz-expl" id="q-expl">${q.explanation}</div>
-          <button class="quiz-next-btn" id="q-next" onclick="qi++;renderQ()">Question suivante →</button>
+          <div class="quiz-expl" id="q-expl"></div>
+          <div id="q-reco"></div>
+          <button class="quiz-next-btn" id="q-next" onclick="loadAdaptiveQuiz()">Question suivante →</button>
         </div>
       `;
-      qa=false;
     }
 
-    function ansQ(sel) {
-      if(qa) return; qa=true;
-      const q=qz[qi];
-      document.querySelectorAll('.quiz-opt').forEach((o,i)=>{
+    async function answerAdaptive(questionId, selected) {
+      if (!currentAdaptiveQ) return;
+      const opts = document.querySelectorAll('.quiz-opt');
+      opts.forEach(o => o.style.pointerEvents = 'none');
+
+      // Show correct/wrong immediately
+      const correct = currentAdaptiveQ.correct_answer;
+      opts.forEach((o, i) => {
         o.classList.add('answered');
-        if(i===q.correct_answer) o.classList.add('correct');
-        if(i===sel&&i!==q.correct_answer) o.classList.add('wrong');
+        if (i === correct) o.classList.add('correct');
+        if (i === selected && i !== correct) o.classList.add('wrong');
       });
-      if(sel===q.correct_answer) qc++;
-      document.getElementById('q-expl').classList.add('show');
+
+      try {
+        const d = await fetch(`${API}/quiz/answer`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ question_id: questionId, answer: selected, profile: quizProfile }),
+        }).then(r => r.json());
+
+        quizProfile = d.updated_profile;
+        saveQuizProfile();
+
+        // Show explanation
+        const explEl = document.getElementById('q-expl');
+        explEl.textContent = d.explanation || currentAdaptiveQ.explanation;
+        explEl.classList.add('show');
+
+        // Show recommended episode
+        if (d.recommended_episode) {
+          document.getElementById('q-reco').innerHTML = `
+            <div class="quiz-reco-card" onclick="showEpM(${d.recommended_episode.episode_number})">
+              <strong>Episode recommande :</strong> #${d.recommended_episode.episode_number} — ${d.recommended_episode.title}
+              <span style="font-size:11px;color:var(--text-muted)">(similarite: ${(d.recommended_episode.similarity * 100).toFixed(0)}%)</span>
+            </div>
+          `;
+        }
+      } catch {
+        // Offline fallback
+        const explEl = document.getElementById('q-expl');
+        explEl.textContent = currentAdaptiveQ.explanation;
+        explEl.classList.add('show');
+      }
+
       document.getElementById('q-next').classList.add('show');
+      currentAdaptiveQ = null;
+    }
+
+    // Classic quiz fallback
+    let qz=[], qi=0, qc=0;
+    async function loadClassicQuiz() {
+      const d = await F(`${API}/quiz?limit=10`);
+      qz=d.questions; qi=0; qc=0; qLoaded=true;
+      renderClassicQ();
+    }
+    function renderClassicQ() {
+      const el=document.getElementById('quiz-area');
+      if(qi>=qz.length){ el.innerHTML=`<div class="quiz-q-card" style="text-align:center;padding:48px"><div style="font-size:48px;font-weight:700;color:var(--blue)">${qc}/${qz.length}</div><button class="reco-btn" style="width:auto;padding:10px 28px;margin-top:16px" onclick="loadClassicQuiz()">Nouveau quiz</button></div>`; return; }
+      const q=qz[qi];
+      el.innerHTML=`<div class="quiz-q-card"><div class="quiz-q-text">${q.question}</div><div class="quiz-opts">${q.options.map((o,i)=>`<div class="quiz-opt" onclick="classicAns(${i})">${o}</div>`).join('')}</div><div class="quiz-expl" id="q-expl">${q.explanation}</div><button class="quiz-next-btn" id="q-next" onclick="qi++;renderClassicQ()">Suivante →</button></div>`;
+    }
+    function classicAns(sel) {
+      const q=qz[qi]; document.querySelectorAll('.quiz-opt').forEach((o,i)=>{o.classList.add('answered');if(i===q.correct_answer)o.classList.add('correct');if(i===sel&&i!==q.correct_answer)o.classList.add('wrong');});
+      if(sel===q.correct_answer)qc++; document.getElementById('q-expl').classList.add('show'); document.getElementById('q-next').classList.add('show');
     }
 
     // ===== GRAPH =====
@@ -1427,18 +1871,48 @@
           <a href="${ep.url}" target="_blank" class="btn-listen">Voir sur lamartingale.io →</a>
           <button class="btn-mark ${d?'done':''}" id="bm-${ep.id}" onclick="togD(${ep.id});this.classList.toggle('done');this.textContent=isD(${ep.id})?'✓ Vu':'Marquer vu';renderEpList();renderHomeEp();">${d?'✓ Vu':'Marquer vu'}</button>
         </div>
-        ${data.related.length?`
-          <div style="font-size:14px;font-weight:600;margin-bottom:8px">Episodes similaires</div>
-          ${data.related.slice(0,5).map(r=>`
-            <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;cursor:pointer" onclick="showEpM(${r.id})">
-              ${r.thumbnail ? `<img src="${r.thumbnail}" style="width:32px;height:32px;border-radius:6px;object-fit:cover">` : `<span style="color:var(--blue);font-weight:600;min-width:36px">#${r.id}</span>`}
-              <span style="flex:1">${r.title}</span>
-              ${isD(r.id)?'<span style="color:var(--success)">✓</span>':''}
-            </div>
-          `).join('')}
-        `:''}
+        <div id="similar-${ep.id}" style="margin-top:16px">
+          ${data.related.length?`
+            <div style="font-size:14px;font-weight:600;margin-bottom:8px">Episodes du meme pilier</div>
+            ${data.related.slice(0,3).map(r=>`
+              <div class="similar-item" onclick="showEpM(${r.id})">
+                ${r.thumbnail ? `<img src="${r.thumbnail}" style="width:32px;height:32px;border-radius:6px;object-fit:cover">` : `<span style="color:var(--blue);font-weight:600;min-width:36px">#${r.id}</span>`}
+                <span style="flex:1">${r.title}</span>
+                ${isD(r.id)?'<span style="color:var(--success)">✓</span>':''}
+              </div>
+            `).join('')}
+          `:''}
+        </div>
       `;
       document.getElementById('modal').classList.add('open');
+
+      // Load AI-powered similar episodes (pgvector)
+      loadSimilarEpisodes(ep.id);
+    }
+
+    async function loadSimilarEpisodes(epNum) {
+      try {
+        const d = await F(`${API}/similar/${epNum}?limit=5`);
+        if (!d.similar || d.similar.length === 0) return;
+        const container = document.getElementById(`similar-${epNum}`);
+        if (!container) return;
+        container.innerHTML = `
+          <div style="font-size:14px;font-weight:600;margin-bottom:8px">Episodes les plus proches <span style="font-size:11px;font-weight:400;color:var(--text-muted)">(similarite semantique IA)</span></div>
+          <div class="similar-list">
+            ${d.similar.map(s => `
+              <div class="similar-item" onclick="showEpM(${s.id})">
+                ${s.thumbnail ? `<img src="${s.thumbnail}" style="width:36px;height:36px;border-radius:6px;object-fit:cover">` : `<span style="color:var(--blue);font-weight:600;min-width:36px">#${s.id}</span>`}
+                <div style="flex:1;min-width:0">
+                  <div style="font-weight:500">#${s.id} — ${s.title}</div>
+                  <div style="font-size:11px;color:var(--text-muted)">${s.guest} · <span style="color:${PC[s.pillar]}">●</span> ${PN[s.pillar]}</div>
+                </div>
+                <span class="similar-score">${(s.similarity * 100).toFixed(0)}%</span>
+                ${isD(s.id)?'<span style="color:var(--success)">✓</span>':''}
+              </div>
+            `).join('')}
+          </div>
+        `;
+      } catch { /* pgvector not available, keep pillar-based fallback */ }
     }
 
     async function showPathM(id) {
@@ -1473,17 +1947,20 @@
 
     // ===== NAVIGATION =====
     function go(view, btn) {
-      const views=['home','episodes','paths','experts','quiz','graph','reco'];
-      views.forEach(v=>document.getElementById(`v-${v}`).classList.remove('active'));
-      document.getElementById(`v-${view}`).classList.add('active');
+      const views=['home','episodes','paths','experts','search','chat','quiz','graph','reco'];
+      views.forEach(v=>{const el=document.getElementById(`v-${v}`);if(el)el.classList.remove('active');});
+      const target=document.getElementById(`v-${view}`);
+      if(target) target.classList.add('active');
       document.getElementById('hero-section').style.display = view==='home'?'':'none';
       document.querySelectorAll('#main-nav .nav-link').forEach(n=>n.classList.remove('active'));
       if(btn) btn.classList.add('active');
       if(view==='episodes') renderEpList();
       if(view==='paths') renderPathsAll();
       if(view==='experts') renderExpertsAll();
-      if(view==='quiz'&&!qLoaded) loadQ('');
+      if(view==='quiz'&&!qLoaded) loadAdaptiveQuiz();
       if(view==='graph') renderGraph();
+      if(view==='search') document.getElementById('hybrid-search-input')?.focus();
+      if(view==='chat') document.getElementById('chat-input')?.focus();
       scrollTo(0,0);
     }
 
