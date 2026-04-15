@@ -2,1605 +2,562 @@
   "_description": "Index complet des 312 episodes + hors-series de La Martingale. Format compact pour reference rapide.",
   "episodes": [
     {
-      "id": 1,
-      "guest": "Philippe Le Trung",
-      "title": "Immobilier peut-il se casser",
-      "pillar": "IMMOBILIER",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 2,
-      "guest": "Laurent Girard",
-      "title": "Epargne robot",
-      "pillar": "PATRIMOINE_FISCALITE",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 3,
-      "guest": "Eric Larcheveque",
-      "title": "Bitcoin arnaque ou opportunites",
-      "pillar": "CRYPTO",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 4,
-      "guest": "Georges Viglietti",
-      "title": "Fortune startups",
-      "pillar": "PE_STARTUP",
-      "difficulty": "INT"
-    },
-    {
-      "id": 5,
-      "guest": "Martin Menez",
-      "title": "Meilleurs coups immo",
-      "pillar": "IMMOBILIER",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 6,
-      "guest": "Frederic Zablocki",
-      "title": "Licornes de demain",
-      "pillar": "PE_STARTUP",
-      "difficulty": "AVA"
-    },
-    {
-      "id": 7,
-      "guest": "Geraldine Metifeux",
-      "title": "Investir avant fin du monde",
-      "pillar": "BOURSE",
-      "difficulty": "INT"
-    },
-    {
-      "id": 8,
-      "guest": "Angelique de Lencquesaing",
-      "title": "Investir dans le vin",
-      "pillar": "ALTERNATIFS",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 9,
-      "guest": "Maxime Camus",
-      "title": "S'organiser avant investir",
-      "pillar": "FINANCES_PERSO",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 10,
-      "guest": "Eric Pinon",
-      "title": "Eviter nouveau Madoff",
-      "pillar": "PATRIMOINE_FISCALITE",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 11,
-      "guest": "Rafik Makhlouf",
-      "title": "Or mieux que Bitcoin",
-      "pillar": "ALTERNATIFS",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 12,
-      "guest": "Mathieu Cornieti",
-      "title": "Impact Investing Burger King",
+      "id": 312,
+      "guest": "Arthur Auboeuf & Joseph Choueifaty",
+      "title": "Fonds “verts” : comment éviter les pièges du greenwashing ?",
       "pillar": "IMPACT_ESG",
       "difficulty": "INT"
     },
     {
-      "id": 13,
-      "guest": "Guillaume Piard",
-      "title": "Goal Based Investing",
-      "pillar": "PATRIMOINE_FISCALITE",
-      "difficulty": "INT"
-    },
-    {
-      "id": 14,
-      "guest": "Pierre-Antoine Dusoulier",
-      "title": "Tout en euros",
-      "pillar": "BOURSE",
-      "difficulty": "INT"
-    },
-    {
-      "id": 15,
-      "guest": "Jean-Baptiste Vayleux",
-      "title": "Crowdfunding immo 10%",
-      "pillar": "CROWDFUNDING",
-      "difficulty": "INT"
-    },
-    {
-      "id": 16,
-      "guest": "Victor Lora",
-      "title": "FIRE retraite 40 ans",
-      "pillar": "FINANCES_PERSO",
-      "difficulty": "INT"
-    },
-    {
-      "id": 17,
-      "guest": "Baudouin Vercken",
-      "title": "Planter arbres",
-      "pillar": "ALTERNATIFS",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 18,
-      "guest": "Gabriel Jarrosson",
-      "title": "Startup en club",
-      "pillar": "PE_STARTUP",
-      "difficulty": "INT"
-    },
-    {
-      "id": 19,
-      "guest": "Nicolas de Feraudy",
-      "title": "6% transition energetique",
-      "pillar": "IMPACT_ESG",
-      "difficulty": "INT"
-    },
-    {
-      "id": 20,
-      "guest": "Pierre Chapon",
-      "title": "Investir a plusieurs immobilier",
-      "pillar": "IMMOBILIER",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 21,
-      "guest": "Laurent Puget",
-      "title": "Finances tempete Covid",
-      "pillar": "BOURSE",
-      "difficulty": "INT"
-    },
-    {
-      "id": 22,
-      "guest": "Sebastien de Lafond",
-      "title": "Coronavirus immobilier",
+      "id": 311,
+      "guest": "Steve Lepine",
+      "title": "Investir dans l’hôtellerie à partir de 1 000€",
       "pillar": "IMMOBILIER",
       "difficulty": "INT"
     },
     {
-      "id": 23,
-      "guest": "Manuel Valente",
-      "title": "Refuge Bitcoin",
-      "pillar": "CRYPTO",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 24,
-      "guest": "Sandrine Cauvin",
-      "title": "Petrole energies renouvelables",
-      "pillar": "IMPACT_ESG",
-      "difficulty": "INT"
-    },
-    {
-      "id": 25,
-      "guest": "Arnaud Dubois",
-      "title": "Investir dans l'art",
-      "pillar": "ALTERNATIFS",
-      "difficulty": "INT"
-    },
-    {
-      "id": 26,
-      "guest": "Julia Bridger",
-      "title": "Pepites derriere CAC40",
-      "pillar": "BOURSE",
-      "difficulty": "INT"
-    },
-    {
-      "id": 27,
-      "guest": "Philippe Le Trung",
-      "title": "COVID immobilier",
-      "pillar": "IMMOBILIER",
-      "difficulty": "INT"
-    },
-    {
-      "id": 28,
-      "guest": "Albert d'Anthouard",
-      "title": "Banquier prive",
-      "pillar": "FINANCES_PERSO",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 29,
-      "guest": "Philippe Roux",
-      "title": "Bien prendre risques",
-      "pillar": "BOURSE",
-      "difficulty": "INT"
-    },
-    {
-      "id": 30,
-      "guest": "Brice Tavernier & Loic Audet",
-      "title": "Meilleurs coups locatif",
-      "pillar": "IMMOBILIER",
-      "difficulty": "INT"
-    },
-    {
-      "id": 31,
-      "guest": "Greg Blumenfeld",
-      "title": "Investir montres",
-      "pillar": "ALTERNATIFS",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 32,
-      "guest": "Yoann Lopez",
-      "title": "Meilleures strategies",
-      "pillar": "BOURSE",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 33,
-      "guest": "Guy Marty",
-      "title": "SCPI immobilier ameliore",
-      "pillar": "IMMOBILIER",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 34,
-      "guest": "Tarek Elmarhri",
-      "title": "Risques comme les pros",
+      "id": 310,
+      "guest": "Anne-Laure Frischlander",
+      "title": "SaaSpocalypse : sommes-nous à l’aube d’une crise ?",
       "pillar": "BOURSE",
       "difficulty": "AVA"
     },
     {
-      "id": 35,
-      "guest": "Matthieu Lamoure",
-      "title": "Voitures collection",
+      "id": 309,
+      "guest": "Gonzague Ruchaud",
+      "title": "Voitures de collection : les modèles qui flambent et ceux qui s'effondrent",
       "pillar": "ALTERNATIFS",
       "difficulty": "INT"
     },
     {
-      "id": 36,
-      "guest": "Alexandre Toussaint",
-      "title": "Murs poissonnier",
-      "pillar": "IMMOBILIER",
-      "difficulty": "INT"
-    },
-    {
-      "id": 37,
-      "guest": "Pierre Sabatier",
-      "title": "Preparer retraite",
-      "pillar": "FINANCES_PERSO",
-      "difficulty": "INT"
-    },
-    {
-      "id": 38,
-      "guest": "Joachim Dupont",
-      "title": "Crise immo startups",
-      "pillar": "CROWDFUNDING",
-      "difficulty": "INT"
-    },
-    {
-      "id": 39,
-      "guest": "Delphine Pinon",
-      "title": "Airbnb petite mise",
-      "pillar": "IMMOBILIER",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 40,
-      "guest": "Camille David",
-      "title": "Preter entreprises crise",
-      "pillar": "CROWDFUNDING",
-      "difficulty": "INT"
-    },
-    {
-      "id": 41,
-      "guest": "Thomas Hebrard",
-      "title": "Vin 2021",
-      "pillar": "ALTERNATIFS",
-      "difficulty": "INT"
-    },
-    {
-      "id": 42,
-      "guest": "Julien Niquet",
-      "title": "Epargne salariale pepite",
+      "id": 308,
+      "guest": "Pierre Marin",
+      "title": "CGP : comment arrêter de se faire avoir sur les frais",
       "pillar": "PATRIMOINE_FISCALITE",
       "difficulty": "DEB"
     },
     {
-      "id": 43,
-      "guest": "Alice Leger",
-      "title": "Sacs a main",
-      "pillar": "ALTERNATIFS",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 44,
-      "guest": "Daniel Haguet",
-      "title": "Finance comportementale cerveau",
-      "pillar": "FINANCES_PERSO",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 45,
-      "guest": "Laurent Puget",
-      "title": "Frosties meilleur investissement",
-      "pillar": "BOURSE",
-      "difficulty": "INT"
-    },
-    {
-      "id": 46,
-      "guest": "Jean-Marc Jacobson",
-      "title": "Loft Chicago 30 EUR",
-      "pillar": "IMMOBILIER",
-      "difficulty": "INT"
-    },
-    {
-      "id": 47,
-      "guest": "Xavier Delmas",
-      "title": "Bourse avec peu",
-      "pillar": "BOURSE",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 48,
-      "guest": "Pierre Chapon",
-      "title": "Acheter RP ou pas",
-      "pillar": "IMMOBILIER",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 49,
-      "guest": "Alexandre Lacharme",
-      "title": "Investir parkings",
-      "pillar": "IMMOBILIER",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 50,
-      "guest": "Victor Lora",
-      "title": "FIRE un an plus tard",
-      "pillar": "FINANCES_PERSO",
-      "difficulty": "INT"
-    },
-    {
-      "id": 51,
-      "guest": "Maximilien Urso",
-      "title": "Montres luxe seconde main",
-      "pillar": "ALTERNATIFS",
-      "difficulty": "INT"
-    },
-    {
-      "id": 52,
-      "guest": "Paul Nyzam",
-      "title": "Investir art Christie's",
-      "pillar": "ALTERNATIFS",
-      "difficulty": "INT"
-    },
-    {
-      "id": 53,
-      "guest": "Marc Fiorentino",
-      "title": "Momentum vs Value bulle",
+      "id": 307,
+      "guest": "Alain Madelin",
+      "title": "La décennie qui va tout changer",
       "pillar": "BOURSE",
       "difficulty": "AVA"
     },
     {
-      "id": 54,
-      "guest": "Gregory Raymond",
-      "title": "Montagnes russes cryptos",
-      "pillar": "CRYPTO",
-      "difficulty": "INT"
-    },
-    {
-      "id": 55,
-      "guest": "Audrey Bacrot",
-      "title": "Value ecart bulles",
-      "pillar": "BOURSE",
-      "difficulty": "AVA"
-    },
-    {
-      "id": 56,
-      "guest": "Emeric Eveno",
-      "title": "Defiscalisation immobiliere",
-      "pillar": "PATRIMOINE_FISCALITE",
-      "difficulty": "INT"
-    },
-    {
-      "id": 57,
-      "guest": "Owen Simonin",
-      "title": "Crypto 18 ans business",
-      "pillar": "CRYPTO",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 58,
-      "guest": "Augustin Sayer",
-      "title": "Startups surcotees 2021",
-      "pillar": "PE_STARTUP",
-      "difficulty": "INT"
-    },
-    {
-      "id": 59,
-      "guest": "Corentin Orsini",
-      "title": "Chasser en meute amis",
-      "pillar": "PE_STARTUP",
-      "difficulty": "INT"
-    },
-    {
-      "id": 60,
-      "guest": "Cecile Roquelaure",
-      "title": "Bien emprunter s'enrichir",
-      "pillar": "IMMOBILIER",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 61,
-      "guest": "Leo Lemordant",
-      "title": "Energies renouvelables ideal",
-      "pillar": "IMPACT_ESG",
-      "difficulty": "INT"
-    },
-    {
-      "id": 62,
-      "guest": "Geraldine Metifeux",
-      "title": "Investir fin du monde",
-      "pillar": "BOURSE",
-      "difficulty": "INT"
-    },
-    {
-      "id": 63,
-      "guest": "Mathieu Vaissie",
-      "title": "Gerer risques pratique",
-      "pillar": "BOURSE",
-      "difficulty": "INT"
-    },
-    {
-      "id": 64,
-      "guest": "Nicolas Cheron",
-      "title": "Riche lentement surement",
-      "pillar": "BOURSE",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 65,
-      "guest": "Sebastien Verdeaux",
-      "title": "S'inspirer des fortunes",
-      "pillar": "FINANCES_PERSO",
-      "difficulty": "INT"
-    },
-    {
-      "id": 66,
-      "guest": "Thierry Vignal",
-      "title": "Immobilier etranger",
-      "pillar": "IMMOBILIER",
-      "difficulty": "INT"
-    },
-    {
-      "id": 67,
-      "guest": "Heloise Bolle",
-      "title": "Amour et argent",
-      "pillar": "PATRIMOINE_FISCALITE",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 68,
-      "guest": "Gautier Delabrousse-Mayoux",
-      "title": "SCPI entre amis",
-      "pillar": "IMMOBILIER",
-      "difficulty": "INT"
-    },
-    {
-      "id": 69,
-      "guest": "Annie Maudouit-Ridde & Jerome Herbet",
-      "title": "SPACs",
-      "pillar": "BOURSE",
-      "difficulty": "AVA"
-    },
-    {
-      "id": 70,
-      "guest": "Mounir Laggoune",
-      "title": "Chasser frais caches",
-      "pillar": "FINANCES_PERSO",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 71,
-      "guest": "Philippe Le Trung",
-      "title": "Hausse prix immobilier",
-      "pillar": "IMMOBILIER",
-      "difficulty": "INT"
-    },
-    {
-      "id": 72,
-      "guest": "Sophie Richard",
-      "title": "Acheter en viager",
-      "pillar": "IMMOBILIER",
-      "difficulty": "INT"
-    },
-    {
-      "id": 73,
-      "guest": "Quentin Romet",
-      "title": "Immobilier 20 40 65 ans",
-      "pillar": "IMMOBILIER",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 74,
-      "guest": "Thomas Lefebvre",
-      "title": "Data immobilier",
-      "pillar": "IMMOBILIER",
-      "difficulty": "INT"
-    },
-    {
-      "id": 75,
-      "guest": "Ufuk Inci",
-      "title": "Social trading",
-      "pillar": "BOURSE",
-      "difficulty": "INT"
-    },
-    {
-      "id": 76,
-      "guest": "Ambre Soubiran",
-      "title": "Detenir cryptos en propre",
-      "pillar": "CRYPTO",
-      "difficulty": "INT"
-    },
-    {
-      "id": 77,
-      "guest": "Mailys Rebora",
-      "title": "COVID immobilier entreprise",
-      "pillar": "IMMOBILIER",
-      "difficulty": "INT"
-    },
-    {
-      "id": 78,
-      "guest": "Emilie Bellet",
-      "title": "10 conseils finances perso",
-      "pillar": "FINANCES_PERSO",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 79,
-      "guest": "Greg Blumenfeld",
-      "title": "Montres occasion resistance crise",
-      "pillar": "ALTERNATIFS",
-      "difficulty": "INT"
-    },
-    {
-      "id": 80,
-      "guest": "Nicolas Cheron & Gregory Raymond",
-      "title": "Debut ou fin cryptos",
-      "pillar": "CRYPTO",
-      "difficulty": "INT"
-    },
-    {
-      "id": 81,
-      "guest": "Joseph Choueifaty",
-      "title": "Epargne responsable",
-      "pillar": "IMPACT_ESG",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 82,
-      "guest": "Nicolas Decaudain",
-      "title": "Defiscalisation commencer",
-      "pillar": "PATRIMOINE_FISCALITE",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 83,
-      "guest": "Marc Tempelman",
-      "title": "Epargne confiance humains",
-      "pillar": "FINANCES_PERSO",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 84,
-      "guest": "Alessandro Soldati",
-      "title": "Ruee vers l'or 2022",
-      "pillar": "ALTERNATIFS",
-      "difficulty": "INT"
-    },
-    {
-      "id": 85,
-      "guest": "Matthias Baccino",
-      "title": "DCA long-terme",
-      "pillar": "BOURSE",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 86,
-      "guest": "John Karp",
-      "title": "Expliquer NFTs",
-      "pillar": "CRYPTO",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 87,
-      "guest": "Antoine Delon",
-      "title": "Epargne retraite",
-      "pillar": "PATRIMOINE_FISCALITE",
-      "difficulty": "INT"
-    },
-    {
-      "id": 88,
-      "guest": "Vincent Piche",
-      "title": "Finance a impact",
-      "pillar": "IMPACT_ESG",
-      "difficulty": "INT"
-    },
-    {
-      "id": 89,
-      "guest": "Gaelle Haag",
-      "title": "Gender Lens Investing",
-      "pillar": "IMPACT_ESG",
-      "difficulty": "INT"
-    },
-    {
-      "id": 90,
-      "guest": "Julien Calamote",
-      "title": "Effet de levier immobilier",
-      "pillar": "IMMOBILIER",
-      "difficulty": "INT"
-    },
-    {
-      "id": 91,
-      "guest": "Caroline Jurado",
-      "title": "Crypto pour les nuls",
-      "pillar": "CRYPTO",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 92,
-      "guest": "Cedric O'Neill",
-      "title": "Immobilier fractionne 10 EUR",
-      "pillar": "IMMOBILIER",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 93,
-      "guest": "Matthieu Stefani",
-      "title": "Hors-serie - Les coulisses de La Martingale en 2021",
-      "pillar": "FINANCES_PERSO",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 94,
-      "guest": "Laurent Puget",
-      "title": "Bilan 2021",
-      "pillar": "BOURSE",
-      "difficulty": "INT"
-    },
-    {
-      "id": 95,
-      "guest": "Mathieu Mars",
-      "title": "Chateau investissement",
-      "pillar": "IMMOBILIER",
-      "difficulty": "INT"
-    },
-    {
-      "id": 96,
-      "guest": "Antoine Fraysse-Soulier",
-      "title": "Cannabis billet vert",
-      "pillar": "ALTERNATIFS",
-      "difficulty": "INT"
-    },
-    {
-      "id": 97,
-      "guest": "Pierre Morizot",
-      "title": "Cryptos paradis fiscal",
-      "pillar": "CRYPTO",
-      "difficulty": "INT"
-    },
-    {
-      "id": 98,
-      "guest": "Christophe Vattier",
-      "title": "Miser celebrites",
-      "pillar": "ALTERNATIFS",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 99,
-      "guest": "Marguerite Berard",
-      "title": "Banquier utile",
-      "pillar": "FINANCES_PERSO",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 100,
-      "guest": "Jean-Michel Pailhon",
-      "title": "NFTs art",
-      "pillar": "CRYPTO",
-      "difficulty": "INT"
-    },
-    {
-      "id": 101,
-      "guest": "Maeva",
-      "title": "Budget sans effort",
-      "pillar": "FINANCES_PERSO",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 102,
-      "guest": "Fabrice Artinian",
-      "title": "Residences de service",
-      "pillar": "IMMOBILIER",
-      "difficulty": "INT"
-    },
-    {
-      "id": 103,
-      "guest": "Thomas Perret",
-      "title": "Conflits geopolitiques",
-      "pillar": "BOURSE",
-      "difficulty": "INT"
-    },
-    {
-      "id": 104,
-      "guest": "Yoann Lopez",
-      "title": "Investir dans LEGO",
-      "pillar": "ALTERNATIFS",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 105,
-      "guest": "Julien Etaix",
-      "title": "Face a l'inflation",
-      "pillar": "BOURSE",
-      "difficulty": "INT"
-    },
-    {
-      "id": 106,
-      "guest": "Francois Badelon",
-      "title": "Investir comme Buffett",
-      "pillar": "BOURSE",
-      "difficulty": "INT"
-    },
-    {
-      "id": 107,
-      "guest": "Bassel Abedi",
-      "title": "Vraie rentabilite locatif",
-      "pillar": "IMMOBILIER",
-      "difficulty": "INT"
-    },
-    {
-      "id": 108,
-      "guest": "Lea Lejeune",
-      "title": "Bien s'informer investir",
-      "pillar": "FINANCES_PERSO",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 109,
-      "guest": "Martin Menez",
-      "title": "Bien vendre bien acheter",
-      "pillar": "IMMOBILIER",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 110,
-      "guest": "Clement Renault",
-      "title": "Choisir SCPI",
-      "pillar": "IMMOBILIER",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 111,
-      "guest": "Mathilde Iclanzan",
-      "title": "Crowdfunding 2022",
-      "pillar": "CROWDFUNDING",
-      "difficulty": "INT"
-    },
-    {
-      "id": 112,
-      "guest": "Martin Cortet",
-      "title": "Declarer impots 2022",
-      "pillar": "PATRIMOINE_FISCALITE",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 113,
-      "guest": "Christele Biganzoli",
-      "title": "Expatriation fiscalite",
-      "pillar": "PATRIMOINE_FISCALITE",
-      "difficulty": "INT"
-    },
-    {
-      "id": 114,
-      "guest": "Nicolas Cheron & Gregory Raymond",
-      "title": "Chute cryptos",
-      "pillar": "CRYPTO",
-      "difficulty": "INT"
-    },
-    {
-      "id": 115,
-      "guest": "Emeline Siron",
-      "title": "Locatif echelle superieure",
-      "pillar": "IMMOBILIER",
-      "difficulty": "INT"
-    },
-    {
-      "id": 116,
-      "guest": "Thomas",
-      "title": "Epargne de precaution",
-      "pillar": "FINANCES_PERSO",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 117,
-      "guest": "Arthur Micoulet",
-      "title": "DeFi",
-      "pillar": "CRYPTO",
-      "difficulty": "INT"
-    },
-    {
-      "id": 118,
-      "guest": "Leonard Hery",
-      "title": "Immobilier small caps",
-      "pillar": "IMMOBILIER",
-      "difficulty": "AVA"
-    },
-    {
-      "id": 119,
-      "guest": "Sonia Elmlinger-Labadie",
-      "title": "Assurance emprunteur",
-      "pillar": "IMMOBILIER",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 120,
-      "guest": "Adrien Chaltiel",
-      "title": "Levee de fonds Seed",
-      "pillar": "PE_STARTUP",
-      "difficulty": "AVA"
-    },
-    {
-      "id": 121,
-      "guest": "Pierre Chapon",
-      "title": "Residence secondaire",
-      "pillar": "IMMOBILIER",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 122,
-      "guest": "Maxime Carmignac",
-      "title": "Entreprises familiales",
-      "pillar": "PE_STARTUP",
-      "difficulty": "AVA"
-    },
-    {
-      "id": 123,
+      "id": 306,
       "guest": "Guillaume Angot",
-      "title": "Lean FIRE",
-      "pillar": "FINANCES_PERSO",
+      "title": "Prendre sa retraite à 34 ans grâce à l’immobilier : comment a-t-il fait ?",
+      "pillar": "IMMOBILIER",
       "difficulty": "INT"
     },
     {
-      "id": 124,
-      "guest": "Nicolas Decaudain",
-      "title": "10 conseils choisir CGP",
-      "pillar": "PATRIMOINE_FISCALITE",
-      "difficulty": "DEB"
+      "id": 305,
+      "guest": "Romain Daubry",
+      "title": "Les options en Bourse : l’arme secrète des investisseurs",
+      "pillar": "BOURSE",
+      "difficulty": "AVA"
     },
     {
-      "id": 125,
-      "guest": "Heloise Bolle",
-      "title": "Preparer succession",
-      "pillar": "PATRIMOINE_FISCALITE",
-      "difficulty": "INT"
-    },
-    {
-      "id": 126,
-      "guest": "Owen Simonin",
-      "title": "Nouvelle crypto",
+      "id": 304,
+      "guest": "Alexandre Stachtchenko",
+      "title": "Bitcoin : le zéro ou le million",
       "pillar": "CRYPTO",
       "difficulty": "INT"
     },
     {
-      "id": 127,
-      "guest": "Thomas Friedberger",
-      "title": "Megatendances",
-      "pillar": "IMPACT_ESG",
-      "difficulty": "AVA"
-    },
-    {
-      "id": 128,
-      "guest": "Foulques du Reau",
-      "title": "Terres agricoles",
-      "pillar": "ALTERNATIFS",
-      "difficulty": "INT"
-    },
-    {
-      "id": 129,
-      "guest": "Chloe Clair",
-      "title": "Diagnostic energetique immo",
-      "pillar": "IMMOBILIER",
-      "difficulty": "INT"
-    },
-    {
-      "id": 130,
-      "guest": "Thibault de la Baronniere",
-      "title": "Investir caves",
-      "pillar": "IMMOBILIER",
-      "difficulty": "INT"
-    },
-    {
-      "id": 131,
-      "guest": "Vincent Boy",
-      "title": "Investir bear market",
-      "pillar": "BOURSE",
-      "difficulty": "INT"
-    },
-    {
-      "id": 132,
-      "guest": "Anthony Bourbon",
-      "title": "Club PE startup",
-      "pillar": "PE_STARTUP",
-      "difficulty": "INT"
-    },
-    {
-      "id": 133,
-      "guest": "Marc Maziere",
-      "title": "Economies quotidien",
-      "pillar": "FINANCES_PERSO",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 134,
-      "guest": "Souleymane-Jean Galadima",
-      "title": "Investir infrastructures",
-      "pillar": "PE_STARTUP",
-      "difficulty": "INT"
-    },
-    {
-      "id": 135,
-      "guest": "Magalie Petit",
-      "title": "Don defiscalisation",
+      "id": 303,
+      "guest": "Yann Le Her",
+      "title": "Perdez-vous de l’argent avec votre CGP ?",
       "pillar": "PATRIMOINE_FISCALITE",
       "difficulty": "DEB"
     },
     {
-      "id": 136,
-      "guest": "Yoann Lopez",
-      "title": "Revenus supplementaires side business",
-      "pillar": "ENTREPRENEURIAT",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 137,
-      "guest": "John Karp",
-      "title": "NFT fin 2022",
-      "pillar": "CRYPTO",
-      "difficulty": "INT"
-    },
-    {
-      "id": 138,
-      "guest": "Pauline de La Motte Rouge",
-      "title": "Conflit patrimonial",
-      "pillar": "PATRIMOINE_FISCALITE",
-      "difficulty": "INT"
-    },
-    {
-      "id": 139,
-      "guest": "Gautier Allard",
-      "title": "Marchand de biens",
-      "pillar": "IMMOBILIER",
-      "difficulty": "INT"
-    },
-    {
-      "id": 140,
-      "guest": "Marc Montagne",
-      "title": "Montres investissement",
-      "pillar": "ALTERNATIFS",
-      "difficulty": "INT"
-    },
-    {
-      "id": 141,
-      "guest": "Owen Simonin & Marc Fiorentino",
-      "title": "Crypto Far West debat",
-      "pillar": "CRYPTO",
-      "difficulty": "INT"
-    },
-    {
-      "id": 142,
-      "guest": "Gautier Delabrousse-Mayoux",
-      "title": "Bilan fin 2022",
-      "pillar": "BOURSE",
-      "difficulty": "INT"
-    },
-    {
-      "id": 143,
-      "guest": "Matthieu Stefani",
-      "title": "Hors-serie - Les coulisses de La Martingale en 2022",
-      "pillar": "FINANCES_PERSO",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 144,
-      "guest": "Thomas Lefebvre",
-      "title": "Immobilier 2023 foncer attendre",
-      "pillar": "IMMOBILIER",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 145,
-      "guest": "Titiou Lecoq",
-      "title": "Organisation financiere couple",
-      "pillar": "PATRIMOINE_FISCALITE",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 146,
-      "guest": "Keyvan Nilforoushan",
-      "title": "Acheter ou louer RP",
-      "pillar": "IMMOBILIER",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 147,
-      "guest": "Samantha McCoy",
-      "title": "Photographie art",
-      "pillar": "ALTERNATIFS",
-      "difficulty": "INT"
-    },
-    {
-      "id": 148,
-      "guest": "Hugo Salard",
-      "title": "Gerer abonnements",
-      "pillar": "FINANCES_PERSO",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 149,
-      "guest": "Reda Berrehili",
-      "title": "5 lecons eviter FTX",
-      "pillar": "CRYPTO",
-      "difficulty": "INT"
-    },
-    {
-      "id": 150,
-      "guest": "Aurelie Khaldi",
-      "title": "Societe holding",
-      "pillar": "PATRIMOINE_FISCALITE",
-      "difficulty": "AVA"
-    },
-    {
-      "id": 151,
-      "guest": "Nadim Takchi",
-      "title": "S'endetter pour s'enrichir",
-      "pillar": "IMMOBILIER",
-      "difficulty": "INT"
-    },
-    {
-      "id": 152,
-      "guest": "Gregory Guilmin",
-      "title": "Gestion passive ETF",
+      "id": 302,
+      "guest": "Mathieu Vaissie",
+      "title": "Les 10 mythes de l'investissement qui vous font perdre de l'argent",
       "pillar": "BOURSE",
       "difficulty": "DEB"
     },
     {
-      "id": 153,
-      "guest": "Julia Calderoli & Romain Garcon",
-      "title": "Frais de notaire",
-      "pillar": "IMMOBILIER",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 154,
-      "guest": "Delphine d'Amarzit",
-      "title": "Secrets Euronext Paris",
-      "pillar": "BOURSE",
-      "difficulty": "INT"
-    },
-    {
-      "id": 155,
-      "guest": "Alexandre Roubaud",
-      "title": "DCA Bitcoin",
-      "pillar": "CRYPTO",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 156,
-      "guest": "Pascal Gautier",
-      "title": "Cold wallet Ledger",
-      "pillar": "CRYPTO",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 157,
-      "guest": "Igal Natan",
-      "title": "Viager nue-propriete",
-      "pillar": "IMMOBILIER",
-      "difficulty": "INT"
-    },
-    {
-      "id": 158,
-      "guest": "Frederic Puzin",
-      "title": "Chasser frais ou performance",
-      "pillar": "PATRIMOINE_FISCALITE",
-      "difficulty": "INT"
-    },
-    {
-      "id": 159,
-      "guest": "Laure Gaschignard",
-      "title": "Donation vivant",
-      "pillar": "PATRIMOINE_FISCALITE",
-      "difficulty": "INT"
-    },
-    {
-      "id": 160,
-      "guest": "Antoine Fraysse-Soulier",
-      "title": "Marches chinois",
-      "pillar": "BOURSE",
-      "difficulty": "AVA"
-    },
-    {
-      "id": 161,
-      "guest": "Vincent Kraus",
-      "title": "Investissement agricole",
-      "pillar": "ALTERNATIFS",
-      "difficulty": "INT"
-    },
-    {
-      "id": 162,
-      "guest": "Amandine Chaigne",
-      "title": "PER retraite",
-      "pillar": "PATRIMOINE_FISCALITE",
-      "difficulty": "INT"
-    },
-    {
-      "id": 163,
-      "guest": "Nina Baka",
-      "title": "Eduquer enfants finance",
-      "pillar": "PATRIMOINE_FISCALITE",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 164,
-      "guest": "Antoine de Ravel d'Esclapon",
-      "title": "Societe Civile",
-      "pillar": "PATRIMOINE_FISCALITE",
-      "difficulty": "INT"
-    },
-    {
-      "id": 165,
-      "guest": "Maxime Camus",
-      "title": "PE societes non cotees",
-      "pillar": "PE_STARTUP",
-      "difficulty": "INT"
-    },
-    {
-      "id": 166,
-      "guest": "Benoit Petit",
-      "title": "Loi Girardin",
-      "pillar": "PATRIMOINE_FISCALITE",
-      "difficulty": "INT"
-    },
-    {
-      "id": 167,
-      "guest": "Charles Ruelle",
-      "title": "Leasing immobilier",
-      "pillar": "IMMOBILIER",
-      "difficulty": "INT"
-    },
-    {
-      "id": 168,
-      "guest": "Jeremy Gachet & Loic Audet",
-      "title": "Coliving",
-      "pillar": "IMMOBILIER",
-      "difficulty": "INT"
-    },
-    {
-      "id": 169,
-      "guest": "Thomas Cornu",
-      "title": "Meilleures villes 2023",
-      "pillar": "IMMOBILIER",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 170,
-      "guest": "Adrien Legendre",
-      "title": "Livres manuscrits",
-      "pillar": "ALTERNATIFS",
-      "difficulty": "AVA"
-    },
-    {
-      "id": 171,
-      "guest": "Thomas Veillet",
-      "title": "Marches mi-2023",
-      "pillar": "BOURSE",
-      "difficulty": "INT"
-    },
-    {
-      "id": 172,
-      "guest": "Sophie Desmazieres",
-      "title": "Louer JO 2024",
-      "pillar": "IMMOBILIER",
-      "difficulty": "INT"
-    },
-    {
-      "id": 173,
-      "guest": "Aldric Emie",
-      "title": "5 regles or investissement",
-      "pillar": "FINANCES_PERSO",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 174,
-      "guest": "Alexandre Boissenot",
-      "title": "Cartes Pokemon",
-      "pillar": "ALTERNATIFS",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 175,
-      "guest": "Agathe Tounsi",
-      "title": "Dubai immobilier",
-      "pillar": "IMMOBILIER",
-      "difficulty": "INT"
-    },
-    {
-      "id": 176,
-      "guest": "Raphael Bloch",
-      "title": "Web3 mi-2023",
-      "pillar": "CRYPTO",
-      "difficulty": "INT"
-    },
-    {
-      "id": 177,
-      "guest": "Michael Holzmann",
-      "title": "Sneakers investissement",
-      "pillar": "ALTERNATIFS",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 178,
-      "guest": "Insaff El Hassini",
-      "title": "Negocier augmentation",
-      "pillar": "FINANCES_PERSO",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 179,
-      "guest": "Thomas Creton",
-      "title": "ETF mode ou martingale",
-      "pillar": "BOURSE",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 180,
-      "guest": "Kevin Jourdan",
-      "title": "Side business revenus passifs",
-      "pillar": "ENTREPRENEURIAT",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 181,
-      "guest": "Cyril Chiche",
-      "title": "Banque vs application",
-      "pillar": "FINANCES_PERSO",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 182,
-      "guest": "Clement Renault",
-      "title": "Immobilier fractionne",
-      "pillar": "IMMOBILIER",
-      "difficulty": "INT"
-    },
-    {
-      "id": 183,
-      "guest": "Laure Verhaeghe",
-      "title": "Crowdfunding transition energetique",
-      "pillar": "IMPACT_ESG",
-      "difficulty": "INT"
-    },
-    {
-      "id": 184,
-      "guest": "Thomas Hebrard",
-      "title": "Vin 2023",
-      "pillar": "ALTERNATIFS",
-      "difficulty": "INT"
-    },
-    {
-      "id": 185,
-      "guest": "Olivier Herbout",
-      "title": "Finance quantitative",
-      "pillar": "BOURSE",
-      "difficulty": "AVA"
-    },
-    {
-      "id": 186,
-      "guest": "Arthur de Villemandy",
-      "title": "Detecter tendances",
-      "pillar": "PE_STARTUP",
-      "difficulty": "INT"
-    },
-    {
-      "id": 187,
-      "guest": "Diane Cesbron",
-      "title": "SOFICA cinema",
-      "pillar": "ALTERNATIFS",
-      "difficulty": "INT"
-    },
-    {
-      "id": 188,
-      "guest": "Bruno Cantegrel",
-      "title": "Trouver bon locataire",
-      "pillar": "IMMOBILIER",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 189,
-      "guest": "Alisson Jungling",
-      "title": "30 appartements 97%",
-      "pillar": "IMMOBILIER",
-      "difficulty": "AVA"
-    },
-    {
-      "id": 190,
-      "guest": "Xavier Hovasse",
-      "title": "Bresil Mexique Chili",
-      "pillar": "BOURSE",
-      "difficulty": "AVA"
-    },
-    {
-      "id": 191,
-      "guest": "Frederic Stolar",
-      "title": "PME ETI non cotees",
-      "pillar": "PE_STARTUP",
-      "difficulty": "AVA"
-    },
-    {
-      "id": 192,
-      "guest": "Geraldine Metifeux",
-      "title": "Couts dependance parents",
-      "pillar": "PATRIMOINE_FISCALITE",
-      "difficulty": "INT"
-    },
-    {
-      "id": 193,
-      "guest": "Jean-Baptiste Monie",
-      "title": "Taux credit 2024",
-      "pillar": "IMMOBILIER",
-      "difficulty": "INT"
-    },
-    {
-      "id": 194,
-      "guest": "Matthieu Stefani",
-      "title": "Hors-serie - Bilan et perspectives La Martingale en 2023",
-      "pillar": "FINANCES_PERSO",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 195,
-      "guest": "Souleymane-Jean Galadima",
-      "title": "10 100 1000 par mois",
-      "pillar": "FINANCES_PERSO",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 196,
-      "guest": "Frederic Moreau",
-      "title": "Erreurs immobilier",
-      "pillar": "IMMOBILIER",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 197,
-      "guest": "Florian Delifer",
-      "title": "Louer salon 500/jour",
-      "pillar": "ENTREPRENEURIAT",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 198,
-      "guest": "Bettina Mazzocchi",
-      "title": "ETF obligataires",
-      "pillar": "BOURSE",
-      "difficulty": "INT"
-    },
-    {
-      "id": 199,
-      "guest": "Renaud Guillerm",
-      "title": "SPV business angels",
-      "pillar": "PE_STARTUP",
-      "difficulty": "AVA"
-    },
-    {
-      "id": 200,
-      "guest": "4 entrepreneurs",
-      "title": "Passion en business",
-      "pillar": "ENTREPRENEURIAT",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 201,
-      "guest": "Marie de Raismes",
-      "title": "Actions dividendes",
-      "pillar": "BOURSE",
-      "difficulty": "INT"
-    },
-    {
-      "id": 202,
-      "guest": "Caroline Aupoix",
-      "title": "Avocat fiscaliste",
-      "pillar": "PATRIMOINE_FISCALITE",
-      "difficulty": "INT"
-    },
-    {
-      "id": 203,
-      "guest": "Nicolas Barrailler",
-      "title": "Eviter arnaques",
-      "pillar": "FINANCES_PERSO",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 204,
-      "guest": "Bassel Abedi",
-      "title": "Location saisonniere limites",
-      "pillar": "IMMOBILIER",
-      "difficulty": "INT"
-    },
-    {
-      "id": 205,
-      "guest": "Laurent Mesnil",
-      "title": "Finances sportifs",
-      "pillar": "FINANCES_PERSO",
-      "difficulty": "INT"
-    },
-    {
-      "id": 206,
-      "guest": "Yasmina Brasseur",
-      "title": "SARL famille vs SCI",
-      "pillar": "IMMOBILIER",
-      "difficulty": "INT"
-    },
-    {
-      "id": 207,
-      "guest": "Joseph Choueifaty",
-      "title": "Tri fonds durables",
-      "pillar": "IMPACT_ESG",
-      "difficulty": "INT"
-    },
-    {
-      "id": 208,
-      "guest": "Owen Simonin",
-      "title": "Bitcoin ATH ETF 2024",
-      "pillar": "CRYPTO",
-      "difficulty": "INT"
-    },
-    {
-      "id": 209,
-      "guest": "Adlene Djekiref",
-      "title": "Guide Airbnb",
-      "pillar": "IMMOBILIER",
-      "difficulty": "INT"
-    },
-    {
-      "id": 210,
-      "guest": "Jeremy Faucheux",
-      "title": "Boutiques bureaux",
-      "pillar": "IMMOBILIER",
-      "difficulty": "INT"
-    },
-    {
-      "id": 211,
-      "guest": "Maeva Courtois",
-      "title": "Reduire depenses epargner",
-      "pillar": "FINANCES_PERSO",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 212,
-      "guest": "Yvan Vaillant",
-      "title": "Strategie tortue long terme",
-      "pillar": "FINANCES_PERSO",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 213,
-      "guest": "Vincent Bourdel",
-      "title": "Actifs alternatifs 2024",
-      "pillar": "ALTERNATIFS",
-      "difficulty": "INT"
-    },
-    {
-      "id": 214,
-      "guest": "Yoann Lopez",
-      "title": "Methode devenir millionnaire",
-      "pillar": "FINANCES_PERSO",
-      "difficulty": "INT"
-    },
-    {
-      "id": 215,
-      "guest": "Johann Nguelet",
-      "title": "Defis epargne +1000",
-      "pillar": "FINANCES_PERSO",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 216,
-      "guest": "Olivier Dhaine",
-      "title": "Acheter revendre voiture",
-      "pillar": "FINANCES_PERSO",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 217,
-      "guest": "Fanny Kopf",
-      "title": "Pret sur gage",
-      "pillar": "FINANCES_PERSO",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 218,
+      "id": 301,
       "guest": "Nicolas Cheron",
-      "title": "Investir en crise",
+      "title": " Investir dans la vraie vie",
       "pillar": "BOURSE",
       "difficulty": "INT"
     },
     {
-      "id": 219,
-      "guest": "William Bailey",
-      "title": "Investir rap francais",
-      "pillar": "ALTERNATIFS",
-      "difficulty": "INT"
-    },
-    {
-      "id": 220,
-      "guest": "Paco Debonnaire",
-      "title": "Lecons +400 interviews",
-      "pillar": "FINANCES_PERSO",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 221,
-      "guest": "Thomas Lefebvre",
-      "title": "Immobilier 2024 opportunites",
+      "id": 300,
+      "guest": "Philippe Le Trung",
+      "title": "Bureaux, résidentiel, hôtellerie : où placer son argent en 2026 ?",
       "pillar": "IMMOBILIER",
       "difficulty": "INT"
     },
     {
-      "id": 222,
-      "guest": "Mbarek Wadil",
-      "title": "Logement social",
-      "pillar": "IMMOBILIER",
-      "difficulty": "INT"
-    },
-    {
-      "id": 223,
-      "guest": "Claire Balva",
-      "title": "Crypto methode DCA",
-      "pillar": "CRYPTO",
-      "difficulty": "INT"
-    },
-    {
-      "id": 225,
-      "guest": "Remi de Truchis de Varennes",
-      "title": "Small caps gros gains",
+      "id": 299,
+      "guest": "Romain Burnand",
+      "title": "Small caps : les secrets pour surperformer en Bourse",
       "pillar": "BOURSE",
       "difficulty": "AVA"
     },
     {
-      "id": 226,
-      "guest": "Yannick Van Caneghem",
-      "title": "Metaux precieux medaille",
-      "pillar": "ALTERNATIFS",
-      "difficulty": "INT"
-    },
-    {
-      "id": 227,
-      "guest": "Claire Halconruy",
-      "title": "Art moderne contemporain",
-      "pillar": "ALTERNATIFS",
-      "difficulty": "INT"
-    },
-    {
-      "id": 228,
-      "guest": "Caroline Menager",
-      "title": "Argent de poche",
+      "id": 298,
+      "guest": "Marie-Lahya Simon",
+      "title": "Couple et argent : comment ne pas se faire avoir ?",
       "pillar": "PATRIMOINE_FISCALITE",
       "difficulty": "DEB"
     },
     {
-      "id": 229,
-      "guest": "Pierre-Emmanuel Jus",
-      "title": "Logements etudiants",
+      "id": 297,
+      "guest": "Matthieu Stefani",
+      "title": "Bilan 2025 et Perspectives pour 2026",
+      "pillar": "FINANCES_PERSO",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 296,
+      "guest": "Mounir Laggoune",
+      "title": "Comment construire son patrimoine en (re)partant de zéro",
+      "pillar": "FINANCES_PERSO",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 295,
+      "guest": "Marine Bibas",
+      "title": "Comment gagner de l'argent grâce au luxe de seconde main ?",
+      "pillar": "ALTERNATIFS",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 294,
+      "guest": "Charles Beigbeder",
+      "title": "Spatial, quantique, nucléaire : les secteurs qui vont exploser",
+      "pillar": "PE_STARTUP",
+      "difficulty": "AVA"
+    },
+    {
+      "id": 293,
+      "guest": "Esther Moisy-Kirschbaum",
+      "title": "Comment gagner de l'argent avec l'IA et le vibe coding ?",
+      "pillar": "ENTREPRENEURIAT",
+      "difficulty": "INT"
+    },
+    {
+      "id": 292,
+      "guest": "Jerome Vialla",
+      "title": "Indépendants : 3 leviers pour économiser des milliers d'euros",
+      "pillar": "PATRIMOINE_FISCALITE",
+      "difficulty": "INT"
+    },
+    {
+      "id": 291,
+      "guest": "Paul Moreno Blosseville",
+      "title": "Private Equity : les 3 critères pour identifier les meilleurs gérants",
+      "pillar": "PE_STARTUP",
+      "difficulty": "AVA"
+    },
+    {
+      "id": 290,
+      "guest": "Herve Degreve",
+      "title": "Home Equity : la rénovation énergétique sans prêt ni mensualités",
       "pillar": "IMMOBILIER",
       "difficulty": "INT"
     },
     {
-      "id": 230,
-      "guest": "Guillaume Malgouyres",
-      "title": "Renover sans sacrifier rentabilite",
+      "id": 289,
+      "guest": "Yves Choueifaty",
+      "title": "Investir où les institutionnels n’osent pas aller",
+      "pillar": "BOURSE",
+      "difficulty": "AVA"
+    },
+    {
+      "id": 288,
+      "guest": "Valentin Lautier",
+      "title": "Les quotas carbone : le meilleur investissement à impact ?",
+      "pillar": "IMPACT_ESG",
+      "difficulty": "INT"
+    },
+    {
+      "id": 287,
+      "guest": "Kevin Thozet",
+      "title": "Devises : le piège que personne ne voit dans vos ETF",
+      "pillar": "BOURSE",
+      "difficulty": "INT"
+    },
+    {
+      "id": 286,
+      "guest": "Geraldine Metifeux",
+      "title": "La France dégradée par Fitch : faut-il vendre ou investir ?",
+      "pillar": "BOURSE",
+      "difficulty": "INT"
+    },
+    {
+      "id": 285,
+      "guest": "Gregory Guilmin",
+      "title": "ETF : les erreurs qui vous coûtent cher",
+      "pillar": "BOURSE",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 284,
+      "guest": "Matthieu Burin",
+      "title": "Travaux de rénovation : prix, délais et pièges à éviter",
+      "pillar": "IMMOBILIER",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 283,
+      "guest": "Insaff El Hassini",
+      "title": "Décrochez l’augmentation que vous méritez",
+      "pillar": "FINANCES_PERSO",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 282,
+      "guest": "Pierre Chartier",
+      "title": "Dans les coulisses du trading avec Pierre Chartier",
+      "pillar": "BOURSE",
+      "difficulty": "AVA"
+    },
+    {
+      "id": 281,
+      "guest": "Marc Touati",
+      "title": "La France va-t-elle s’effondrer ?",
+      "pillar": "BOURSE",
+      "difficulty": "INT"
+    },
+    {
+      "id": 280,
+      "guest": "Aldric Emie",
+      "title": "Private Equity : la grille de lecture pour bien investir",
+      "pillar": "PE_STARTUP",
+      "difficulty": "INT"
+    },
+    {
+      "id": 279,
+      "guest": "Paul Rodrigues",
+      "title": "Investir dans la terre",
+      "pillar": "ALTERNATIFS",
+      "difficulty": "INT"
+    },
+    {
+      "id": 278,
+      "guest": "Bertrand Lamielle",
+      "title": "Comment votre cerveau sabote vos gains en Bourse",
+      "pillar": "FINANCES_PERSO",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 277,
+      "guest": "Stephane Torrens",
+      "title": "ChatGPT vs CGP : qui gère le mieux votre argent ?",
+      "pillar": "PATRIMOINE_FISCALITE",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 276,
+      "guest": "Nicolas Marque",
+      "title": "Produits structurés : révolution ou effet de mode ?",
+      "pillar": "BOURSE",
+      "difficulty": "AVA"
+    },
+    {
+      "id": 275,
+      "guest": "Damien Morin",
+      "title": "Dans la tête d’un business angel",
+      "pillar": "PE_STARTUP",
+      "difficulty": "AVA"
+    },
+    {
+      "id": 274,
+      "guest": "David Baverez",
+      "title": "Comment investir en économie de guerre ?",
+      "pillar": "BOURSE",
+      "difficulty": "AVA"
+    },
+    {
+      "id": 273,
+      "guest": "Thomas Friedberger",
+      "title": "Faut-il investir dans la défense européenne ?",
+      "pillar": "IMPACT_ESG",
+      "difficulty": "AVA"
+    },
+    {
+      "id": 272,
+      "guest": "Pierre Leroy",
+      "title": "Les pièges à éviter quand on investit en start-up",
+      "pillar": "PE_STARTUP",
+      "difficulty": "INT"
+    },
+    {
+      "id": 271,
+      "guest": "Benjamin Louvet",
+      "title": "Comment investir dans les métaux précieux sans se tromper ?",
+      "pillar": "ALTERNATIFS",
+      "difficulty": "INT"
+    },
+    {
+      "id": 270,
+      "guest": "Karen-Laure Mrejen",
+      "title": "Gagner 2 à 5% de rendement sans risque : c’est possible !",
+      "pillar": "BOURSE",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 269,
+      "guest": "Eric Treguier",
+      "title": "De 0 au Milliard : les clés d’investissement des plus riches",
+      "pillar": "FINANCES_PERSO",
+      "difficulty": "INT"
+    },
+    {
+      "id": 268,
+      "guest": "Lauren Dannay",
+      "title": "Club deals ou crowdfunding : deux visions de l’immobilier, un seul gagnant ?",
+      "pillar": "IMMOBILIER",
+      "difficulty": "INT"
+    },
+    {
+      "id": 267,
+      "guest": "Bruno Cantegrel",
+      "title": "Locatif : les astuces pour louer sans stress",
+      "pillar": "IMMOBILIER",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 266,
+      "guest": "Guillaume Dolisi",
+      "title": "Investir à contre-courant",
+      "pillar": "BOURSE",
+      "difficulty": "AVA"
+    },
+    {
+      "id": 265,
+      "guest": "Geoffroy Reiser",
+      "title": "Faut-il investir dans l'immobilier en Espagne ?",
+      "pillar": "IMMOBILIER",
+      "difficulty": "INT"
+    },
+    {
+      "id": 263,
+      "guest": "Charles Gave",
+      "title": "Comment devenir riche (et le rester) ?",
+      "pillar": "FINANCES_PERSO",
+      "difficulty": "INT"
+    },
+    {
+      "id": 262,
+      "guest": "Romain Lanery",
+      "title": "Investir comme chez Goldman Sachs",
+      "pillar": "ENTREPRENEURIAT",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 261,
+      "guest": "Celine Bertrix",
+      "title": "Les hacks pour résoudre vos galères administratives",
+      "pillar": "FINANCES_PERSO",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 260,
+      "guest": "Jonathan Cohen",
+      "title": "Créer une société : stratégie gagnante ou fausse bonne idée ?",
+      "pillar": "ENTREPRENEURIAT",
+      "difficulty": "INT"
+    },
+    {
+      "id": 259,
+      "guest": "Parysatis Peymani",
+      "title": "Maison de vacances : plaisir ou vrai bon investissement ?",
+      "pillar": "IMMOBILIER",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 258,
+      "guest": "Yoni Buchsbaum",
+      "title": "Comment devenir marchand de biens ?",
+      "pillar": "IMMOBILIER",
+      "difficulty": "AVA"
+    },
+    {
+      "id": 257,
+      "guest": "Xavier Anthonioz",
+      "title": "Private Equity : Pourquoi tout le monde s’y met ?",
+      "pillar": "PE_STARTUP",
+      "difficulty": "INT"
+    },
+    {
+      "id": 256,
+      "guest": "Arnaud Dubois",
+      "title": "Investir dans l’art contemporain sans être millionnaire",
+      "pillar": "ALTERNATIFS",
+      "difficulty": "INT"
+    },
+    {
+      "id": 255,
+      "guest": "Marc Fiorentino",
+      "title": "“Ma martingale : ne pas me prendre pour un trader”",
+      "pillar": "FINANCES_PERSO",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 254,
+      "guest": "Evan Testa",
+      "title": "Investir à plusieurs : les clés pour éviter les erreurs !",
+      "pillar": "PE_STARTUP",
+      "difficulty": "INT"
+    },
+    {
+      "id": 253,
+      "guest": "Clement Tardiveau",
+      "title": "Montres en 2025 : les investissements à ne pas rater et ceux à éviter !",
+      "pillar": "ALTERNATIFS",
+      "difficulty": "INT"
+    },
+    {
+      "id": 252,
+      "guest": "Thierry Vignal",
+      "title": "Paris : ces petites surfaces qui peuvent rapporter gros",
+      "pillar": "IMMOBILIER",
+      "difficulty": "INT"
+    },
+    {
+      "id": 251,
+      "guest": "Mathieu Charret",
+      "title": "20% de rendement par an grâce aux stablecoins ?!",
+      "pillar": "CRYPTO",
+      "difficulty": "AVA"
+    },
+    {
+      "id": 250,
+      "guest": "Hugo Wind",
+      "title": "Clubs deals immobiliers : opportunités et pièges à éviter",
+      "pillar": "IMMOBILIER",
+      "difficulty": "INT"
+    },
+    {
+      "id": 249,
+      "guest": "Nicolas Le Febvre",
+      "title": "Comprendre les produits structurés en toute simplicité",
+      "pillar": "BOURSE",
+      "difficulty": "INT"
+    },
+    {
+      "id": 248,
+      "guest": "Mathieu Chandelier",
+      "title": "Gestion passive vs. active : où placer vos convictions d’investisseur ?",
+      "pillar": "BOURSE",
+      "difficulty": "INT"
+    },
+    {
+      "id": 247,
+      "guest": "Marc Maziere",
+      "title": "Dépenser moins et voyager plus : les meilleurs tips",
+      "pillar": "FINANCES_PERSO",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 246,
+      "guest": "Matthieu Stefani",
+      "title": "Bilan 2024 et Perspectives pour 2025",
+      "pillar": "FINANCES_PERSO",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 245,
+      "guest": "Valerie Batigne",
+      "title": "Retraite : comment gagner plus et partir plus tôt ?",
+      "pillar": "FINANCES_PERSO",
+      "difficulty": "INT"
+    },
+    {
+      "id": 244,
+      "guest": "Adeline Dillmann",
+      "title": "Protéger et faire fructifier l’épargne de vos enfants",
+      "pillar": "PATRIMOINE_FISCALITE",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 243,
+      "guest": "Jonathan Levy",
+      "title": "Défaillance de l’État : comment protéger votre patrimoine ?",
+      "pillar": "PATRIMOINE_FISCALITE",
+      "difficulty": "INT"
+    },
+    {
+      "id": 242,
+      "guest": "Hugo Panczak",
+      "title": "Airdrops, memecoins et stablecoins : les pépites du Web3 à suivre en 2025",
+      "pillar": "CRYPTO",
+      "difficulty": "AVA"
+    },
+    {
+      "id": 241,
+      "guest": "Maxime Chipoy",
+      "title": "Meilleure carte bancaire",
+      "pillar": "FINANCES_PERSO",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 240,
+      "guest": "Raphael di Meglio",
+      "title": "Devenir actionnaire de sa boîte : mode d’emploi des BSPCE",
+      "pillar": "FINANCES_PERSO",
+      "difficulty": "INT"
+    },
+    {
+      "id": 239,
+      "guest": "Arnaud Filhol",
+      "title": "Gagner jusqu’à 6% par an en investissant dans la forêt ?!",
+      "pillar": "ALTERNATIFS",
+      "difficulty": "INT"
+    },
+    {
+      "id": 238,
+      "guest": "Guillaume Simonin",
+      "title": "Votre conseiller financier vous rapporte-t-il vraiment de l’argent ?",
+      "pillar": "PATRIMOINE_FISCALITE",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 237,
+      "guest": "Anne-Marie Sylvestre",
+      "title": "Les avantages méconnus de l'assurance vie au Luxembourg",
+      "pillar": "PATRIMOINE_FISCALITE",
+      "difficulty": "AVA"
+    },
+    {
+      "id": 236,
+      "guest": "Pascale Baussant",
+      "title": "Gagner de l’argent sans prendre de risques : les meilleurs placements garantis",
+      "pillar": "PATRIMOINE_FISCALITE",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 235,
+      "guest": "Marc Menase",
+      "title": "Private Equity : on arrête tout, ou on accélère ?",
+      "pillar": "PE_STARTUP",
+      "difficulty": "AVA"
+    },
+    {
+      "id": 234,
+      "guest": "Christele Biganzoli",
+      "title": "S’expatrier pour gagner plus : bonne ou mauvaise idée ?",
+      "pillar": "PATRIMOINE_FISCALITE",
+      "difficulty": "INT"
+    },
+    {
+      "id": 233,
+      "guest": "Maelle Caravaca",
+      "title": "1h pour optimiser 2 patrimoines : consultation par la crème des CGP",
+      "pillar": "PATRIMOINE_FISCALITE",
+      "difficulty": "INT"
+    },
+    {
+      "id": 232,
+      "guest": "Paul Bourdois",
+      "title": "Crise SCPI",
       "pillar": "IMMOBILIER",
       "difficulty": "INT"
     },
@@ -1612,564 +569,1607 @@
       "difficulty": "DEB"
     },
     {
-      "id": 232,
-      "guest": "Paul Bourdois",
-      "title": "Crise SCPI",
+      "id": 230,
+      "guest": "Guillaume Malgouyres",
+      "title": "Renover sans sacrifier rentabilite",
       "pillar": "IMMOBILIER",
       "difficulty": "INT"
     },
     {
-      "id": 233,
-      "guest": "Maelle Caravaca",
-      "title": "Optimiser 2 patrimoines",
-      "pillar": "PATRIMOINE_FISCALITE",
+      "id": 229,
+      "guest": "Pierre-Emmanuel Jus",
+      "title": "Logements etudiants",
+      "pillar": "IMMOBILIER",
       "difficulty": "INT"
     },
     {
-      "id": 234,
-      "guest": "Christele Biganzoli",
-      "title": "Expatriation gagner plus",
-      "pillar": "PATRIMOINE_FISCALITE",
-      "difficulty": "INT"
-    },
-    {
-      "id": 235,
-      "guest": "Marc Menase",
-      "title": "PE arreter ou accelerer",
-      "pillar": "PE_STARTUP",
-      "difficulty": "AVA"
-    },
-    {
-      "id": 236,
-      "guest": "Pascale Baussant",
-      "title": "Placements garantis",
+      "id": 228,
+      "guest": "Caroline Menager",
+      "title": "Argent de poche",
       "pillar": "PATRIMOINE_FISCALITE",
       "difficulty": "DEB"
     },
     {
-      "id": 237,
-      "guest": "Anne-Marie Sylvestre",
-      "title": "Assurance vie Luxembourg",
-      "pillar": "PATRIMOINE_FISCALITE",
-      "difficulty": "AVA"
-    },
-    {
-      "id": 238,
-      "guest": "Guillaume Simonin",
-      "title": "Conseiller rapporte argent",
-      "pillar": "PATRIMOINE_FISCALITE",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 239,
-      "guest": "Arnaud Filhol",
-      "title": "Investir foret 6%",
+      "id": 227,
+      "guest": "Claire Halconruy",
+      "title": "Art moderne contemporain",
       "pillar": "ALTERNATIFS",
       "difficulty": "INT"
     },
     {
-      "id": 240,
-      "guest": "Raphael di Meglio",
-      "title": "BSPCE actionnariat",
-      "pillar": "FINANCES_PERSO",
+      "id": 226,
+      "guest": "Yannick Van Caneghem",
+      "title": "Médaille d’or de l’investissement 2024 et autres métaux précieux",
+      "pillar": "ALTERNATIFS",
       "difficulty": "INT"
     },
     {
-      "id": 241,
-      "guest": "Maxime Chipoy",
-      "title": "Meilleure carte bancaire",
-      "pillar": "FINANCES_PERSO",
-      "difficulty": "DEB"
+      "id": 225,
+      "guest": "Remi de Truchis de Varennes",
+      "title": "Small caps gros gains",
+      "pillar": "BOURSE",
+      "difficulty": "AVA"
     },
     {
-      "id": 242,
-      "guest": "Hugo Panczak",
-      "title": "Airdrops memecoins stablecoins",
+      "id": 223,
+      "guest": "Claire Balva",
+      "title": "Crypto : la méthode DCA est-elle encore la plus efficace ?",
       "pillar": "CRYPTO",
-      "difficulty": "AVA"
-    },
-    {
-      "id": 243,
-      "guest": "Jonathan Levy",
-      "title": "Defaillance Etat",
-      "pillar": "PATRIMOINE_FISCALITE",
       "difficulty": "INT"
     },
     {
-      "id": 244,
-      "guest": "Adeline Dillmann",
-      "title": "Epargne enfants",
-      "pillar": "PATRIMOINE_FISCALITE",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 245,
-      "guest": "Valerie Batigne",
-      "title": "Retraite partir plus tot",
-      "pillar": "FINANCES_PERSO",
-      "difficulty": "INT"
-    },
-    {
-      "id": 246,
-      "guest": "Matthieu Stefani",
-      "title": "Bilan 2024 / Perspectives 2025",
-      "pillar": "FINANCES_PERSO",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 247,
-      "guest": "Marc Maziere",
-      "title": "Depenser moins voyager plus",
-      "pillar": "FINANCES_PERSO",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 248,
-      "guest": "Mathieu Chandelier",
-      "title": "Gestion passive vs active",
-      "pillar": "BOURSE",
-      "difficulty": "INT"
-    },
-    {
-      "id": 249,
-      "guest": "Nicolas Le Febvre",
-      "title": "Produits structures simple",
-      "pillar": "BOURSE",
-      "difficulty": "INT"
-    },
-    {
-      "id": 250,
-      "guest": "Hugo Wind",
-      "title": "Clubs deals pieges",
+      "id": 222,
+      "guest": "Mbarek Wadil",
+      "title": "Pourquoi et comment investir dans un logement social ?",
       "pillar": "IMMOBILIER",
       "difficulty": "INT"
     },
     {
-      "id": 251,
-      "guest": "Mathieu Charret",
-      "title": "20% stablecoins",
-      "pillar": "CRYPTO",
-      "difficulty": "AVA"
-    },
-    {
-      "id": 252,
-      "guest": "Thierry Vignal",
-      "title": "Petites surfaces Paris",
+      "id": 221,
+      "guest": "Thomas Lefebvre",
+      "title": "Immobilier 2024 opportunites",
       "pillar": "IMMOBILIER",
       "difficulty": "INT"
     },
     {
-      "id": 253,
-      "guest": "Clement Tardiveau",
-      "title": "Montres 2025",
+      "id": 220,
+      "guest": "Paco Debonnaire",
+      "title": "Investir comme un pro : les leçons tirées de +400 interviews",
+      "pillar": "FINANCES_PERSO",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 219,
+      "guest": "William Bailey",
+      "title": "Investir rap francais",
       "pillar": "ALTERNATIFS",
       "difficulty": "INT"
     },
     {
-      "id": 254,
-      "guest": "Evan Testa",
-      "title": "Investir a plusieurs",
-      "pillar": "PE_STARTUP",
-      "difficulty": "INT"
-    },
-    {
-      "id": 255,
-      "guest": "Marc Fiorentino",
-      "title": "Pas me prendre pour trader",
-      "pillar": "FINANCES_PERSO",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 256,
-      "guest": "Arnaud Dubois",
-      "title": "Art contemporain",
-      "pillar": "ALTERNATIFS",
-      "difficulty": "INT"
-    },
-    {
-      "id": 257,
-      "guest": "Xavier Anthonioz",
-      "title": "PE pourquoi tout le monde",
-      "pillar": "PE_STARTUP",
-      "difficulty": "INT"
-    },
-    {
-      "id": 258,
-      "guest": "Yoni Buchsbaum",
-      "title": "Marchand de biens",
-      "pillar": "IMMOBILIER",
-      "difficulty": "AVA"
-    },
-    {
-      "id": 259,
-      "guest": "Parysatis Peymani",
-      "title": "Maison de vacances",
-      "pillar": "IMMOBILIER",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 260,
-      "guest": "Jonathan Cohen",
-      "title": "Creer une societe",
-      "pillar": "ENTREPRENEURIAT",
-      "difficulty": "INT"
-    },
-    {
-      "id": 261,
-      "guest": "Celine Bertrix",
-      "title": "Hacks administratifs",
-      "pillar": "FINANCES_PERSO",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 262,
-      "guest": "Romain Lanery",
-      "title": "Vivre de son contenu",
-      "pillar": "ENTREPRENEURIAT",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 263,
-      "guest": "Charles Gave",
-      "title": "Devenir riche et rester",
-      "pillar": "FINANCES_PERSO",
-      "difficulty": "INT"
-    },
-    {
-      "id": 265,
-      "guest": "Geoffroy Reiser",
-      "title": "Immobilier Espagne",
-      "pillar": "IMMOBILIER",
-      "difficulty": "INT"
-    },
-    {
-      "id": 266,
-      "guest": "Guillaume Dolisi",
-      "title": "Investir contre-courant",
-      "pillar": "BOURSE",
-      "difficulty": "AVA"
-    },
-    {
-      "id": 267,
-      "guest": "Bruno Cantegrel",
-      "title": "Louer sans stress",
-      "pillar": "IMMOBILIER",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 268,
-      "guest": "Lauren Dannay",
-      "title": "Club deals vs crowdfunding",
-      "pillar": "IMMOBILIER",
-      "difficulty": "INT"
-    },
-    {
-      "id": 269,
-      "guest": "Eric Treguier",
-      "title": "0 au milliard",
-      "pillar": "FINANCES_PERSO",
-      "difficulty": "INT"
-    },
-    {
-      "id": 270,
-      "guest": "Karen-Laure Mrejen",
-      "title": "2-5% sans risque",
-      "pillar": "BOURSE",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 271,
-      "guest": "Benjamin Louvet",
-      "title": "Metaux precieux",
-      "pillar": "ALTERNATIFS",
-      "difficulty": "INT"
-    },
-    {
-      "id": 272,
-      "guest": "Pierre Leroy",
-      "title": "Pieges startup",
-      "pillar": "PE_STARTUP",
-      "difficulty": "INT"
-    },
-    {
-      "id": 273,
-      "guest": "Thomas Friedberger",
-      "title": "Defense europeenne",
-      "pillar": "IMPACT_ESG",
-      "difficulty": "AVA"
-    },
-    {
-      "id": 274,
-      "guest": "David Baverez",
-      "title": "Economie de guerre",
-      "pillar": "BOURSE",
-      "difficulty": "AVA"
-    },
-    {
-      "id": 275,
-      "guest": "Damien Morin",
-      "title": "Tete business angel",
-      "pillar": "PE_STARTUP",
-      "difficulty": "AVA"
-    },
-    {
-      "id": 276,
-      "guest": "Nicolas Marque",
-      "title": "Produits structures",
-      "pillar": "BOURSE",
-      "difficulty": "AVA"
-    },
-    {
-      "id": 277,
-      "guest": "Stephane Torrens",
-      "title": "ChatGPT vs CGP",
-      "pillar": "PATRIMOINE_FISCALITE",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 278,
-      "guest": "Bertrand Lamielle",
-      "title": "Cerveau sabote gains",
-      "pillar": "FINANCES_PERSO",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 279,
-      "guest": "Paul Rodrigues",
-      "title": "Investir dans la terre",
-      "pillar": "ALTERNATIFS",
-      "difficulty": "INT"
-    },
-    {
-      "id": 280,
-      "guest": "Aldric Emie",
-      "title": "PE grille lecture",
-      "pillar": "PE_STARTUP",
-      "difficulty": "INT"
-    },
-    {
-      "id": 281,
-      "guest": "Marc Touati",
-      "title": "France effondrement",
-      "pillar": "BOURSE",
-      "difficulty": "INT"
-    },
-    {
-      "id": 282,
-      "guest": "Pierre Chartier",
-      "title": "Coulisses trading",
-      "pillar": "BOURSE",
-      "difficulty": "AVA"
-    },
-    {
-      "id": 283,
-      "guest": "Insaff El Hassini",
-      "title": "Augmentation meritee",
-      "pillar": "FINANCES_PERSO",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 284,
-      "guest": "Matthieu Burin",
-      "title": "Renovation pieges",
-      "pillar": "IMMOBILIER",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 285,
-      "guest": "Gregory Guilmin",
-      "title": "ETF erreurs couteuses",
-      "pillar": "BOURSE",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 286,
-      "guest": "Geraldine Metifeux",
-      "title": "France degradee Fitch",
-      "pillar": "BOURSE",
-      "difficulty": "INT"
-    },
-    {
-      "id": 287,
-      "guest": "Kevin Thozet",
-      "title": "Devises piege ETF",
-      "pillar": "BOURSE",
-      "difficulty": "INT"
-    },
-    {
-      "id": 288,
-      "guest": "Valentin Lautier",
-      "title": "Quotas carbone",
-      "pillar": "IMPACT_ESG",
-      "difficulty": "INT"
-    },
-    {
-      "id": 289,
-      "guest": "Yves Choueifaty",
-      "title": "Investir ou institutionnels n'osent pas",
-      "pillar": "BOURSE",
-      "difficulty": "AVA"
-    },
-    {
-      "id": 290,
-      "guest": "Herve Degreve",
-      "title": "Home Equity renovation",
-      "pillar": "IMMOBILIER",
-      "difficulty": "INT"
-    },
-    {
-      "id": 291,
-      "guest": "Paul Moreno Blosseville",
-      "title": "PE meilleurs gerants",
-      "pillar": "PE_STARTUP",
-      "difficulty": "AVA"
-    },
-    {
-      "id": 292,
-      "guest": "Jerome Vialla",
-      "title": "Independants 3 leviers",
-      "pillar": "PATRIMOINE_FISCALITE",
-      "difficulty": "INT"
-    },
-    {
-      "id": 293,
-      "guest": "Esther Moisy-Kirschbaum",
-      "title": "IA et vibe coding",
-      "pillar": "ENTREPRENEURIAT",
-      "difficulty": "INT"
-    },
-    {
-      "id": 294,
-      "guest": "Charles Beigbeder",
-      "title": "Spatial, quantique, nucleaire",
-      "pillar": "PE_STARTUP",
-      "difficulty": "AVA"
-    },
-    {
-      "id": 295,
-      "guest": "Marine Bibas",
-      "title": "Luxe seconde main",
-      "pillar": "ALTERNATIFS",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 296,
-      "guest": "Mounir Laggoune",
-      "title": "Patrimoine de zero",
-      "pillar": "FINANCES_PERSO",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 297,
-      "guest": "Matthieu Stefani",
-      "title": "Bilan 2025 / Perspectives 2026",
-      "pillar": "FINANCES_PERSO",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 298,
-      "guest": "Marie-Lahya Simon",
-      "title": "Couple et argent",
-      "pillar": "PATRIMOINE_FISCALITE",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 299,
-      "guest": "Romain Burnand",
-      "title": "Small caps surperformer",
-      "pillar": "BOURSE",
-      "difficulty": "AVA"
-    },
-    {
-      "id": 300,
-      "guest": "Philippe Le Trung",
-      "title": "Bureaux, residentiel, hotellerie",
-      "pillar": "IMMOBILIER",
-      "difficulty": "INT"
-    },
-    {
-      "id": 301,
+      "id": 218,
       "guest": "Nicolas Cheron",
-      "title": "Investir vraie vie",
+      "title": "Investir en crise",
       "pillar": "BOURSE",
       "difficulty": "INT"
     },
     {
-      "id": 302,
-      "guest": "Mathieu Vaissie",
-      "title": "10 mythes investissement",
-      "pillar": "BOURSE",
+      "id": 217,
+      "guest": "Fanny Kopf",
+      "title": "Comment fonctionne le prêt sur gage ?",
+      "pillar": "FINANCES_PERSO",
       "difficulty": "DEB"
     },
     {
-      "id": 303,
-      "guest": "Yann Le Her",
-      "title": "Perdre argent avec CGP",
-      "pillar": "PATRIMOINE_FISCALITE",
+      "id": 216,
+      "guest": "Olivier Dhaine",
+      "title": "Acheter revendre voiture",
+      "pillar": "FINANCES_PERSO",
       "difficulty": "DEB"
     },
     {
-      "id": 304,
-      "guest": "Alexandre Stachtchenko",
-      "title": "Bitcoin zero ou million",
-      "pillar": "CRYPTO",
+      "id": 215,
+      "guest": "Johann Nguelet",
+      "title": "Économiser +1000€ par an grâce aux défis d’épargne",
+      "pillar": "FINANCES_PERSO",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 214,
+      "guest": "Yoann Lopez",
+      "title": "Existe-t-il une méthode pour devenir millionnaire ?",
+      "pillar": "FINANCES_PERSO",
       "difficulty": "INT"
     },
     {
-      "id": 305,
-      "guest": "Romain Daubry",
-      "title": "Options en Bourse",
-      "pillar": "BOURSE",
-      "difficulty": "AVA"
-    },
-    {
-      "id": 306,
-      "guest": "Guillaume Angot",
-      "title": "Rentier a 34 ans",
-      "pillar": "IMMOBILIER",
-      "difficulty": "INT"
-    },
-    {
-      "id": 307,
-      "guest": "Alain Madelin",
-      "title": "La decennie qui change",
-      "pillar": "BOURSE",
-      "difficulty": "AVA"
-    },
-    {
-      "id": 308,
-      "guest": "Pierre Marin",
-      "title": "CGP et frais",
-      "pillar": "PATRIMOINE_FISCALITE",
-      "difficulty": "DEB"
-    },
-    {
-      "id": 309,
-      "guest": "Gonzague Ruchaud",
-      "title": "Voitures de collection",
+      "id": 213,
+      "guest": "Vincent Bourdel",
+      "title": "Actifs alternatifs 2024",
       "pillar": "ALTERNATIFS",
       "difficulty": "INT"
     },
     {
-      "id": 310,
-      "guest": "Anne-Laure Frischlander",
-      "title": "SaaSpocalypse",
-      "pillar": "BOURSE",
-      "difficulty": "AVA"
+      "id": 212,
+      "guest": "Yvan Vaillant",
+      "title": "La stratégie de la tortue : ne pas se précipiter et voir long terme pour son patrimoine",
+      "pillar": "FINANCES_PERSO",
+      "difficulty": "DEB"
     },
     {
-      "id": 311,
-      "guest": "Steve Lepine",
-      "title": "Hotellerie des 1000 EUR",
+      "id": 211,
+      "guest": "Maeva Courtois",
+      "title": "Comment (vraiment) réduire ses dépenses et mieux épargner ?",
+      "pillar": "FINANCES_PERSO",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 210,
+      "guest": "Jeremy Faucheux",
+      "title": "Boutiques, enseignes, bureaux : infiltrez le monde des pros",
       "pillar": "IMMOBILIER",
       "difficulty": "INT"
     },
     {
-      "id": 312,
-      "guest": "Arthur Auboeuf & Joseph Choueifaty",
-      "title": "Fonds verts : greenwashing",
+      "id": 209,
+      "guest": "Adlene Djekiref",
+      "title": "Guide Airbnb",
+      "pillar": "IMMOBILIER",
+      "difficulty": "INT"
+    },
+    {
+      "id": 208,
+      "guest": "Owen Simonin",
+      "title": "Bitcoin ATH ETF 2024",
+      "pillar": "CRYPTO",
+      "difficulty": "INT"
+    },
+    {
+      "id": 207,
+      "guest": "Joseph Choueifaty",
+      "title": "Faire le tri dans les fonds durables pour éviter le greenwashing",
       "pillar": "IMPACT_ESG",
       "difficulty": "INT"
+    },
+    {
+      "id": 206,
+      "guest": "Yasmina Brasseur",
+      "title": "SARL famille vs SCI",
+      "pillar": "IMMOBILIER",
+      "difficulty": "INT"
+    },
+    {
+      "id": 205,
+      "guest": "Laurent Mesnil",
+      "title": "Comment les sportifs de haut niveau gèrent leurs finances ?",
+      "pillar": "FINANCES_PERSO",
+      "difficulty": "INT"
+    },
+    {
+      "id": 204,
+      "guest": "Bassel Abedi",
+      "title": "Location saisonnière : le secret pour contourner toutes les limites !",
+      "pillar": "IMMOBILIER",
+      "difficulty": "INT"
+    },
+    {
+      "id": 203,
+      "guest": "Nicolas Barrailler",
+      "title": "Comment éviter les arnaques financières ?",
+      "pillar": "FINANCES_PERSO",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 202,
+      "guest": "Caroline Aupoix",
+      "title": "Avocat fiscaliste : dépense futile ou investissement utile ?",
+      "pillar": "PATRIMOINE_FISCALITE",
+      "difficulty": "INT"
+    },
+    {
+      "id": 201,
+      "guest": "Marie de Raismes",
+      "title": "Investir dans des actions à dividendes",
+      "pillar": "BOURSE",
+      "difficulty": "INT"
+    },
+    {
+      "id": 200,
+      "guest": "4 entrepreneurs",
+      "title": "Transformer sa passion en business : l’expérience de 4 entrepreneurs",
+      "pillar": "ENTREPRENEURIAT",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 199,
+      "guest": "Renaud Guillerm",
+      "title": "Investir aux côtés des meilleurs business angels grâce au SPV",
+      "pillar": "PE_STARTUP",
+      "difficulty": "AVA"
+    },
+    {
+      "id": 198,
+      "guest": "Bettina Mazzocchi",
+      "title": "ETF obligataires",
+      "pillar": "BOURSE",
+      "difficulty": "INT"
+    },
+    {
+      "id": 197,
+      "guest": "Florian Delifer",
+      "title": "Louer son salon 500€ par jour pour un team building : l’affaire de l’année ?",
+      "pillar": "ENTREPRENEURIAT",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 196,
+      "guest": "Frederic Moreau",
+      "title": "Quelles sont les erreurs à éviter lorsqu’on investit dans l’immobilier ?",
+      "pillar": "IMMOBILIER",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 195,
+      "guest": "Souleymane-Jean Galadima",
+      "title": "Investir 10€, 100€ ou 1 000€ par mois : comment se lancer ?",
+      "pillar": "FINANCES_PERSO",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 194,
+      "guest": "Matthieu Stefani",
+      "title": "Hors-série - Bilan et perspectives : La Martingale en 2023",
+      "pillar": "FINANCES_PERSO",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 193,
+      "guest": "Jean-Baptiste Monie",
+      "title": "Crédit immobilier : quelle tendance pour les taux en 2024 ?",
+      "pillar": "IMMOBILIER",
+      "difficulty": "INT"
+    },
+    {
+      "id": 192,
+      "guest": "Geraldine Metifeux",
+      "title": "Couts dependance parents",
+      "pillar": "PATRIMOINE_FISCALITE",
+      "difficulty": "INT"
+    },
+    {
+      "id": 191,
+      "guest": "Frederic Stolar",
+      "title": "Investir dans les meilleures PME et ETI non cotées",
+      "pillar": "PE_STARTUP",
+      "difficulty": "AVA"
+    },
+    {
+      "id": 190,
+      "guest": "Xavier Hovasse",
+      "title": "Investir à l'étranger : destination Brésil, Mexique, Chili",
+      "pillar": "BOURSE",
+      "difficulty": "AVA"
+    },
+    {
+      "id": 189,
+      "guest": "Alisson Jungling",
+      "title": "Louer 30 appartements rentables 97% de l'année : la méthode Jungling",
+      "pillar": "IMMOBILIER",
+      "difficulty": "AVA"
+    },
+    {
+      "id": 188,
+      "guest": "Bruno Cantegrel",
+      "title": "Comment trouver le bon locataire ?",
+      "pillar": "IMMOBILIER",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 187,
+      "guest": "Diane Cesbron",
+      "title": " Investir dans le cinéma grâce aux SOFICA",
+      "pillar": "ALTERNATIFS",
+      "difficulty": "INT"
+    },
+    {
+      "id": 186,
+      "guest": "Arthur de Villemandy",
+      "title": "Détecter les tendances pour mieux investir",
+      "pillar": "PE_STARTUP",
+      "difficulty": "INT"
+    },
+    {
+      "id": 185,
+      "guest": "Olivier Herbout",
+      "title": "La finance quantitative est-elle réservée aux pros des maths ?",
+      "pillar": "BOURSE",
+      "difficulty": "AVA"
+    },
+    {
+      "id": 184,
+      "guest": "Thomas Hebrard",
+      "title": "Investir dans le vin: comment s'y prendre en 2023 ?",
+      "pillar": "ALTERNATIFS",
+      "difficulty": "INT"
+    },
+    {
+      "id": 183,
+      "guest": "Laure Verhaeghe",
+      "title": "Soutenir la transition énergétique grâce au crowdfunding",
+      "pillar": "IMPACT_ESG",
+      "difficulty": "INT"
+    },
+    {
+      "id": 182,
+      "guest": "Clement Renault",
+      "title": "Démystifier l'immobilier fractionné : risques et opportunités",
+      "pillar": "IMMOBILIER",
+      "difficulty": "INT"
+    },
+    {
+      "id": 181,
+      "guest": "Cyril Chiche",
+      "title": "Banque vs Application : où placer et gérer son argent ?",
+      "pillar": "FINANCES_PERSO",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 180,
+      "guest": "Kevin Jourdan",
+      "title": "Side business et revenus passifs : on vous dit tout !",
+      "pillar": "ENTREPRENEURIAT",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 179,
+      "guest": "Thomas Creton",
+      "title": "ETF: effet de mode ou véritable martingale ?",
+      "pillar": "BOURSE",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 178,
+      "guest": "Insaff El Hassini",
+      "title": "Negocier augmentation",
+      "pillar": "FINANCES_PERSO",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 177,
+      "guest": "Michael Holzmann",
+      "title": "Les sneakers : mode ou investissement lucratif ?",
+      "pillar": "ALTERNATIFS",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 176,
+      "guest": "Raphael Bloch",
+      "title": "Investir dans le Web3 : opportunités et risques à mi-2023",
+      "pillar": "CRYPTO",
+      "difficulty": "INT"
+    },
+    {
+      "id": 175,
+      "guest": "Agathe Tounsi",
+      "title": "Dubaï : la ruée vers l'or immobilier",
+      "pillar": "IMMOBILIER",
+      "difficulty": "INT"
+    },
+    {
+      "id": 174,
+      "guest": "Alexandre Boissenot",
+      "title": "L'essor des cartes Pokémon: une aubaine pour investir ?",
+      "pillar": "ALTERNATIFS",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 173,
+      "guest": "Aldric Emie",
+      "title": "5 regles or investissement",
+      "pillar": "FINANCES_PERSO",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 172,
+      "guest": "Sophie Desmazieres",
+      "title": "Louer son appartement durant les JO 2024 : l'opportunité du siècle ?",
+      "pillar": "IMMOBILIER",
+      "difficulty": "INT"
+    },
+    {
+      "id": 171,
+      "guest": "Thomas Veillet",
+      "title": "Où en sont les marchés financiers à mi-2023 ? Rétrospective et prévisions",
+      "pillar": "BOURSE",
+      "difficulty": "INT"
+    },
+    {
+      "id": 170,
+      "guest": "Adrien Legendre",
+      "title": "Investir dans des livres et manuscrits de collection",
+      "pillar": "ALTERNATIFS",
+      "difficulty": "AVA"
+    },
+    {
+      "id": 169,
+      "guest": "Thomas Cornu",
+      "title": "Les meilleures villes où investir en 2023",
+      "pillar": "IMMOBILIER",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 168,
+      "guest": "Jeremy Gachet & Loic Audet",
+      "title": "Investir dans un coliving : faut-il se lancer ?",
+      "pillar": "IMMOBILIER",
+      "difficulty": "INT"
+    },
+    {
+      "id": 167,
+      "guest": "Charles Ruelle",
+      "title": "Leasing immobilier : devenir propriétaire sans passer par la banque ?",
+      "pillar": "IMMOBILIER",
+      "difficulty": "INT"
+    },
+    {
+      "id": 166,
+      "guest": "Benoit Petit",
+      "title": "Réduire ses impôts grâce à la loi Girardin",
+      "pillar": "PATRIMOINE_FISCALITE",
+      "difficulty": "INT"
+    },
+    {
+      "id": 165,
+      "guest": "Maxime Camus",
+      "title": "Private Equity : Comment investir dans les sociétés non cotées ?",
+      "pillar": "PE_STARTUP",
+      "difficulty": "INT"
+    },
+    {
+      "id": 164,
+      "guest": "Antoine de Ravel d'Esclapon",
+      "title": "Tout ce qu'il faut savoir sur la Société Civile",
+      "pillar": "PATRIMOINE_FISCALITE",
+      "difficulty": "INT"
+    },
+    {
+      "id": 163,
+      "guest": "Nina Baka",
+      "title": "Du Berceau à la Bourse : éduquer les enfants à la finance",
+      "pillar": "PATRIMOINE_FISCALITE",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 162,
+      "guest": "Amandine Chaigne",
+      "title": "Le PER est-il la bonne solution pour ma retraite ?",
+      "pillar": "PATRIMOINE_FISCALITE",
+      "difficulty": "INT"
+    },
+    {
+      "id": 161,
+      "guest": "Vincent Kraus",
+      "title": "ISR, réduction d'impôt et rendement : les clés de l'investissement agricole",
+      "pillar": "ALTERNATIFS",
+      "difficulty": "INT"
+    },
+    {
+      "id": 160,
+      "guest": "Antoine Fraysse-Soulier",
+      "title": "2023, bon timing pour investir sur les marchés chinois ?",
+      "pillar": "BOURSE",
+      "difficulty": "AVA"
+    },
+    {
+      "id": 159,
+      "guest": "Laure Gaschignard",
+      "title": "Pourquoi faire une donation de son vivant ?",
+      "pillar": "PATRIMOINE_FISCALITE",
+      "difficulty": "INT"
+    },
+    {
+      "id": 158,
+      "guest": "Frederic Puzin",
+      "title": "Chasser les frais ou payer la performance : comment choisir ?",
+      "pillar": "PATRIMOINE_FISCALITE",
+      "difficulty": "INT"
+    },
+    {
+      "id": 157,
+      "guest": "Igal Natan",
+      "title": "Viager et nue-propriété : allier investissement social et rendement",
+      "pillar": "IMMOBILIER",
+      "difficulty": "INT"
+    },
+    {
+      "id": 156,
+      "guest": "Pascal Gautier",
+      "title": "Investir sereinement dans la crypto grâce au cold wallet",
+      "pillar": "CRYPTO",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 155,
+      "guest": "Alexandre Roubaud",
+      "title": "DCA Bitcoin : épargner et investir en crypto sans prise de tête",
+      "pillar": "CRYPTO",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 154,
+      "guest": "Delphine d'Amarzit",
+      "title": "Les secrets de la première place boursière de la zone euro",
+      "pillar": "BOURSE",
+      "difficulty": "INT"
+    },
+    {
+      "id": 153,
+      "guest": "Julia Calderoli & Romain Garcon",
+      "title": "Que se cache-t-il derrière les frais de notaire (et comment les diminuer) ?",
+      "pillar": "IMMOBILIER",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 152,
+      "guest": "Gregory Guilmin",
+      "title": "La gestion passive (et rentable) de son épargne grâce aux ETF",
+      "pillar": "BOURSE",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 151,
+      "guest": "Nadim Takchi",
+      "title": "Faut-il s'endetter pour s'enrichir avec l'immobilier locatif ?",
+      "pillar": "IMMOBILIER",
+      "difficulty": "INT"
+    },
+    {
+      "id": 150,
+      "guest": "Aurelie Khaldi",
+      "title": "La société holding : est-ce que ça me concerne ?",
+      "pillar": "PATRIMOINE_FISCALITE",
+      "difficulty": "AVA"
+    },
+    {
+      "id": 149,
+      "guest": "Reda Berrehili",
+      "title": "Cryptos - 5 leçons pour éviter un nouveau FTX",
+      "pillar": "CRYPTO",
+      "difficulty": "INT"
+    },
+    {
+      "id": 148,
+      "guest": "Hugo Salard",
+      "title": "Gérer ses abonnements : le meilleur moyen d'économiser de l'argent ?",
+      "pillar": "FINANCES_PERSO",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 147,
+      "guest": "Samantha McCoy",
+      "title": "Investir dans la photographie d'art",
+      "pillar": "ALTERNATIFS",
+      "difficulty": "INT"
+    },
+    {
+      "id": 146,
+      "guest": "Keyvan Nilforoushan",
+      "title": "Faut-il acheter ou louer sa résidence principale ?",
+      "pillar": "IMMOBILIER",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 145,
+      "guest": "Titiou Lecoq",
+      "title": "Couples : comment trouver son organisation financière idéale ?",
+      "pillar": "PATRIMOINE_FISCALITE",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 144,
+      "guest": "Thomas Lefebvre",
+      "title": "L'immobilier en 2023 : faut-il foncer ou attendre ?",
+      "pillar": "IMMOBILIER",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 143,
+      "guest": "Matthieu Stefani",
+      "title": "Hors-série - Les coulisses de La Martingale en 2022",
+      "pillar": "FINANCES_PERSO",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 142,
+      "guest": "Gautier Delabrousse-Mayoux",
+      "title": "Immo, Private Equity, Crypto, Bourse : On en est où fin 2022 ?",
+      "pillar": "BOURSE",
+      "difficulty": "INT"
+    },
+    {
+      "id": 141,
+      "guest": "Owen Simonin & Marc Fiorentino",
+      "title": "Crypto = Far west ? Le débat entre Owen Simonin (Hasheur) et Marc Fiorentino",
+      "pillar": "CRYPTO",
+      "difficulty": "INT"
+    },
+    {
+      "id": 140,
+      "guest": "Marc Montagne",
+      "title": "Les montres : un investissement toujours attrayant ?",
+      "pillar": "ALTERNATIFS",
+      "difficulty": "INT"
+    },
+    {
+      "id": 139,
+      "guest": "Gautier Allard",
+      "title": "Marchand de biens immobiliers : le bon filon ?",
+      "pillar": "IMMOBILIER",
+      "difficulty": "INT"
+    },
+    {
+      "id": 138,
+      "guest": "Pauline de La Motte Rouge",
+      "title": "Comment éviter ou résoudre un conflit patrimonial ?",
+      "pillar": "PATRIMOINE_FISCALITE",
+      "difficulty": "INT"
+    },
+    {
+      "id": 137,
+      "guest": "John Karp",
+      "title": "NFT : Où en est-on fin 2022 ?",
+      "pillar": "CRYPTO",
+      "difficulty": "INT"
+    },
+    {
+      "id": 136,
+      "guest": "Yoann Lopez",
+      "title": "Générer des revenus supplémentaires grâce au side business",
+      "pillar": "ENTREPRENEURIAT",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 135,
+      "guest": "Magalie Petit",
+      "title": "Tout savoir sur le don et la défiscalisation",
+      "pillar": "PATRIMOINE_FISCALITE",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 134,
+      "guest": "Souleymane-Jean Galadima",
+      "title": "Investir dans les infrastructures",
+      "pillar": "PE_STARTUP",
+      "difficulty": "INT"
+    },
+    {
+      "id": 133,
+      "guest": "Marc Maziere",
+      "title": "Comment faire des économies au quotidien ?",
+      "pillar": "FINANCES_PERSO",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 132,
+      "guest": "Anthony Bourbon",
+      "title": "Investir en start-up via un club de Private Equity",
+      "pillar": "PE_STARTUP",
+      "difficulty": "INT"
+    },
+    {
+      "id": 131,
+      "guest": "Vincent Boy",
+      "title": "Comment investir en période de bear market ?",
+      "pillar": "BOURSE",
+      "difficulty": "INT"
+    },
+    {
+      "id": 130,
+      "guest": "Thibault de la Baronniere",
+      "title": "Les secrets de l’investissement dans les caves",
+      "pillar": "IMMOBILIER",
+      "difficulty": "INT"
+    },
+    {
+      "id": 129,
+      "guest": "Chloe Clair",
+      "title": "Climat, diagnostic énergétique et investissement immo",
+      "pillar": "IMMOBILIER",
+      "difficulty": "INT"
+    },
+    {
+      "id": 128,
+      "guest": "Foulques du Reau",
+      "title": "Investir dans les terres agricoles",
+      "pillar": "ALTERNATIFS",
+      "difficulty": "INT"
+    },
+    {
+      "id": 127,
+      "guest": "Thomas Friedberger",
+      "title": "Mégatendance : anticiper les grands changements pour mieux investir",
+      "pillar": "IMPACT_ESG",
+      "difficulty": "AVA"
+    },
+    {
+      "id": 126,
+      "guest": "Owen Simonin",
+      "title": "Nouvelle crypto",
+      "pillar": "CRYPTO",
+      "difficulty": "INT"
+    },
+    {
+      "id": 125,
+      "guest": "Heloise Bolle",
+      "title": "Comment bien préparer sa succession ?",
+      "pillar": "PATRIMOINE_FISCALITE",
+      "difficulty": "INT"
+    },
+    {
+      "id": 124,
+      "guest": "Nicolas Decaudain",
+      "title": "[REDIFF] La société holding : est-ce que ça me concerne ?",
+      "pillar": "PATRIMOINE_FISCALITE",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 123,
+      "guest": "Guillaume Angot",
+      "title": "Tout savoir sur le Lean FIRE",
+      "pillar": "FINANCES_PERSO",
+      "difficulty": "INT"
+    },
+    {
+      "id": 122,
+      "guest": "Maxime Carmignac",
+      "title": "Investir dans des entreprises familiales",
+      "pillar": "PE_STARTUP",
+      "difficulty": "AVA"
+    },
+    {
+      "id": 121,
+      "guest": "Pierre Chapon",
+      "title": "Tout savoir sur l'achat d'une résidence secondaire",
+      "pillar": "IMMOBILIER",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 120,
+      "guest": "Adrien Chaltiel",
+      "title": "Investir dans une levée de fonds en Seed",
+      "pillar": "PE_STARTUP",
+      "difficulty": "AVA"
+    },
+    {
+      "id": 119,
+      "guest": "Sonia Elmlinger-Labadie",
+      "title": "Tout savoir sur l’assurance emprunteur",
+      "pillar": "IMMOBILIER",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 118,
+      "guest": "Leonard Hery",
+      "title": "Les opportunités cachées de l’immobilier small caps",
+      "pillar": "IMMOBILIER",
+      "difficulty": "AVA"
+    },
+    {
+      "id": 117,
+      "guest": "Arthur Micoulet",
+      "title": "Tout savoir sur la DeFi (Decentralized Finance)",
+      "pillar": "CRYPTO",
+      "difficulty": "INT"
+    },
+    {
+      "id": 116,
+      "guest": "Thomas",
+      "title": "Tout savoir sur l’épargne de précaution",
+      "pillar": "FINANCES_PERSO",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 115,
+      "guest": "Emeline Siron",
+      "title": "Investissement locatif, comment gagner du temps et passer à l'échelle supérieure ?",
+      "pillar": "IMMOBILIER",
+      "difficulty": "INT"
+    },
+    {
+      "id": 114,
+      "guest": "Nicolas Cheron & Gregory Raymond",
+      "title": "Chute des cryptos : faut-il abandonner ou accélérer ?",
+      "pillar": "CRYPTO",
+      "difficulty": "INT"
+    },
+    {
+      "id": 113,
+      "guest": "Christele Biganzoli",
+      "title": "Expatriation, investissement et fiscalité à l'étranger : on vous dit tout !",
+      "pillar": "PATRIMOINE_FISCALITE",
+      "difficulty": "INT"
+    },
+    {
+      "id": 112,
+      "guest": "Martin Cortet",
+      "title": "Comment bien déclarer ses impôts en 2022 ?",
+      "pillar": "PATRIMOINE_FISCALITE",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 111,
+      "guest": "Mathilde Iclanzan",
+      "title": "Crowdfunding - tout le monde en parle, mais où en est-on en 2022 ?",
+      "pillar": "CROWDFUNDING",
+      "difficulty": "INT"
+    },
+    {
+      "id": 110,
+      "guest": "Clement Renault",
+      "title": "Comment bien choisir sa SCPI ?",
+      "pillar": "IMMOBILIER",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 109,
+      "guest": "Martin Menez",
+      "title": "Immobilier : bien vendre (et bien acheter)",
+      "pillar": "IMMOBILIER",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 108,
+      "guest": "Lea Lejeune",
+      "title": "Bien s’informer pour bien investir",
+      "pillar": "FINANCES_PERSO",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 107,
+      "guest": "Bassel Abedi",
+      "title": "La vraie rentabilité de l'immobilier locatif",
+      "pillar": "IMMOBILIER",
+      "difficulty": "INT"
+    },
+    {
+      "id": 106,
+      "guest": "Francois Badelon",
+      "title": "Investir comme Warren Buffett",
+      "pillar": "BOURSE",
+      "difficulty": "INT"
+    },
+    {
+      "id": 105,
+      "guest": "Julien Etaix",
+      "title": "Que faire face à l’inflation ?",
+      "pillar": "BOURSE",
+      "difficulty": "INT"
+    },
+    {
+      "id": 104,
+      "guest": "Yoann Lopez",
+      "title": "Investir dans les LEGO",
+      "pillar": "ALTERNATIFS",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 103,
+      "guest": "Thomas Perret",
+      "title": "Conflits géopolitiques et investissement : Que faire ?",
+      "pillar": "BOURSE",
+      "difficulty": "INT"
+    },
+    {
+      "id": 102,
+      "guest": "Fabrice Artinian",
+      "title": "Ce que rapportent vraiment les résidences de service",
+      "pillar": "IMMOBILIER",
+      "difficulty": "INT"
+    },
+    {
+      "id": 101,
+      "guest": "Maeva",
+      "title": "Gérer son budget sans effort",
+      "pillar": "FINANCES_PERSO",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 100,
+      "guest": "Jean-Michel Pailhon",
+      "title": "Tout comprendre des NFTs d’art",
+      "pillar": "CRYPTO",
+      "difficulty": "INT"
+    },
+    {
+      "id": 99,
+      "guest": "Marguerite Berard",
+      "title": "Mon banquier sert-il encore à quelque chose ?",
+      "pillar": "FINANCES_PERSO",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 98,
+      "guest": "Christophe Vattier",
+      "title": "Miser sur des célébrités (ou votre belle-mère), c'est du sérieux et ça peut rapporter",
+      "pillar": "ALTERNATIFS",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 97,
+      "guest": "Pierre Morizot",
+      "title": "Les cryptos, un paradis fiscal ?",
+      "pillar": "CRYPTO",
+      "difficulty": "INT"
+    },
+    {
+      "id": 96,
+      "guest": "Antoine Fraysse-Soulier",
+      "title": "Le cannabis, le nouveau billet vert ?",
+      "pillar": "ALTERNATIFS",
+      "difficulty": "INT"
+    },
+    {
+      "id": 95,
+      "guest": "Mathieu Mars",
+      "title": "S’offrir un château pour toucher le gros lot ?",
+      "pillar": "IMMOBILIER",
+      "difficulty": "INT"
+    },
+    {
+      "id": 94,
+      "guest": "Laurent Puget",
+      "title": "Ce qu’il faut retenir de l’investissement en 2021",
+      "pillar": "BOURSE",
+      "difficulty": "INT"
+    },
+    {
+      "id": 93,
+      "guest": "Matthieu Stefani",
+      "title": "Hors-série - Les coulisses de La Martingale en 2021",
+      "pillar": "FINANCES_PERSO",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 92,
+      "guest": "Cedric O'Neill",
+      "title": "Investissement fractionné : acheter dans l’immobilier à partir de 10€",
+      "pillar": "IMMOBILIER",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 91,
+      "guest": "Caroline Jurado",
+      "title": "La crypto pour les nuls, back to basics",
+      "pillar": "CRYPTO",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 90,
+      "guest": "Julien Calamote",
+      "title": "Immobilier, effet de levier et enrichissement latent",
+      "pillar": "IMMOBILIER",
+      "difficulty": "INT"
+    },
+    {
+      "id": 89,
+      "guest": "Gaelle Haag",
+      "title": "Pourquoi faut-il s'intéresser au Gender Lens Investing (et se lancer) ?",
+      "pillar": "IMPACT_ESG",
+      "difficulty": "INT"
+    },
+    {
+      "id": 88,
+      "guest": "Vincent Piche",
+      "title": "Finance à impact : comment trier les déchets des pépites ?",
+      "pillar": "IMPACT_ESG",
+      "difficulty": "INT"
+    },
+    {
+      "id": 87,
+      "guest": "Antoine Delon",
+      "title": "Pourquoi l'épargne retraite ne doit pas être plan-plan",
+      "pillar": "PATRIMOINE_FISCALITE",
+      "difficulty": "INT"
+    },
+    {
+      "id": 86,
+      "guest": "John Karp",
+      "title": "Maman, je vais tout t'expliquer sur les NFTs",
+      "pillar": "CRYPTO",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 85,
+      "guest": "Matthias Baccino",
+      "title": "La stratégie long-terme avec le Dollar Cost Averaging",
+      "pillar": "BOURSE",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 84,
+      "guest": "Alessandro Soldati",
+      "title": "2022, la nouvelle ruée vers l’or ?",
+      "pillar": "ALTERNATIFS",
+      "difficulty": "INT"
+    },
+    {
+      "id": 83,
+      "guest": "Marc Tempelman",
+      "title": "Épargne : peut-on encore faire confiance aux humains ?",
+      "pillar": "FINANCES_PERSO",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 82,
+      "guest": "Nicolas Decaudain",
+      "title": "La défiscalisation : par où commencer ?",
+      "pillar": "PATRIMOINE_FISCALITE",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 81,
+      "guest": "Joseph Choueifaty",
+      "title": "Faut-il investir dans l’épargne responsable ?",
+      "pillar": "IMPACT_ESG",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 80,
+      "guest": "Nicolas Cheron & Gregory Raymond",
+      "title": "Est-ce le début ou la fin des cryptos ? - Nicolas Chéron et Grégory Raymond",
+      "pillar": "CRYPTO",
+      "difficulty": "INT"
+    },
+    {
+      "id": 79,
+      "guest": "Greg Blumenfeld",
+      "title": "Un an plus tard, comment les montres d’occasion ont résisté à la crise",
+      "pillar": "ALTERNATIFS",
+      "difficulty": "INT"
+    },
+    {
+      "id": 78,
+      "guest": "Emilie Bellet",
+      "title": "10 conseils pour gérer ses finances perso",
+      "pillar": "FINANCES_PERSO",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 77,
+      "guest": "Mailys Rebora",
+      "title": "Comment la COVID a transformé le marché de l’immobilier d’entreprise",
+      "pillar": "IMMOBILIER",
+      "difficulty": "INT"
+    },
+    {
+      "id": 76,
+      "guest": "Ambre Soubiran",
+      "title": "Pourquoi détenir ses cryptos en propre ?",
+      "pillar": "CRYPTO",
+      "difficulty": "INT"
+    },
+    {
+      "id": 75,
+      "guest": "Ufuk Inci",
+      "title": "Pourquoi le “social trading” cartonne même chez les pros ?",
+      "pillar": "BOURSE",
+      "difficulty": "INT"
+    },
+    {
+      "id": 74,
+      "guest": "Thomas Lefebvre",
+      "title": "Quand la data nous aide à faire les meilleurs coups immobiliers",
+      "pillar": "IMMOBILIER",
+      "difficulty": "INT"
+    },
+    {
+      "id": 73,
+      "guest": "Quentin Romet",
+      "title": "Comment investir dans l’immobilier à 20, 40 ou 65 ans ?",
+      "pillar": "IMMOBILIER",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 72,
+      "guest": "Sophie Richard",
+      "title": "Acheter en viager, la bonne idée",
+      "pillar": "IMMOBILIER",
+      "difficulty": "INT"
+    },
+    {
+      "id": 71,
+      "guest": "Philippe Le Trung",
+      "title": "Jusqu’où ira la hausse des prix de l'immobilier",
+      "pillar": "IMMOBILIER",
+      "difficulty": "INT"
+    },
+    {
+      "id": 70,
+      "guest": "Mounir Laggoune",
+      "title": "Chasser les frais cachés pour exploser ses performances",
+      "pillar": "FINANCES_PERSO",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 69,
+      "guest": "Annie Maudouit-Ridde & Jerome Herbet",
+      "title": "Tout comprendre aux SPACs",
+      "pillar": "BOURSE",
+      "difficulty": "AVA"
+    },
+    {
+      "id": 68,
+      "guest": "Gautier Delabrousse-Mayoux",
+      "title": "Guide de l’investissement en SCPI entre amis",
+      "pillar": "IMMOBILIER",
+      "difficulty": "INT"
+    },
+    {
+      "id": 67,
+      "guest": "Heloise Bolle",
+      "title": "Amour et argent, comment faire bon ménage ?",
+      "pillar": "PATRIMOINE_FISCALITE",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 66,
+      "guest": "Thierry Vignal",
+      "title": "Investir dans l'immobilier à l’étranger",
+      "pillar": "IMMOBILIER",
+      "difficulty": "INT"
+    },
+    {
+      "id": 65,
+      "guest": "Sebastien Verdeaux",
+      "title": "S’inspirer des plus fortunés pour mieux gérer son patrimoine professionnel",
+      "pillar": "FINANCES_PERSO",
+      "difficulty": "INT"
+    },
+    {
+      "id": 64,
+      "guest": "Nicolas Cheron",
+      "title": "Devenir riche lentement mais sûrement",
+      "pillar": "BOURSE",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 63,
+      "guest": "Mathieu Vaissie",
+      "title": "Gérer ses risques, de la théorie à la pratique",
+      "pillar": "BOURSE",
+      "difficulty": "INT"
+    },
+    {
+      "id": 62,
+      "guest": "Geraldine Metifeux",
+      "title": "Investir en période de fin du monde, le retour",
+      "pillar": "BOURSE",
+      "difficulty": "INT"
+    },
+    {
+      "id": 61,
+      "guest": "Leo Lemordant",
+      "title": "Et si les énergies renouvelables étaient l’investissement idéal ?",
+      "pillar": "IMPACT_ESG",
+      "difficulty": "INT"
+    },
+    {
+      "id": 60,
+      "guest": "Cecile Roquelaure",
+      "title": "Immobilier, bien emprunter pour s’enrichir",
+      "pillar": "IMMOBILIER",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 59,
+      "guest": "Corentin Orsini",
+      "title": "Chasser en meute : comment investir entre amis ?",
+      "pillar": "PE_STARTUP",
+      "difficulty": "INT"
+    },
+    {
+      "id": 58,
+      "guest": "Augustin Sayer",
+      "title": "Les startups sont-elles surcotées en 2021 ?",
+      "pillar": "PE_STARTUP",
+      "difficulty": "INT"
+    },
+    {
+      "id": 57,
+      "guest": "Owen Simonin",
+      "title": "Se lancer dans la crypto à 18 ans et en faire son business",
+      "pillar": "CRYPTO",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 56,
+      "guest": "Emeric Eveno",
+      "title": "Réussir sa défiscalisation immobilière",
+      "pillar": "PATRIMOINE_FISCALITE",
+      "difficulty": "INT"
+    },
+    {
+      "id": 55,
+      "guest": "Audrey Bacrot",
+      "title": "Le “value” pour se tenir à l’écart des bulles",
+      "pillar": "BOURSE",
+      "difficulty": "AVA"
+    },
+    {
+      "id": 54,
+      "guest": "Gregory Raymond",
+      "title": "Montagnes russes des cryptos : comment s’y retrouver ?",
+      "pillar": "CRYPTO",
+      "difficulty": "INT"
+    },
+    {
+      "id": 53,
+      "guest": "Marc Fiorentino",
+      "title": "Plutôt Momentum Player ou Value Investor ? Comment investir en période de bulle ?",
+      "pillar": "BOURSE",
+      "difficulty": "AVA"
+    },
+    {
+      "id": 52,
+      "guest": "Paul Nyzam",
+      "title": "Investir dans l’art sans se tromper",
+      "pillar": "ALTERNATIFS",
+      "difficulty": "INT"
+    },
+    {
+      "id": 51,
+      "guest": "Maximilien Urso",
+      "title": "Investir dans les montres de luxe de seconde main oui, mais lesquelles ?",
+      "pillar": "ALTERNATIFS",
+      "difficulty": "INT"
+    },
+    {
+      "id": 50,
+      "guest": "Victor Lora",
+      "title": "Un an plus tard, la machine à construire du patrimoine",
+      "pillar": "FINANCES_PERSO",
+      "difficulty": "INT"
+    },
+    {
+      "id": 49,
+      "guest": "Alexandre Lacharme",
+      "title": "Comment investir dans les parkings ?",
+      "pillar": "IMMOBILIER",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 48,
+      "guest": "Pierre Chapon",
+      "title": "Faut-il vraiment acheter sa résidence principale ?",
+      "pillar": "IMMOBILIER",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 47,
+      "guest": "Xavier Delmas",
+      "title": "Investir en bourse même avec très peu de moyens",
+      "pillar": "BOURSE",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 46,
+      "guest": "Jean-Marc Jacobson",
+      "title": "Investir dans un loft à Chicago avec 30 euros",
+      "pillar": "IMMOBILIER",
+      "difficulty": "INT"
+    },
+    {
+      "id": 45,
+      "guest": "Laurent Puget",
+      "title": "Les Frosties : le meilleur investissement de 2021 ?",
+      "pillar": "BOURSE",
+      "difficulty": "INT"
+    },
+    {
+      "id": 44,
+      "guest": "Daniel Haguet",
+      "title": "Finance comportementale : Peut-on faire confiance à notre cerveau ?",
+      "pillar": "FINANCES_PERSO",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 43,
+      "guest": "Alice Leger",
+      "title": "Comment investir dans les sacs à main ?",
+      "pillar": "ALTERNATIFS",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 42,
+      "guest": "Julien Niquet",
+      "title": "L’épargne salariale : une pépite largement sous-évaluée",
+      "pillar": "PATRIMOINE_FISCALITE",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 41,
+      "guest": "Thomas Hebrard",
+      "title": "Châteaux de légende et “rising stars” : comment investir dans le vin en 2021 ?",
+      "pillar": "ALTERNATIFS",
+      "difficulty": "INT"
+    },
+    {
+      "id": 40,
+      "guest": "Camille David",
+      "title": "Prêter de l’argent à des entreprises en pleine crise sanitaire : bonne ou mauvaise idée ?",
+      "pillar": "CROWDFUNDING",
+      "difficulty": "INT"
+    },
+    {
+      "id": 39,
+      "guest": "Delphine Pinon",
+      "title": "Hors-série - Immobilier neuf en 2025 : stratégies d’achat et d’investissement à connaître avec Emeric Eveno, Papillon Patrimoine",
+      "pillar": "IMMOBILIER",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 38,
+      "guest": "Joachim Dupont",
+      "title": "Crise : bon ou mauvais moment pour investir dans l’immo et les Startups ? On vous dit tout !",
+      "pillar": "CROWDFUNDING",
+      "difficulty": "INT"
+    },
+    {
+      "id": 37,
+      "guest": "Pierre Sabatier",
+      "title": "Comment préparer sa retraite ? La question que tout le monde repousse (Surtout quand on a 20 ans)",
+      "pillar": "FINANCES_PERSO",
+      "difficulty": "INT"
+    },
+    {
+      "id": 36,
+      "guest": "Alexandre Toussaint",
+      "title": "Acheter les murs de son poissonnier, une bonne idée ?",
+      "pillar": "IMMOBILIER",
+      "difficulty": "INT"
+    },
+    {
+      "id": 35,
+      "guest": "Matthieu Lamoure",
+      "title": "Comment investir dans des voitures de collection ?",
+      "pillar": "ALTERNATIFS",
+      "difficulty": "INT"
+    },
+    {
+      "id": 34,
+      "guest": "Tarek Elmarhri",
+      "title": "Prendre des risques en s’inspirant des pros",
+      "pillar": "BOURSE",
+      "difficulty": "AVA"
+    },
+    {
+      "id": 33,
+      "guest": "Guy Marty",
+      "title": "Les SCPI : L’immobilier amélioré",
+      "pillar": "IMMOBILIER",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 32,
+      "guest": "Yoann Lopez",
+      "title": "Les meilleures stratégies d’investissement",
+      "pillar": "BOURSE",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 31,
+      "guest": "Greg Blumenfeld",
+      "title": "Comment investir dans les montres",
+      "pillar": "ALTERNATIFS",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 30,
+      "guest": "Brice Tavernier & Loic Audet",
+      "title": "Les meilleurs coups dans l’immobilier locatif sans sortir de chez soi",
+      "pillar": "IMMOBILIER",
+      "difficulty": "INT"
+    },
+    {
+      "id": 29,
+      "guest": "Philippe Roux",
+      "title": "Comment (bien) prendre des risques ?",
+      "pillar": "BOURSE",
+      "difficulty": "INT"
+    },
+    {
+      "id": 28,
+      "guest": "Albert d'Anthouard",
+      "title": "Faut-il être riche pour avoir un banquier privé ?",
+      "pillar": "FINANCES_PERSO",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 27,
+      "guest": "Philippe Le Trung",
+      "title": "Comment le covid19 va dérégler le marché de l’immobilier ?",
+      "pillar": "IMMOBILIER",
+      "difficulty": "INT"
+    },
+    {
+      "id": 26,
+      "guest": "Julia Bridger",
+      "title": "Bourse : comment dénicher ces pépites cachées derrière le CAC 40 ?",
+      "pillar": "BOURSE",
+      "difficulty": "INT"
+    },
+    {
+      "id": 25,
+      "guest": "Arnaud Dubois",
+      "title": "Comment investir dans l'art ? - Arnaud Dubois",
+      "pillar": "ALTERNATIFS",
+      "difficulty": "INT"
+    },
+    {
+      "id": 24,
+      "guest": "Sandrine Cauvin",
+      "title": "Investir dans le pétrole pour favoriser les énergies renouvelables ?",
+      "pillar": "IMPACT_ESG",
+      "difficulty": "INT"
+    },
+    {
+      "id": 23,
+      "guest": "Manuel Valente",
+      "title": "Faut-il se réfugier dans le Bitcoin ?",
+      "pillar": "CRYPTO",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 22,
+      "guest": "Sebastien de Lafond",
+      "title": "Le Coronavirus va-t-il rééquilibrer le marché immobilier ?",
+      "pillar": "IMMOBILIER",
+      "difficulty": "INT"
+    },
+    {
+      "id": 21,
+      "guest": "Laurent Puget",
+      "title": "Gérer mes finances dans la tempête du Covid",
+      "pillar": "BOURSE",
+      "difficulty": "INT"
+    },
+    {
+      "id": 20,
+      "guest": "Pierre Chapon",
+      "title": "Investir à plusieurs dans l’immobilier : une bonne idée ?",
+      "pillar": "IMMOBILIER",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 19,
+      "guest": "Nicolas de Feraudy",
+      "title": "6% d’intérêts en investissant dans la transition énergétique",
+      "pillar": "IMPACT_ESG",
+      "difficulty": "INT"
+    },
+    {
+      "id": 18,
+      "guest": "Gabriel Jarrosson",
+      "title": "Investir dans une startup en club",
+      "pillar": "PE_STARTUP",
+      "difficulty": "INT"
+    },
+    {
+      "id": 17,
+      "guest": "Baudouin Vercken",
+      "title": "Faire du blé en plantant des arbres : comment s’enrichir en faisant du bien à la planète ?",
+      "pillar": "ALTERNATIFS",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 16,
+      "guest": "Victor Lora",
+      "title": "[REDIFF] - 10 conseils pour gérer ses finances perso",
+      "pillar": "FINANCES_PERSO",
+      "difficulty": "INT"
+    },
+    {
+      "id": 15,
+      "guest": "Jean-Baptiste Vayleux",
+      "title": "Avoir un objectif de 10% de rentabilité via le crowdfunding immobilier c’est possible ?",
+      "pillar": "CROWDFUNDING",
+      "difficulty": "INT"
+    },
+    {
+      "id": 14,
+      "guest": "Pierre-Antoine Dusoulier",
+      "title": "Faut il avoir toutes ses économies en euros ?",
+      "pillar": "BOURSE",
+      "difficulty": "INT"
+    },
+    {
+      "id": 13,
+      "guest": "Guillaume Piard",
+      "title": "Ne plus investir dans le vent avec le Goal Based Investing !",
+      "pillar": "PATRIMOINE_FISCALITE",
+      "difficulty": "INT"
+    },
+    {
+      "id": 12,
+      "guest": "Mathieu Cornieti",
+      "title": "L'Impact Investing : Investir dans un Burger King pour avoir un impact social en gagnant de l'argent.",
+      "pillar": "IMPACT_ESG",
+      "difficulty": "INT"
+    },
+    {
+      "id": 11,
+      "guest": "Rafik Makhlouf",
+      "title": "L’or en barre, encore mieux que le bitcoin ?",
+      "pillar": "ALTERNATIFS",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 10,
+      "guest": "Eric Pinon",
+      "title": "Comment éviter de se faire accompagner par le nouveau Madoff ?",
+      "pillar": "PATRIMOINE_FISCALITE",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 9,
+      "guest": "Maxime Camus",
+      "title": "Comment bien s’organiser avant d’investir ?",
+      "pillar": "FINANCES_PERSO",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 8,
+      "guest": "Angelique de Lencquesaing",
+      "title": "Comment investir dans le vin et faire de l’argent avec du liquide ?",
+      "pillar": "ALTERNATIFS",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 7,
+      "guest": "Geraldine Metifeux",
+      "title": "Où investir avant la fin du monde ?",
+      "pillar": "BOURSE",
+      "difficulty": "INT"
+    },
+    {
+      "id": 6,
+      "guest": "Frederic Zablocki",
+      "title": "Comment trouver les licornes de demain ?",
+      "pillar": "PE_STARTUP",
+      "difficulty": "AVA"
+    },
+    {
+      "id": 5,
+      "guest": "Martin Menez",
+      "title": "Où faire les meilleurs coups immobiliers ?",
+      "pillar": "IMMOBILIER",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 4,
+      "guest": "Georges Viglietti",
+      "title": "Comment faire fortune en investissant dans des startups ?",
+      "pillar": "PE_STARTUP",
+      "difficulty": "INT"
+    },
+    {
+      "id": 3,
+      "guest": "Eric Larcheveque",
+      "title": "Bitcoin, arnaque ou opportunités ?",
+      "pillar": "CRYPTO",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 2,
+      "guest": "Laurent Girard",
+      "title": "Défense européenne : le meilleur placement ? Allô La Martingale",
+      "pillar": "PATRIMOINE_FISCALITE",
+      "difficulty": "DEB"
+    },
+    {
+      "id": 1,
+      "guest": "Philippe Le Trung",
+      "title": "Tesla, tech US ou Europe : le bon pari pour 2025 ? Allô La Martingale",
+      "pillar": "IMMOBILIER",
+      "difficulty": "DEB"
     }
   ]
 }

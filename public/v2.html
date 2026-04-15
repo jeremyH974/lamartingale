@@ -1412,9 +1412,9 @@
     // ===== EPISODE CARD =====
     function epCard(ep) {
       const d = isD(ep.id);
-      const thumb = ep.thumbnail || mediaMap[ep.id] || '';
+      const thumb = ep.thumbnail || (mediaMap[ep.id]?.thumbnail_350) || '';
       return `<div class="card card-clickable ep-card ${d?'completed':''}" onclick="showEpM(${ep.id})">
-        ${thumb ? `<img src="${thumb}" alt="" style="width:48px;height:48px;border-radius:8px;object-fit:cover;flex-shrink:0">` : `<div class="ep-num">#${ep.id}</div>`}
+        ${thumb ? `<img src="${thumb}" alt="" style="width:52px;height:52px;border-radius:10px;object-fit:cover;flex-shrink:0">` : `<div style="width:52px;height:52px;border-radius:10px;background:var(--blue-50);display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="color:var(--blue);font-size:11px;font-weight:700">${ep.id}</span></div>`}
         <div class="ep-body">
           <div class="ep-title">${ep.title}</div>
           <div class="ep-guest">${ep.guest_name}</div>
@@ -1422,6 +1422,7 @@
         <div class="ep-tags">
           <span class="ep-pillar-dot" style="background:${PC[ep.pillar]||'#999'}"></span>
           <span class="ep-pillar-name">${PN[ep.pillar]||ep.pillar}</span>
+          <span style="font-size:10px;color:var(--text-muted);margin-left:4px">#${ep.id}</span>
         </div>
         ${d?'<span class="ep-check">✓</span>':''}
       </div>`;
@@ -1856,7 +1857,8 @@
             <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px">
               <span style="color:${PC[ep.pillar]}">●</span> ${PN[ep.pillar]} · ${ep.difficulty}
             </div>
-            <h2 style="font-size:20px;font-weight:700;letter-spacing:-0.5px;margin-bottom:4px">#${ep.id} — ${ep.title}</h2>
+            <h2 style="font-size:20px;font-weight:700;letter-spacing:-0.5px;margin-bottom:4px">${ep.title}</h2>
+            <span style="font-size:11px;color:var(--text-muted)">Episode #${ep.id}</span>
             <p style="font-size:14px;color:var(--text-secondary)">${ep.guest_name}</p>
           </div>
         </div>
