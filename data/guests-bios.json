@@ -1,0 +1,1738 @@
+{
+  "metadata": {
+    "scraped_at": "2026-04-15T22:35:38.288Z",
+    "total": 288,
+    "with_bio": 88,
+    "with_company": 0
+  },
+  "guests": [
+    {
+      "episode_id": 312,
+      "guest_name": "Arthur Aubœuf et Joseph Choueifaty",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 311,
+      "guest_name": "Steve Lepine",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 310,
+      "guest_name": " Anne-Laure  Frischlander",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 309,
+      "guest_name": "Gonzague  Ruchaud",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 308,
+      "guest_name": "Pierre Marin",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 307,
+      "guest_name": "Alain Madelin",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 306,
+      "guest_name": "Guillaume Angot",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 305,
+      "guest_name": "Romain Daubry",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 304,
+      "guest_name": "Alexandre Stachtchenko",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 303,
+      "guest_name": "Yann Le Her",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 302,
+      "guest_name": "Mathieu Vaissié",
+      "guest_company": "",
+      "guest_bio": "mark de novembre 2025 réalisé par Les Echos Études"
+    },
+    {
+      "episode_id": 301,
+      "guest_name": "Nicolas Chéron",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 300,
+      "guest_name": "Philippe Le Trung",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 299,
+      "guest_name": "Romain Burnand",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 298,
+      "guest_name": "Marie-Lahya Simon ",
+      "guest_company": "",
+      "guest_bio": "On vous souhaite une très bonne écoute ! C’est par ici si vous préférez Apple Podcasts, ou ici si vous préférez Spotify"
+    },
+    {
+      "episode_id": 297,
+      "guest_name": "Matthieu Stefani",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 296,
+      "guest_name": "Mounir Laggoune",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 295,
+      "guest_name": "Marine Bibas",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 294,
+      "guest_name": "Charles Beigbeder",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 293,
+      "guest_name": "Esther Moisy-Kirschbaum",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 292,
+      "guest_name": "Jérôme Vialla",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 291,
+      "guest_name": "Paul Moreno Blosseville ",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 290,
+      "guest_name": "Hervé Degreve",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 289,
+      "guest_name": "Yves Choueifaty",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 288,
+      "guest_name": "Valentin Lautier",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 287,
+      "guest_name": "Kévin Thozet",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 286,
+      "guest_name": "Géraldine Métifeux",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 285,
+      "guest_name": "Grégory Guilmin",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 284,
+      "guest_name": "Matthieu Burin",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 283,
+      "guest_name": " Insaff El Hassini",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 282,
+      "guest_name": "Pierre Chartier",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 281,
+      "guest_name": "Marc Touati",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 280,
+      "guest_name": "Aldric Emié",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 278,
+      "guest_name": "Bertrand Lamielle",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 277,
+      "guest_name": "Stéphane Torrens",
+      "guest_company": "",
+      "guest_bio": "« Il ne faut jamais lâcher avec ChatGPT », conseille Matthieu"
+    },
+    {
+      "episode_id": 276,
+      "guest_name": "Nicolas Marque",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 275,
+      "guest_name": "Damien Morin",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 274,
+      "guest_name": "David Baverez ",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 273,
+      "guest_name": "Thomas Friedberger",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 272,
+      "guest_name": "Pierre Leroy",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 271,
+      "guest_name": "Benjamin Louvet ",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 270,
+      "guest_name": "Karen-Laure Mrejen ",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 269,
+      "guest_name": "Eric Tréguier",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 268,
+      "guest_name": "Lauren Dannay",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 267,
+      "guest_name": "Bruno Cantegrel",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 266,
+      "guest_name": "Guillaume Dolisi",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 265,
+      "guest_name": "Geoffroy Reiser",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 263,
+      "guest_name": "Charles Gave",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 262,
+      "guest_name": "Jokariz",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 261,
+      "guest_name": "Céline Bertrix",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 260,
+      "guest_name": "Jonathan Cohen",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 259,
+      "guest_name": "Parysatis Peymani",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 258,
+      "guest_name": "Yoni Buchsbaum",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 257,
+      "guest_name": "Xavier Anthonioz",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 256,
+      "guest_name": "Arnaud Dubois",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 255,
+      "guest_name": "Marc Fiorentino",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 254,
+      "guest_name": " Evan Testa",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 253,
+      "guest_name": "Clément Tardiveau",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 252,
+      "guest_name": "Thierry Vignal",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 251,
+      "guest_name": "Mathieu Charret",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 250,
+      "guest_name": "Hugo WInd",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 249,
+      "guest_name": "Nicolas Le Febvre",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 248,
+      "guest_name": "Mathieu Chandelier ",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 247,
+      "guest_name": "Marc Mazière",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 246,
+      "guest_name": "Matthieu Stefani",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 245,
+      "guest_name": "Valérie Batigne",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 244,
+      "guest_name": "Adeline Dillmann",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 243,
+      "guest_name": "Jonathan Levy",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 242,
+      "guest_name": "Hugo Panczak",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 240,
+      "guest_name": "Raphaël di Meglio",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 239,
+      "guest_name": "Arnaud Filhol",
+      "guest_company": "",
+      "guest_bio": "Transmission :\n\n75% d’exonération de droits de succession et donation (en contrepartie d’un engagement d’exploitation durable sur 30 ans)"
+    },
+    {
+      "episode_id": 238,
+      "guest_name": "Guillaume Simonin",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 237,
+      "guest_name": "Anne-Marie Sylvestre",
+      "guest_company": "",
+      "guest_bio": "’investissements adaptées à vos projets sur amundi"
+    },
+    {
+      "episode_id": 236,
+      "guest_name": "Pascale Baussant",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 235,
+      "guest_name": "Marc Menasé",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 234,
+      "guest_name": "Christèle Biganzoli ",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 233,
+      "guest_name": "Maëlle Caravaca",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 226,
+      "guest_name": "Yannick Van Caneghem",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 223,
+      "guest_name": "Claire Balva - Deblock",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 222,
+      "guest_name": "Mbarek Wadil - Atlas Immobilier",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 220,
+      "guest_name": "Paco Debonnaire - Les Investisseurs 4.0",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 217,
+      "guest_name": "Fanny Kopf",
+      "guest_company": "",
+      "guest_bio": "Le Crédit Municipal peut vous prêter de l’argent en échange de la remise d’un objet vous appartenant"
+    },
+    {
+      "episode_id": 215,
+      "guest_name": "Johann Nguelet - E-Pocket Budget",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 214,
+      "guest_name": "Yoann Lopez - Snowball",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 212,
+      "guest_name": "Yvan Vaillant - Edmond de Rothschild",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 211,
+      "guest_name": "Maeva Courtois - Helios",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 210,
+      "guest_name": "Jérémy Faucheux - ECE",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 207,
+      "guest_name": "Joseph Choueifaty - Goodvest",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 205,
+      "guest_name": "Laurent Mesnil - Elite Patrimoine",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 204,
+      "guest_name": "Bassel Abedi - Horiz.io",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 203,
+      "guest_name": "Nicolas Barrailler",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 202,
+      "guest_name": "Caroline Aupoix - Cabinet Aupoix",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 201,
+      "guest_name": "Marie de Raismes - Hiboo",
+      "guest_company": "",
+      "guest_bio": "Les dividend aristocrats sont des entreprises qui ont non seulement versé, mais aussi augmenté le montant de leurs dividendes chaque année pendant au moins 25 ans consécutifs"
+    },
+    {
+      "episode_id": 200,
+      "guest_name": "Émeline Siron, Clémence Baconnet, Jean-Christophe Pellat & Christophe Harmand",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 199,
+      "guest_name": "Renaud Guillerm - SideAngels",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 197,
+      "guest_name": "Florian Delifer - OfficeRiders",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 196,
+      "guest_name": "Frédéric Moreau - Immo Pour Expat'",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 195,
+      "guest_name": "Souleymane-Jean Galadima",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 194,
+      "guest_name": "Matthieu Stefani",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 193,
+      "guest_name": "Jean-Baptiste Monié - Carte Financement",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 191,
+      "guest_name": "Frédéric Stolar - Altaroc",
+      "guest_company": "",
+      "guest_bio": "On vous souhaite une très bonne écoute ! C’est par ici si vous préférez Apple Podcasts, ici si vous préférez Google Podcasts ou encore ici si vous préférez Spotify"
+    },
+    {
+      "episode_id": 190,
+      "guest_name": "Xavier Hovasse - Carmignac",
+      "guest_company": "",
+      "guest_bio": "Selon Xavier Hovasse, il ne faut pas investir de manière passive en Amérique latine (donc, ne pas privilégier les ETF)"
+    },
+    {
+      "episode_id": 189,
+      "guest_name": "Alisson Jungling - investisseuse & formatrice",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 188,
+      "guest_name": "Bruno Cantegrel - Monsieur Hugo",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 187,
+      "guest_name": "Diane Cesbron - Cinécapital",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 186,
+      "guest_name": "Arthur de Villemandy - Magma, Capsule",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 185,
+      "guest_name": "Olivier Herbout - Ramify",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 184,
+      "guest_name": "Thomas Hebrard - U'Wine",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 183,
+      "guest_name": "Laure Verhaeghe - Lendosphère",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 182,
+      "guest_name": "Clément Renault - Louve Invest ",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 181,
+      "guest_name": "Cyril Chiche - Lydia",
+      "guest_company": "",
+      "guest_bio": "que chose ?, avec Marguerite Bérard de BNP Paribas"
+    },
+    {
+      "episode_id": 180,
+      "guest_name": "Kévin Jourdan - DotMarket.eu ",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 179,
+      "guest_name": "Thomas Creton -  Investir Simple",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 177,
+      "guest_name": "Michael Holzmann - Wethenew",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 176,
+      "guest_name": "Raphaël Bloch - The Big Whale",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 175,
+      "guest_name": "Agathe Tounsi",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 174,
+      "guest_name": "Alexandre Boissenot - eBay",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 172,
+      "guest_name": "Sophie Desmazières - Homanie",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 171,
+      "guest_name": "Thomas Veillet",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 170,
+      "guest_name": "Adrien Legendre - Christie's",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 169,
+      "guest_name": "Thomas Cornu - LyBox",
+      "guest_company": "",
+      "guest_bio": "On vous souhaite une très bonne écoute ! C’est par ici si vous préférez Apple Podcasts, ici si vous préférez Google Podcast ou encore ici si vous préférez Spotify"
+    },
+    {
+      "episode_id": 168,
+      "guest_name": "Jérémy Gachet & Loïc Audet",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 167,
+      "guest_name": "Charles Ruelle - Sézame",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 166,
+      "guest_name": "Benoît Petit - Inter Invest",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 165,
+      "guest_name": "Maxime Camus - Grisbee",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 164,
+      "guest_name": "Antoine de Ravel d'Esclapon - Patrimonio",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 163,
+      "guest_name": "Nina Baka",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 162,
+      "guest_name": "Amandine Chaigne - Ade-ci",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 161,
+      "guest_name": "Vincent Kraus - Fermes en Vie",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 160,
+      "guest_name": "Antoine Fraysse-Soulier - eToro",
+      "guest_company": "",
+      "guest_bio": "Et pour recevoir toutes les actus et des recommandations exclusives, abonnez-vous à la newsletter, c’est par ici"
+    },
+    {
+      "episode_id": 159,
+      "guest_name": "Laure Gaschignard - Angle Droit",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 158,
+      "guest_name": "Frédéric Puzin - Corum",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 157,
+      "guest_name": "Igal Natan - Renée Costes",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 156,
+      "guest_name": "Pascal Gautier - Ledger",
+      "guest_company": "",
+      "guest_bio": "Un wallet (portefeuille) est un support physique ou numérique permettant de gérer ses cryptomonnaies sans intermédiaire"
+    },
+    {
+      "episode_id": 155,
+      "guest_name": "Alexandre Roubaud - Bitstack",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 154,
+      "guest_name": "Delphine d'Amarzit - Euronext Paris",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 153,
+      "guest_name": "Julia Calderoli et Romain Garçon - Altom Notaires",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 152,
+      "guest_name": "Grégory Guilmin - La Bourse Make It Easy",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 151,
+      "guest_name": "Nadim Takchi - Livret P",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 150,
+      "guest_name": "Aurélie Khaldi - Culture Patrimoine",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 149,
+      "guest_name": "Réda Berrehili - Klub",
+      "guest_company": "",
+      "guest_bio": "orizot – Les cryptos, un paradis fiscal ?\n#114 – N"
+    },
+    {
+      "episode_id": 148,
+      "guest_name": "Hugo Salard - Origame",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 147,
+      "guest_name": "Samantha McCoy - Magnum Photos",
+      "guest_company": "",
+      "guest_bio": "La période (photo d’époque ou photo moderne)\nL’appareil utilisé par le photographe\nLa renommée du photographe\nLa taille de la photographie\nLa technique d’impression\nL’état de la photographie\nLe nombre d’exemplaires\nLe processus de tirage\n\n## Investissement dans la photographie d’art : les bonnes pratiques\n\nAfin d’améliorer vos connaissances, participez à des expositions et visitez des galeries"
+    },
+    {
+      "episode_id": 146,
+      "guest_name": "Keyvan Nilforoushan - Virgil",
+      "guest_company": "",
+      "guest_bio": "Pour cela, il faut regarder : \n\nsi la ville dans laquelle on investit est en croissance (y a-t-il plus de gens qui viennent pour travailler que de gens qui partent) ;\net que le stock d’immeubles neufs soit faible"
+    },
+    {
+      "episode_id": 145,
+      "guest_name": "Titiou Lecoq",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 144,
+      "guest_name": "Thomas Lefebvre - Meilleurs Agents",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 143,
+      "guest_name": "Matthieu Stefani",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 142,
+      "guest_name": "Gautier Delabrousse-Mayoux - Iroko",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 141,
+      "guest_name": "Owen Simonin et Marc Fiorentino",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 140,
+      "guest_name": "Marc Montagne - Vacheron Constantin",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 139,
+      "guest_name": "Gautier Allard - ClubFunding",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 138,
+      "guest_name": "Pauline de La Motte Rouge - Médiaccord",
+      "guest_company": "",
+      "guest_bio": "Pauline de La Motte Rouge est diplômée notaire et médiatrice"
+    },
+    {
+      "episode_id": 137,
+      "guest_name": "John Karp - NFT MORNING",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 136,
+      "guest_name": "Yoann Lopez - Snowball",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 135,
+      "guest_name": "Magalie Petit - 15:MA",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 134,
+      "guest_name": "Souleymane-Jean Galadima - Alphacap",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 133,
+      "guest_name": "Marc Mazière - Radin Malin",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 132,
+      "guest_name": "Anthony Bourbon - Feed",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 131,
+      "guest_name": "Vincent Boy - IG Group ",
+      "guest_company": "",
+      "guest_bio": "(Le Monde)\nLes films Margin Call et The Big Short\nL’épisode  #229 de GDIY : Le WEB3 pour se réapproprier Internet (Frédéric Montagnon)\n\nLes épisodes de La Martingale pour approfondir le sujet :\n  \n\n\n\n#44 – Daniel Haguet – Finance comportementale : Peut-on faire confiance à notre cerveau ?\n#62 – Géraldine Métifeux – Investir en période de fin du monde, le retour\n#63 – Mathieu Vaissié – Gérer ses risques, de la théorie à la pratique\n#103 – Thomas Perret – Conflits géopolitiques et investissement :"
+    },
+    {
+      "episode_id": 130,
+      "guest_name": "Thibault de la Baronnière",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 129,
+      "guest_name": "Chloé Clair - namR",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 128,
+      "guest_name": "Foulques du Réau - LRC",
+      "guest_company": "",
+      "guest_bio": "Le conseiller vous proposera d’investir dans des parts sociales de groupes fonciers agricoles (GFA)"
+    },
+    {
+      "episode_id": 127,
+      "guest_name": "Thomas Friedberger - Tikehau Capital",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 125,
+      "guest_name": "Héloïse Bolle - Oseille & Compagnie",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 124,
+      "guest_name": "Aurélie Khaldi - Culture Patrimoine",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 123,
+      "guest_name": "Guillaume Angot - Lean FIRE",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 122,
+      "guest_name": "Maxime Carmignac - Carmignac",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 121,
+      "guest_name": "Pierre Chapon - Pretto ",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 120,
+      "guest_name": "Adrien Chaltiel - Eldorado.co ",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 119,
+      "guest_name": "Sonia Elmlinger-Labadie - Social Care Consulting / Lilycare",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 118,
+      "guest_name": "Léonard Hery - Epsilon Capital ",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 117,
+      "guest_name": "Arthur Micoulet - DeFi France",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 116,
+      "guest_name": "Thomas - Mon Budget Zen",
+      "guest_company": "",
+      "guest_bio": "Thomas a ensuite créé Mon Budget Zen, pour apprendre à un maximum de personnes à épargner pour leurs projets de vie"
+    },
+    {
+      "episode_id": 115,
+      "guest_name": "Emeline Siron - Evermind",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 114,
+      "guest_name": "Nicolas Chéron et Grégory Raymond",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 113,
+      "guest_name": "Christèle Biganzoli - Ritchee",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 112,
+      "guest_name": "Martin Cortet - Climb",
+      "guest_company": "",
+      "guest_bio": "Obtenez votre check-list personnalisée en suivant ce lien"
+    },
+    {
+      "episode_id": 111,
+      "guest_name": "Mathilde Iclanzan - WiSEED",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 110,
+      "guest_name": "Clément Renault - Louve invest",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 109,
+      "guest_name": "Martin Menez - Bevouac ",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 108,
+      "guest_name": "Léa Lejeune - Plan Cash",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 107,
+      "guest_name": "Bassel Abedi - Horiz.io",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 106,
+      "guest_name": "François Badelon - Lonvia Capital",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 105,
+      "guest_name": "Julien Etaix",
+      "guest_company": "",
+      "guest_bio": "Il y a deux types d’inflation :\n  \n\n\n\nla “bonne inflation”, qui se manifeste lorsque l’économie est en croissance (investissement, création d’emplois, taux d’intérêt bas) ;\net la “mauvaise inflation”, portée par la hausse des prix des matières premières"
+    },
+    {
+      "episode_id": 104,
+      "guest_name": "Yoann Lopez - Snowball",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 103,
+      "guest_name": "Thomas Perret - Mon Petit Placement",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 102,
+      "guest_name": "Fabrice Artinian - Institut du Patrimoine",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 101,
+      "guest_name": "Maeva - Mon Budget Bento",
+      "guest_company": "",
+      "guest_bio": "Son crédo ? L’optimisation du temps et le moins d’effort possible grâce à l’automatisation"
+    },
+    {
+      "episode_id": 100,
+      "guest_name": "Jean-Michel Pailhon - Ledger",
+      "guest_company": "",
+      "guest_bio": "Fondée en 2014, Ledger est une startup française qui conçoit et commercialise des portefeuilles de cryptomonnaies pour les particuliers et les entreprises"
+    },
+    {
+      "episode_id": 99,
+      "guest_name": "Marguerite Bérard - BNP Paribas",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 98,
+      "guest_name": "Christophe Vattier - Royaltiz",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 97,
+      "guest_name": "Pierre Morizot - Waltio",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 96,
+      "guest_name": "Antoine Fraysse-Soulier",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 95,
+      "guest_name": "Mathieu Mars - Institut du Patrimoine",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 94,
+      "guest_name": "Laurent Puget - OTEA Capital",
+      "guest_company": "",
+      "guest_bio": "D’après Laurent Puget, en plus de ne pas être souverain, le bitcoin est une aberration en termes de placement financier"
+    },
+    {
+      "episode_id": 93,
+      "guest_name": "Matthieu Stefani",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 92,
+      "guest_name": "Cédric O’Neill - Bricks",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 91,
+      "guest_name": "Caroline Jurado - Les cryptos de Caro",
+      "guest_company": "",
+      "guest_bio": "Caroline Jurado est la fondatrice du média Les cryptos de Caro, programme de vulgarisation des cryptomonnaies sous forme de newsletter et sur TikTok"
+    },
+    {
+      "episode_id": 90,
+      "guest_name": "Julien Calamote",
+      "guest_company": "",
+      "guest_bio": "Pour Julien Calamote : OUI ! Même un bien qui, en apparence, ne semble pas être à rénover doit l’être"
+    },
+    {
+      "episode_id": 89,
+      "guest_name": "Gaëlle Haag - Capitana",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 88,
+      "guest_name": "Vincent Piche - Kimpa",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 87,
+      "guest_name": "Antoine Delon - LINXEA",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 86,
+      "guest_name": "John Karp",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 85,
+      "guest_name": "Matthias Baccino - Trade Republic",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 84,
+      "guest_name": "Alessandro Soldati - Gold Avenue",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 83,
+      "guest_name": "Marc Tempelman - Cashbee",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 82,
+      "guest_name": "Nicolas Decaudain - Avenue des investisseurs",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 81,
+      "guest_name": "Joseph Choueifaty - Goodvest",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 80,
+      "guest_name": "Nicolas Chéron et Grégory Raymond",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 79,
+      "guest_name": "Greg Blumenfeld - Le Guide des Montres",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 78,
+      "guest_name": "Emilie Bellet - Vestpod",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 77,
+      "guest_name": "Maïlys Rebora",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 76,
+      "guest_name": "Ambre Soubiran",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 75,
+      "guest_name": "Ufuk Inci",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 74,
+      "guest_name": "Thomas Lefebvre - MeilleursAgents",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 73,
+      "guest_name": "Quentin Romet - Homunity",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 72,
+      "guest_name": "Sophie Richard - Viagimmo",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 71,
+      "guest_name": "Philippe Le Trung - VIEWS+S",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 70,
+      "guest_name": "Mounir Laggoune - Finary",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 69,
+      "guest_name": "Annie Maudouit-Ridde et Jérôme Herbet - Cabinet Winston & Strawn",
+      "guest_company": "",
+      "guest_bio": "Si tout cela vous semble encore trop technique, on vous le promet : à la fin de cet épisode, vous aurez vous aussi TOUT compris ! \nLes invités du jour : Et pour y voir plus clair, ce n’est pas un mais deux invités qui s’expriment au micro de La Martingale ! Annie Maudouit-Ridde et Jérôme Herbet exercent en tant qu’avocats dans le Cabinet Winston & Strawn"
+    },
+    {
+      "episode_id": 68,
+      "guest_name": "Gautier Delabrousse-Mayoux - Iroko",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 67,
+      "guest_name": "Héloïse Bolle - Oseille et Compagnie",
+      "guest_company": "",
+      "guest_bio": "rices de La Martingale vous y attend !"
+    },
+    {
+      "episode_id": 66,
+      "guest_name": "Thierrry Vignal - Masteos",
+      "guest_company": "",
+      "guest_bio": "Jusqu’à la rénovation, l’ameublement et la gestion"
+    },
+    {
+      "episode_id": 65,
+      "guest_name": "Sébastien Verdeaux - LetUs Private Office",
+      "guest_company": "",
+      "guest_bio": "Leur rôle ? Aider ceux et celles qui entreprennent à donner du sens à leur patrimoine professionnel, autant dire toute leur histoire"
+    },
+    {
+      "episode_id": 64,
+      "guest_name": "Nicolas Chéron",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 63,
+      "guest_name": "Mathieu Vaissié - Ginjer AM",
+      "guest_company": "",
+      "guest_bio": "L’invité parfait pour nous éclairer sur ces sujets !\nAu micro de Matthieu Stefani, cofondateur de CosaVostra, Mathieu Vaissié explique les grands principes théoriques qu’il faut avoir en tête avant de passer à la pratique quand il s’agit de gestion financière"
+    },
+    {
+      "episode_id": 62,
+      "guest_name": "Géraldine Métifeux - Alter Egale",
+      "guest_company": "",
+      "guest_bio": "Depuis, elle accompagne aussi bien particuliers qu’entreprises dans la gestion de leurs biens, en gardant en tête une valeur clé : l’indépendance"
+    },
+    {
+      "episode_id": 61,
+      "guest_name": "Léo Lemordant - Enerfip",
+      "guest_company": "",
+      "guest_bio": "Au micro de Matthieu Stefani, cofondateur de CosaVostra, Léo Lemordant explique tout ce qu’il faut savoir avant d’investir dans les énergies renouvelables"
+    },
+    {
+      "episode_id": 60,
+      "guest_name": "Cécile Roquelaure - Compagnie Européenne de Crédit",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 59,
+      "guest_name": "Corentin Orsini - Super Capital",
+      "guest_company": "",
+      "guest_bio": "Alors il y a quelques années, il a décidé de co-fonder Super Capital, une communauté de Business Angels qui investissent uniquement en Early Stage"
+    },
+    {
+      "episode_id": 58,
+      "guest_name": "Augustin Sayer - Newfund",
+      "guest_company": "",
+      "guest_bio": "Au micro de Matthieu Stefani, cofondateur de CosaVostra, il met en lumière le fonctionnement de Newfund et explique tout ce à quoi il faut prêter attention si l’on souhaite investir à son tour dans les startups :\n# Il ne faut surtout pas se laisser entraîner par sa FOMO (Fear Of Missing Out) et inv"
+    },
+    {
+      "episode_id": 57,
+      "guest_name": "Owen Simonin - Just Mining",
+      "guest_company": "",
+      "guest_bio": "L’objectif de Just Mining ? Rendre les cryptomonnaies accessibles à tous et aider les particuliers à augmenter leur profit"
+    },
+    {
+      "episode_id": 56,
+      "guest_name": "Emeric Eveno - Papillon Patrimoine",
+      "guest_company": "",
+      "guest_bio": "Concrètement, Papillon Patrimoine accompagne les investisseurs dans : le choix des dispositifs fiscaux les plus appropriés, le choix des meilleurs produits, le financement et la mise en location"
+    },
+    {
+      "episode_id": 55,
+      "guest_name": "Audrey Bacrot -  Indépendance et Expansion AM",
+      "guest_company": "",
+      "guest_bio": "Et ce n’est pas tout, grâce à la stratégie “quality value” mise en place, Indépendance et Expansion est devenu le meilleur fonds d’actions en France sur 8, 10 et 25 ans depuis le 31 décembre 2020"
+    },
+    {
+      "episode_id": 54,
+      "guest_name": "Grégory Raymond - 21 Millions",
+      "guest_company": "",
+      "guest_bio": "Depuis 2013, il se passionne pour les cryptomonnaies et s’est peu à peu spécialisé dans le domaine"
+    },
+    {
+      "episode_id": 53,
+      "guest_name": "Marc Fiorentino",
+      "guest_company": "",
+      "guest_bio": "Il est l’auteur de plusieurs livres (dont Votre argent : gérez mieux, gagnez plus ou Sauvez votre retraite)  mais aussi de newsletters quotidiennes à retrouver sur meilleurplacement"
+    },
+    {
+      "episode_id": 52,
+      "guest_name": "Paul Nyzam - Christie's",
+      "guest_company": "",
+      "guest_bio": "Fondée en 1766, Christie’s est une société de vente aux enchères internationale spécialisée dans la vente d’œuvres d’art"
+    },
+    {
+      "episode_id": 51,
+      "guest_name": "Maximilien Urso - Cresus",
+      "guest_company": "",
+      "guest_bio": "Concrètement, Cresus remet en état toutes les montres d’occasion avant de les revendre entre 30 et 50% moins cher que sur le marché en ligne et dans 6 boutiques physiques en France"
+    },
+    {
+      "episode_id": 50,
+      "guest_name": "Victor Lora - Mouvement FIRE",
+      "guest_company": "",
+      "guest_bio": "Pour retrouver leurs différents projets évoqués dans l’épisode :\n# Le livre de Victor Lora –  La retraite à 40 ans c’est possible disponible sur  Amazon ou la Fnac\n  \n\n\n# Sa newsletter : devenirfrugaliste"
+    },
+    {
+      "episode_id": 49,
+      "guest_name": "Alexandre Lacharme",
+      "guest_company": "",
+      "guest_bio": "S’être positionné exclusivement sur le 2 roues, optimisant ainsi ses espaces et sa rentabilité"
+    },
+    {
+      "episode_id": 48,
+      "guest_name": "Pierre Chapon - Pretto",
+      "guest_company": "",
+      "guest_bio": "Créé en 2017, Pretto est un courtier en ligne qui permet aux acheteurs de comparer en direct les taux immobiliers pour obtenir le prêt le plus avantageux"
+    },
+    {
+      "episode_id": 47,
+      "guest_name": "Xavier Delmas",
+      "guest_company": "",
+      "guest_bio": "C’est aussi un (presque) youtubeur qui, deux fois par semaine, propose des contenus pédagogiques et délivre de nombreux conseils pour investir sur la chaîne de Zonebourse"
+    },
+    {
+      "episode_id": 46,
+      "guest_name": "Jean-Marc Jacobson",
+      "guest_company": "",
+      "guest_bio": "Et c’est d’ailleurs la raison pour laquelle il a cofondé l’Ambassade du Bitcoin à Montréal et plus récemment RealT, une plateforme qui permet d’investir dans l’immobilier américain grâce… à la blockchain"
+    },
+    {
+      "episode_id": 45,
+      "guest_name": "Laurent Puget",
+      "guest_company": "",
+      "guest_bio": "Déjà intervenu au micro de La Martingale, c’était l’invité parfait pour dresser ce bilan"
+    },
+    {
+      "episode_id": 44,
+      "guest_name": "Daniel Haguet",
+      "guest_company": "",
+      "guest_bio": "Dès les années 70, les chercheurs ont commencé à étudier tous ces mécanismes qui nous poussent à prendre des décisions"
+    },
+    {
+      "episode_id": 43,
+      "guest_name": "Alice Léger",
+      "guest_company": "",
+      "guest_bio": "Spécialisée dans les sacs à main Hermès, Alice s’occupe d’estimer le prix des sacs avant leurs enchères en aidant les revendeurs à en tirer le meilleur prix"
+    },
+    {
+      "episode_id": 42,
+      "guest_name": "Julien Niquet",
+      "guest_company": "",
+      "guest_bio": "Les maîtres mots d’Epsor ? Accessibilité, transparence, conseil et performance"
+    },
+    {
+      "episode_id": 41,
+      "guest_name": "Thomas Hebrard",
+      "guest_company": "",
+      "guest_bio": "Bonne écoute ! C’est par ici si vous préférez iTunes, ici si vous préférez Deezer ou encore ici si vous préférez Spotify"
+    },
+    {
+      "episode_id": 40,
+      "guest_name": "Camille David",
+      "guest_company": "",
+      "guest_bio": "Que vous soyez particuliers ou professionnels, vous pouvez facilement investir dans les PME de votre choix dès 20 euros"
+    },
+    {
+      "episode_id": 39,
+      "guest_name": "Emeric Eveno",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 38,
+      "guest_name": "Joachim Dupont - Anaxago",
+      "guest_company": "",
+      "guest_bio": "“Il y a beaucoup de raisons d’être fébrile, mais la majorité de ce qui était vrai hier reste vrai aujourd’hui”\nAvec Matthieu Stefani, cofondateur de CosaVostra, ils évoquent l’impact qu’a et que va avoir la crise du Covid sur les marchés de l’immobilier et sur la santé des PME et des startups"
+    },
+    {
+      "episode_id": 37,
+      "guest_name": "Pierre Sabatier - PrimeView",
+      "guest_company": "",
+      "guest_bio": "C’est aussi le fondateur de PrimeView, un cabinet de recherche économique et financière, et le vice-président de l’AUREP"
+    },
+    {
+      "episode_id": 36,
+      "guest_name": "Alexandre Toussaint - Baltis Capital",
+      "guest_company": "",
+      "guest_bio": "Concrètement, Baltis Capital propose d’investir dans tous les commerces de bouche, médicaux ou les enseignes nationales de votre quartier"
+    },
+    {
+      "episode_id": 35,
+      "guest_name": "Matthieu Lamoure - Arcturial Motorcars",
+      "guest_company": "",
+      "guest_bio": "On y parle d’anciens épisodes de la Martingale  :Comment investir dans l’art ? – Arnaud DuboisComment investir dans les montres – Greg Blumenfeld\nBonne écoute ! C’est par ici si vous préférez iTunes, ici si vous préférez Deezer ou encore ici si vous préférez Spotify"
+    },
+    {
+      "episode_id": 34,
+      "guest_name": "Tarek Elmarhri - Krechendo Trading",
+      "guest_company": "",
+      "guest_bio": "Ce passionné a commencé sa carrière par la création d’un club d’investissement avant de faire ses armes dans les plus grandes salles de marchés d’Europe"
+    },
+    {
+      "episode_id": 33,
+      "guest_name": "Guy Marty - pierrepapier.fr",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 32,
+      "guest_name": "Yoann Lopez - Snowball",
+      "guest_company": "",
+      "guest_bio": "Et pour faire profiter tout le monde de ses apprentissages et trouvailles il a décidé d’écrire sa propre newsletter : Snowball"
+    },
+    {
+      "episode_id": 31,
+      "guest_name": "Greg Blumenfeld - Le Guide des Montres",
+      "guest_company": "",
+      "guest_bio": "– Arnaud Dubois\nAttention, comme pour l’or, les montres sont un investissement à double tranchant"
+    },
+    {
+      "episode_id": 30,
+      "guest_name": "Brice Tavernier et Loïc Audet - ImmocitiZ'",
+      "guest_company": "",
+      "guest_bio": "Comment le covid19 va dérégler le marché de l’immobilier ?\nOn y parle aussi de leur podcast, spécialisé dans l’investissement immobilier : CLUB DEAL"
+    },
+    {
+      "episode_id": 29,
+      "guest_name": "Philippe Roux - Pro-Indicators",
+      "guest_company": "",
+      "guest_bio": "Découvrez avec lui la manière de bien prendre des risques lorsqu’on achète ou vend des actions, et oui, c’est possible"
+    },
+    {
+      "episode_id": 28,
+      "guest_name": "Albert d’Anthoüard - Nalo",
+      "guest_company": "",
+      "guest_bio": "Rôle des banquiers privés, gestion de son patrimoine, etc"
+    },
+    {
+      "episode_id": 27,
+      "guest_name": "Philippe Le Trung",
+      "guest_company": "",
+      "guest_bio": "Faut-il vendre ? Peut-on acheter ? Philippe répond à toutes vos questions dans ce nouvel épisode de la Martingale"
+    },
+    {
+      "episode_id": 26,
+      "guest_name": "Julia Bridger - EuroLand Corporate",
+      "guest_company": "",
+      "guest_bio": "Découvrez son expertise en écoutant le nouvel épisode de la Martingale !\n“Lors des introductions en bourse, on calcule de manière très précise, combien de particuliers sont entrés et quel est le montant qu’ils ont levé"
+    },
+    {
+      "episode_id": 25,
+      "guest_name": "Arnaud Dubois - Arnaud Dubois Associates",
+      "guest_company": "",
+      "guest_bio": "Son expertise est assurée par une double formation"
+    },
+    {
+      "episode_id": 24,
+      "guest_name": "Sandrine Cauvin - OTEA Capital",
+      "guest_company": "",
+      "guest_bio": "estion de vos patrimoines privés ou professionnels"
+    },
+    {
+      "episode_id": 23,
+      "guest_name": "Manuel Valente - Coinhouse",
+      "guest_company": "",
+      "guest_bio": "Mais, soucieux d’être les meilleurs et toujours à la pointe de l’information sur ce domaine, il est devenu directeur de l’analyse et de la recherche sur les Cryptomonnaies de cette même Coinhouse"
+    },
+    {
+      "episode_id": 22,
+      "guest_name": "Sébastien de Lafond - MeilleursAgents.com",
+      "guest_company": "",
+      "guest_bio": "Créé en 2008, MeilleursAgents est partenaire de plus de 12 000 agences dans toute la France"
+    },
+    {
+      "episode_id": 21,
+      "guest_name": "Laurent Puget - OTEA Capital",
+      "guest_company": "",
+      "guest_bio": "Il était déjà intervenu en ce début d’année pour nous parler des bases pour investir en 2020"
+    },
+    {
+      "episode_id": 20,
+      "guest_name": "Pierre Chapon - Pretto",
+      "guest_company": "",
+      "guest_bio": "Créé en 2017, Pretto est une SCPI qui permet d’investir collectivement dans des actifs qui ne seraient pas accessibles aux particuliers directement, avec des tickets à partir de 500€"
+    },
+    {
+      "episode_id": 19,
+      "guest_name": "Nicolas de Feraudy - Lendopolis",
+      "guest_company": "",
+      "guest_bio": "Créé en 2014, Lendopolis permet à chacun de placer dès 20 € dans un projet au choix"
+    },
+    {
+      "episode_id": 18,
+      "guest_name": "Gabriel Jarrosson - Leonis Investissement",
+      "guest_company": "",
+      "guest_bio": "Créée en 2017, Leonis permet notamment aux particuliers, aux Business Angels ou encore aux entreprises d’investir au moins 2000 euros dans des startups en croissance"
+    },
+    {
+      "episode_id": 17,
+      "guest_name": "Baudouin Vercken - Ecotree",
+      "guest_company": "",
+      "guest_bio": "Aussi bien les particuliers que les entreprises peuvent, grâce à Ecotree, investir économiquement dans des forêts françaises de leur choix et ainsi les valoriser, tout en ayant un véritable impact écologique"
+    },
+    {
+      "episode_id": 16,
+      "guest_name": "Emilie Bellet - Vespod",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 15,
+      "guest_name": "Jean-Baptiste Vayleux - Lymo",
+      "guest_company": "",
+      "guest_bio": "“Mon investissement numéro 1, c’est la lecture : tu apprends énormément en lisant les erreurs et les succès des autres"
+    },
+    {
+      "episode_id": 14,
+      "guest_name": "Pierre-Antoine Dusoulier - iBanFirst",
+      "guest_company": "",
+      "guest_bio": "“Comme l’investissement sur les devises est très volatil, avec beaucoup d’intérêts à vendre, il y’a beaucoup de Charlatan sur internet"
+    },
+    {
+      "episode_id": 13,
+      "guest_name": "Guillaume Piard - Nalo",
+      "guest_company": "",
+      "guest_bio": "“Même les professionnels en France ne savent pas gérer leur argent, y’a pas d’approche individuelle, le focus de tous les professionnel est tournée vers le produit"
+    },
+    {
+      "episode_id": 12,
+      "guest_name": "Mathieu Cornieti - IMPACT Partenaires",
+      "guest_company": "",
+      "guest_bio": ")\n“L’enjeu le plus important de l’impact investing, c’est vraiment l’accompagnement de l’entrepreneur sur lequel tu décides d’investir”\nAu programme de ce douzième épisode : \nUne présentation des enjeux de l’Impact Investing, mais aussi la réponse aux questions : Comment bien mesurer son impact ? Pe"
+    },
+    {
+      "episode_id": 11,
+      "guest_name": "Rafik Makhlouf - GOLDMARKET.fr",
+      "guest_company": "",
+      "guest_bio": "fr, une plateforme et un réseau de plusieurs boutiques experts en métaux précieux et spécialisés en investissement or physique"
+    },
+    {
+      "episode_id": 10,
+      "guest_name": "Eric Pinon - AFG, Association Française de la Gestion financière",
+      "guest_company": "",
+      "guest_bio": "Il est également Senior Advisor à la Financière de l’Echiquier"
+    },
+    {
+      "episode_id": 9,
+      "guest_name": "Maxime Camus - Grisbee",
+      "guest_company": "",
+      "guest_bio": "“Se constituer une épargne de précaution, c’est le b-a"
+    },
+    {
+      "episode_id": 8,
+      "guest_name": "Angélique de Lencquesaing - IDealWine",
+      "guest_company": "",
+      "guest_bio": "Ancienne d’Euronext, elle co-fonde en 2000 cette “bourse” des vins permettant aux amateurs de vins d’acheter, de coter,  de revendre et d’estimer leurs bouteilles"
+    },
+    {
+      "episode_id": 7,
+      "guest_name": "Géraldine Métifeux - Alter Egale",
+      "guest_company": "",
+      "guest_bio": "À la tête du cabinet de conseil Alter Égale depuis presque quinze ans, elle accompagne avec son équipe des particuliers, des entreprise et des professions libérales dans la gestion de leurs biens"
+    },
+    {
+      "episode_id": 6,
+      "guest_name": "Frédéric Zablocki - Entrepreneur Venture",
+      "guest_company": "",
+      "guest_bio": "Véritable “dinosaure” de l’ère des startups, Frédéric Zablocki revient sur son riche parcours d’entrepreneur, jusqu’à devenir business angel"
+    },
+    {
+      "episode_id": 5,
+      "guest_name": "Martin Menez - Bevouac",
+      "guest_company": "",
+      "guest_bio": "Il accompagne ses clients dans leurs investissements immobiliers de A à Z,  de la recherche du bien à la paperasse qui en décourage plus d’un"
+    },
+    {
+      "episode_id": 4,
+      "guest_name": "Georges Viglietti - Sowefund",
+      "guest_company": "",
+      "guest_bio": "Il a d’abord été directeur pendant 5 ans du réseaux Paris Business Angels, mais il est surtout depuis 2013 l’un des fondateurs de Sowefund, une plateforme de Crowdfunding dédiée à l’investissement dans les startups"
+    },
+    {
+      "episode_id": 3,
+      "guest_name": "Eric Larchevêque - Ledger",
+      "guest_company": "",
+      "guest_bio": "Il a fondé la Maison du Bitcoin – aujourd’hui Coinhouse – parce qu’il s’est intéressé aux crypto-assets et qu’il voulait créer un espace de rencontre et de discussion"
+    },
+    {
+      "episode_id": 2,
+      "guest_name": "Valentine Ainouz et Eric Lewin",
+      "guest_company": "",
+      "guest_bio": ""
+    },
+    {
+      "episode_id": 1,
+      "guest_name": "Souleymane-Jean Galadima et Olivier Lévy",
+      "guest_company": "",
+      "guest_bio": ""
+    }
+  ]
+}

@@ -25,24 +25,27 @@ async function main() {
   const sql = neon(process.env.DATABASE_URL!);
   const db = drizzle(sql, { schema });
 
-  // Get episodes that need embeddings
+  const forceAll = process.argv.includes('--force');
+
+  // Get episodes with enriched content for better embeddings
   const episodes = await sql`
-    SELECT e.id, e.episode_number, e.title, e.guest, e.pillar, e.difficulty, e.abstract,
+    SELECT e.id, e.episode_number, e.title, e.guest, e.pillar, e.difficulty,
+           e.abstract, e.article_content, e.key_takeaways, e.guest_bio,
            en.id as enrichment_id, en.tags, en.sub_themes, en.embedding
     FROM episodes e
     LEFT JOIN episodes_enrichment en ON en.episode_id = e.id
     ORDER BY e.episode_number DESC
   `;
 
-  const needsEmbedding = episodes.filter((ep: any) => !ep.embedding);
+  const needsEmbedding = forceAll ? episodes : episodes.filter((ep: any) => !ep.embedding);
   const alreadyDone = episodes.length - needsEmbedding.length;
 
   console.log(`  Total episodes: ${episodes.length}`);
   console.log(`  Already embedded: ${alreadyDone}`);
-  console.log(`  Need embedding: ${needsEmbedding.length}\n`);
+  console.log(`  Need embedding: ${needsEmbedding.length}${forceAll ? ' (--force: re-embedding all)' : ''}\n`);
 
   if (needsEmbedding.length === 0) {
-    console.log('[COUCHE 2][EMBEDDINGS] All episodes already have embeddings. Nothing to do.');
+    console.log('[COUCHE 2][EMBEDDINGS] All episodes already have embeddings. Use --force to re-embed.');
     return;
   }
 
@@ -57,18 +60,23 @@ async function main() {
 
     console.log(`  Batch ${batchNum}/${totalBatches} (${batch.length} episodes)...`);
 
-    // Build embedding text for each episode
+    // Build embedding text with full enriched content
     const texts = batch.map((ep: any) => {
       const parts = [
         ep.title || '',
         ep.guest ? `Invité: ${ep.guest}` : '',
         ep.abstract || '',
+        // Article content (truncated to ~500 chars for embedding efficiency)
+        ep.article_content ? ep.article_content.replace(/##\s*/g, '').substring(0, 500) : '',
+        // Key takeaways add strong semantic signal
+        (ep.key_takeaways || []).length ? `Points clés: ${ep.key_takeaways.join('. ')}` : '',
         ep.pillar ? `Pilier: ${ep.pillar}` : '',
         ep.difficulty ? `Niveau: ${ep.difficulty}` : '',
         (ep.tags || []).length ? `Tags: ${ep.tags.join(', ')}` : '',
         (ep.sub_themes || []).length ? `Sous-thèmes: ${ep.sub_themes.join(', ')}` : '',
       ].filter(Boolean);
-      return parts.join(' | ');
+      // Limit total to ~2000 chars (within embedding model's optimal range)
+      return parts.join(' | ').substring(0, 2000);
     });
 
     try {
