@@ -4,3 +4,5 @@ dist/
 *.env
 .claude/
 graphify-out/
+
+.vercel
