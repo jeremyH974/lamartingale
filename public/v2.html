@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>La Martingale — Education Financiere Interactive</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    :root {
+      --blue: #004cff;
+      --blue-light: #e8eeff;
+      --blue-hover: #0040d6;
+      --blue-50: rgba(0, 76, 255, 0.06);
+      --blue-100: rgba(0, 76, 255, 0.10);
+      --white: #ffffff;
+      --bg: #fafbfd;
+      --surface: #ffffff;
+      --surface-2: #f3f4f8;
+      --border: #e8eaef;
+      --text: #111827;
+      --text-secondary: #4b5563;
+      --text-muted: #9ca3af;
+      --success: #059669;
+      --success-bg: #ecfdf5;
+      --warning: #d97706;
+      --danger: #dc2626;
+      --radius: 14px;
+      --radius-sm: 8px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.06);
+      --shadow: 0 2px 8px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+      --shadow-lg: 0 8px 30px rgba(0,0,0,0.08);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ====== HEADER ====== */
+    .header {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--blue);
+      letter-spacing: -0.5px;
+    }
+
+    .brand-tag {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--white);
+      background: var(--blue);
+      padding: 2px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.3px;
+    }
+
+    .nav { display: flex; gap: 4px; }
+
+    .nav-link {
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.15s;
+      border: none;
+      background: none;
+    }
+
+    .nav-link:hover { color: var(--text); background: var(--surface-2); }
+    .nav-link.active { color: var(--blue); background: var(--blue-50); }
+
+    .nav-progress {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--text-muted);
+      padding: 6px 14px;
+      background: var(--surface-2);
+      border-radius: 20px;
+    }
+
+    .nav-progress-bar {
+      width: 60px;
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .nav-progress-fill {
+      height: 100%;
+      background: var(--blue);
+      border-radius: 2px;
+      transition: width 0.4s;
+    }
+
+    /* ====== HERO ====== */
+    .hero {
+      background: linear-gradient(135deg, #004cff 0%, #0066ff 50%, #1a7aff 100%);
+      padding: 72px 32px 64px;
+      color: white;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .hero-inner {
+      max-width: 720px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero h1 {
+      font-size: 42px;
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -1px;
+      margin-bottom: 16px;
+    }
+
+    .hero p {
+      font-size: 17px;
+      font-weight: 300;
+      opacity: 0.9;
+      margin-bottom: 36px;
+      line-height: 1.6;
+    }
+
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      margin-bottom: 36px;
+    }
+
+    .hero-stat-value {
+      font-size: 36px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .hero-stat-label {
+      font-size: 13px;
+      opacity: 0.7;
+      margin-top: 4px;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 32px;
+      background: white;
+      color: var(--blue);
+      font-size: 15px;
+      font-weight: 600;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+    }
+
+    .hero-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
+
+    /* ====== CONTAINER ====== */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    .section {
+      padding: 56px 0;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 28px;
+    }
+
+    .section-title {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .section-subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .section-action {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--blue);
+      cursor: pointer;
+      border: none;
+      background: none;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .section-action:hover { text-decoration: underline; }
+
+    /* ====== CARDS ====== */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      transition: all 0.2s;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow);
+      border-color: #d1d5db;
+    }
+
+    .card-clickable { cursor: pointer; }
+    .card-clickable:hover { transform: translateY(-2px); }
+
+    /* ====== PATH CARDS ====== */
+    .paths-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .path-card { position: relative; overflow: hidden; }
+
+    .path-accent {
+      width: 100%;
+      height: 4px;
+      border-radius: var(--radius) var(--radius) 0 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .path-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      margin-bottom: 14px;
+    }
+
+    .path-name {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      letter-spacing: -0.3px;
+    }
+
+    .path-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 14px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .path-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .path-progress-bar {
+      width: 100%;
+      height: 5px;
+      background: var(--surface-2);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-top: 12px;
+    }
+
+    .path-progress-fill {
+      height: 100%;
+      background: var(--blue);
+      border-radius: 3px;
+      transition: width 0.4s;
+    }
+
+    .path-badge {
+      display: inline-flex;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .badge-deb { background: #ecfdf5; color: #059669; }
+    .badge-int { background: #eff6ff; color: #2563eb; }
+    .badge-ava { background: #f5f3ff; color: #7c3aed; }
+
+    /* ====== EPISODE CARDS ====== */
+    .episodes-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .ep-card {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .ep-card.completed { border-left: 3px solid var(--success); }
+
+    .ep-num {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--blue);
+      min-width: 48px;
+      text-align: center;
+    }
+
+    .ep-body { flex: 1; min-width: 0; }
+
+    .ep-title {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: -0.2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .ep-guest {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .ep-tags {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .ep-pillar-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .ep-pillar-name {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .ep-check {
+      color: var(--success);
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    /* ====== SEARCH & FILTERS ====== */
+    .search-wrap {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 12px 16px 12px 44px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px var(--blue-50); }
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .filters { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 20px; }
+
+    .filter-pill {
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--white);
+      color: var(--text-secondary);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .filter-pill:hover { border-color: var(--blue); color: var(--blue); }
+    .filter-pill.active { background: var(--blue); color: white; border-color: var(--blue); }
+
+    /* ====== EXPERTS ====== */
+    .experts-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .expert-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--blue-light);
+      color: var(--blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .expert-name { font-size: 14px; font-weight: 600; }
+    .expert-company { font-size: 12px; color: var(--text-muted); }
+    .expert-meta { font-size: 11px; color: var(--text-muted); margin-top: 8px; }
+    .expert-stars { color: var(--warning); }
+
+    /* ====== QUIZ ====== */
+    .quiz-wrap { max-width: 660px; }
+
+    .quiz-q-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      box-shadow: var(--shadow);
+    }
+
+    .quiz-q-text {
+      font-size: 17px;
+      font-weight: 600;
+      line-height: 1.5;
+      margin-bottom: 24px;
+      letter-spacing: -0.3px;
+    }
+
+    .quiz-opts { display: flex; flex-direction: column; gap: 10px; }
+
+    .quiz-opt {
+      padding: 14px 18px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.15s;
+      background: var(--white);
+    }
+
+    .quiz-opt:hover:not(.answered) { border-color: var(--blue); background: var(--blue-50); }
+    .quiz-opt.correct { border-color: var(--success); background: var(--success-bg); }
+    .quiz-opt.wrong { border-color: var(--danger); background: #fef2f2; }
+
+    .quiz-expl {
+      margin-top: 16px;
+      padding: 14px 18px;
+      background: var(--blue-50);
+      border-radius: 10px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      display: none;
+    }
+
+    .quiz-expl.show { display: block; }
+
+    .quiz-next-btn {
+      margin-top: 20px;
+      padding: 10px 24px;
+      background: var(--blue);
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: none;
+    }
+
+    .quiz-next-btn.show { display: inline-block; }
+    .quiz-next-btn:hover { background: var(--blue-hover); }
+
+    .quiz-bar {
+      width: 100%;
+      height: 5px;
+      background: var(--surface-2);
+      border-radius: 3px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+
+    .quiz-bar-fill {
+      height: 100%;
+      background: var(--blue);
+      border-radius: 3px;
+      transition: width 0.3s;
+    }
+
+    /* ====== GRAPH ====== */
+    #graph-box {
+      width: 100%;
+      height: 560px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+
+    #graph-box svg { width: 100%; height: 100%; }
+
+    .graph-tt {
+      position: absolute;
+      background: var(--text);
+      color: white;
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      font-size: 12px;
+      pointer-events: none;
+      z-index: 10;
+      max-width: 220px;
+      display: none;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .graph-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .legend-chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      padding: 4px 10px;
+      border-radius: 20px;
+      transition: background 0.15s;
+    }
+
+    .legend-chip:hover { background: var(--surface-2); }
+
+    .legend-dot-sm {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    /* ====== RECO FORM ====== */
+    .reco-form-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .form-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .form-select {
+      width: 100%;
+      padding: 10px 14px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 14px;
+      outline: none;
+      cursor: pointer;
+      margin-bottom: 18px;
+    }
+
+    .form-select:focus { border-color: var(--blue); }
+
+    .chips-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .chip {
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-align: center;
+    }
+
+    .chip:hover { border-color: var(--blue); }
+    .chip.on { border-color: var(--blue); background: var(--blue-50); color: var(--blue); font-weight: 600; }
+
+    .reco-btn {
+      width: 100%;
+      padding: 13px;
+      background: var(--blue);
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .reco-btn:hover { background: var(--blue-hover); }
+
+    .reco-result {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      padding: 18px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .reco-result:hover { border-color: var(--blue); box-shadow: var(--shadow-sm); }
+
+    .reco-score {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--blue);
+      min-width: 40px;
+      text-align: center;
+    }
+
+    .reco-reason {
+      display: inline-flex;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      background: var(--surface-2);
+      color: var(--text-muted);
+      margin-top: 4px;
+      margin-right: 4px;
+    }
+
+    /* ====== MODAL ====== */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+
+    .overlay.open { display: flex; }
+
+    .modal-card {
+      background: var(--surface);
+      border-radius: 16px;
+      padding: 36px;
+      max-width: 600px;
+      width: 92%;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .modal-close {
+      float: right;
+      background: var(--surface-2);
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-size: 16px;
+      cursor: pointer;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-close:hover { background: var(--border); }
+
+    .btn-mark {
+      padding: 8px 16px;
+      border: 1px solid var(--success);
+      border-radius: var(--radius-sm);
+      background: var(--success-bg);
+      color: var(--success);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-mark:hover, .btn-mark.done { background: var(--success); color: white; }
+
+    .btn-listen {
+      padding: 8px 16px;
+      border: none;
+      border-radius: var(--radius-sm);
+      background: var(--blue);
+      color: white;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .btn-listen:hover { background: var(--blue-hover); }
+
+    /* ====== PAGINATION ====== */
+    .pagination { display: flex; justify-content: center; gap: 6px; margin-top: 28px; }
+
+    .pg-btn {
+      padding: 6px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--white);
+      color: var(--text-secondary);
+      font-family: inherit;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .pg-btn:hover, .pg-btn.active { border-color: var(--blue); color: var(--blue); }
+
+    /* ====== FOOTER ====== */
+    .footer {
+      background: var(--text);
+      color: rgba(255,255,255,0.6);
+      padding: 48px 32px 32px;
+      margin-top: 48px;
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 32px;
+    }
+
+    .footer-brand { font-size: 18px; font-weight: 700; color: white; }
+    .footer-desc { font-size: 13px; margin-top: 8px; max-width: 320px; line-height: 1.6; }
+
+    .footer-links {
+      display: flex;
+      gap: 32px;
+      font-size: 13px;
+    }
+
+    .footer-links a {
+      color: rgba(255,255,255,0.5);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .footer-links a:hover { color: white; }
+
+    .footer-copy {
+      text-align: center;
+      font-size: 11px;
+      margin-top: 32px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* ====== VIEWS ====== */
+    .view { display: none; }
+    .view.active { display: block; }
+
+    /* ====== RESPONSIVE ====== */
+    @media (max-width: 900px) {
+      .hero h1 { font-size: 28px; }
+      .hero-stats { gap: 24px; }
+      .paths-grid { grid-template-columns: 1fr; }
+      .episodes-grid { grid-template-columns: 1fr; }
+      .experts-grid { grid-template-columns: repeat(2, 1fr); }
+      .chips-grid { grid-template-columns: 1fr; }
+      .footer-inner { flex-direction: column; }
+      .nav { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="brand">
+        <span class="brand-logo">La Martingale</span>
+        <span class="brand-tag">Education</span>
+      </div>
+      <nav class="nav" id="main-nav">
+        <button class="nav-link active" onclick="go('home',this)">Accueil</button>
+        <button class="nav-link" onclick="go('episodes',this)">Episodes</button>
+        <button class="nav-link" onclick="go('paths',this)">Parcours</button>
+        <button class="nav-link" onclick="go('experts',this)">Experts</button>
+        <button class="nav-link" onclick="go('quiz',this)">Quiz</button>
+        <button class="nav-link" onclick="go('graph',this)">Graphe</button>
+        <button class="nav-link" onclick="go('reco',this)">Pour vous</button>
+      </nav>
+      <div class="nav-progress" id="header-progress">
+        <span id="hdr-prog-text">0%</span>
+        <div class="nav-progress-bar"><div class="nav-progress-fill" id="hdr-prog-bar" style="width:0%"></div></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO (home only) -->
+  <section class="hero" id="hero-section">
+    <div class="hero-inner">
+      <h1>Prenez le controle<br>de votre argent</h1>
+      <p>Le premier podcast francais sur les finances personnelles, transforme en plateforme educative interactive. Parcours pedagogiques, quiz, recommandations sur mesure.</p>
+      <div class="hero-stats">
+        <div><div class="hero-stat-value" id="hs-ep">307</div><div class="hero-stat-label">episodes</div></div>
+        <div><div class="hero-stat-value" id="hs-ex">28</div><div class="hero-stat-label">experts</div></div>
+        <div><div class="hero-stat-value" id="hs-q">614</div><div class="hero-stat-label">quiz</div></div>
+        <div><div class="hero-stat-value" id="hs-p">6</div><div class="hero-stat-label">parcours</div></div>
+      </div>
+      <button class="hero-cta" onclick="go('paths')">Commencer un parcours →</button>
+    </div>
+  </section>
+
+  <!-- MAIN CONTENT -->
+  <main class="container">
+
+    <!-- HOME -->
+    <div class="view active" id="v-home">
+      <section class="section">
+        <div class="section-header">
+          <div><div class="section-title">Parcours pedagogiques</div><div class="section-subtitle">Progressez etape par etape, de debutant a expert</div></div>
+          <button class="section-action" onclick="go('paths')">Voir tous les parcours →</button>
+        </div>
+        <div class="paths-grid" id="home-paths"></div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div><div class="section-title">Derniers episodes</div><div class="section-subtitle">Les plus recents du podcast La Martingale</div></div>
+          <button class="section-action" onclick="go('episodes')">Tous les episodes →</button>
+        </div>
+        <div class="episodes-grid" id="home-episodes"></div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div><div class="section-title">Nos experts</div><div class="section-subtitle">Les voix qui comptent en finance personnelle</div></div>
+          <button class="section-action" onclick="go('experts')">Tous les experts →</button>
+        </div>
+        <div class="experts-grid" id="home-experts"></div>
+      </section>
+    </div>
+
+    <!-- EPISODES -->
+    <div class="view" id="v-episodes">
+      <section class="section">
+        <div class="section-title" style="margin-bottom:20px">Tous les episodes</div>
+        <div class="search-wrap">
+          <span class="search-icon">🔍</span>
+          <input class="search-input" type="text" placeholder="Rechercher un episode, expert ou theme..." oninput="searchEp(this.value)" id="search-in">
+        </div>
+        <div class="filters" id="ep-filters"></div>
+        <div id="ep-count" style="font-size:13px;color:var(--text-muted);margin-bottom:14px"></div>
+        <div class="episodes-grid" id="ep-list"></div>
+        <div class="pagination" id="ep-pag"></div>
+      </section>
+    </div>
+
+    <!-- PATHS -->
+    <div class="view" id="v-paths">
+      <section class="section">
+        <div class="section-title" style="margin-bottom:4px">Parcours pedagogiques</div>
+        <div class="section-subtitle" style="margin-bottom:28px">Chaque parcours vous guide a travers les meilleurs episodes, dans l'ordre optimal</div>
+        <div class="paths-grid" id="paths-all" style="grid-template-columns:repeat(2,1fr)"></div>
+      </section>
+    </div>
+
+    <!-- EXPERTS -->
+    <div class="view" id="v-experts">
+      <section class="section">
+        <div class="section-title" style="margin-bottom:28px">Experts recurrents</div>
+        <div class="experts-grid" id="experts-all"></div>
+      </section>
+    </div>
+
+    <!-- QUIZ -->
+    <div class="view" id="v-quiz">
+      <section class="section">
+        <div class="section-title" style="margin-bottom:4px">Quiz</div>
+        <div class="section-subtitle" style="margin-bottom:20px">Testez vos connaissances financieres</div>
+        <div class="filters" id="quiz-filters"></div>
+        <div class="quiz-wrap" id="quiz-area"></div>
+      </section>
+    </div>
+
+    <!-- GRAPH -->
+    <div class="view" id="v-graph">
+      <section class="section">
+        <div class="section-title" style="margin-bottom:4px">Carte de connaissances</div>
+        <div class="section-subtitle" style="margin-bottom:16px">Explorez les liens entre episodes : memes experts, memes themes, memes parcours</div>
+        <div class="filters" id="graph-filters"></div>
+        <div id="graph-box"></div>
+        <div class="graph-legend" id="graph-legend"></div>
+      </section>
+    </div>
+
+    <!-- RECOMMANDATIONS -->
+    <div class="view" id="v-reco">
+      <section class="section">
+        <div class="section-title" style="margin-bottom:4px">Pour vous</div>
+        <div class="section-subtitle" style="margin-bottom:24px">Des recommandations personnalisees basees sur votre profil</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start">
+          <div class="reco-form-card">
+            <div style="font-size:16px;font-weight:600;margin-bottom:20px">Votre profil investisseur</div>
+            <label class="form-label">Niveau d'experience</label>
+            <select class="form-select" id="r-exp">
+              <option value="DEBUTANT">Debutant</option>
+              <option value="INTERMEDIAIRE" selected>Intermediaire</option>
+              <option value="AVANCE">Avance</option>
+            </select>
+            <label class="form-label">Centres d'interet</label>
+            <div class="chips-grid" id="r-pillars"></div>
+            <label class="form-label">Objectifs</label>
+            <div class="chips-grid" id="r-goals"></div>
+            <button class="reco-btn" onclick="getReco()">Obtenir mes recommandations</button>
+          </div>
+          <div id="reco-results"></div>
+        </div>
+      </section>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">La Martingale</div>
+        <div class="footer-desc">Le premier podcast natif francais sur les finances personnelles. Un episode chaque semaine pour apprendre a investir et gerer son argent.</div>
+      </div>
+      <div class="footer-links">
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <a href="https://lamartingale.io" target="_blank">Site officiel</a>
+          <a href="https://podcasts.apple.com/fr/podcast/la-martingale/id1457342478" target="_blank">Apple Podcasts</a>
+          <a href="https://open.spotify.com/show/33GxJdsxabjNWHl6whIsiS" target="_blank">Spotify</a>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <a href="https://www.linkedin.com/company/lamartingalepodcast/" target="_blank">LinkedIn</a>
+          <a href="https://www.youtube.com/@LaMartingaleMedia" target="_blank">YouTube</a>
+          <a href="https://www.instagram.com/lamartingalepodcast/" target="_blank">Instagram</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-copy">Produit par Orso Media · Matthieu Stefani · &copy; 2026</div>
+  </footer>
+
+  <!-- MODAL -->
+  <div class="overlay" id="modal" onclick="if(event.target===this)closeM()">
+    <div class="modal-card" id="modal-c"></div>
+  </div>
+  <div class="graph-tt" id="graph-tt"></div>
+
+  <script>
+    const API = window.location.hostname === 'localhost' ? 'http://localhost:3001/api' : '/api';
+    let allEp = [], graphD = null;
+    let curPillar = null, curDiff = null, curPage = 1;
+
+    const PC = {
+      IMMOBILIER:'#2563EB', BOURSE:'#16A34A', CRYPTO:'#F59E0B', ALTERNATIFS:'#9333EA',
+      PE_STARTUP:'#DC2626', PATRIMOINE_FISCALITE:'#0891B2', FINANCES_PERSO:'#EA580C',
+      IMPACT_ESG:'#059669', CROWDFUNDING:'#7C3AED', ENTREPRENEURIAT:'#BE185D'
+    };
+    const PN = {
+      IMMOBILIER:'Immobilier', BOURSE:'Bourse', CRYPTO:'Crypto', ALTERNATIFS:'Alternatifs',
+      PE_STARTUP:'PE & Startups', PATRIMOINE_FISCALITE:'Patrimoine', FINANCES_PERSO:'Finances Perso',
+      IMPACT_ESG:'Impact ESG', CROWDFUNDING:'Crowdfunding', ENTREPRENEURIAT:'Entrepreneuriat'
+    };
+    const pathIcons = ['📚','🏠','📈','₿','👨‍👩‍👧','🎯'];
+    const pathColors = ['#004cff','#2563EB','#16A34A','#F59E0B','#DC2626','#9333EA'];
+
+    // ===== PROGRESS =====
+    const SK = 'lm_progress';
+    const ldP = () => { try { return JSON.parse(localStorage.getItem(SK)||'{"completed":[]}'); } catch { return {completed:[]}; }};
+    const svP = p => localStorage.setItem(SK, JSON.stringify(p));
+    const isD = id => ldP().completed.includes(id);
+    const togD = id => { const p=ldP(); const i=p.completed.indexOf(id); if(i>=0) p.completed.splice(i,1); else p.completed.push(id); svP(p); updHdr(); };
+    function updHdr() {
+      const p=ldP(), pct=allEp.length? Math.round(p.completed.length/allEp.length*100):0;
+      const t=document.getElementById('hdr-prog-text'), b=document.getElementById('hdr-prog-bar');
+      if(t) t.textContent=pct+'%';
+      if(b) b.style.width=pct+'%';
+    }
+
+    // ===== FETCH =====
+    const F = url => fetch(url).then(r=>r.json());
+
+    // ===== INIT =====
+    async function init() {
+      const [stats,paths,experts,epRes] = await Promise.all([
+        F(`${API}/stats`), F(`${API}/paths`), F(`${API}/experts`), F(`${API}/episodes?limit=312`)
+      ]);
+      allEp = epRes.episodes;
+      document.getElementById('hs-ep').textContent = stats.total_episodes;
+      document.getElementById('hs-ex').textContent = stats.total_experts;
+      document.getElementById('hs-p').textContent = stats.total_paths;
+      renderHomePaths(paths.paths);
+      renderHomeEp();
+      renderHomeExperts(experts.experts);
+      buildEpFilters(stats);
+      buildQuizFilters();
+      buildRecoForm();
+      updHdr();
+    }
+
+    // ===== HOME =====
+    function renderHomePaths(paths) {
+      document.getElementById('home-paths').innerHTML = paths.slice(0,3).map((p,i) => `
+        <div class="card card-clickable path-card" onclick="showPathM('${p.id}')">
+          <div class="path-accent" style="background:${pathColors[i]||'#004cff'}"></div>
+          <div class="path-icon" style="background:${pathColors[i]||'#004cff'}15">${pathIcons[i]||'📚'}</div>
+          <div class="path-name">${p.name}</div>
+          <div class="path-desc">${p.description}</div>
+          <div class="path-footer">
+            <span>${p.episode_count} episodes · ${p.estimated_hours}h</span>
+            <span class="path-badge ${p.difficulty==='DEBUTANT'?'badge-deb':p.difficulty==='INTERMEDIAIRE'?'badge-int':'badge-ava'}">${p.difficulty.substring(0,3)}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderHomeEp() {
+      document.getElementById('home-episodes').innerHTML = allEp.slice(0,6).map(ep => epCard(ep)).join('');
+    }
+
+    function renderHomeExperts(experts) {
+      document.getElementById('home-experts').innerHTML = experts.slice(0,8).map(e => `
+        <div class="card">
+          <div class="expert-avatar">${e.name.charAt(0)}</div>
+          <div class="expert-name">${e.name}</div>
+          <div class="expert-company">${e.company}</div>
+          <div class="expert-meta"><span class="expert-stars">${'★'.repeat(e.authority_score)}</span> · ${e.episodes.length} ep</div>
+        </div>
+      `).join('');
+    }
+
+    // ===== EPISODE CARD =====
+    function epCard(ep) {
+      const d = isD(ep.id);
+      return `<div class="card card-clickable ep-card ${d?'completed':''}" onclick="showEpM(${ep.id})">
+        <div class="ep-num">#${ep.id}</div>
+        <div class="ep-body">
+          <div class="ep-title">${ep.title}</div>
+          <div class="ep-guest">${ep.guest_name}</div>
+        </div>
+        <div class="ep-tags">
+          <span class="ep-pillar-dot" style="background:${PC[ep.pillar]||'#999'}"></span>
+          <span class="ep-pillar-name">${PN[ep.pillar]||ep.pillar}</span>
+        </div>
+        ${d?'<span class="ep-check">✓</span>':''}
+      </div>`;
+    }
+
+    // ===== EPISODES VIEW =====
+    function buildEpFilters(stats) {
+      document.getElementById('ep-filters').innerHTML = `
+        <button class="filter-pill active" onclick="setF(null,null,this)">Tous</button>
+        <button class="filter-pill" onclick="setF('DEBUTANT',null,this)">Debutant</button>
+        <button class="filter-pill" onclick="setF('INTERMEDIAIRE',null,this)">Intermediaire</button>
+        <button class="filter-pill" onclick="setF('AVANCE',null,this)">Avance</button>
+        ${Object.entries(PN).map(([k,v])=>`<button class="filter-pill" onclick="setF(null,'${k}',this)" style="border-left:3px solid ${PC[k]}">${v}</button>`).join('')}
+      `;
+    }
+
+    function setF(diff, pillar, el) {
+      if(diff!==undefined) curDiff=diff;
+      if(pillar!==undefined) curPillar=pillar;
+      if(!diff && !pillar) { curDiff=null; curPillar=null; }
+      curPage=1;
+      document.querySelectorAll('#ep-filters .filter-pill').forEach(b=>b.classList.remove('active'));
+      if(el) el.classList.add('active');
+      renderEpList();
+    }
+
+    function renderEpList() {
+      let f=[...allEp];
+      if(curPillar) f=f.filter(e=>e.pillar===curPillar);
+      if(curDiff) f=f.filter(e=>e.difficulty===curDiff);
+      const pp=20, tp=Math.ceil(f.length/pp), pg=f.slice((curPage-1)*pp,curPage*pp);
+      document.getElementById('ep-count').textContent=f.length+' episodes';
+      document.getElementById('ep-list').innerHTML=pg.map(ep=>epCard(ep)).join('');
+      document.getElementById('ep-pag').innerHTML=`
+        ${curPage>1?`<button class="pg-btn" onclick="curPage--;renderEpList();scrollTo(0,0)">Prec</button>`:''}
+        ${Array.from({length:Math.min(tp,7)},(_,i)=>`<button class="pg-btn ${i+1===curPage?'active':''}" onclick="curPage=${i+1};renderEpList();scrollTo(0,0)">${i+1}</button>`).join('')}
+        ${tp>7?`<button class="pg-btn">..</button><button class="pg-btn" onclick="curPage=${tp};renderEpList();scrollTo(0,0)">${tp}</button>`:''}
+        ${curPage<tp?`<button class="pg-btn" onclick="curPage++;renderEpList();scrollTo(0,0)">Suiv</button>`:''}
+      `;
+    }
+
+    async function searchEp(q) {
+      if(!q||q.length<2) { renderEpList(); return; }
+      const d=await F(`${API}/search?q=${encodeURIComponent(q)}`);
+      document.getElementById('ep-list').innerHTML=(d.episodes||[]).slice(0,20).map(ep=>epCard(ep)).join('')||`<div style="color:var(--text-muted);padding:20px">Aucun resultat</div>`;
+      document.getElementById('ep-count').textContent=(d.episodes||[]).length+' resultats';
+    }
+
+    // ===== PATHS VIEW =====
+    async function renderPathsAll() {
+      const d = await F(`${API}/paths`);
+      document.getElementById('paths-all').innerHTML = d.paths.map((p,i) => {
+        return `
+          <div class="card card-clickable path-card" onclick="showPathM('${p.id}')">
+            <div class="path-accent" style="background:${pathColors[i%pathColors.length]}"></div>
+            <div class="path-icon" style="background:${pathColors[i%pathColors.length]}15">${pathIcons[i%pathIcons.length]}</div>
+            <div class="path-name">${p.name}</div>
+            <div class="path-desc">${p.description}</div>
+            <div class="path-footer">
+              <span>${p.episode_count} episodes · ${p.estimated_hours}h</span>
+              <span class="path-badge ${p.difficulty==='DEBUTANT'?'badge-deb':p.difficulty==='INTERMEDIAIRE'?'badge-int':'badge-ava'}">${p.difficulty.substring(0,3)}</span>
+            </div>
+            <div class="path-progress-bar"><div class="path-progress-fill" id="pp-${p.id}" style="width:0%"></div></div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:4px" id="ppt-${p.id}"></div>
+            ${(p.outcomes||[]).slice(0,3).map(o=>`<div style="font-size:12px;color:var(--text-secondary);padding:2px 0;margin-top:2px">✓ ${o}</div>`).join('')}
+          </div>
+        `;
+      }).join('');
+      // Update progress
+      for(const p of d.paths) {
+        const det = await F(`${API}/paths/${p.id}`);
+        const prog = ldP(), eps=det.path.episodes_ordered||[];
+        const done=eps.filter(s=>prog.completed.includes(s.episode_id)).length;
+        const pct=eps.length?Math.round(done/eps.length*100):0;
+        const bar=document.getElementById(`pp-${p.id}`);
+        const txt=document.getElementById(`ppt-${p.id}`);
+        if(bar) bar.style.width=pct+'%';
+        if(txt) txt.textContent=`${done}/${eps.length} completes`;
+      }
+    }
+
+    // ===== EXPERTS VIEW =====
+    async function renderExpertsAll() {
+      const d = await F(`${API}/experts`);
+      document.getElementById('experts-all').innerHTML = d.experts.map(e=>`
+        <div class="card">
+          <div class="expert-avatar">${e.name.charAt(0)}</div>
+          <div class="expert-name">${e.name}</div>
+          <div class="expert-company">${e.company}</div>
+          <div style="margin-top:6px;font-size:12px;color:var(--text-muted)">${e.specialty.join(' · ')}</div>
+          <div class="expert-meta"><span class="expert-stars">${'★'.repeat(e.authority_score)}</span> · ${e.episodes.length} ep</div>
+          <div style="margin-top:8px;font-size:11px;color:var(--text-muted)">
+            ${e.episodes.map(id=>`<span style="cursor:pointer;color:var(--blue)" onclick="showEpM(${id})">#${id}</span>`).join(' ')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // ===== QUIZ =====
+    let qz=[], qi=0, qc=0, qa=false, qLoaded=false;
+
+    function buildQuizFilters() {
+      document.getElementById('quiz-filters').innerHTML = `
+        <button class="filter-pill active" onclick="loadQ('')">Tous</button>
+        <button class="filter-pill" onclick="loadQ('IMMOBILIER')">Immobilier</button>
+        <button class="filter-pill" onclick="loadQ('BOURSE')">Bourse</button>
+        <button class="filter-pill" onclick="loadQ('CRYPTO')">Crypto</button>
+        <button class="filter-pill" onclick="loadQ('ALTERNATIFS')">Alternatifs</button>
+      `;
+    }
+
+    async function loadQ(pillar) {
+      let url=`${API}/quiz?limit=10`;
+      if(pillar) url+=`&pillar=${pillar}`;
+      const d=await F(url);
+      qz=d.questions; qi=0; qc=0; qLoaded=true;
+      document.querySelectorAll('#quiz-filters .filter-pill').forEach(b=>b.classList.remove('active'));
+      event?.target?.classList.add('active');
+      renderQ();
+    }
+
+    function renderQ() {
+      const el=document.getElementById('quiz-area');
+      if(!qz.length){el.innerHTML='<p style="color:var(--text-muted)">Aucune question. <button class="reco-btn" style="width:auto;padding:8px 20px;margin-left:8px" onclick="loadQ(\'\')">Charger</button></p>';return;}
+      if(qi>=qz.length){
+        const pct=Math.round(qc/qz.length*100);
+        el.innerHTML=`<div class="quiz-q-card" style="text-align:center;padding:48px">
+          <div style="font-size:48px;font-weight:700;color:var(--blue)">${qc}/${qz.length}</div>
+          <div style="font-size:16px;color:var(--text-muted);margin:8px 0 24px">${pct}% de bonnes reponses${pct>=80?' — Excellent !':pct>=50?' — Bien joue !':' — Continuez !'}</div>
+          <button class="reco-btn" style="width:auto;padding:10px 28px" onclick="loadQ('')">Nouveau quiz</button>
+        </div>`;return;
+      }
+      const q=qz[qi], prog=(qi/qz.length*100).toFixed(0);
+      el.innerHTML=`
+        <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--text-muted);margin-bottom:8px">
+          <span>Question ${qi+1}/${qz.length}</span><span style="color:var(--blue);font-weight:600">${qc} correct${qc!==1?'s':''}</span>
+        </div>
+        <div class="quiz-bar"><div class="quiz-bar-fill" style="width:${prog}%"></div></div>
+        <div class="quiz-q-card">
+          <div style="font-size:11px;color:var(--text-muted);margin-bottom:12px">
+            <span style="color:${PC[q.pillar]||'#999'}">●</span> Episode #${q.episode_id} · ${PN[q.pillar]||q.pillar}
+          </div>
+          <div class="quiz-q-text">${q.question}</div>
+          <div class="quiz-opts" id="q-opts">
+            ${q.options.map((o,i)=>`<div class="quiz-opt" onclick="ansQ(${i})" data-i="${i}">${o}</div>`).join('')}
+          </div>
+          <div class="quiz-expl" id="q-expl">${q.explanation}</div>
+          <button class="quiz-next-btn" id="q-next" onclick="qi++;renderQ()">Question suivante →</button>
+        </div>
+      `;
+      qa=false;
+    }
+
+    function ansQ(sel) {
+      if(qa) return; qa=true;
+      const q=qz[qi];
+      document.querySelectorAll('.quiz-opt').forEach((o,i)=>{
+        o.classList.add('answered');
+        if(i===q.correct_answer) o.classList.add('correct');
+        if(i===sel&&i!==q.correct_answer) o.classList.add('wrong');
+      });
+      if(sel===q.correct_answer) qc++;
+      document.getElementById('q-expl').classList.add('show');
+      document.getElementById('q-next').classList.add('show');
+    }
+
+    // ===== GRAPH =====
+    async function renderGraph() {
+      if(!graphD) graphD=await F(`${API}/graph`);
+      document.getElementById('graph-filters').innerHTML = `
+        <button class="filter-pill active" onclick="drawG(null,this)">Tous</button>
+        ${Object.entries(PN).map(([k,v])=>`<button class="filter-pill" onclick="drawG('${k}',this)" style="border-left:3px solid ${PC[k]}">${v}</button>`).join('')}
+      `;
+      document.getElementById('graph-legend').innerHTML = Object.entries(PC).map(([k,c])=>`
+        <div class="legend-chip"><span class="legend-dot-sm" style="background:${c}"></span>${PN[k]}</div>
+      `).join('');
+      drawG(null);
+    }
+
+    function drawG(pf, btn) {
+      if(btn) { document.querySelectorAll('#graph-filters .filter-pill').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); }
+      const c=document.getElementById('graph-box'); c.innerHTML='';
+      const W=c.offsetWidth||800, H=560;
+      let nodes=graphD.nodes.map(n=>({...n})), edges=graphD.edges.map(e=>({...e}));
+      if(pf) { const ok=new Set(nodes.filter(n=>n.pillar===pf).map(n=>n.id)); nodes=nodes.filter(n=>ok.has(n.id)); edges=edges.filter(e=>ok.has(e.source)||ok.has(e.target)); }
+      const conn=new Set(); edges.forEach(e=>{conn.add(e.source);conn.add(e.target);});
+      const cn=nodes.filter(n=>conn.has(n.id)), iso=nodes.filter(n=>!conn.has(n.id)).sort((a,b)=>b.id-a.id).slice(0,25);
+      nodes=[...cn,...iso];
+      const nm=new Map(nodes.map(n=>[n.id,n])); edges=edges.filter(e=>nm.has(e.source)&&nm.has(e.target));
+      const svg=d3.select(c).append('svg').attr('width',W).attr('height',H);
+      const g=svg.append('g');
+      svg.call(d3.zoom().scaleExtent([0.2,4]).on('zoom',ev=>g.attr('transform',ev.transform)));
+      const sim=d3.forceSimulation(nodes)
+        .force('link',d3.forceLink(edges).id(d=>d.id).distance(55).strength(0.3))
+        .force('charge',d3.forceManyBody().strength(-70))
+        .force('center',d3.forceCenter(W/2,H/2))
+        .force('collision',d3.forceCollide().radius(d=>nr(d)+3));
+      g.append('g').attr('stroke-opacity',0.2).selectAll('line').data(edges).join('line')
+        .attr('stroke',d=>d.type==='same_expert'?'#f59e0b':d.type==='learning_path'?'#059669':'#aaa').attr('stroke-width',1);
+      const node=g.append('g').selectAll('g').data(nodes).join('g').attr('cursor','pointer')
+        .call(d3.drag().on('start',(e,d)=>{if(!e.active)sim.alphaTarget(0.3).restart();d.fx=d.x;d.fy=d.y;}).on('drag',(e,d)=>{d.fx=e.x;d.fy=e.y;}).on('end',(e,d)=>{if(!e.active)sim.alphaTarget(0);d.fx=null;d.fy=null;}))
+        .on('click',(e,d)=>{e.stopPropagation();showEpM(d.id);})
+        .on('mouseover',(e,d)=>{const tt=document.getElementById('graph-tt');tt.innerHTML=`<strong>#${d.id}</strong> ${d.title}<br><span style="opacity:.7">${d.guest} · ${PN[d.pillar]}</span>`;tt.style.display='block';tt.style.left=(e.pageX+12)+'px';tt.style.top=(e.pageY-20)+'px';})
+        .on('mouseout',()=>document.getElementById('graph-tt').style.display='none');
+      node.append('circle').attr('r',d=>nr(d)).attr('fill',d=>PC[d.pillar]||'#999').attr('fill-opacity',0.8)
+        .attr('stroke',d=>isD(d.id)?'#059669':'transparent').attr('stroke-width',2);
+      node.filter(d=>d.degree>=3).append('text').attr('text-anchor','middle').attr('dy',d=>nr(d)+10).attr('font-size',8).attr('fill','#888').attr('font-family','Poppins').text(d=>`#${d.id}`);
+      const link=g.selectAll('line');
+      sim.on('tick',()=>{link.attr('x1',d=>d.source.x).attr('y1',d=>d.source.y).attr('x2',d=>d.target.x).attr('y2',d=>d.target.y);node.attr('transform',d=>`translate(${d.x},${d.y})`);});
+    }
+
+    function nr(d){return 4+Math.min((d.degree||0)*1.5,12);}
+
+    // ===== RECOMMANDATIONS =====
+    const selP=new Set(), selG=new Set();
+    function buildRecoForm() {
+      document.getElementById('r-pillars').innerHTML = Object.entries(PN).map(([k,v])=>`<div class="chip" onclick="togC(selP,'${k}',this)"><span style="color:${PC[k]}">●</span> ${v}</div>`).join('');
+      document.getElementById('r-goals').innerHTML = [
+        ['BUILD_SAVINGS','Constituer une epargne'],['BUY_HOME','Acheter ma RP'],['INVEST_REAL_ESTATE','Immobilier locatif'],
+        ['GROW_PORTFOLIO','Faire fructifier'],['PREPARE_RETIREMENT','Preparer retraite'],['REDUCE_TAXES','Optimiser fiscalite'],
+        ['DIVERSIFY','Diversifier'],['FINANCIAL_FREEDOM','Independance financiere'],['CRYPTO_EXPOSURE','Exposition crypto'],['IMPACT_INVESTING','Investir responsable']
+      ].map(([k,v])=>`<div class="chip" onclick="togC(selG,'${k}',this)">${v}</div>`).join('');
+    }
+
+    function togC(set,k,el){if(set.has(k)){set.delete(k);el.classList.remove('on');}else{set.add(k);el.classList.add('on');}}
+
+    async function getReco() {
+      if(!selP.size){document.getElementById('reco-results').innerHTML=`<p style="color:var(--danger)">Selectionnez au moins un interet.</p>`;return;}
+      document.getElementById('reco-results').innerHTML='<p style="color:var(--text-muted)">Calcul...</p>';
+      const d=await fetch(`${API}/recommend?limit=12`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+        investment_experience:document.getElementById('r-exp').value,interests:[...selP],goals:[...selG],completed_episodes:ldP().completed,age_range:'25-35',patrimony_level:'GROWING'
+      })}).then(r=>r.json());
+      if(!d.recommendations?.length){document.getElementById('reco-results').innerHTML='<p style="color:var(--text-muted)">Aucune recommandation.</p>';return;}
+      document.getElementById('reco-results').innerHTML=`
+        <div style="font-size:14px;font-weight:600;margin-bottom:14px">${d.recommendations.length} episodes pour vous</div>
+        ${d.recommendations.map(r=>`
+          <div class="reco-result" onclick="showEpM(${r.episode.id})">
+            <div class="reco-score">${r.score}</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-weight:600;font-size:14px">#${r.episode.id} — ${r.episode.title}</div>
+              <div style="font-size:12px;color:var(--text-muted)">${r.episode.guest_name} · <span style="color:${PC[r.episode.pillar]||'#999'}">●</span> ${PN[r.episode.pillar]}</div>
+              <div style="margin-top:4px">${r.reasons.map(x=>`<span class="reco-reason">${x}</span>`).join('')}</div>
+            </div>
+          </div>
+        `).join('')}
+      `;
+    }
+
+    // ===== MODALS =====
+    async function showEpM(id) {
+      const [data, enr] = await Promise.all([F(`${API}/episodes/${id}`), F(`${API}/enriched/${id}`).catch(()=>null)]);
+      const ep=data.episode, d=isD(ep.id);
+      document.getElementById('modal-c').innerHTML=`
+        <button class="modal-close" onclick="closeM()">✕</button>
+        <div style="font-size:12px;color:var(--text-muted);margin-bottom:8px">
+          <span style="color:${PC[ep.pillar]}">●</span> ${PN[ep.pillar]} · ${ep.difficulty}
+        </div>
+        <h2 style="font-size:20px;font-weight:700;letter-spacing:-0.5px;margin-bottom:4px">#${ep.id} — ${ep.title}</h2>
+        <p style="font-size:14px;color:var(--text-secondary);margin-bottom:16px">${ep.guest_name}</p>
+        ${enr?.tags?.length?`<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px">${enr.tags.map(t=>`<span style="font-size:11px;padding:2px 8px;border-radius:4px;background:var(--surface-2);color:var(--text-muted)">${t}</span>`).join('')}</div>`:''}
+        ${enr?.sub_themes?.length?`<div style="font-size:12px;color:var(--text-muted);margin-bottom:14px">Sous-themes : ${enr.sub_themes.join(' · ')}</div>`:''}
+        <div style="display:flex;gap:8px;margin-bottom:20px">
+          <a href="https://lamartingale.io/tous/${id}" target="_blank" class="btn-listen">Ecouter sur lamartingale.io →</a>
+          <button class="btn-mark ${d?'done':''}" id="bm-${ep.id}" onclick="togD(${ep.id});this.classList.toggle('done');this.textContent=isD(${ep.id})?'✓ Vu':'Marquer vu';renderEpList();renderHomeEp();">${d?'✓ Vu':'Marquer vu'}</button>
+        </div>
+        ${data.related.length?`
+          <div style="font-size:14px;font-weight:600;margin-bottom:8px">Episodes similaires</div>
+          ${data.related.slice(0,5).map(r=>`
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;cursor:pointer" onclick="showEpM(${r.id})">
+              <span style="color:var(--blue);font-weight:600;min-width:36px">#${r.id}</span>
+              <span style="flex:1">${r.title}</span>
+              ${isD(r.id)?'<span style="color:var(--success)">✓</span>':''}
+            </div>
+          `).join('')}
+        `:''}
+      `;
+      document.getElementById('modal').classList.add('open');
+    }
+
+    async function showPathM(id) {
+      const d=await F(`${API}/paths/${id}`);
+      const p=d.path, prog=ldP(), eps=p.episodes_ordered||[];
+      const done=eps.filter(s=>prog.completed.includes(s.episode_id)).length;
+      const pct=eps.length?Math.round(done/eps.length*100):0;
+      document.getElementById('modal-c').innerHTML=`
+        <button class="modal-close" onclick="closeM()">✕</button>
+        <h2 style="font-size:20px;font-weight:700;margin-bottom:4px">${p.name}</h2>
+        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px">${p.description}</p>
+        <div style="font-size:13px;color:var(--text-muted);margin-bottom:6px">Progression : ${done}/${eps.length} (${pct}%)</div>
+        <div class="path-progress-bar" style="margin-bottom:20px"><div class="path-progress-fill" style="width:${pct}%"></div></div>
+        <div style="font-weight:600;font-size:14px;margin-bottom:10px">Etapes</div>
+        ${(p.steps||eps.map((s,i)=>({...s,episode:allEp.find(e=>e.id===s.episode_id)}))).map((s,i)=>{
+          const c=prog.completed.includes(s.episode_id);
+          return `<div style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)">
+            <div style="width:28px;height:28px;border-radius:50%;background:${c?'var(--success)':'var(--blue)'};color:white;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">${c?'✓':i+1}</div>
+            <div style="flex:1">
+              <div style="font-size:14px;font-weight:500;cursor:pointer;color:var(--blue)" onclick="closeM();showEpM(${s.episode_id})">#${s.episode_id} — ${s.episode?.title||'Episode'}</div>
+              <div style="font-size:12px;color:var(--text-muted)">${s.why||''}</div>
+            </div>
+          </div>`;
+        }).join('')}
+        ${p.outcomes?`<div style="margin-top:20px;font-weight:600;font-size:14px;margin-bottom:8px">Ce que vous apprendrez</div>${p.outcomes.map(o=>`<div style="font-size:13px;padding:3px 0;color:var(--text-secondary)">✓ ${o}</div>`).join('')}`:''}
+      `;
+      document.getElementById('modal').classList.add('open');
+    }
+
+    function closeM(){document.getElementById('modal').classList.remove('open');}
+    document.addEventListener('keydown',e=>{if(e.key==='Escape')closeM();});
+
+    // ===== NAVIGATION =====
+    function go(view, btn) {
+      const views=['home','episodes','paths','experts','quiz','graph','reco'];
+      views.forEach(v=>document.getElementById(`v-${v}`).classList.remove('active'));
+      document.getElementById(`v-${view}`).classList.add('active');
+      document.getElementById('hero-section').style.display = view==='home'?'':'none';
+      document.querySelectorAll('#main-nav .nav-link').forEach(n=>n.classList.remove('active'));
+      if(btn) btn.classList.add('active');
+      if(view==='episodes') renderEpList();
+      if(view==='paths') renderPathsAll();
+      if(view==='experts') renderExpertsAll();
+      if(view==='quiz'&&!qLoaded) loadQ('');
+      if(view==='graph') renderGraph();
+      scrollTo(0,0);
+    }
+
+    init();
+  </script>
+</body>
+</html>

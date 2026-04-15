@@ -12,6 +12,11 @@ app.use(express.json());
 // Serve static frontend
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
+// V2 brand-aligned route
+app.get('/v2', (_req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'public', 'v2.html'));
+});
+
 const PORT = process.env.PORT || 3001;
 
 // ============================================================================
