@@ -1,0 +1,22 @@
+# Data JSON (2.9 MB) — jamais besoin de les indexer
+data/episodes-enriched.json
+data/episodes-ai-enriched.json
+data/episodes-media.json
+data/quiz-bank.json
+data/episodes-complete-index.json
+data/clustering.json
+data/episodes.json
+
+# Generated / build
+graphify-out/
+src/graphify-out/
+dist/
+node_modules/
+package-lock.json
+
+# Caches
+.graphify_python
+*.log
+
+# Secrets
+.env
