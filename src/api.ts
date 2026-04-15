@@ -368,6 +368,76 @@ app.get('/api/quiz/episode/:id', async (req, res) => {
   } catch (e: any) { res.status(500).json({ error: e.message }); }
 });
 
+// --- Hybrid Search (Couche 3) ---
+
+app.get('/api/search/hybrid', async (req, res) => {
+  try {
+    if (!USE_DB || !process.env.OPENAI_API_KEY) {
+      return res.status(503).json({ error: 'Hybrid search requires USE_DB=true + OPENAI_API_KEY' });
+    }
+    const q = req.query.q as string;
+    if (!q || q.length < 2) return res.status(400).json({ error: 'Query must be at least 2 characters' });
+    const limit = parseInt(req.query.limit as string) || 10;
+    const { hybridSearch } = await import('./ai/search');
+    const result = await hybridSearch(q, limit);
+    res.json(result);
+  } catch (e: any) { console.error('[API] /api/search/hybrid error:', e.message); res.status(500).json({ error: e.message }); }
+});
+
+// --- RAG Chat (Couche 3) ---
+
+app.post('/api/chat', async (req, res) => {
+  try {
+    if (!USE_DB || !process.env.OPENAI_API_KEY) {
+      return res.status(503).json({ error: 'Chat requires USE_DB=true + OPENAI_API_KEY' });
+    }
+    const { message } = req.body;
+    if (!message) return res.status(400).json({ error: 'Missing message' });
+    const { ragQuery } = await import('./ai/rag');
+    const result = await ragQuery(message);
+    res.json(result);
+  } catch (e: any) { console.error('[API] /api/chat error:', e.message); res.status(500).json({ error: e.message }); }
+});
+
+// --- Adaptive Quiz (Couche 3) ---
+
+app.post('/api/quiz/next', async (req, res) => {
+  try {
+    if (!USE_DB) return res.status(503).json({ error: 'Adaptive quiz requires USE_DB=true' });
+    const { getNextQuestion, initProfile } = await import('./ai/quiz-adaptive');
+    const profile = req.body.profile || initProfile();
+    const question = await getNextQuestion(profile);
+    if (!question) return res.json({ done: true, message: 'Toutes les questions ont été répondues' });
+    res.json(question);
+  } catch (e: any) { res.status(500).json({ error: e.message }); }
+});
+
+app.post('/api/quiz/answer', async (req, res) => {
+  try {
+    if (!USE_DB) return res.status(503).json({ error: 'Adaptive quiz requires USE_DB=true' });
+    const { processAnswer } = await import('./ai/quiz-adaptive');
+    const { question_id, answer, profile } = req.body;
+    if (!question_id || answer === undefined || !profile) {
+      return res.status(400).json({ error: 'Missing question_id, answer, or profile' });
+    }
+    const result = await processAnswer(question_id, answer, profile);
+    res.json(result);
+  } catch (e: any) { res.status(500).json({ error: e.message }); }
+});
+
+// --- Clustering data (Couche 2) ---
+
+app.get('/api/clustering', (_req, res) => {
+  try {
+    const clusterPath = path.join(__dirname, '..', 'data', 'clustering.json');
+    if (fs.existsSync(clusterPath)) {
+      res.json(JSON.parse(fs.readFileSync(clusterPath, 'utf-8')));
+    } else {
+      res.status(404).json({ error: 'Clustering data not available. Run scripts/clustering.py' });
+    }
+  } catch (e: any) { res.status(500).json({ error: e.message }); }
+});
+
 // --- Episode Relation Graph (always JSON-based, graph is structural) ---
 
 app.get('/api/graph', async (_req, res) => {
