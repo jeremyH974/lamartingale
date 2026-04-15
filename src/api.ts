@@ -33,12 +33,31 @@ const expertsData = loadJSON<{ experts: Expert[] }>('experts.json');
 const pathsData = loadJSON<{ learning_paths: LearningPath[] }>('learning-paths.json');
 const taxonomyData = loadJSON<any>('taxonomy.json');
 
+// Build real URL mapping from scraped data (slug-based URLs)
+const scrapedData = loadJSON<{ episodes: any[] }>('episodes-enriched.json');
+const urlMap: Record<number, string> = {};
+for (const ep of scrapedData.episodes) {
+  if (ep.id && ep.url && !urlMap[ep.id]) {
+    urlMap[ep.id] = ep.url;
+  }
+}
+
 // Map difficulty abbreviations
 function mapDifficulty(d: string): Difficulty {
   if (d === 'DEB') return 'DEBUTANT';
   if (d === 'INT') return 'INTERMEDIAIRE';
   if (d === 'AVA') return 'AVANCE';
   return d as Difficulty;
+}
+
+// Generate slug from title as fallback
+function slugify(title: string): string {
+  return title
+    .toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .substring(0, 80);
 }
 
 // Normalize episodes from compact index
@@ -53,7 +72,7 @@ const episodes: Episode[] = episodesData.episodes.map((ep: any) => ({
   tags: [],
   difficulty: mapDifficulty(ep.difficulty),
   learning_paths: [],
-  url: `https://lamartingale.io/episodes/${ep.id}`,
+  url: urlMap[ep.id] || `https://lamartingale.io/tous/${slugify(ep.title)}/`,
 }));
 
 // ============================================================================

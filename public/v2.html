@@ -1409,7 +1409,7 @@
         ${enr?.tags?.length?`<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px">${enr.tags.map(t=>`<span style="font-size:11px;padding:2px 8px;border-radius:4px;background:var(--surface-2);color:var(--text-muted)">${t}</span>`).join('')}</div>`:''}
         ${enr?.sub_themes?.length?`<div style="font-size:12px;color:var(--text-muted);margin-bottom:14px">Sous-themes : ${enr.sub_themes.join(' · ')}</div>`:''}
         <div style="display:flex;gap:8px;margin-bottom:20px">
-          <a href="https://lamartingale.io/tous/${id}" target="_blank" class="btn-listen">Ecouter sur lamartingale.io →</a>
+          <a href="${ep.url}" target="_blank" class="btn-listen">Ecouter sur lamartingale.io →</a>
           <button class="btn-mark ${d?'done':''}" id="bm-${ep.id}" onclick="togD(${ep.id});this.classList.toggle('done');this.textContent=isD(${ep.id})?'✓ Vu':'Marquer vu';renderEpList();renderHomeEp();">${d?'✓ Vu':'Marquer vu'}</button>
         </div>
         ${data.related.length?`
