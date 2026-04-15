@@ -33,6 +33,13 @@ const expertsData = loadJSON<{ experts: Expert[] }>('experts.json');
 const pathsData = loadJSON<{ learning_paths: LearningPath[] }>('learning-paths.json');
 const taxonomyData = loadJSON<any>('taxonomy.json');
 
+// Load media data (thumbnails, audio players)
+let mediaData: { by_id: Record<string, any> } = { by_id: {} };
+const mediaPath = path.join(__dirname, '..', 'data', 'episodes-media.json');
+if (fs.existsSync(mediaPath)) {
+  mediaData = JSON.parse(fs.readFileSync(mediaPath, 'utf-8'));
+}
+
 // Build real URL mapping from scraped data (slug-based URLs)
 const scrapedData = loadJSON<{ episodes: any[] }>('episodes-enriched.json');
 const urlMap: Record<number, string> = {};
@@ -116,7 +123,10 @@ app.get('/api/episodes', (req, res) => {
     page,
     limit,
     pages: Math.ceil(result.length / limit),
-    episodes: result.slice(start, start + limit),
+    episodes: result.slice(start, start + limit).map(ep => ({
+      ...ep,
+      thumbnail: mediaData.by_id[ep.id]?.thumbnail_350 || null,
+    })),
   });
 });
 
@@ -135,7 +145,15 @@ app.get('/api/episodes/:id', (req, res) => {
     ex.episodes.includes(episode.id)
   );
 
-  res.json({ episode, related, expert });
+  // Get media data
+  const media = mediaData.by_id[id] || {};
+
+  res.json({
+    episode: { ...episode, thumbnail: media.thumbnail_350 || null, thumbnail_full: media.thumbnail_full || null },
+    related: related.map(r => ({ ...r, thumbnail: mediaData.by_id[r.id]?.thumbnail_350 || null })),
+    expert,
+    audio_player: media.audio_player || null,
+  });
 });
 
 // --- Experts ---
@@ -403,6 +421,19 @@ app.get('/api/enriched/:id', (req, res) => {
   const enriched = enrichedData.episodes.find((e: any) => e.id === id);
   if (!enriched) return res.status(404).json({ error: 'Enriched data not found' });
   res.json(enriched);
+});
+
+// --- Media ---
+
+app.get('/api/media', (_req, res) => {
+  res.json(mediaData.by_id);
+});
+
+app.get('/api/media/:id', (req, res) => {
+  const id = req.params.id;
+  const media = mediaData.by_id[id];
+  if (!media) return res.status(404).json({ error: 'No media for this episode' });
+  res.json(media);
 });
 
 // --- Tags ---

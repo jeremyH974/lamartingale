@@ -1054,7 +1054,7 @@
 
   <script>
     const API = window.location.hostname === 'localhost' ? 'http://localhost:3001/api' : '/api';
-    let allEp = [], graphD = null;
+    let allEp = [], graphD = null, mediaMap = {};
     let curPillar = null, curDiff = null, curPage = 1;
 
     const PC = {
@@ -1088,10 +1088,12 @@
 
     // ===== INIT =====
     async function init() {
-      const [stats,paths,experts,epRes] = await Promise.all([
-        F(`${API}/stats`), F(`${API}/paths`), F(`${API}/experts`), F(`${API}/episodes?limit=312`)
+      const [stats,paths,experts,epRes,media] = await Promise.all([
+        F(`${API}/stats`), F(`${API}/paths`), F(`${API}/experts`), F(`${API}/episodes?limit=312`),
+        F(`${API}/media`).catch(()=>({}))
       ]);
       allEp = epRes.episodes;
+      mediaMap = media || {};
       document.getElementById('hs-ep').textContent = stats.total_episodes;
       document.getElementById('hs-ex').textContent = stats.total_experts;
       document.getElementById('hs-p').textContent = stats.total_paths;
@@ -1138,8 +1140,9 @@
     // ===== EPISODE CARD =====
     function epCard(ep) {
       const d = isD(ep.id);
+      const thumb = ep.thumbnail || mediaMap[ep.id] || '';
       return `<div class="card card-clickable ep-card ${d?'completed':''}" onclick="showEpM(${ep.id})">
-        <div class="ep-num">#${ep.id}</div>
+        ${thumb ? `<img src="${thumb}" alt="" style="width:48px;height:48px;border-radius:8px;object-fit:cover;flex-shrink:0">` : `<div class="ep-num">#${ep.id}</div>`}
         <div class="ep-body">
           <div class="ep-title">${ep.title}</div>
           <div class="ep-guest">${ep.guest_name}</div>
@@ -1399,24 +1402,36 @@
     async function showEpM(id) {
       const [data, enr] = await Promise.all([F(`${API}/episodes/${id}`), F(`${API}/enriched/${id}`).catch(()=>null)]);
       const ep=data.episode, d=isD(ep.id);
+      const thumb = ep.thumbnail_full || ep.thumbnail || mediaMap[ep.id]?.thumbnail_full || '';
+      const audio = data.audio_player || mediaMap[ep.id]?.audio_player || '';
       document.getElementById('modal-c').innerHTML=`
         <button class="modal-close" onclick="closeM()">✕</button>
-        <div style="font-size:12px;color:var(--text-muted);margin-bottom:8px">
-          <span style="color:${PC[ep.pillar]}">●</span> ${PN[ep.pillar]} · ${ep.difficulty}
+        <div style="display:flex;gap:16px;margin-bottom:16px;align-items:flex-start">
+          ${thumb ? `<img src="${thumb}" alt="" style="width:100px;height:100px;border-radius:12px;object-fit:cover;flex-shrink:0">` : ''}
+          <div style="flex:1;min-width:0">
+            <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px">
+              <span style="color:${PC[ep.pillar]}">●</span> ${PN[ep.pillar]} · ${ep.difficulty}
+            </div>
+            <h2 style="font-size:20px;font-weight:700;letter-spacing:-0.5px;margin-bottom:4px">#${ep.id} — ${ep.title}</h2>
+            <p style="font-size:14px;color:var(--text-secondary)">${ep.guest_name}</p>
+          </div>
         </div>
-        <h2 style="font-size:20px;font-weight:700;letter-spacing:-0.5px;margin-bottom:4px">#${ep.id} — ${ep.title}</h2>
-        <p style="font-size:14px;color:var(--text-secondary);margin-bottom:16px">${ep.guest_name}</p>
+        ${audio ? `
+          <div style="margin-bottom:20px;border-radius:12px;overflow:hidden;border:1px solid var(--border)">
+            <iframe src="${audio}" style="width:100%;height:200px;border:none" allow="autoplay" loading="lazy"></iframe>
+          </div>
+        ` : ''}
         ${enr?.tags?.length?`<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px">${enr.tags.map(t=>`<span style="font-size:11px;padding:2px 8px;border-radius:4px;background:var(--surface-2);color:var(--text-muted)">${t}</span>`).join('')}</div>`:''}
         ${enr?.sub_themes?.length?`<div style="font-size:12px;color:var(--text-muted);margin-bottom:14px">Sous-themes : ${enr.sub_themes.join(' · ')}</div>`:''}
         <div style="display:flex;gap:8px;margin-bottom:20px">
-          <a href="${ep.url}" target="_blank" class="btn-listen">Ecouter sur lamartingale.io →</a>
+          <a href="${ep.url}" target="_blank" class="btn-listen">Voir sur lamartingale.io →</a>
           <button class="btn-mark ${d?'done':''}" id="bm-${ep.id}" onclick="togD(${ep.id});this.classList.toggle('done');this.textContent=isD(${ep.id})?'✓ Vu':'Marquer vu';renderEpList();renderHomeEp();">${d?'✓ Vu':'Marquer vu'}</button>
         </div>
         ${data.related.length?`
           <div style="font-size:14px;font-weight:600;margin-bottom:8px">Episodes similaires</div>
           ${data.related.slice(0,5).map(r=>`
             <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;cursor:pointer" onclick="showEpM(${r.id})">
-              <span style="color:var(--blue);font-weight:600;min-width:36px">#${r.id}</span>
+              ${r.thumbnail ? `<img src="${r.thumbnail}" style="width:32px;height:32px;border-radius:6px;object-fit:cover">` : `<span style="color:var(--blue);font-weight:600;min-width:36px">#${r.id}</span>`}
               <span style="flex:1">${r.title}</span>
               ${isD(r.id)?'<span style="color:var(--success)">✓</span>':''}
             </div>
