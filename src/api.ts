@@ -293,7 +293,7 @@ app.get('/api/stats', async (_req, res) => {
 
 app.get('/api/analytics', async (_req, res) => {
   try {
-    if (!USE_DB) return res.status(503).json({ error: 'Analytics requires database mode (USE_DB=true)' });
+    if (!process.env.DATABASE_URL) return res.status(503).json({ error: 'Analytics requires DATABASE_URL' });
     const { getAnalytics } = await import('./ai/analytics');
     const data = await getAnalytics();
     res.json(data);
@@ -304,7 +304,7 @@ app.get('/api/analytics', async (_req, res) => {
 
 app.get('/api/similar/:id', async (req, res) => {
   try {
-    if (!USE_DB) return res.status(503).json({ error: 'Similarity requires database mode' });
+    if (!process.env.DATABASE_URL) return res.status(503).json({ error: 'Similarity requires DATABASE_URL' });
     const sql = (await import('@neondatabase/serverless')).neon(process.env.DATABASE_URL!);
     const episodeNumber = parseInt(req.params.id);
     const limit = parseInt(req.query.limit as string) || 10;
@@ -372,8 +372,8 @@ app.get('/api/quiz/episode/:id', async (req, res) => {
 
 app.get('/api/search/hybrid', async (req, res) => {
   try {
-    if (!USE_DB || !process.env.OPENAI_API_KEY) {
-      return res.status(503).json({ error: 'Hybrid search requires USE_DB=true + OPENAI_API_KEY' });
+    if (!process.env.DATABASE_URL || !process.env.OPENAI_API_KEY) {
+      return res.status(503).json({ error: 'Hybrid search requires DATABASE_URL + OPENAI_API_KEY', db: !!process.env.DATABASE_URL, openai: !!process.env.OPENAI_API_KEY, use_db: USE_DB });
     }
     const q = req.query.q as string;
     if (!q || q.length < 2) return res.status(400).json({ error: 'Query must be at least 2 characters' });
@@ -388,8 +388,8 @@ app.get('/api/search/hybrid', async (req, res) => {
 
 app.post('/api/chat', async (req, res) => {
   try {
-    if (!USE_DB || !process.env.OPENAI_API_KEY) {
-      return res.status(503).json({ error: 'Chat requires USE_DB=true + OPENAI_API_KEY' });
+    if (!process.env.DATABASE_URL || !process.env.OPENAI_API_KEY) {
+      return res.status(503).json({ error: 'Chat requires DATABASE_URL + OPENAI_API_KEY' });
     }
     const { message } = req.body;
     if (!message) return res.status(400).json({ error: 'Missing message' });
@@ -403,7 +403,7 @@ app.post('/api/chat', async (req, res) => {
 
 app.post('/api/quiz/next', async (req, res) => {
   try {
-    if (!USE_DB) return res.status(503).json({ error: 'Adaptive quiz requires USE_DB=true' });
+    if (!process.env.DATABASE_URL) return res.status(503).json({ error: 'Adaptive quiz requires DATABASE_URL' });
     const { getNextQuestion, initProfile } = await import('./ai/quiz-adaptive');
     const profile = req.body.profile || initProfile();
     const question = await getNextQuestion(profile);
@@ -414,7 +414,7 @@ app.post('/api/quiz/next', async (req, res) => {
 
 app.post('/api/quiz/answer', async (req, res) => {
   try {
-    if (!USE_DB) return res.status(503).json({ error: 'Adaptive quiz requires USE_DB=true' });
+    if (!process.env.DATABASE_URL) return res.status(503).json({ error: 'Adaptive quiz requires DATABASE_URL' });
     const { processAnswer } = await import('./ai/quiz-adaptive');
     const { question_id, answer, profile } = req.body;
     if (!question_id || answer === undefined || !profile) {
