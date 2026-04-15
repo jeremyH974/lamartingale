@@ -1,0 +1,259 @@
+{
+  "experts": [
+    {
+      "id": "nicolas-cheron",
+      "name": "Nicolas Cheron",
+      "company": "Strategiste boursier independant / ZoneBourse",
+      "specialty": ["Bourse", "Marches financiers", "Analyse technique", "Crypto"],
+      "episodes": [301, 218, 114, 80, 64],
+      "authority_score": 5,
+      "bio": "Strategiste boursier independant, ancien de CMC Markets et IG Group"
+    },
+    {
+      "id": "pierre-chapon",
+      "name": "Pierre Chapon",
+      "company": "Pretto",
+      "specialty": ["Credit immobilier", "Residence principale", "Negociation"],
+      "episodes": [231, 121, 48, 20],
+      "authority_score": 4,
+      "bio": "Cofondateur de Pretto, courtier en credit immobilier en ligne"
+    },
+    {
+      "id": "owen-simonin",
+      "name": "Owen Simonin (Hasheur)",
+      "company": "Meria / Just Mining",
+      "specialty": ["Bitcoin", "Crypto", "Mining", "Web3"],
+      "episodes": [208, 141, 126, 57],
+      "authority_score": 4,
+      "bio": "Entrepreneur crypto, fondateur de Meria (ex-Just Mining), vulgarisateur crypto #1 en France"
+    },
+    {
+      "id": "geraldine-metifeux",
+      "name": "Geraldine Metifeux",
+      "company": "Alter Egale",
+      "specialty": ["CGP", "Patrimoine", "Fiscalite", "Conjoncture"],
+      "episodes": [286, 192, 62, 7],
+      "authority_score": 4,
+      "bio": "Dirigeante du cabinet Alter Egale, CGP independante"
+    },
+    {
+      "id": "thomas-friedberger",
+      "name": "Thomas Friedberger",
+      "company": "Tikehau Capital",
+      "specialty": ["Private Equity", "Megatendances", "Defense", "Souverainete"],
+      "episodes": [273, 127],
+      "hors_series": ["HS#1", "HS#2"],
+      "authority_score": 4,
+      "bio": "DGA de Tikehau Capital, specialiste des megatendances et de l'investissement souverain"
+    },
+    {
+      "id": "philippe-le-trung",
+      "name": "Philippe Le Trung",
+      "company": "Viewss / VIEWS+S",
+      "specialty": ["Immobilier", "Marche immobilier", "Prospective"],
+      "episodes": [300, 71, 27, 1],
+      "authority_score": 4,
+      "bio": "Analyste immobilier, invite du tout premier episode de La Martingale"
+    },
+    {
+      "id": "joseph-choueifaty",
+      "name": "Joseph Choueifaty",
+      "company": "Goodvest",
+      "specialty": ["ESG", "ISR", "Epargne responsable", "Greenwashing"],
+      "episodes": [312, 207, 81],
+      "authority_score": 3,
+      "bio": "Cofondateur de Goodvest, solution d'epargne responsable"
+    },
+    {
+      "id": "yoann-lopez",
+      "name": "Yoann Lopez",
+      "company": "Snowball",
+      "specialty": ["Investissement", "Side business", "Strategie", "Alternatifs"],
+      "episodes": [214, 136, 104, 32],
+      "authority_score": 4,
+      "bio": "Fondateur de Snowball, newsletter finance personnelle"
+    },
+    {
+      "id": "marc-fiorentino",
+      "name": "Marc Fiorentino",
+      "company": "MeilleurTaux Placement",
+      "specialty": ["Marches financiers", "Strategie", "Allocation"],
+      "episodes": [255, 141, 53],
+      "authority_score": 3,
+      "bio": "Editorialiste financier, fondateur de MeilleurTaux Placement"
+    },
+    {
+      "id": "laurent-puget",
+      "name": "Laurent Puget",
+      "company": "OTEA Capital",
+      "specialty": ["Gestion de crise", "Marches", "Allocation"],
+      "episodes": [94, 45, 21],
+      "hors_series": ["HS - Les bases pour investir"],
+      "authority_score": 3,
+      "bio": "President d'OTEA Capital, gerant de portefeuille"
+    },
+    {
+      "id": "gregory-guilmin",
+      "name": "Gregory Guilmin",
+      "company": "La Bourse: Make it Easy",
+      "specialty": ["ETF", "Gestion passive", "Education financiere"],
+      "episodes": [285, 152],
+      "authority_score": 2,
+      "bio": "Auteur et formateur, specialiste de la gestion passive par ETF"
+    },
+    {
+      "id": "mounir-laggoune",
+      "name": "Mounir Laggoune",
+      "company": "Finary",
+      "specialty": ["Patrimoine", "Frais", "Agregation", "Tech"],
+      "episodes": [296, 70],
+      "authority_score": 2,
+      "bio": "Cofondateur de Finary, application de suivi patrimonial"
+    },
+    {
+      "id": "matthieu-stefani",
+      "name": "Matthieu Stefani",
+      "company": "CosaVostra / La Martingale",
+      "specialty": ["Entrepreneuriat", "Patrimoine", "Vision globale"],
+      "episodes": [297, 246, 194, 143, 93],
+      "authority_score": 5,
+      "bio": "Cofondateur de CosaVostra, createur et host de La Martingale"
+    },
+    {
+      "id": "insaff-el-hassini",
+      "name": "Insaff El Hassini",
+      "company": "",
+      "specialty": ["Negociation salariale", "Augmentation", "Carriere"],
+      "episodes": [283, 178],
+      "authority_score": 2,
+      "bio": "Experte en negociation salariale"
+    },
+    {
+      "id": "christele-biganzoli",
+      "name": "Christele Biganzoli",
+      "company": "Ritchee",
+      "specialty": ["Expatriation", "Fiscalite internationale"],
+      "episodes": [234, 113],
+      "authority_score": 2,
+      "bio": "Specialiste de la gestion patrimoniale pour expatries"
+    },
+    {
+      "id": "heloise-bolle",
+      "name": "Heloise Bolle",
+      "company": "Oseille & Compagnie",
+      "specialty": ["Succession", "Couple et argent", "Patrimoine familial"],
+      "episodes": [125, 67],
+      "authority_score": 2,
+      "bio": "Notaire, specialiste de la transmission patrimoniale"
+    },
+    {
+      "id": "thomas-lefebvre",
+      "name": "Thomas Lefebvre",
+      "company": "MeilleursAgents / AVIV",
+      "specialty": ["Data immobiliere", "Marche immobilier", "Prospective"],
+      "episodes": [221, 144, 74],
+      "authority_score": 3,
+      "bio": "Directeur scientifique de MeilleursAgents, analyste data immobilier"
+    },
+    {
+      "id": "marc-maziere",
+      "name": "Marc Maziere",
+      "company": "Radin Malin",
+      "specialty": ["Economies", "Frugalite", "Budget"],
+      "episodes": [247, 133],
+      "authority_score": 2,
+      "bio": "Blogueur et auteur, specialiste des economies au quotidien"
+    },
+    {
+      "id": "nicolas-decaudain",
+      "name": "Nicolas Decaudain",
+      "company": "Avenue des investisseurs",
+      "specialty": ["CGP", "Defiscalisation", "Conseil"],
+      "episodes": [124, 82],
+      "authority_score": 2,
+      "bio": "Cofondateur d'Avenue des investisseurs, site de reference en finances perso"
+    },
+    {
+      "id": "emeric-eveno",
+      "name": "Emeric Eveno",
+      "company": "Papillon Patrimoine",
+      "specialty": ["Immobilier neuf", "Defiscalisation immobiliere"],
+      "episodes": [56],
+      "hors_series": ["Immobilier neuf 2025 x2"],
+      "authority_score": 2,
+      "bio": "Fondateur de Papillon Patrimoine, specialiste de l'immobilier neuf"
+    },
+    {
+      "id": "greg-blumenfeld",
+      "name": "Greg Blumenfeld",
+      "company": "Le Guide des Montres",
+      "specialty": ["Montres de luxe", "Collection", "Investissement alternatif"],
+      "episodes": [79, 31],
+      "authority_score": 2,
+      "bio": "Expert en montres de luxe, fondateur du Guide des Montres"
+    },
+    {
+      "id": "thomas-hebrard",
+      "name": "Thomas Hebrard",
+      "company": "U'Wine",
+      "specialty": ["Vin", "Investissement alternatif"],
+      "episodes": [184, 41],
+      "authority_score": 2,
+      "bio": "Cofondateur de U'Wine, plateforme d'investissement dans le vin"
+    },
+    {
+      "id": "arnaud-dubois",
+      "name": "Arnaud Dubois",
+      "company": "Matis / Arnaud Dubois Associates",
+      "specialty": ["Art contemporain", "Investissement art"],
+      "episodes": [256, 25],
+      "authority_score": 2,
+      "bio": "Expert en investissement dans l'art contemporain"
+    },
+    {
+      "id": "souleymane-jean-galadima",
+      "name": "Souleymane-Jean Galadima",
+      "company": "Alphacap",
+      "specialty": ["Infrastructures", "Se lancer"],
+      "episodes": [195, 134],
+      "authority_score": 2,
+      "bio": "Cofondateur d'Alphacap, specialiste infrastructures"
+    },
+    {
+      "id": "clement-renault",
+      "name": "Clement Renault",
+      "company": "Louve Invest",
+      "specialty": ["SCPI", "Immobilier fractionne"],
+      "episodes": [182, 110],
+      "authority_score": 2,
+      "bio": "Cofondateur de Louve Invest, plateforme d'investissement SCPI"
+    },
+    {
+      "id": "bassel-abedi",
+      "name": "Bassel Abedi",
+      "company": "Horiz.io",
+      "specialty": ["Immobilier locatif", "Rentabilite", "Location saisonniere"],
+      "episodes": [204, 107],
+      "authority_score": 2,
+      "bio": "Cofondateur de Horiz.io, outil d'analyse immobiliere"
+    },
+    {
+      "id": "john-karp",
+      "name": "John Karp",
+      "company": "NFT Morning",
+      "specialty": ["NFT", "Web3", "Art numerique"],
+      "episodes": [137, 86],
+      "authority_score": 2,
+      "bio": "Animateur de NFT Morning, vulgarisateur NFT"
+    },
+    {
+      "id": "gautier-delabrousse-mayoux",
+      "name": "Gautier Delabrousse-Mayoux",
+      "company": "Iroko",
+      "specialty": ["SCPI", "Immobilier", "Allocation"],
+      "episodes": [142, 68],
+      "authority_score": 2,
+      "bio": "Cofondateur d'Iroko, SCPI nouvelle generation"
+    }
+  ]
+}

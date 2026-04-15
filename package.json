@@ -1,0 +1,33 @@
+{
+  "name": "lamartingale",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npx tsx src/api.ts",
+    "scrape": "npx tsx src/scraper.ts",
+    "scrape:all": "npx tsx src/scraper.ts 1 30",
+    "enrich": "npx tsx src/enrichment.ts enrich 10",
+    "enrich:quiz": "npx tsx src/enrichment.ts quiz",
+    "build": "tsc",
+    "start": "node dist/api.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.89.0",
+    "@types/node": "^25.6.0",
+    "cheerio": "^1.2.0",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.2"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@vercel/node": "^5.7.5"
+  }
+}

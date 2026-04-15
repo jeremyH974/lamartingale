@@ -1,0 +1,1792 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>La Martingale - Education Financiere</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --surface: #141414;
+      --surface-2: #1e1e1e;
+      --border: #2a2a2a;
+      --text: #e5e5e5;
+      --text-muted: #888;
+      --accent: #f59e0b;
+      --accent-hover: #fbbf24;
+      --success: #22c55e;
+      --danger: #ef4444;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* --- Layout --- */
+    .app { display: flex; min-height: 100vh; }
+
+    .sidebar {
+      width: 260px;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 24px 16px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      overflow-y: auto;
+    }
+
+    .main {
+      margin-left: 260px;
+      flex: 1;
+      padding: 32px 40px;
+      max-width: 1200px;
+    }
+
+    /* --- Sidebar --- */
+    .logo {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+    }
+
+    .logo-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+    }
+
+    .nav-section {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin: 24px 0 8px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--text-muted);
+      transition: all 0.15s;
+    }
+
+    .nav-item:hover, .nav-item.active {
+      background: var(--surface-2);
+      color: var(--text);
+    }
+
+    .nav-item.active { border-left: 2px solid var(--accent); }
+
+    .nav-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* --- Progress bar --- */
+    .progress-bar-wrap {
+      background: var(--surface-2);
+      border-radius: 4px;
+      height: 6px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 4px;
+      transition: width 0.4s ease;
+    }
+    .progress-text {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* --- Stats Cards --- */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* --- Search --- */
+    .search-bar {
+      position: relative;
+      margin-bottom: 24px;
+    }
+
+    .search-bar input {
+      width: 100%;
+      padding: 12px 16px 12px 44px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-bar input:focus { border-color: var(--accent); }
+
+    .search-bar::before {
+      content: '🔍';
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 16px;
+    }
+
+    /* --- Filters --- */
+    .filters {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .filter-btn:hover { border-color: var(--accent); color: var(--text); }
+    .filter-btn.active { background: var(--accent); color: #000; border-color: var(--accent); }
+
+    /* --- Episode List --- */
+    .section-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .episode-list { display: flex; flex-direction: column; gap: 8px; }
+
+    .episode-card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.15s;
+      position: relative;
+    }
+
+    .episode-card:hover {
+      border-color: var(--accent);
+      transform: translateX(4px);
+    }
+
+    .episode-card.completed {
+      border-left: 3px solid var(--success);
+      opacity: 0.85;
+    }
+
+    .completed-check {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--success);
+      font-size: 16px;
+    }
+
+    .ep-number {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--accent);
+      min-width: 44px;
+    }
+
+    .ep-info { flex: 1; }
+
+    .ep-title {
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 2px;
+    }
+
+    .ep-guest {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .ep-badge {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+
+    .ep-badge.DEB, .ep-badge.DEBUTANT { background: #064e3b; color: #34d399; }
+    .ep-badge.INT, .ep-badge.INTERMEDIAIRE { background: #1e3a5f; color: #60a5fa; }
+    .ep-badge.AVA, .ep-badge.AVANCE { background: #4a1d96; color: #a78bfa; }
+
+    .ep-pillar {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: var(--surface-2);
+      color: var(--text-muted);
+    }
+
+    /* --- Paths --- */
+    .paths-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .path-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .path-card:hover { border-color: var(--accent); }
+
+    .path-name {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .path-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .path-meta {
+      display: flex;
+      gap: 16px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .path-meta span { display: flex; align-items: center; gap: 4px; }
+
+    /* --- Pillar Distribution --- */
+    .pillar-chart {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 32px;
+    }
+
+    .pillar-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .pillar-label {
+      width: 200px;
+      font-size: 13px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .pillar-bar-bg {
+      flex: 1;
+      height: 24px;
+      background: var(--surface);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .pillar-bar {
+      height: 100%;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      padding-left: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #000;
+      transition: width 0.5s ease;
+    }
+
+    .pillar-count {
+      font-size: 12px;
+      color: var(--text-muted);
+      min-width: 30px;
+    }
+
+    /* --- Expert Cards --- */
+    .experts-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .expert-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+    }
+
+    .expert-name { font-weight: 600; font-size: 14px; }
+    .expert-company { font-size: 12px; color: var(--text-muted); }
+    .expert-score {
+      display: inline-flex;
+      margin-top: 8px;
+      font-size: 11px;
+      color: var(--accent);
+    }
+
+    /* --- Pagination --- */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 24px;
+    }
+
+    .page-btn {
+      padding: 6px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .page-btn:hover, .page-btn.active {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* --- Detail Modal --- */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      max-width: 640px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .modal-close {
+      float: right;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .modal h2 { font-size: 18px; margin-bottom: 8px; }
+    .modal .meta { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; }
+
+    .step-list { list-style: none; counter-reset: step; }
+    .step-list li {
+      counter-increment: step;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+    .step-list li::before {
+      content: counter(step);
+      display: inline-flex;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #000;
+      font-size: 12px;
+      font-weight: 700;
+      align-items: center;
+      justify-content: center;
+      margin-right: 12px;
+    }
+
+    .step-item-completed::before { background: var(--success) !important; }
+
+    .step-why { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+    /* --- Quiz --- */
+    .quiz-container { max-width: 700px; }
+
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .quiz-score {
+      font-size: 14px;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .quiz-progress {
+      width: 100%;
+      height: 4px;
+      background: var(--surface-2);
+      border-radius: 2px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+
+    .quiz-progress-bar {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 2px;
+      transition: width 0.3s ease;
+    }
+
+    .quiz-question {
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .quiz-options { display: flex; flex-direction: column; gap: 10px; }
+
+    .quiz-option {
+      padding: 14px 18px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.15s;
+    }
+
+    .quiz-option:hover:not(.answered) {
+      border-color: var(--accent);
+      transform: translateX(4px);
+    }
+
+    .quiz-option.correct { border-color: #22c55e; background: rgba(34, 197, 94, 0.1); }
+    .quiz-option.wrong   { border-color: #ef4444; background: rgba(239, 68, 68, 0.1); }
+
+    .quiz-explanation {
+      margin-top: 16px;
+      padding: 12px 16px;
+      background: var(--surface-2);
+      border-radius: 8px;
+      font-size: 13px;
+      color: var(--text-muted);
+      display: none;
+    }
+
+    .quiz-explanation.show { display: block; }
+
+    .quiz-next {
+      margin-top: 20px;
+      padding: 10px 24px;
+      background: var(--accent);
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: none;
+    }
+
+    .quiz-next.show { display: inline-block; }
+
+    .quiz-result {
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .quiz-result-score {
+      font-size: 48px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .quiz-result-label {
+      font-size: 16px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    .quiz-filters {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    /* --- Graph View --- */
+    #graph-canvas {
+      width: 100%;
+      height: 600px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    #graph-canvas svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .graph-tooltip {
+      position: absolute;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 12px;
+      pointer-events: none;
+      z-index: 10;
+      max-width: 220px;
+      display: none;
+    }
+
+    .graph-controls {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .graph-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 2px 8px;
+      border-radius: 4px;
+      transition: background 0.15s;
+    }
+
+    .legend-item:hover { background: var(--surface-2); }
+    .legend-item.dimmed { opacity: 0.4; }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* --- Recommendations --- */
+    .rec-form {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px;
+      margin-bottom: 32px;
+    }
+
+    .rec-form-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-label {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .form-select {
+      width: 100%;
+      padding: 10px 14px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 14px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .form-select:focus { border-color: var(--accent); }
+
+    .checkbox-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.15s;
+    }
+
+    .checkbox-item.selected {
+      border-color: var(--accent);
+      background: rgba(245, 158, 11, 0.1);
+      color: var(--accent);
+    }
+
+    .rec-btn {
+      width: 100%;
+      padding: 12px;
+      background: var(--accent);
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.15s;
+    }
+
+    .rec-btn:hover { background: var(--accent-hover); }
+
+    .rec-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 8px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .rec-score {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--accent);
+      min-width: 44px;
+      text-align: center;
+    }
+
+    .rec-reasons {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+    }
+
+    .rec-reason-tag {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: var(--surface-2);
+      color: var(--text-muted);
+    }
+
+    /* --- Tags --- */
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .tag {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: var(--surface-2);
+      color: var(--text-muted);
+    }
+
+    /* --- Complete button --- */
+    .btn-complete {
+      padding: 8px 16px;
+      border: 1px solid var(--success);
+      border-radius: 8px;
+      background: transparent;
+      color: var(--success);
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.15s;
+      margin-top: 12px;
+    }
+
+    .btn-complete:hover, .btn-complete.done {
+      background: var(--success);
+      color: #000;
+    }
+
+    /* --- Badges/achievements strip --- */
+    .achievements {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .achievement {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 16px;
+      text-align: center;
+      min-width: 100px;
+    }
+
+    .achievement-icon { font-size: 24px; }
+    .achievement-label { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+    .achievement-value { font-size: 16px; font-weight: 700; color: var(--accent); }
+
+    @media (max-width: 900px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; padding: 20px; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .paths-grid { grid-template-columns: 1fr; }
+      .experts-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <div class="logo">La Martingale</div>
+      <div class="logo-sub">Education Financiere</div>
+
+      <div class="nav-section">Navigation</div>
+      <div class="nav-item active" onclick="navTo('dashboard', this)">📊 Dashboard</div>
+      <div class="nav-item" onclick="navTo('episodes', this)">🎙️ Episodes</div>
+      <div class="nav-item" onclick="navTo('paths', this)">🗺️ Parcours</div>
+      <div class="nav-item" onclick="navTo('experts', this)">👤 Experts</div>
+      <div class="nav-item" onclick="navTo('quiz', this)">🧠 Quiz</div>
+      <div class="nav-item" onclick="navTo('graph', this)">🔗 Graphe</div>
+      <div class="nav-item" onclick="navTo('recommendations', this)">✨ Recommandations</div>
+
+      <div class="nav-section">Piliers</div>
+      <div id="sidebar-pillars"></div>
+
+      <div class="nav-section">Ma progression</div>
+      <div id="sidebar-progress" style="padding:8px 12px;font-size:12px;color:var(--text-muted)">
+        Chargement...
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main">
+      <div id="view-dashboard"></div>
+      <div id="view-episodes" style="display:none"></div>
+      <div id="view-paths" style="display:none"></div>
+      <div id="view-experts" style="display:none"></div>
+      <div id="view-quiz" style="display:none"></div>
+      <div id="view-graph" style="display:none"></div>
+      <div id="view-recommendations" style="display:none"></div>
+    </main>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
+    <div class="modal" id="modal-content"></div>
+  </div>
+
+  <!-- Graph tooltip -->
+  <div class="graph-tooltip" id="graph-tooltip"></div>
+
+  <script>
+    const API = window.location.hostname === 'localhost' ? 'http://localhost:3001/api' : '/api';
+    let allEpisodes = [];
+    let currentPillar = null;
+    let currentDifficulty = null;
+    let currentPage = 1;
+    let graphData = null;
+
+    // ============ COLORS ============
+    const pillarColors = {
+      IMMOBILIER: '#2563EB', BOURSE: '#16A34A', CRYPTO: '#F59E0B',
+      ALTERNATIFS: '#9333EA', PE_STARTUP: '#DC2626', PATRIMOINE_FISCALITE: '#0891B2',
+      FINANCES_PERSO: '#EA580C', IMPACT_ESG: '#059669', CROWDFUNDING: '#7C3AED',
+      ENTREPRENEURIAT: '#BE185D'
+    };
+
+    const pillarNames = {
+      IMMOBILIER: 'Immobilier', BOURSE: 'Bourse', CRYPTO: 'Crypto',
+      ALTERNATIFS: 'Alternatifs', PE_STARTUP: 'PE & Startups',
+      PATRIMOINE_FISCALITE: 'Patrimoine', FINANCES_PERSO: 'Finances Perso',
+      IMPACT_ESG: 'Impact ESG', CROWDFUNDING: 'Crowdfunding',
+      ENTREPRENEURIAT: 'Entrepreneuriat'
+    };
+
+    // ============ PROGRESS TRACKING ============
+    const STORAGE_KEY = 'lm_progress';
+
+    function loadProgress() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{"completed":[]}');
+      } catch { return { completed: [] }; }
+    }
+
+    function saveProgress(p) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(p));
+    }
+
+    function isCompleted(id) {
+      return loadProgress().completed.includes(id);
+    }
+
+    function toggleComplete(id) {
+      const p = loadProgress();
+      const idx = p.completed.indexOf(id);
+      if (idx >= 0) p.completed.splice(idx, 1);
+      else p.completed.push(id);
+      saveProgress(p);
+      updateSidebarProgress();
+    }
+
+    function getPathProgress(path) {
+      if (!path || !path.episodes_ordered) return { done: 0, total: 0 };
+      const p = loadProgress();
+      const done = path.episodes_ordered.filter(s => p.completed.includes(s.episode_id)).length;
+      return { done, total: path.episodes_ordered.length };
+    }
+
+    function updateSidebarProgress() {
+      const p = loadProgress();
+      const total = allEpisodes.length || 307;
+      const done = p.completed.length;
+      const pct = total ? Math.round(done / total * 100) : 0;
+      const el = document.getElementById('sidebar-progress');
+      if (el) {
+        el.innerHTML = `
+          <div>${done} / ${total} episodes</div>
+          <div class="progress-bar-wrap" style="margin-top:6px">
+            <div class="progress-bar-fill" style="width:${pct}%"></div>
+          </div>
+          <div class="progress-text">${pct}% completes</div>
+        `;
+      }
+    }
+
+    // ============ FETCH ============
+    async function fetchJSON(url) {
+      const res = await fetch(url);
+      return res.json();
+    }
+
+    // ============ INIT ============
+    async function init() {
+      const [stats, paths, experts, episodesRes] = await Promise.all([
+        fetchJSON(`${API}/stats`),
+        fetchJSON(`${API}/paths`),
+        fetchJSON(`${API}/experts`),
+        fetchJSON(`${API}/episodes?limit=312`),
+      ]);
+      allEpisodes = episodesRes.episodes;
+
+      renderSidebarPillars(stats);
+      renderDashboard(stats, paths, experts);
+      renderEpisodes();
+      renderPaths(paths);
+      renderExperts(experts);
+      updateSidebarProgress();
+    }
+
+    // ============ SIDEBAR ============
+    function renderSidebarPillars(stats) {
+      const el = document.getElementById('sidebar-pillars');
+      el.innerHTML = Object.entries(stats.episodes_by_pillar)
+        .sort((a, b) => b[1] - a[1])
+        .map(([key, count]) => `
+          <div class="nav-item" onclick="filterPillar('${key}')">
+            <span class="nav-dot" style="background:${pillarColors[key]||'#666'}"></span>
+            ${pillarNames[key]||key} <span style="margin-left:auto;font-size:11px;color:var(--text-muted)">${count}</span>
+          </div>
+        `).join('');
+    }
+
+    // ============ DASHBOARD ============
+    function renderDashboard(stats, paths, experts) {
+      const p = loadProgress();
+      const streakEp = p.completed.length;
+      document.getElementById('view-dashboard').innerHTML = `
+        <h1 style="font-size:28px;font-weight:700;margin-bottom:24px">Dashboard</h1>
+
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-value">${stats.total_episodes}</div><div class="stat-label">Episodes</div></div>
+          <div class="stat-card"><div class="stat-value">${stats.total_experts}</div><div class="stat-label">Experts</div></div>
+          <div class="stat-card"><div class="stat-value">${stats.total_paths}</div><div class="stat-label">Parcours</div></div>
+          <div class="stat-card"><div class="stat-value">${streakEp}</div><div class="stat-label">Episodes completes</div></div>
+        </div>
+
+        <div class="section-title">Mes progres</div>
+        <div class="achievements">
+          ${getBadges(p).map(b => `
+            <div class="achievement">
+              <div class="achievement-icon">${b.icon}</div>
+              <div class="achievement-value">${b.value}</div>
+              <div class="achievement-label">${b.label}</div>
+            </div>
+          `).join('')}
+        </div>
+
+        <div class="section-title">Repartition par pilier</div>
+        <div class="pillar-chart">
+          ${Object.entries(stats.episodes_by_pillar)
+            .sort((a, b) => b[1] - a[1])
+            .map(([k, v]) => {
+              const pct = (v / stats.total_episodes * 100).toFixed(0);
+              return `<div class="pillar-row">
+                <div class="pillar-label">${pillarNames[k]||k}</div>
+                <div class="pillar-bar-bg">
+                  <div class="pillar-bar" style="width:${pct}%;background:${pillarColors[k]||'#666'}">${v}</div>
+                </div>
+                <div class="pillar-count">${pct}%</div>
+              </div>`;
+            }).join('')}
+        </div>
+
+        <div class="section-title">Parcours pedagogiques</div>
+        <div class="paths-grid">
+          ${paths.paths.slice(0, 4).map(p => `
+            <div class="path-card" onclick="showPathDetail('${p.id}')">
+              <div class="path-name">${p.name}</div>
+              <div class="path-desc">${p.description.substring(0, 100)}...</div>
+              <div class="path-meta">
+                <span>${p.episode_count} ep</span>
+                <span>${p.estimated_hours}h</span>
+                <span class="ep-badge ${p.difficulty}">${p.difficulty.substring(0,3)}</span>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+
+        <div class="section-title">Top experts</div>
+        <div class="experts-grid">
+          ${experts.experts.slice(0, 6).map(e => `
+            <div class="expert-card">
+              <div class="expert-name">${e.name}</div>
+              <div class="expert-company">${e.company}</div>
+              <div class="expert-score">${'★'.repeat(e.authority_score)} · ${e.episodes.length} episodes</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function getBadges(p) {
+      const done = p.completed.length;
+      const badges = [
+        { icon: '🎙️', value: done, label: 'Episodes vus' },
+        { icon: '🏆', value: done >= 10 ? '✓' : `${done}/10`, label: 'Explorateur' },
+        { icon: '🚀', value: done >= 50 ? '✓' : `${done}/50`, label: 'Apprenti' },
+        { icon: '💎', value: done >= 100 ? '✓' : `${done}/100`, label: 'Expert' },
+      ];
+      return badges;
+    }
+
+    // ============ EPISODES ============
+    function renderEpisodes() {
+      let filtered = [...allEpisodes];
+      if (currentPillar) filtered = filtered.filter(e => e.pillar === currentPillar);
+      if (currentDifficulty) filtered = filtered.filter(e => e.difficulty === currentDifficulty);
+
+      const perPage = 20;
+      const totalPages = Math.ceil(filtered.length / perPage);
+      const paged = filtered.slice((currentPage - 1) * perPage, currentPage * perPage);
+
+      document.getElementById('view-episodes').innerHTML = `
+        <h1 style="font-size:28px;font-weight:700;margin-bottom:16px">Episodes</h1>
+
+        <div class="search-bar">
+          <input type="text" placeholder="Rechercher un episode, expert ou tag..." oninput="searchEpisodes(this.value)" id="ep-search-input">
+        </div>
+
+        <div class="filters">
+          <button class="filter-btn ${!currentDifficulty?'active':''}" onclick="setDifficulty(null)">Tous</button>
+          <button class="filter-btn ${currentDifficulty==='DEBUTANT'?'active':''}" onclick="setDifficulty('DEBUTANT')">Debutant</button>
+          <button class="filter-btn ${currentDifficulty==='INTERMEDIAIRE'?'active':''}" onclick="setDifficulty('INTERMEDIAIRE')">Intermediaire</button>
+          <button class="filter-btn ${currentDifficulty==='AVANCE'?'active':''}" onclick="setDifficulty('AVANCE')">Avance</button>
+          ${currentPillar ? `<button class="filter-btn active" onclick="filterPillar(null)">${pillarNames[currentPillar]} ✕</button>` : ''}
+        </div>
+
+        <div style="font-size:13px;color:var(--text-muted);margin-bottom:12px">${filtered.length} episodes</div>
+
+        <div class="episode-list">
+          ${paged.map(ep => episodeCardHTML(ep)).join('')}
+        </div>
+
+        <div class="pagination">
+          ${currentPage > 1 ? `<button class="page-btn" onclick="goPage(${currentPage-1})">Prec</button>` : ''}
+          ${Array.from({length: Math.min(totalPages, 7)}, (_, i) => {
+            const pg = i + 1;
+            return `<button class="page-btn ${pg===currentPage?'active':''}" onclick="goPage(${pg})">${pg}</button>`;
+          }).join('')}
+          ${totalPages > 7 ? `<button class="page-btn">...</button><button class="page-btn" onclick="goPage(${totalPages})">${totalPages}</button>` : ''}
+          ${currentPage < totalPages ? `<button class="page-btn" onclick="goPage(${currentPage+1})">Suiv</button>` : ''}
+        </div>
+      `;
+    }
+
+    function episodeCardHTML(ep) {
+      const done = isCompleted(ep.id);
+      return `
+        <div class="episode-card ${done ? 'completed' : ''}" onclick="showEpisodeDetail(${ep.id})">
+          <div class="ep-number">#${ep.id}</div>
+          <div class="ep-info">
+            <div class="ep-title">${ep.title}</div>
+            <div class="ep-guest">${ep.guest_name}</div>
+          </div>
+          <span class="ep-pillar" style="border-left:3px solid ${pillarColors[ep.pillar]||'#666'}">${pillarNames[ep.pillar]||ep.pillar}</span>
+          <span class="ep-badge ${ep.difficulty}">${ep.difficulty.substring(0,3)}</span>
+          ${done ? '<span class="completed-check">✓</span>' : ''}
+        </div>
+      `;
+    }
+
+    // ============ PATHS ============
+    async function renderPaths(data) {
+      const pathsWithProgress = data.paths.map(p => {
+        const prog = loadProgress();
+        const steps = p.episode_count;
+        // We'll compute from episodes_ordered once loaded
+        return { ...p, prog };
+      });
+
+      document.getElementById('view-paths').innerHTML = `
+        <h1 style="font-size:28px;font-weight:700;margin-bottom:24px">Parcours pedagogiques</h1>
+        <div class="paths-grid">
+          ${data.paths.map(p => pathCardHTML(p)).join('')}
+        </div>
+      `;
+    }
+
+    function pathCardHTML(p) {
+      return `
+        <div class="path-card" onclick="showPathDetail('${p.id}')">
+          <div class="path-name">${p.name}</div>
+          <div class="path-desc">${p.description}</div>
+          <div class="path-meta">
+            <span>${p.episode_count} episodes</span>
+            <span>${p.estimated_hours}h</span>
+            <span class="ep-badge ${p.difficulty}">${p.difficulty.substring(0,3)}</span>
+          </div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar-fill" style="width:0%" id="path-prog-${p.id}"></div>
+          </div>
+          <div class="progress-text" id="path-prog-text-${p.id}">Chargement...</div>
+          ${(p.outcomes||[]).map(o => `<div style="font-size:12px;color:var(--text-muted);padding:2px 0;margin-top:4px">✓ ${o}</div>`).join('')}
+        </div>
+      `;
+    }
+
+    async function updatePathProgress() {
+      const data = await fetchJSON(`${API}/paths`);
+      for (const p of data.paths) {
+        const detail = await fetchJSON(`${API}/paths/${p.id}`);
+        const { done, total } = getPathProgress(detail.path);
+        const pct = total ? Math.round(done / total * 100) : 0;
+        const bar = document.getElementById(`path-prog-${p.id}`);
+        const txt = document.getElementById(`path-prog-text-${p.id}`);
+        if (bar) bar.style.width = pct + '%';
+        if (txt) txt.textContent = `${done}/${total} completes (${pct}%)`;
+      }
+    }
+
+    // ============ EXPERTS ============
+    function renderExperts(data) {
+      document.getElementById('view-experts').innerHTML = `
+        <h1 style="font-size:28px;font-weight:700;margin-bottom:24px">Experts</h1>
+        <div class="experts-grid">
+          ${data.experts.map(e => `
+            <div class="expert-card">
+              <div class="expert-name">${e.name}</div>
+              <div class="expert-company">${e.company}</div>
+              <div style="margin-top:8px;font-size:12px;color:var(--text-muted)">${e.specialty.join(' · ')}</div>
+              <div class="expert-score">${'★'.repeat(e.authority_score)} · ${e.episodes.length} episodes</div>
+              <div style="margin-top:8px;font-size:11px;color:var(--text-muted)">
+                ${e.episodes.map(id => `<span onclick="showEpisodeDetail(${id})" style="cursor:pointer;color:var(--accent)">#${id}</span>`).join(' ')}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    // ============ GRAPH VIEW ============
+    async function renderGraph() {
+      const el = document.getElementById('view-graph');
+      el.innerHTML = `
+        <h1 style="font-size:28px;font-weight:700;margin-bottom:16px">Graphe de connaissances</h1>
+        <p style="color:var(--text-muted);font-size:13px;margin-bottom:16px">
+          ${(graphData?.nodes || []).length} episodes · ${(graphData?.edges || []).length} connexions.
+          Taille = degre de connexion. Couleur = pilier. Noeud = clic pour details.
+        </p>
+
+        <div class="graph-controls">
+          <button class="filter-btn active" onclick="filterGraph(null, this)">Tous les piliers</button>
+          ${Object.entries(pillarColors).map(([k, c]) => `
+            <button class="filter-btn" onclick="filterGraph('${k}', this)" style="border-left:3px solid ${c}">${pillarNames[k]}</button>
+          `).join('')}
+        </div>
+
+        <div id="graph-canvas"></div>
+
+        <div class="graph-legend" id="graph-legend">
+          ${Object.entries(pillarColors).map(([k, c]) => `
+            <div class="legend-item" id="legend-${k}" onclick="toggleLegendPillar('${k}')">
+              <span class="legend-dot" style="background:${c}"></span>
+              ${pillarNames[k]}
+            </div>
+          `).join('')}
+        </div>
+      `;
+
+      if (!graphData) {
+        graphData = await fetchJSON(`${API}/graph`);
+      }
+
+      drawGraph(graphData, null);
+    }
+
+    let activePillarFilter = null;
+
+    function filterGraph(pillar, btn) {
+      activePillarFilter = pillar;
+      document.querySelectorAll('.graph-controls .filter-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      if (graphData) drawGraph(graphData, pillar);
+    }
+
+    function toggleLegendPillar(pillar) {
+      const item = document.getElementById(`legend-${pillar}`);
+      item.classList.toggle('dimmed');
+    }
+
+    function drawGraph(data, pillarFilter) {
+      const container = document.getElementById('graph-canvas');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const W = container.offsetWidth || 800;
+      const H = 600;
+
+      // Filter nodes
+      let nodes = data.nodes.map(n => ({ ...n }));
+      let edges = data.edges.map(e => ({ ...e }));
+
+      if (pillarFilter) {
+        const allowed = new Set(nodes.filter(n => n.pillar === pillarFilter).map(n => n.id));
+        nodes = nodes.filter(n => allowed.has(n.id));
+        edges = edges.filter(e => allowed.has(e.source) || allowed.has(e.target));
+      }
+
+      // Limit to nodes with edges (+ top isolated by id desc for context)
+      const connectedIds = new Set();
+      edges.forEach(e => { connectedIds.add(e.source); connectedIds.add(e.target); });
+      const connected = nodes.filter(n => connectedIds.has(n.id));
+      const isolated = nodes.filter(n => !connectedIds.has(n.id)).sort((a, b) => b.id - a.id).slice(0, 30);
+      nodes = [...connected, ...isolated];
+
+      const nodeMap = new Map(nodes.map(n => [n.id, n]));
+      edges = edges.filter(e => nodeMap.has(e.source) && nodeMap.has(e.target));
+
+      const svg = d3.select(container).append('svg')
+        .attr('width', W).attr('height', H);
+
+      // Zoom
+      const g = svg.append('g');
+      svg.call(d3.zoom().scaleExtent([0.2, 4]).on('zoom', (event) => {
+        g.attr('transform', event.transform);
+      }));
+
+      // Simulation
+      const sim = d3.forceSimulation(nodes)
+        .force('link', d3.forceLink(edges).id(d => d.id).distance(60).strength(0.3))
+        .force('charge', d3.forceManyBody().strength(-80))
+        .force('center', d3.forceCenter(W / 2, H / 2))
+        .force('collision', d3.forceCollide().radius(d => nodeRadius(d) + 3));
+
+      // Links
+      const link = g.append('g').attr('stroke-opacity', 0.25)
+        .selectAll('line').data(edges).join('line')
+        .attr('stroke', d => d.type === 'same_expert' ? '#f59e0b' : d.type === 'learning_path' ? '#22c55e' : '#555')
+        .attr('stroke-width', d => d.type === 'same_expert' ? 1.5 : 1);
+
+      // Node groups
+      const node = g.append('g').selectAll('g').data(nodes).join('g')
+        .attr('cursor', 'pointer')
+        .call(d3.drag()
+          .on('start', (event, d) => { if (!event.active) sim.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; })
+          .on('drag', (event, d) => { d.fx = event.x; d.fy = event.y; })
+          .on('end', (event, d) => { if (!event.active) sim.alphaTarget(0); d.fx = null; d.fy = null; })
+        )
+        .on('click', (event, d) => { event.stopPropagation(); showEpisodeDetail(d.id); })
+        .on('mouseover', (event, d) => showGraphTooltip(event, d))
+        .on('mouseout', hideGraphTooltip);
+
+      node.append('circle')
+        .attr('r', d => nodeRadius(d))
+        .attr('fill', d => pillarColors[d.pillar] || '#666')
+        .attr('fill-opacity', d => isCompleted(d.id) ? 1 : 0.75)
+        .attr('stroke', d => isCompleted(d.id) ? '#fff' : 'transparent')
+        .attr('stroke-width', 1.5);
+
+      // Label for high-degree nodes
+      node.filter(d => d.degree >= 3).append('text')
+        .attr('text-anchor', 'middle')
+        .attr('dy', d => nodeRadius(d) + 10)
+        .attr('font-size', 8)
+        .attr('fill', '#aaa')
+        .text(d => `#${d.id}`);
+
+      sim.on('tick', () => {
+        link.attr('x1', d => d.source.x).attr('y1', d => d.source.y)
+            .attr('x2', d => d.target.x).attr('y2', d => d.target.y);
+        node.attr('transform', d => `translate(${d.x},${d.y})`);
+      });
+    }
+
+    function nodeRadius(d) {
+      const base = 4;
+      const bonus = Math.min((d.degree || 0) * 1.5, 12);
+      return base + bonus;
+    }
+
+    function showGraphTooltip(event, d) {
+      const tt = document.getElementById('graph-tooltip');
+      tt.innerHTML = `<strong>#${d.id}</strong> ${d.title}<br>
+        <span style="color:#888">${d.guest} · ${pillarNames[d.pillar]}</span><br>
+        <span style="color:#888">${d.difficulty} · ${d.degree} connexion${d.degree !== 1 ? 's' : ''}</span>
+        ${isCompleted(d.id) ? '<br><span style="color:#22c55e">✓ Complete</span>' : ''}`;
+      tt.style.display = 'block';
+      tt.style.left = (event.pageX + 14) + 'px';
+      tt.style.top = (event.pageY - 28) + 'px';
+    }
+
+    function hideGraphTooltip() {
+      document.getElementById('graph-tooltip').style.display = 'none';
+    }
+
+    // ============ RECOMMENDATIONS ============
+    const recPillars = [];
+    const recGoals = [];
+
+    function renderRecommendations() {
+      document.getElementById('view-recommendations').innerHTML = `
+        <h1 style="font-size:28px;font-weight:700;margin-bottom:24px">Recommandations personnalisees</h1>
+
+        <div class="rec-form">
+          <div class="rec-form-title">Votre profil investisseur</div>
+
+          <div class="form-group">
+            <label class="form-label">Votre niveau d'experience</label>
+            <select class="form-select" id="rec-experience">
+              <option value="DEBUTANT">Debutant — je decouvre l'investissement</option>
+              <option value="INTERMEDIAIRE" selected>Intermediaire — j'ai quelques placements</option>
+              <option value="AVANCE">Avance — portefeuille diversifie</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Vos centres d'interet (cliquez pour selectionner)</label>
+            <div class="checkbox-grid" id="rec-pillars">
+              ${Object.entries(pillarNames).map(([k, v]) => `
+                <div class="checkbox-item" onclick="toggleRecPillar('${k}', this)" data-pillar="${k}">
+                  <span class="nav-dot" style="background:${pillarColors[k]}"></span>
+                  ${v}
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Vos objectifs financiers</label>
+            <div class="checkbox-grid" id="rec-goals">
+              ${[
+                ['BUILD_SAVINGS', '💰 Constituer une epargne'],
+                ['BUY_HOME', '🏠 Acheter ma residence principale'],
+                ['INVEST_REAL_ESTATE', '🏢 Investir dans l\'immobilier'],
+                ['GROW_PORTFOLIO', '📈 Faire fructifier mon portefeuille'],
+                ['PREPARE_RETIREMENT', '🌅 Preparer ma retraite'],
+                ['REDUCE_TAXES', '📄 Optimiser ma fiscalite'],
+                ['DIVERSIFY', '🎯 Diversifier mes placements'],
+                ['FINANCIAL_FREEDOM', '🚀 Independance financiere'],
+                ['CRYPTO_EXPOSURE', '₿ M\'exposer aux cryptos'],
+                ['IMPACT_INVESTING', '🌱 Investir responsable'],
+              ].map(([k, v]) => `
+                <div class="checkbox-item" onclick="toggleRecGoal('${k}', this)" data-goal="${k}">
+                  ${v}
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <button class="rec-btn" onclick="loadRecommendations()">✨ Obtenir mes recommandations</button>
+        </div>
+
+        <div id="rec-results"></div>
+      `;
+    }
+
+    const selectedPillars = new Set();
+    const selectedGoals = new Set();
+
+    function toggleRecPillar(pillar, el) {
+      if (selectedPillars.has(pillar)) { selectedPillars.delete(pillar); el.classList.remove('selected'); }
+      else { selectedPillars.add(pillar); el.classList.add('selected'); }
+    }
+
+    function toggleRecGoal(goal, el) {
+      if (selectedGoals.has(goal)) { selectedGoals.delete(goal); el.classList.remove('selected'); }
+      else { selectedGoals.add(goal); el.classList.add('selected'); }
+    }
+
+    async function loadRecommendations() {
+      const experience = document.getElementById('rec-experience').value;
+      const interests = [...selectedPillars];
+      const goals = [...selectedGoals];
+      const completed = loadProgress().completed;
+
+      if (interests.length === 0) {
+        document.getElementById('rec-results').innerHTML = `
+          <div style="color:var(--danger);padding:16px">Selectionnez au moins un centre d'interet.</div>
+        `;
+        return;
+      }
+
+      const payload = {
+        investment_experience: experience,
+        interests,
+        goals,
+        completed_episodes: completed,
+        age_range: '25-35',
+        patrimony_level: 'GROWING',
+      };
+
+      document.getElementById('rec-results').innerHTML = `<div style="color:var(--text-muted);padding:16px">Calcul en cours...</div>`;
+
+      const data = await fetch(`${API}/recommend?limit=12`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      }).then(r => r.json());
+
+      if (!data.recommendations || data.recommendations.length === 0) {
+        document.getElementById('rec-results').innerHTML = `<div style="color:var(--text-muted);padding:16px">Aucune recommandation trouvee. Ajustez votre profil.</div>`;
+        return;
+      }
+
+      document.getElementById('rec-results').innerHTML = `
+        <div class="section-title">${data.recommendations.length} episodes recommandes pour vous</div>
+        ${data.recommendations.map(r => `
+          <div class="rec-card" onclick="showEpisodeDetail(${r.episode.id})">
+            <div class="rec-score">${r.score}</div>
+            <div style="flex:1">
+              <div style="font-weight:600;font-size:14px">#${r.episode.id} — ${r.episode.title}</div>
+              <div style="font-size:12px;color:var(--text-muted);margin-top:2px">
+                ${r.episode.guest_name}
+                <span class="ep-badge ${r.episode.difficulty}" style="margin-left:6px">${r.episode.difficulty.substring(0,3)}</span>
+                <span class="ep-pillar" style="margin-left:4px;border-left:3px solid ${pillarColors[r.episode.pillar]}">${pillarNames[r.episode.pillar]}</span>
+              </div>
+              <div class="rec-reasons">
+                ${r.reasons.map(reason => `<span class="rec-reason-tag">${reason}</span>`).join('')}
+              </div>
+            </div>
+          </div>
+        `).join('')}
+      `;
+    }
+
+    // ============ ACTIONS ============
+    function navTo(view, el) {
+      const views = ['dashboard','episodes','paths','experts','quiz','graph','recommendations'];
+      views.forEach(v => {
+        const el = document.getElementById(`view-${v}`);
+        if (el) el.style.display = v === view ? '' : 'none';
+      });
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      if (el) el.classList.add('active');
+
+      if (view === 'quiz' && !quizLoaded) loadQuiz();
+      if (view === 'graph') renderGraph();
+      if (view === 'recommendations') renderRecommendations();
+      if (view === 'paths') updatePathProgress();
+    }
+
+    // Keep old showView for sidebar pillar clicks
+    function showView(view) {
+      navTo(view, null);
+    }
+
+    function filterPillar(pillar) {
+      currentPillar = pillar;
+      currentPage = 1;
+      navTo('episodes', null);
+      renderEpisodes();
+    }
+
+    function setDifficulty(d) {
+      currentDifficulty = d;
+      currentPage = 1;
+      renderEpisodes();
+    }
+
+    function goPage(p) {
+      currentPage = p;
+      renderEpisodes();
+      window.scrollTo(0, 0);
+    }
+
+    async function searchEpisodes(q) {
+      if (!q || q.length < 2) { renderEpisodes(); return; }
+
+      // Use the API search for enriched results
+      const data = await fetchJSON(`${API}/search?q=${encodeURIComponent(q)}`);
+      const results = data.episodes || [];
+
+      const el = document.querySelector('.episode-list');
+      if (el) {
+        const countEl = document.querySelector('[style*="episodes"]');
+        el.innerHTML = results.slice(0, 30).map(ep => episodeCardHTML(ep)).join('');
+        if (results.length === 0) {
+          el.innerHTML = `<div style="color:var(--text-muted);padding:20px">Aucun episode trouve pour "${q}"</div>`;
+        }
+      }
+    }
+
+    async function showEpisodeDetail(id) {
+      const [data, enriched] = await Promise.all([
+        fetchJSON(`${API}/episodes/${id}`),
+        fetchJSON(`${API}/enriched/${id}`).catch(() => null),
+      ]);
+      const ep = data.episode;
+      const done = isCompleted(ep.id);
+
+      document.getElementById('modal-content').innerHTML = `
+        <button class="modal-close" onclick="closeModal()">✕</button>
+        <h2>#${ep.id} - ${ep.title}</h2>
+        <div class="meta">
+          ${ep.guest_name} ${ep.guest_company ? '· ' + ep.guest_company : ''}
+          <br>
+          <span class="ep-badge ${ep.difficulty}">${ep.difficulty}</span>
+          <span class="ep-pillar" style="margin-left:4px;border-left:3px solid ${pillarColors[ep.pillar]}">${pillarNames[ep.pillar]}</span>
+        </div>
+
+        ${enriched && enriched.tags && enriched.tags.length ? `
+          <div class="tag-list">
+            ${enriched.tags.map(t => `<span class="tag">${t}</span>`).join('')}
+          </div>
+        ` : ''}
+
+        ${enriched && enriched.sub_themes && enriched.sub_themes.length ? `
+          <div style="margin-top:10px;font-size:12px;color:var(--text-muted)">
+            Sous-themes : ${enriched.sub_themes.join(' · ')}
+          </div>
+        ` : ''}
+
+        <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
+          <a href="https://lamartingale.io/tous/${id}" target="_blank"
+             style="color:var(--accent);font-size:13px;text-decoration:none;padding:6px 12px;border:1px solid var(--accent);border-radius:6px">
+             Voir sur lamartingale.io →
+          </a>
+          <button class="btn-complete ${done ? 'done' : ''}" id="btn-complete-${ep.id}"
+            onclick="toggleCompleteModal(${ep.id})">
+            ${done ? '✓ Marque comme vu' : 'Marquer comme vu'}
+          </button>
+        </div>
+
+        ${data.related.length ? `
+          <div style="margin-top:24px">
+            <div style="font-weight:600;font-size:14px;margin-bottom:8px">Episodes du meme pilier</div>
+            ${data.related.map(r => `
+              <div style="font-size:13px;padding:6px 0;border-bottom:1px solid var(--border);cursor:pointer;display:flex;align-items:center;gap:8px" onclick="showEpisodeDetail(${r.id})">
+                <span style="color:var(--accent);font-weight:600;min-width:36px">#${r.id}</span>
+                <span>${r.title}</span>
+                ${isCompleted(r.id) ? '<span style="color:var(--success);margin-left:auto">✓</span>' : ''}
+              </div>
+            `).join('')}
+          </div>
+        ` : ''}
+
+        ${enriched && enriched.quiz && enriched.quiz.length ? `
+          <div style="margin-top:20px">
+            <div style="font-weight:600;font-size:14px;margin-bottom:8px">Quiz de l'episode</div>
+            <div style="font-size:13px;color:var(--text-muted)">
+              ${enriched.quiz.length} question${enriched.quiz.length > 1 ? 's' : ''} disponible${enriched.quiz.length > 1 ? 's' : ''}
+              <button onclick="closeModal();navTo('quiz',null);loadQuizForEpisode(${ep.id})"
+                      style="margin-left:10px;padding:4px 10px;background:var(--accent);color:#000;border:none;border-radius:6px;font-size:12px;cursor:pointer">
+                Faire le quiz →
+              </button>
+            </div>
+          </div>
+        ` : ''}
+      `;
+      document.getElementById('modal').classList.add('open');
+    }
+
+    function toggleCompleteModal(id) {
+      toggleComplete(id);
+      const btn = document.getElementById(`btn-complete-${id}`);
+      if (btn) {
+        const done = isCompleted(id);
+        btn.textContent = done ? '✓ Marque comme vu' : 'Marquer comme vu';
+        btn.classList.toggle('done', done);
+      }
+      renderEpisodes();
+      updateSidebarProgress();
+    }
+
+    async function showPathDetail(id) {
+      const data = await fetchJSON(`${API}/paths/${id}`);
+      const p = data.path;
+      const { done, total } = getPathProgress(p);
+      const pct = total ? Math.round(done / total * 100) : 0;
+
+      document.getElementById('modal-content').innerHTML = `
+        <button class="modal-close" onclick="closeModal()">✕</button>
+        <h2>${p.name}</h2>
+        <div class="meta">${p.description}<br>${p.estimated_hours}h · ${p.episodes_ordered.length} episodes · <span class="ep-badge ${p.difficulty}">${p.difficulty}</span></div>
+
+        <div style="margin-bottom:16px">
+          <div style="font-size:13px;color:var(--text-muted);margin-bottom:4px">Progression : ${done}/${total} (${pct}%)</div>
+          <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
+        </div>
+
+        <div style="font-weight:600;font-size:14px;margin-bottom:8px">Etapes du parcours</div>
+        <ol class="step-list">
+          ${p.steps.map(s => {
+            const completed = isCompleted(s.episode_id);
+            return `
+              <li class="${completed ? 'step-item-completed' : ''}">
+                <span style="font-weight:600;cursor:pointer;color:var(--accent)" onclick="closeModal();showEpisodeDetail(${s.episode_id})">#${s.episode_id}</span>
+                — ${s.episode?.title || 'Episode'}
+                ${completed ? '<span style="color:var(--success);margin-left:6px">✓</span>' : ''}
+                <div class="step-why">${s.why}</div>
+                <div style="font-size:11px;color:var(--text-muted)">${s.episode?.guest_name || ''}</div>
+              </li>
+            `;
+          }).join('')}
+        </ol>
+
+        ${p.outcomes ? `
+          <div style="margin-top:20px;font-weight:600;font-size:14px">Objectifs du parcours</div>
+          ${p.outcomes.map(o => `<div style="font-size:13px;padding:4px 0;color:var(--text-muted)">✓ ${o}</div>`).join('')}
+        ` : ''}
+      `;
+      document.getElementById('modal').classList.add('open');
+    }
+
+    function closeModal() {
+      document.getElementById('modal').classList.remove('open');
+    }
+
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+    // ============ QUIZ MODULE ============
+    let quizLoaded = false;
+    let quizQuestions = [];
+    let quizIndex = 0;
+    let quizCorrect = 0;
+    let quizAnswered = false;
+
+    async function loadQuiz(pillar = '', difficulty = '') {
+      let url = `${API}/quiz?limit=10`;
+      if (pillar) url += `&pillar=${pillar}`;
+      if (difficulty) url += `&difficulty=${difficulty}`;
+
+      const data = await fetchJSON(url);
+      quizQuestions = data.questions;
+      quizIndex = 0;
+      quizCorrect = 0;
+      quizLoaded = true;
+      renderQuizView(pillar, difficulty);
+    }
+
+    async function loadQuizForEpisode(episodeId) {
+      const data = await fetchJSON(`${API}/quiz/episode/${episodeId}`);
+      quizQuestions = data.questions;
+      quizIndex = 0;
+      quizCorrect = 0;
+      quizLoaded = true;
+      renderQuizView('', '', episodeId);
+    }
+
+    function renderQuizView(activePillar = '', activeDifficulty = '', episodeId = null) {
+      const el = document.getElementById('view-quiz');
+
+      if (quizQuestions.length === 0) {
+        el.innerHTML = `
+          <h1 style="font-size:28px;font-weight:700;margin-bottom:16px">Quiz</h1>
+          <p style="color:var(--text-muted)">Aucune question disponible. <button class="quiz-next show" style="display:inline-block" onclick="loadQuiz()">Charger un quiz</button></p>
+        `;
+        return;
+      }
+
+      if (quizIndex >= quizQuestions.length) {
+        const pct = Math.round(quizCorrect / quizQuestions.length * 100);
+        const emoji = pct >= 80 ? '🏆' : pct >= 50 ? '👍' : '📚';
+        el.innerHTML = `
+          <div class="quiz-container">
+            <h1 style="font-size:28px;font-weight:700;margin-bottom:24px">Quiz termine !</h1>
+            <div class="quiz-result">
+              <div class="quiz-result-score">${emoji} ${quizCorrect}/${quizQuestions.length}</div>
+              <div class="quiz-result-label">${pct}% de bonnes reponses</div>
+              <button class="quiz-next show" onclick="loadQuiz()">Nouveau quiz</button>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      const q = quizQuestions[quizIndex];
+      const progress = ((quizIndex) / quizQuestions.length * 100).toFixed(0);
+
+      el.innerHTML = `
+        <div class="quiz-container">
+          <h1 style="font-size:28px;font-weight:700;margin-bottom:16px">Quiz</h1>
+
+          <div class="quiz-filters">
+            <button class="filter-btn ${!activePillar?'active':''}" onclick="loadQuiz('','')">Tous les piliers</button>
+            <button class="filter-btn ${activePillar==='IMMOBILIER'?'active':''}" onclick="loadQuiz('IMMOBILIER')">Immobilier</button>
+            <button class="filter-btn ${activePillar==='BOURSE'?'active':''}" onclick="loadQuiz('BOURSE')">Bourse</button>
+            <button class="filter-btn ${activePillar==='CRYPTO'?'active':''}" onclick="loadQuiz('CRYPTO')">Crypto</button>
+            <button class="filter-btn ${activePillar==='ALTERNATIFS'?'active':''}" onclick="loadQuiz('ALTERNATIFS')">Alternatifs</button>
+          </div>
+
+          <div class="quiz-header">
+            <span style="font-size:13px;color:var(--text-muted)">Question ${quizIndex + 1}/${quizQuestions.length}</span>
+            <span class="quiz-score">${quizCorrect} correct${quizCorrect !== 1 ? 's' : ''}</span>
+          </div>
+
+          <div class="quiz-progress">
+            <div class="quiz-progress-bar" style="width:${progress}%"></div>
+          </div>
+
+          <div style="font-size:11px;color:var(--text-muted);margin-bottom:8px">
+            Episode #${q.episode_id} · ${pillarNames[q.pillar] || q.pillar} · ${q.difficulty}
+          </div>
+
+          <div class="quiz-question">${q.question}</div>
+
+          <div class="quiz-options" id="quiz-options">
+            ${q.options.map((opt, i) => `
+              <div class="quiz-option" onclick="answerQuiz(${i})" data-index="${i}">${opt}</div>
+            `).join('')}
+          </div>
+
+          <div class="quiz-explanation" id="quiz-explanation">${q.explanation}</div>
+          <button class="quiz-next" id="quiz-next" onclick="nextQuiz()">Question suivante →</button>
+        </div>
+      `;
+      quizAnswered = false;
+    }
+
+    function answerQuiz(selected) {
+      if (quizAnswered) return;
+      quizAnswered = true;
+
+      const q = quizQuestions[quizIndex];
+      const options = document.querySelectorAll('.quiz-option');
+
+      options.forEach((opt, i) => {
+        opt.classList.add('answered');
+        if (i === q.correct_answer) opt.classList.add('correct');
+        if (i === selected && i !== q.correct_answer) opt.classList.add('wrong');
+      });
+
+      if (selected === q.correct_answer) quizCorrect++;
+      document.getElementById('quiz-explanation').classList.add('show');
+      document.getElementById('quiz-next').classList.add('show');
+    }
+
+    function nextQuiz() {
+      quizIndex++;
+      renderQuizView();
+    }
+
+    init();
+  </script>
+</body>
+</html>

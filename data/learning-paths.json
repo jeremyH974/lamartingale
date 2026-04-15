@@ -1,0 +1,159 @@
+{
+  "learning_paths": [
+    {
+      "id": "debutant_fondamentaux",
+      "name": "Debutant - Les fondamentaux",
+      "description": "Parcours complet pour construire ses bases en finances personnelles et investissement. De l'organisation budgetaire aux premiers placements.",
+      "difficulty": "DEBUTANT",
+      "estimated_hours": 12,
+      "target_audience": "Personne qui debute en investissement, peu ou pas de patrimoine financier",
+      "prerequisites": [],
+      "episodes_ordered": [
+        { "order": 1, "episode_id": 9, "why": "Poser les bases : organisation, objectifs, profil" },
+        { "order": 2, "episode_id": 78, "why": "10 regles universelles de finances perso" },
+        { "order": 3, "episode_id": 101, "why": "Maitriser son budget sans effort" },
+        { "order": 4, "episode_id": 116, "why": "Constituer son epargne de precaution" },
+        { "order": 5, "episode_id": 173, "why": "Les 5 regles d'or avant d'investir" },
+        { "order": 6, "episode_id": 236, "why": "Placements garantis et sans risque" },
+        { "order": 7, "episode_id": 195, "why": "Se lancer concretement avec 10, 100 ou 1000 EUR/mois" },
+        { "order": 8, "episode_id": 47, "why": "Premiers pas en Bourse avec peu de moyens" },
+        { "order": 9, "episode_id": 85, "why": "La strategie DCA pour investir regulierement" },
+        { "order": 10, "episode_id": 48, "why": "Acheter ou louer sa residence principale ?" },
+        { "order": 11, "episode_id": 82, "why": "Premiers pas en defiscalisation" },
+        { "order": 12, "episode_id": 296, "why": "Vision globale : construire son patrimoine de zero" }
+      ],
+      "outcomes": [
+        "Savoir organiser son budget et epargner",
+        "Comprendre les classes d'actifs principales",
+        "Pouvoir ouvrir ses premiers placements (livrets, ETF, assurance vie)",
+        "Connaitre les bases de la fiscalite"
+      ]
+    },
+    {
+      "id": "immobilier_a_z",
+      "name": "Immobilier - De A a Z",
+      "description": "Tout comprendre de l'investissement immobilier : achat RP, locatif, financement, gestion, structures juridiques et sortie.",
+      "difficulty": "INTERMEDIAIRE",
+      "estimated_hours": 10,
+      "target_audience": "Personne souhaitant investir dans l'immobilier (premier achat ou locatif)",
+      "prerequisites": ["debutant_fondamentaux"],
+      "episodes_ordered": [
+        { "order": 1, "episode_id": 1, "why": "Vision macro du marche immobilier, risques et opportunites" },
+        { "order": 2, "episode_id": 60, "why": "Comprendre le credit et l'effet de levier" },
+        { "order": 3, "episode_id": 146, "why": "Decision fondamentale : acheter ou louer ?" },
+        { "order": 4, "episode_id": 231, "why": "L'art de negocier le prix d'achat" },
+        { "order": 5, "episode_id": 169, "why": "Choisir la bonne ville pour investir" },
+        { "order": 6, "episode_id": 267, "why": "Gerer la location sereinement" },
+        { "order": 7, "episode_id": 230, "why": "Renover sans sacrifier la rentabilite" },
+        { "order": 8, "episode_id": 206, "why": "Structures juridiques : SCI vs SARL de famille" },
+        { "order": 9, "episode_id": 182, "why": "Alternative : immobilier fractionne (SCPI)" },
+        { "order": 10, "episode_id": 306, "why": "Objectif ultime : devenir rentier" }
+      ],
+      "outcomes": [
+        "Savoir analyser un bien immobilier",
+        "Maitriser le financement et la negociation",
+        "Comprendre les structures juridiques optimales",
+        "Pouvoir gerer un bien locatif",
+        "Connaitre les alternatives (SCPI, fractionne)"
+      ]
+    },
+    {
+      "id": "bourse_marches",
+      "name": "Bourse et marches financiers",
+      "description": "De la premiere action achetee a la construction d'un portefeuille diversifie en ETF et actions.",
+      "difficulty": "INTERMEDIAIRE",
+      "estimated_hours": 8,
+      "target_audience": "Investisseur souhaitant investir en Bourse de maniere structuree",
+      "prerequisites": ["debutant_fondamentaux"],
+      "episodes_ordered": [
+        { "order": 1, "episode_id": 47, "why": "Investir en bourse meme avec tres peu" },
+        { "order": 2, "episode_id": 179, "why": "Comprendre les ETF et la gestion passive" },
+        { "order": 3, "episode_id": 85, "why": "Strategie DCA : investir regulierement sans stress" },
+        { "order": 4, "episode_id": 152, "why": "Construire un portefeuille 100% ETF" },
+        { "order": 5, "episode_id": 287, "why": "Le piege des devises dans les ETF" },
+        { "order": 6, "episode_id": 302, "why": "Debunker les 10 mythes de l'investissement" },
+        { "order": 7, "episode_id": 285, "why": "Les erreurs couteuses a eviter" },
+        { "order": 8, "episode_id": 64, "why": "Philosophie : devenir riche lentement" }
+      ],
+      "outcomes": [
+        "Comprendre les ETF et la gestion passive",
+        "Savoir construire un portefeuille diversifie",
+        "Maitriser le DCA et la discipline d'investissement",
+        "Eviter les pieges classiques (frais, devises, biais)"
+      ]
+    },
+    {
+      "id": "crypto_zero_hero",
+      "name": "Crypto - Du zero au hero",
+      "description": "Comprendre la crypto, securiser ses actifs, et construire une strategie d'investissement crypto raisonnee.",
+      "difficulty": "INTERMEDIAIRE",
+      "estimated_hours": 8,
+      "target_audience": "Personne curieuse de la crypto, de debutant total a investisseur souhaitant structurer son approche",
+      "prerequisites": [],
+      "episodes_ordered": [
+        { "order": 1, "episode_id": 3, "why": "Bitcoin : comprendre les fondamentaux avec Eric Larcheveque (Ledger)" },
+        { "order": 2, "episode_id": 91, "why": "La crypto pour les nuls : back to basics" },
+        { "order": 3, "episode_id": 155, "why": "DCA Bitcoin : epargner et investir sans stress" },
+        { "order": 4, "episode_id": 156, "why": "Securiser ses cryptos avec un cold wallet" },
+        { "order": 5, "episode_id": 117, "why": "Comprendre la DeFi" },
+        { "order": 6, "episode_id": 149, "why": "5 lecons pour eviter les catastrophes (FTX)" },
+        { "order": 7, "episode_id": 242, "why": "Les nouvelles opportunites : airdrops, memecoins, stablecoins" },
+        { "order": 8, "episode_id": 304, "why": "Vision long-terme : Bitcoin zero ou million ?" }
+      ],
+      "outcomes": [
+        "Comprendre Bitcoin et les cryptomonnaies",
+        "Savoir securiser ses actifs numeriques",
+        "Connaitre la DeFi et ses opportunites",
+        "Avoir une strategie crypto raisonnee"
+      ]
+    },
+    {
+      "id": "patrimoine_familial",
+      "name": "Patrimoine familial",
+      "description": "Gerer l'argent en couple, eduquer les enfants a la finance, preparer la succession et les donations.",
+      "difficulty": "DEBUTANT",
+      "estimated_hours": 6,
+      "target_audience": "Parents, couples, familles souhaitant optimiser leur gestion patrimoniale commune",
+      "prerequisites": [],
+      "episodes_ordered": [
+        { "order": 1, "episode_id": 145, "why": "Trouver son organisation financiere en couple" },
+        { "order": 2, "episode_id": 298, "why": "Couple et argent : ne pas se faire avoir" },
+        { "order": 3, "episode_id": 163, "why": "Eduquer les enfants a la finance des le berceau" },
+        { "order": 4, "episode_id": 244, "why": "Proteger et faire fructifier l'epargne des enfants" },
+        { "order": 5, "episode_id": 125, "why": "Bien preparer sa succession" },
+        { "order": 6, "episode_id": 159, "why": "Donation de son vivant : mode d'emploi" }
+      ],
+      "outcomes": [
+        "Savoir organiser les finances du couple",
+        "Eduquer les enfants a la gestion de l'argent",
+        "Anticiper la succession et les donations",
+        "Proteger le patrimoine familial"
+      ]
+    },
+    {
+      "id": "investisseur_avance",
+      "name": "Investisseur avance - Diversification",
+      "description": "Aller au-dela des actions et de l'immobilier : private equity, art, foret, metaux, carbone, produits structures.",
+      "difficulty": "AVANCE",
+      "estimated_hours": 8,
+      "target_audience": "Investisseur experimente cherchant a diversifier au-dela des classes d'actifs traditionnelles",
+      "prerequisites": ["debutant_fondamentaux", "bourse_marches"],
+      "episodes_ordered": [
+        { "order": 1, "episode_id": 302, "why": "Debunker les mythes pour penser correctement" },
+        { "order": 2, "episode_id": 280, "why": "Private Equity : grille de lecture" },
+        { "order": 3, "episode_id": 276, "why": "Produits structures : comprendre et evaluer" },
+        { "order": 4, "episode_id": 271, "why": "Metaux precieux : or, argent, commodites" },
+        { "order": 5, "episode_id": 239, "why": "Foret : 6% par an + defiscalisation" },
+        { "order": 6, "episode_id": 256, "why": "Art contemporain accessible" },
+        { "order": 7, "episode_id": 288, "why": "Quotas carbone : impact + rendement" },
+        { "order": 8, "episode_id": 269, "why": "Cles d'investissement des milliardaires" }
+      ],
+      "outcomes": [
+        "Connaitre les classes d'actifs alternatives",
+        "Savoir evaluer le private equity et les produits structures",
+        "Comprendre les investissements tangibles (foret, terre, metaux)",
+        "Construire une allocation multi-actifs sophistiquee"
+      ]
+    }
+  ]
+}
