@@ -78,68 +78,77 @@ export async function getEpisodes(opts: {
 }
 
 export async function getEpisodeById(episodeNumber: number) {
-  const [row] = await db().select().from(s.episodes)
-    .leftJoin(s.episodesMedia, eq(s.episodes.id, s.episodesMedia.episodeId))
-    .where(eq(s.episodes.episodeNumber, episodeNumber));
+  const sqlInstance = neon(process.env.DATABASE_URL!);
 
-  if (!row) return null;
+  // Raw SQL to ensure all enriched columns are included (Vercel caching workaround)
+  const rows = await sqlInstance`
+    SELECT e.*, em.thumbnail_350, em.thumbnail_full, em.audio_player_url
+    FROM episodes e
+    LEFT JOIN episodes_media em ON em.episode_id = e.id
+    WHERE e.episode_number = ${episodeNumber}
+  `;
+
+  if (!rows.length) return null;
+  const row = rows[0];
 
   const episode = {
-    id: row.episodes.episodeNumber,
-    title: row.episodes.title,
-    guest_name: row.episodes.guest || '',
-    guest_company: row.episodes.guestCompany || '',
-    guest_bio: row.episodes.guestBio || '',
+    id: row.episode_number,
+    title: row.title,
+    guest_name: row.guest || '',
+    guest_company: row.guest_company || '',
+    guest_bio: row.guest_bio || '',
     format: 'INTERVIEW',
-    pillar: row.episodes.pillar,
+    pillar: row.pillar,
     sub_theme: '',
     tags: [],
-    difficulty: row.episodes.difficulty || 'INTERMEDIAIRE',
+    difficulty: row.difficulty || 'INTERMEDIAIRE',
     learning_paths: [],
-    url: row.episodes.url || '',
-    abstract: row.episodes.abstract || '',
-    key_takeaways: row.episodes.keyTakeaways || [],
-    related_episodes: row.episodes.relatedEpisodes || [],
-    external_references: row.episodes.externalReferences || [],
-    community_rating: row.episodes.communityRating || null,
-    sponsor: row.episodes.sponsor || null,
-    publication_date: row.episodes.dateCreated?.toISOString() || null,
-    thumbnail: row.episodes_media?.thumbnail350 || null,
-    thumbnail_full: row.episodes_media?.thumbnailFull || null,
+    url: row.url || '',
+    abstract: row.abstract || '',
+    key_takeaways: row.key_takeaways || [],
+    related_episodes: row.related_episodes || [],
+    external_references: row.external_references || [],
+    community_rating: row.community_rating || null,
+    sponsor: row.sponsor || null,
+    publication_date: row.date_created || null,
+    thumbnail: row.thumbnail_350 || null,
+    thumbnail_full: row.thumbnail_full || null,
   };
 
-  // Related episodes (same pillar)
-  const related = await db().select().from(s.episodes)
-    .leftJoin(s.episodesMedia, eq(s.episodes.id, s.episodesMedia.episodeId))
-    .where(and(
-      eq(s.episodes.pillar, row.episodes.pillar),
-      sql`${s.episodes.episodeNumber} != ${episodeNumber}`,
-    ))
-    .orderBy(desc(s.episodes.episodeNumber))
-    .limit(5);
+  // Related episodes (same pillar) - raw SQL for consistency
+  const relatedRows = await sqlInstance`
+    SELECT e.episode_number, e.title, e.guest, e.pillar, e.difficulty, em.thumbnail_350
+    FROM episodes e
+    LEFT JOIN episodes_media em ON em.episode_id = e.id
+    WHERE e.pillar = ${row.pillar} AND e.episode_number != ${episodeNumber}
+    ORDER BY e.episode_number DESC LIMIT 5
+  `;
 
-  const relatedEps = related.map(r => ({
-    id: r.episodes.episodeNumber,
-    title: r.episodes.title,
-    guest_name: r.episodes.guest || '',
-    pillar: r.episodes.pillar,
-    difficulty: r.episodes.difficulty || 'INTERMEDIAIRE',
-    thumbnail: r.episodes_media?.thumbnail350 || null,
+  const relatedEps = relatedRows.map((r: any) => ({
+    id: r.episode_number,
+    title: r.title,
+    guest_name: r.guest || '',
+    pillar: r.pillar,
+    difficulty: r.difficulty || 'INTERMEDIAIRE',
+    thumbnail: r.thumbnail_350 || null,
   }));
 
   // Audio player
-  const audioPlayer = row.episodes_media?.audioPlayerUrl || null;
+  const audioPlayer = row.audio_player_url || null;
 
   // Expert
-  const guestEps = await db().select().from(s.guestEpisodes)
-    .innerJoin(s.guests, eq(s.guestEpisodes.guestId, s.guests.id))
-    .where(eq(s.guestEpisodes.episodeId, row.episodes.id))
-    .limit(1);
-  const expert = guestEps.length ? {
-    name: guestEps[0].guests.name,
-    company: guestEps[0].guests.company,
-    specialty: guestEps[0].guests.specialty,
-    authority_score: guestEps[0].guests.authorityScore,
+  const expertRows = await sqlInstance`
+    SELECT g.name, g.company, g.specialty, g.authority_score
+    FROM guest_episodes ge
+    INNER JOIN guests g ON g.id = ge.guest_id
+    WHERE ge.episode_id = ${row.id}
+    LIMIT 1
+  `;
+  const expert = expertRows.length ? {
+    name: expertRows[0].name,
+    company: expertRows[0].company,
+    specialty: expertRows[0].specialty,
+    authority_score: expertRows[0].authority_score,
   } : null;
 
   return { episode, related: relatedEps, expert, audio_player: audioPlayer };
