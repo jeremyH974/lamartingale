@@ -91,7 +91,7 @@ console.log(`[COUCHE 1] Data source: ${USE_DB ? 'Neon Postgres (Drizzle)' : 'JSO
 
 app.get('/api/episodes', async (req, res) => {
   try {
-    if (USE_DB) {
+    if (process.env.DATABASE_URL) {
       const result = await dbQueries.getEpisodes({
         pillar: req.query.pillar as string,
         difficulty: req.query.difficulty as string,
@@ -125,7 +125,7 @@ app.get('/api/episodes', async (req, res) => {
 app.get('/api/episodes/:id', async (req, res) => {
   try {
     const id = parseInt(req.params.id);
-    if (USE_DB) {
+    if (process.env.DATABASE_URL) {
       const result = await dbQueries.getEpisodeById(id);
       if (!result) return res.status(404).json({ error: 'Episode not found' });
       return res.json(result);
@@ -149,7 +149,7 @@ app.get('/api/episodes/:id', async (req, res) => {
 
 app.get('/api/experts', async (req, res) => {
   try {
-    if (USE_DB) return res.json(await dbQueries.getExperts(req.query.specialty as string));
+    if (process.env.DATABASE_URL) return res.json(await dbQueries.getExperts(req.query.specialty as string));
 
     let result = [...expertsData.experts];
     const specialty = req.query.specialty as string;
@@ -164,7 +164,7 @@ app.get('/api/experts', async (req, res) => {
 
 app.get('/api/experts/:id', async (req, res) => {
   try {
-    if (USE_DB) {
+    if (process.env.DATABASE_URL) {
       const result = await dbQueries.getExpertById(req.params.id);
       if (!result) return res.status(404).json({ error: 'Expert not found' });
       return res.json(result);
@@ -180,7 +180,7 @@ app.get('/api/experts/:id', async (req, res) => {
 
 app.get('/api/paths', async (_req, res) => {
   try {
-    if (USE_DB) return res.json(await dbQueries.getPaths());
+    if (process.env.DATABASE_URL) return res.json(await dbQueries.getPaths());
     const paths = pathsData.learning_paths.map(p => ({
       id: p.id, name: p.name, description: p.description, difficulty: p.difficulty,
       estimated_hours: p.estimated_hours, episode_count: p.episodes_ordered.length,
@@ -192,7 +192,7 @@ app.get('/api/paths', async (_req, res) => {
 
 app.get('/api/paths/:id', async (req, res) => {
   try {
-    if (USE_DB) {
+    if (process.env.DATABASE_URL) {
       const result = await dbQueries.getPathById(req.params.id);
       if (!result) return res.status(404).json({ error: 'Path not found' });
       return res.json(result);
@@ -208,14 +208,14 @@ app.get('/api/paths/:id', async (req, res) => {
 
 app.get('/api/taxonomy', async (_req, res) => {
   try {
-    if (USE_DB) return res.json(await dbQueries.getTaxonomy());
+    if (process.env.DATABASE_URL) return res.json(await dbQueries.getTaxonomy());
     res.json(taxonomyData);
   } catch (e: any) { res.status(500).json({ error: e.message }); }
 });
 
 app.get('/api/taxonomy/pillars', async (_req, res) => {
   try {
-    if (USE_DB) {
+    if (process.env.DATABASE_URL) {
       const data = await dbQueries.getTaxonomy();
       return res.json({ pillars: data.pillars.map((p: any) => ({ id: p.id, name: p.name, icon: p.icon, color: p.color, episode_count: p.episode_count, sub_theme_count: p.sub_themes.length })) });
     }
@@ -246,7 +246,7 @@ app.post('/api/recommend', async (req, res) => {
       return res.status(400).json({ error: 'Missing interests or investment_experience' });
     }
 
-    if (USE_DB) {
+    if (process.env.DATABASE_URL) {
       // Fetch all episodes from DB for scoring
       const allEps = await dbQueries.getEpisodes({ limit: 500 });
       const epList: Episode[] = allEps.episodes.map((ep: any) => ({
@@ -271,7 +271,7 @@ app.post('/api/recommend', async (req, res) => {
 
 app.get('/api/stats', async (_req, res) => {
   try {
-    if (USE_DB) return res.json(await dbQueries.getStats());
+    if (process.env.DATABASE_URL) return res.json(await dbQueries.getStats());
 
     const pillarCounts: Record<string, number> = {};
     const difficultyCounts: Record<string, number> = {};
@@ -342,7 +342,7 @@ app.get('/api/similar/:id', async (req, res) => {
 
 app.get('/api/quiz', async (req, res) => {
   try {
-    if (USE_DB) return res.json(await dbQueries.getQuiz({
+    if (process.env.DATABASE_URL) return res.json(await dbQueries.getQuiz({
       pillar: req.query.pillar as string,
       difficulty: req.query.difficulty as string,
       limit: parseInt(req.query.limit as string) || 10,
@@ -362,7 +362,7 @@ app.get('/api/quiz', async (req, res) => {
 app.get('/api/quiz/episode/:id', async (req, res) => {
   try {
     const id = parseInt(req.params.id);
-    if (USE_DB) return res.json(await dbQueries.getQuizByEpisode(id));
+    if (process.env.DATABASE_URL) return res.json(await dbQueries.getQuizByEpisode(id));
     const questions = quizData.questions.filter((q: any) => q.episode_id === id);
     res.json({ episode_id: id, count: questions.length, questions });
   } catch (e: any) { res.status(500).json({ error: e.message }); }
@@ -442,7 +442,7 @@ app.get('/api/clustering', (_req, res) => {
 
 app.get('/api/graph', async (_req, res) => {
   try {
-    if (USE_DB) {
+    if (process.env.DATABASE_URL) {
       // Fetch all episodes for graph
       const allEps = await dbQueries.getEpisodes({ limit: 500 });
       const expertData = await dbQueries.getExperts();
@@ -517,7 +517,7 @@ app.get('/api/graph', async (_req, res) => {
 app.get('/api/enriched/:id', async (req, res) => {
   try {
     const id = parseInt(req.params.id);
-    if (USE_DB) {
+    if (process.env.DATABASE_URL) {
       const result = await dbQueries.getEnrichedById(id);
       if (!result) return res.status(404).json({ error: 'Enriched data not found' });
       return res.json(result);
@@ -532,7 +532,7 @@ app.get('/api/enriched/:id', async (req, res) => {
 
 app.get('/api/media', async (_req, res) => {
   try {
-    if (USE_DB) return res.json(await dbQueries.getMediaAll());
+    if (process.env.DATABASE_URL) return res.json(await dbQueries.getMediaAll());
     res.json(mediaData.by_id);
   } catch (e: any) { res.status(500).json({ error: e.message }); }
 });
@@ -540,7 +540,7 @@ app.get('/api/media', async (_req, res) => {
 app.get('/api/media/:id', async (req, res) => {
   try {
     const id = parseInt(req.params.id);
-    if (USE_DB) {
+    if (process.env.DATABASE_URL) {
       const result = await dbQueries.getMediaById(id);
       if (!result) return res.status(404).json({ error: 'No media for this episode' });
       return res.json(result);
@@ -555,7 +555,7 @@ app.get('/api/media/:id', async (req, res) => {
 
 app.get('/api/tags', async (_req, res) => {
   try {
-    if (USE_DB) return res.json(await dbQueries.getTags());
+    if (process.env.DATABASE_URL) return res.json(await dbQueries.getTags());
     const tagCounts: Record<string, number> = {};
     for (const ep of enrichedData.episodes) { for (const tag of (ep.tags || [])) { tagCounts[tag] = (tagCounts[tag] || 0) + 1; } }
     const sorted = Object.entries(tagCounts).sort((a, b) => b[1] - a[1]).map(([tag, count]) => ({ tag, count }));
@@ -570,7 +570,7 @@ app.get('/api/search', async (req, res) => {
     const q = (req.query.q as string || '').toLowerCase();
     if (!q || q.length < 2) return res.status(400).json({ error: 'Query must be at least 2 characters' });
 
-    if (USE_DB) return res.json(await dbQueries.searchAll(q));
+    if (process.env.DATABASE_URL) return res.json(await dbQueries.searchAll(q));
 
     const enrichedLookup: Record<number, any> = {};
     for (const e of enrichedData.episodes) { enrichedLookup[e.id] = e; }
