@@ -289,6 +289,55 @@ app.get('/api/stats', async (_req, res) => {
   } catch (e: any) { res.status(500).json({ error: e.message }); }
 });
 
+// --- Analytics (Couche 2) ---
+
+app.get('/api/analytics', async (_req, res) => {
+  try {
+    if (!USE_DB) return res.status(503).json({ error: 'Analytics requires database mode (USE_DB=true)' });
+    const { getAnalytics } = await import('./ai/analytics');
+    const data = await getAnalytics();
+    res.json(data);
+  } catch (e: any) { console.error('[API] /api/analytics error:', e.message); res.status(500).json({ error: e.message }); }
+});
+
+// --- Similar Episodes (Couche 2) ---
+
+app.get('/api/similar/:id', async (req, res) => {
+  try {
+    if (!USE_DB) return res.status(503).json({ error: 'Similarity requires database mode' });
+    const sql = (await import('@neondatabase/serverless')).neon(process.env.DATABASE_URL!);
+    const episodeNumber = parseInt(req.params.id);
+    const limit = parseInt(req.query.limit as string) || 10;
+
+    const similar = await sql`
+      SELECT e2.episode_number, e2.title, e2.guest, e2.pillar, e2.difficulty,
+             es.similarity_score,
+             em.thumbnail_350
+      FROM episode_similarities es
+      INNER JOIN episodes e1 ON e1.id = es.episode_id
+      INNER JOIN episodes e2 ON e2.id = es.similar_episode_id
+      LEFT JOIN episodes_media em ON em.episode_id = e2.id
+      WHERE e1.episode_number = ${episodeNumber}
+      ORDER BY es.similarity_score DESC
+      LIMIT ${limit}
+    `;
+
+    res.json({
+      episode_number: episodeNumber,
+      count: similar.length,
+      similar: similar.map((r: any) => ({
+        id: r.episode_number,
+        title: r.title,
+        guest: r.guest,
+        pillar: r.pillar,
+        difficulty: r.difficulty,
+        similarity: Number(r.similarity_score).toFixed(4),
+        thumbnail: r.thumbnail_350,
+      })),
+    });
+  } catch (e: any) { res.status(500).json({ error: e.message }); }
+});
+
 // --- Quiz ---
 
 app.get('/api/quiz', async (req, res) => {

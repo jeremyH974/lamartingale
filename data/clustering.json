@@ -1,0 +1,2181 @@
+{
+  "metadata": {
+    "n_episodes": 310,
+    "n_clusters": 23,
+    "n_noise": 101,
+    "ari_score": 0.3162,
+    "ari_interpretation": "Alignement mod\u00e9r\u00e9"
+  },
+  "points": [
+    {
+      "episode_number": 1,
+      "pillar": "IMMOBILIER",
+      "cluster": 0,
+      "x": 9.22775650024414,
+      "y": 4.265532970428467
+    },
+    {
+      "episode_number": 2,
+      "pillar": "PATRIMOINE_FISCALITE",
+      "cluster": 14,
+      "x": 8.06464672088623,
+      "y": 0.82795649766922
+    },
+    {
+      "episode_number": 3,
+      "pillar": "CRYPTO",
+      "cluster": 18,
+      "x": 3.075451612472534,
+      "y": -0.16852286458015442
+    },
+    {
+      "episode_number": 4,
+      "pillar": "PE_STARTUP",
+      "cluster": -1,
+      "x": 7.165017604827881,
+      "y": 2.9106664657592773
+    },
+    {
+      "episode_number": 5,
+      "pillar": "IMMOBILIER",
+      "cluster": 0,
+      "x": 9.226227760314941,
+      "y": 4.4372711181640625
+    },
+    {
+      "episode_number": 6,
+      "pillar": "PE_STARTUP",
+      "cluster": 7,
+      "x": 7.023299694061279,
+      "y": 3.2418699264526367
+    },
+    {
+      "episode_number": 7,
+      "pillar": "BOURSE",
+      "cluster": 12,
+      "x": 5.399192810058594,
+      "y": 0.6698529720306396
+    },
+    {
+      "episode_number": 8,
+      "pillar": "ALTERNATIFS",
+      "cluster": 19,
+      "x": 5.1380934715271,
+      "y": 2.413680076599121
+    },
+    {
+      "episode_number": 9,
+      "pillar": "FINANCES_PERSO",
+      "cluster": -1,
+      "x": 7.372889518737793,
+      "y": 0.7843908667564392
+    },
+    {
+      "episode_number": 10,
+      "pillar": "PATRIMOINE_FISCALITE",
+      "cluster": -1,
+      "x": 7.678786754608154,
+      "y": 0.9212548136711121
+    },
+    {
+      "episode_number": 11,
+      "pillar": "ALTERNATIFS",
+      "cluster": -1,
+      "x": 3.4992575645446777,
+      "y": -0.10883684456348419
+    },
+    {
+      "episode_number": 12,
+      "pillar": "IMPACT_ESG",
+      "cluster": 6,
+      "x": 6.179432392120361,
+      "y": 4.2863640785217285
+    },
+    {
+      "episode_number": 13,
+      "pillar": "PATRIMOINE_FISCALITE",
+      "cluster": -1,
+      "x": 7.204409122467041,
+      "y": 0.8924148678779602
+    },
+    {
+      "episode_number": 14,
+      "pillar": "BOURSE",
+      "cluster": 9,
+      "x": 6.817699432373047,
+      "y": 0.7064149379730225
+    },
+    {
+      "episode_number": 15,
+      "pillar": "CROWDFUNDING",
+      "cluster": -1,
+      "x": 8.12055492401123,
+      "y": 4.353423595428467
+    },
+    {
+      "episode_number": 16,
+      "pillar": "FINANCES_PERSO",
+      "cluster": -1,
+      "x": 8.987100601196289,
+      "y": 0.2516464293003082
+    },
+    {
+      "episode_number": 17,
+      "pillar": "ALTERNATIFS",
+      "cluster": 6,
+      "x": 5.8710150718688965,
+      "y": 4.130234718322754
+    },
+    {
+      "episode_number": 18,
+      "pillar": "PE_STARTUP",
+      "cluster": 7,
+      "x": 7.015437126159668,
+      "y": 3.167541265487671
+    },
+    {
+      "episode_number": 19,
+      "pillar": "IMPACT_ESG",
+      "cluster": 6,
+      "x": 6.505712509155273,
+      "y": 4.645232677459717
+    },
+    {
+      "episode_number": 20,
+      "pillar": "IMMOBILIER",
+      "cluster": 5,
+      "x": 8.536438941955566,
+      "y": 3.727083921432495
+    },
+    {
+      "episode_number": 21,
+      "pillar": "BOURSE",
+      "cluster": 12,
+      "x": 5.508535385131836,
+      "y": 0.46363264322280884
+    },
+    {
+      "episode_number": 22,
+      "pillar": "IMMOBILIER",
+      "cluster": 4,
+      "x": 8.610526084899902,
+      "y": 5.302947044372559
+    },
+    {
+      "episode_number": 23,
+      "pillar": "CRYPTO",
+      "cluster": 18,
+      "x": 3.1356139183044434,
+      "y": -0.0844288244843483
+    },
+    {
+      "episode_number": 24,
+      "pillar": "IMPACT_ESG",
+      "cluster": 6,
+      "x": 6.43184757232666,
+      "y": 4.6548895835876465
+    },
+    {
+      "episode_number": 25,
+      "pillar": "ALTERNATIFS",
+      "cluster": 22,
+      "x": 4.869564056396484,
+      "y": 2.6352651119232178
+    },
+    {
+      "episode_number": 26,
+      "pillar": "BOURSE",
+      "cluster": 8,
+      "x": 6.512508869171143,
+      "y": 2.7854371070861816
+    },
+    {
+      "episode_number": 27,
+      "pillar": "IMMOBILIER",
+      "cluster": 4,
+      "x": 8.6068754196167,
+      "y": 5.218596458435059
+    },
+    {
+      "episode_number": 28,
+      "pillar": "FINANCES_PERSO",
+      "cluster": 14,
+      "x": 7.730255126953125,
+      "y": 0.4833816885948181
+    },
+    {
+      "episode_number": 29,
+      "pillar": "BOURSE",
+      "cluster": 10,
+      "x": 5.9869537353515625,
+      "y": 0.5338528156280518
+    },
+    {
+      "episode_number": 30,
+      "pillar": "IMMOBILIER",
+      "cluster": 1,
+      "x": 9.552794456481934,
+      "y": 4.532930374145508
+    },
+    {
+      "episode_number": 31,
+      "pillar": "ALTERNATIFS",
+      "cluster": 20,
+      "x": 4.541987419128418,
+      "y": 2.3235957622528076
+    },
+    {
+      "episode_number": 32,
+      "pillar": "BOURSE",
+      "cluster": 9,
+      "x": 6.798635959625244,
+      "y": 0.6509398818016052
+    },
+    {
+      "episode_number": 33,
+      "pillar": "IMMOBILIER",
+      "cluster": 5,
+      "x": 8.511765480041504,
+      "y": 3.527341842651367
+    },
+    {
+      "episode_number": 34,
+      "pillar": "BOURSE",
+      "cluster": 10,
+      "x": 6.037587642669678,
+      "y": 0.4302102029323578
+    },
+    {
+      "episode_number": 35,
+      "pillar": "ALTERNATIFS",
+      "cluster": 21,
+      "x": 4.569266319274902,
+      "y": 2.8379311561584473
+    },
+    {
+      "episode_number": 36,
+      "pillar": "IMMOBILIER",
+      "cluster": -1,
+      "x": 8.700549125671387,
+      "y": 4.525719165802002
+    },
+    {
+      "episode_number": 37,
+      "pillar": "FINANCES_PERSO",
+      "cluster": -1,
+      "x": 9.3102388381958,
+      "y": 0.4485357105731964
+    },
+    {
+      "episode_number": 38,
+      "pillar": "CROWDFUNDING",
+      "cluster": -1,
+      "x": 7.997076511383057,
+      "y": 4.5334672927856445
+    },
+    {
+      "episode_number": 39,
+      "pillar": "IMMOBILIER",
+      "cluster": 3,
+      "x": 9.169404983520508,
+      "y": 5.247294902801514
+    },
+    {
+      "episode_number": 40,
+      "pillar": "CROWDFUNDING",
+      "cluster": -1,
+      "x": 7.444941997528076,
+      "y": 4.1938700675964355
+    },
+    {
+      "episode_number": 41,
+      "pillar": "ALTERNATIFS",
+      "cluster": -1,
+      "x": 4.978565216064453,
+      "y": 1.7955058813095093
+    },
+    {
+      "episode_number": 42,
+      "pillar": "PATRIMOINE_FISCALITE",
+      "cluster": -1,
+      "x": 8.743143081665039,
+      "y": 1.0969712734222412
+    },
+    {
+      "episode_number": 43,
+      "pillar": "ALTERNATIFS",
+      "cluster": 21,
+      "x": 4.492598056793213,
+      "y": 2.720308780670166
+    },
+    {
+      "episode_number": 44,
+      "pillar": "FINANCES_PERSO",
+      "cluster": 9,
+      "x": 7.033714294433594,
+      "y": 0.8290234804153442
+    },
+    {
+      "episode_number": 45,
+      "pillar": "BOURSE",
+      "cluster": 12,
+      "x": 5.495231628417969,
+      "y": 0.5368109941482544
+    },
+    {
+      "episode_number": 46,
+      "pillar": "IMMOBILIER",
+      "cluster": -1,
+      "x": 8.259613037109375,
+      "y": 4.34649133682251
+    },
+    {
+      "episode_number": 47,
+      "pillar": "BOURSE",
+      "cluster": -1,
+      "x": 6.340554714202881,
+      "y": 0.9118757843971252
+    },
+    {
+      "episode_number": 48,
+      "pillar": "IMMOBILIER",
+      "cluster": 2,
+      "x": 9.93178653717041,
+      "y": 4.801495552062988
+    },
+    {
+      "episode_number": 49,
+      "pillar": "IMMOBILIER",
+      "cluster": 3,
+      "x": 9.115684509277344,
+      "y": 5.064920425415039
+    },
+    {
+      "episode_number": 50,
+      "pillar": "FINANCES_PERSO",
+      "cluster": -1,
+      "x": 8.93698501586914,
+      "y": 0.08504724502563477
+    },
+    {
+      "episode_number": 51,
+      "pillar": "ALTERNATIFS",
+      "cluster": 21,
+      "x": 4.393164157867432,
+      "y": 2.7054696083068848
+    },
+    {
+      "episode_number": 52,
+      "pillar": "ALTERNATIFS",
+      "cluster": 22,
+      "x": 4.865155220031738,
+      "y": 2.697754144668579
+    },
+    {
+      "episode_number": 53,
+      "pillar": "BOURSE",
+      "cluster": 10,
+      "x": 6.063048362731934,
+      "y": 0.7216394543647766
+    },
+    {
+      "episode_number": 54,
+      "pillar": "CRYPTO",
+      "cluster": 18,
+      "x": 2.895311117172241,
+      "y": 0.06995544582605362
+    },
+    {
+      "episode_number": 55,
+      "pillar": "BOURSE",
+      "cluster": -1,
+      "x": 5.8826165199279785,
+      "y": 0.9131171703338623
+    },
+    {
+      "episode_number": 56,
+      "pillar": "PATRIMOINE_FISCALITE",
+      "cluster": -1,
+      "x": 9.378795623779297,
+      "y": 3.93878173828125
+    },
+    {
+      "episode_number": 57,
+      "pillar": "CRYPTO",
+      "cluster": 18,
+      "x": 2.9735331535339355,
+      "y": 0.19427701830863953
+    },
+    {
+      "episode_number": 58,
+      "pillar": "PE_STARTUP",
+      "cluster": 7,
+      "x": 6.961519718170166,
+      "y": 3.2934422492980957
+    },
+    {
+      "episode_number": 59,
+      "pillar": "PE_STARTUP",
+      "cluster": 7,
+      "x": 7.282696723937988,
+      "y": 3.365751028060913
+    },
+    {
+      "episode_number": 60,
+      "pillar": "IMMOBILIER",
+      "cluster": -1,
+      "x": 9.836862564086914,
+      "y": 3.9574708938598633
+    },
+    {
+      "episode_number": 61,
+      "pillar": "IMPACT_ESG",
+      "cluster": 6,
+      "x": 6.485057353973389,
+      "y": 4.667858123779297
+    },
+    {
+      "episode_number": 62,
+      "pillar": "BOURSE",
+      "cluster": 12,
+      "x": 5.146394729614258,
+      "y": 0.7452002763748169
+    },
+    {
+      "episode_number": 63,
+      "pillar": "BOURSE",
+      "cluster": 10,
+      "x": 6.2295002937316895,
+      "y": 0.42829376459121704
+    },
+    {
+      "episode_number": 64,
+      "pillar": "BOURSE",
+      "cluster": 9,
+      "x": 6.604211807250977,
+      "y": 0.8783947229385376
+    },
+    {
+      "episode_number": 65,
+      "pillar": "FINANCES_PERSO",
+      "cluster": -1,
+      "x": 7.643890380859375,
+      "y": 1.3695340156555176
+    },
+    {
+      "episode_number": 66,
+      "pillar": "IMMOBILIER",
+      "cluster": 2,
+      "x": 9.613980293273926,
+      "y": 4.926010608673096
+    },
+    {
+      "episode_number": 67,
+      "pillar": "PATRIMOINE_FISCALITE",
+      "cluster": 15,
+      "x": 8.766770362854004,
+      "y": 0.7099447846412659
+    },
+    {
+      "episode_number": 68,
+      "pillar": "IMMOBILIER",
+      "cluster": 5,
+      "x": 8.406590461730957,
+      "y": 3.574403762817383
+    },
+    {
+      "episode_number": 69,
+      "pillar": "BOURSE",
+      "cluster": 7,
+      "x": 6.8897600173950195,
+      "y": 2.9777345657348633
+    },
+    {
+      "episode_number": 70,
+      "pillar": "FINANCES_PERSO",
+      "cluster": 14,
+      "x": 8.204672813415527,
+      "y": 0.9967963695526123
+    },
+    {
+      "episode_number": 71,
+      "pillar": "IMMOBILIER",
+      "cluster": 4,
+      "x": 8.602747917175293,
+      "y": 5.210243225097656
+    },
+    {
+      "episode_number": 72,
+      "pillar": "IMMOBILIER",
+      "cluster": 1,
+      "x": 9.868452072143555,
+      "y": 4.315872669219971
+    },
+    {
+      "episode_number": 73,
+      "pillar": "IMMOBILIER",
+      "cluster": 0,
+      "x": 9.270763397216797,
+      "y": 4.154719829559326
+    },
+    {
+      "episode_number": 74,
+      "pillar": "IMMOBILIER",
+      "cluster": 0,
+      "x": 8.98261547088623,
+      "y": 4.696950912475586
+    },
+    {
+      "episode_number": 75,
+      "pillar": "BOURSE",
+      "cluster": -1,
+      "x": 6.6713457107543945,
+      "y": 0.0871490016579628
+    },
+    {
+      "episode_number": 76,
+      "pillar": "CRYPTO",
+      "cluster": 18,
+      "x": 2.958134651184082,
+      "y": -0.13651111721992493
+    },
+    {
+      "episode_number": 77,
+      "pillar": "IMMOBILIER",
+      "cluster": 4,
+      "x": 8.454950332641602,
+      "y": 4.939886569976807
+    },
+    {
+      "episode_number": 78,
+      "pillar": "FINANCES_PERSO",
+      "cluster": 15,
+      "x": 8.561123847961426,
+      "y": 0.4210490584373474
+    },
+    {
+      "episode_number": 79,
+      "pillar": "ALTERNATIFS",
+      "cluster": 20,
+      "x": 4.473231315612793,
+      "y": 2.2523865699768066
+    },
+    {
+      "episode_number": 80,
+      "pillar": "CRYPTO",
+      "cluster": 18,
+      "x": 3.0138919353485107,
+      "y": -0.1501949429512024
+    },
+    {
+      "episode_number": 81,
+      "pillar": "IMPACT_ESG",
+      "cluster": 6,
+      "x": 6.175487041473389,
+      "y": 4.28631067276001
+    },
+    {
+      "episode_number": 82,
+      "pillar": "PATRIMOINE_FISCALITE",
+      "cluster": -1,
+      "x": 9.095909118652344,
+      "y": 1.8883253335952759
+    },
+    {
+      "episode_number": 83,
+      "pillar": "FINANCES_PERSO",
+      "cluster": 14,
+      "x": 8.07397174835205,
+      "y": 0.5660659670829773
+    },
+    {
+      "episode_number": 84,
+      "pillar": "ALTERNATIFS",
+      "cluster": 13,
+      "x": 4.4131035804748535,
+      "y": 1.4492844343185425
+    },
+    {
+      "episode_number": 85,
+      "pillar": "BOURSE",
+      "cluster": 11,
+      "x": 6.448794364929199,
+      "y": -0.2820965051651001
+    },
+    {
+      "episode_number": 86,
+      "pillar": "CRYPTO",
+      "cluster": 18,
+      "x": 3.108090400695801,
+      "y": 0.49357232451438904
+    },
+    {
+      "episode_number": 87,
+      "pillar": "PATRIMOINE_FISCALITE",
+      "cluster": -1,
+      "x": 9.240446090698242,
+      "y": 0.5495665073394775
+    },
+    {
+      "episode_number": 88,
+      "pillar": "IMPACT_ESG",
+      "cluster": 6,
+      "x": 6.224339008331299,
+      "y": 4.317102432250977
+    },
+    {
+      "episode_number": 89,
+      "pillar": "IMPACT_ESG",
+      "cluster": 6,
+      "x": 6.7123236656188965,
+      "y": 4.047028064727783
+    },
+    {
+      "episode_number": 90,
+      "pillar": "IMMOBILIER",
+      "cluster": 0,
+      "x": 9.225141525268555,
+      "y": 4.2158918380737305
+    },
+    {
+      "episode_number": 91,
+      "pillar": "CRYPTO",
+      "cluster": 18,
+      "x": 2.9689810276031494,
+      "y": -0.06932706385850906
+    },
+    {
+      "episode_number": 92,
+      "pillar": "IMMOBILIER",
+      "cluster": -1,
+      "x": 8.64367389678955,
+      "y": 4.201350212097168
+    },
+    {
+      "episode_number": 93,
+      "pillar": "FINANCES_PERSO",
+      "cluster": 13,
+      "x": 4.102174282073975,
+      "y": 1.1157604455947876
+    },
+    {
+      "episode_number": 94,
+      "pillar": "BOURSE",
+      "cluster": 13,
+      "x": 4.081008434295654,
+      "y": 0.9240440130233765
+    },
+    {
+      "episode_number": 95,
+      "pillar": "IMMOBILIER",
+      "cluster": 0,
+      "x": 9.171518325805664,
+      "y": 4.632782936096191
+    },
+    {
+      "episode_number": 96,
+      "pillar": "ALTERNATIFS",
+      "cluster": 13,
+      "x": 3.769819498062134,
+      "y": 1.1203104257583618
+    },
+    {
+      "episode_number": 97,
+      "pillar": "CRYPTO",
+      "cluster": 18,
+      "x": 2.939373731613159,
+      "y": -0.20851123332977295
+    },
+    {
+      "episode_number": 98,
+      "pillar": "ALTERNATIFS",
+      "cluster": -1,
+      "x": 6.574769496917725,
+      "y": 1.3219224214553833
+    },
+    {
+      "episode_number": 99,
+      "pillar": "FINANCES_PERSO",
+      "cluster": 14,
+      "x": 7.779969692230225,
+      "y": 0.5448587536811829
+    },
+    {
+      "episode_number": 100,
+      "pillar": "CRYPTO",
+      "cluster": -1,
+      "x": 3.380143404006958,
+      "y": 0.8843913078308105
+    },
+    {
+      "episode_number": 101,
+      "pillar": "FINANCES_PERSO",
+      "cluster": 16,
+      "x": 8.65708065032959,
+      "y": 0.1213279590010643
+    },
+    {
+      "episode_number": 102,
+      "pillar": "IMMOBILIER",
+      "cluster": 2,
+      "x": 9.926361083984375,
+      "y": 4.731952667236328
+    },
+    {
+      "episode_number": 103,
+      "pillar": "BOURSE",
+      "cluster": 12,
+      "x": 5.298322677612305,
+      "y": 0.9167829751968384
+    },
+    {
+      "episode_number": 104,
+      "pillar": "ALTERNATIFS",
+      "cluster": 19,
+      "x": 5.042586326599121,
+      "y": 2.1229095458984375
+    },
+    {
+      "episode_number": 105,
+      "pillar": "BOURSE",
+      "cluster": 12,
+      "x": 5.046632289886475,
+      "y": 0.6438044309616089
+    },
+    {
+      "episode_number": 106,
+      "pillar": "BOURSE",
+      "cluster": 9,
+      "x": 6.83362340927124,
+      "y": 0.7440482974052429
+    },
+    {
+      "episode_number": 107,
+      "pillar": "IMMOBILIER",
+      "cluster": 1,
+      "x": 9.889803886413574,
+      "y": 4.443037986755371
+    },
+    {
+      "episode_number": 108,
+      "pillar": "FINANCES_PERSO",
+      "cluster": 9,
+      "x": 6.63962459564209,
+      "y": 0.9824830889701843
+    },
+    {
+      "episode_number": 109,
+      "pillar": "IMMOBILIER",
+      "cluster": 1,
+      "x": 9.530503273010254,
+      "y": 4.384347438812256
+    },
+    {
+      "episode_number": 110,
+      "pillar": "IMMOBILIER",
+      "cluster": 5,
+      "x": 8.522740364074707,
+      "y": 3.639852285385132
+    },
+    {
+      "episode_number": 111,
+      "pillar": "CROWDFUNDING",
+      "cluster": -1,
+      "x": 7.201408386230469,
+      "y": 4.157177448272705
+    },
+    {
+      "episode_number": 112,
+      "pillar": "PATRIMOINE_FISCALITE",
+      "cluster": -1,
+      "x": 9.084882736206055,
+      "y": 1.6709117889404297
+    },
+    {
+      "episode_number": 113,
+      "pillar": "PATRIMOINE_FISCALITE",
+      "cluster": 17,
+      "x": 9.277892112731934,
+      "y": 1.5556491613388062
+    },
+    {
+      "episode_number": 114,
+      "pillar": "CRYPTO",
+      "cluster": -1,
+      "x": 3.3404648303985596,
+      "y": 0.23759987950325012
+    },
+    {
+      "episode_number": 115,
+      "pillar": "IMMOBILIER",
+      "cluster": 0,
+      "x": 9.42289924621582,
+      "y": 4.331415176391602
+    },
+    {
+      "episode_number": 116,
+      "pillar": "FINANCES_PERSO",
+      "cluster": 14,
+      "x": 7.76289701461792,
+      "y": 0.6989663243293762
+    },
+    {
+      "episode_number": 117,
+      "pillar": "CRYPTO",
+      "cluster": 18,
+      "x": 2.81150484085083,
+      "y": 0.06814224272966385
+    },
+    {
+      "episode_number": 118,
+      "pillar": "IMMOBILIER",
+      "cluster": 5,
+      "x": 8.779934883117676,
+      "y": 3.9289560317993164
+    },
+    {
+      "episode_number": 119,
+      "pillar": "IMMOBILIER",
+      "cluster": -1,
+      "x": 9.802845001220703,
+      "y": 3.829437255859375
+    },
+    {
+      "episode_number": 120,
+      "pillar": "PE_STARTUP",
+      "cluster": 7,
+      "x": 7.014742374420166,
+      "y": 3.3413398265838623
+    },
+    {
+      "episode_number": 121,
+      "pillar": "IMMOBILIER",
+      "cluster": 2,
+      "x": 10.155974388122559,
+      "y": 4.801947116851807
+    },
+    {
+      "episode_number": 122,
+      "pillar": "PE_STARTUP",
+      "cluster": 7,
+      "x": 6.945459842681885,
+      "y": 2.6976678371429443
+    },
+    {
+      "episode_number": 123,
+      "pillar": "FINANCES_PERSO",
+      "cluster": -1,
+      "x": 9.120688438415527,
+      "y": 0.14233030378818512
+    },
+    {
+      "episode_number": 124,
+      "pillar": "PATRIMOINE_FISCALITE",
+      "cluster": -1,
+      "x": 8.393643379211426,
+      "y": 2.0221831798553467
+    },
+    {
+      "episode_number": 125,
+      "pillar": "PATRIMOINE_FISCALITE",
+      "cluster": -1,
+      "x": 9.143404960632324,
+      "y": 1.2808030843734741
+    },
+    {
+      "episode_number": 126,
+      "pillar": "CRYPTO",
+      "cluster": 18,
+      "x": 2.9379284381866455,
+      "y": 0.2982384264469147
+    },
+    {
+      "episode_number": 127,
+      "pillar": "IMPACT_ESG",
+      "cluster": 12,
+      "x": 5.377440452575684,
+      "y": 1.186811923980713
+    },
+    {
+      "episode_number": 128,
+      "pillar": "ALTERNATIFS",
+      "cluster": 6,
+      "x": 5.685191631317139,
+      "y": 3.859776020050049
+    },
+    {
+      "episode_number": 129,
+      "pillar": "IMMOBILIER",
+      "cluster": 6,
+      "x": 7.230565547943115,
+      "y": 4.839077949523926
+    },
+    {
+      "episode_number": 130,
+      "pillar": "IMMOBILIER",
+      "cluster": 3,
+      "x": 9.079014778137207,
+      "y": 5.024041175842285
+    },
+    {
+      "episode_number": 131,
+      "pillar": "BOURSE",
+      "cluster": 12,
+      "x": 5.254356861114502,
+      "y": 0.592669665813446
+    },
+    {
+      "episode_number": 132,
+      "pillar": "PE_STARTUP",
+      "cluster": 7,
+      "x": 6.8510212898254395,
+      "y": 3.1400275230407715
+    },
+    {
+      "episode_number": 133,
+      "pillar": "FINANCES_PERSO",
+      "cluster": 16,
+      "x": 8.479971885681152,
+      "y": 0.009670480154454708
+    },
+    {
+      "episode_number": 134,
+      "pillar": "PE_STARTUP",
+      "cluster": 12,
+      "x": 5.511820316314697,
+      "y": 0.8165401220321655
+    },
+    {
+      "episode_number": 135,
+      "pillar": "PATRIMOINE_FISCALITE",
+      "cluster": -1,
+      "x": 9.146484375,
+      "y": 1.9043232202529907
+    },
+    {
+      "episode_number": 136,
+      "pillar": "ENTREPRENEURIAT",
+      "cluster": -1,
+      "x": 7.714626312255859,
+      "y": 2.1806702613830566
+    },
+    {
+      "episode_number": 137,
+      "pillar": "CRYPTO",
+      "cluster": 18,
+      "x": 3.3519606590270996,
+      "y": 0.6065106391906738
+    },
+    {
+      "episode_number": 138,
+      "pillar": "PATRIMOINE_FISCALITE",
+      "cluster": -1,
+      "x": 9.074461936950684,
+      "y": 1.3033512830734253
+    },
+    {
+      "episode_number": 139,
+      "pillar": "IMMOBILIER",
+      "cluster": 0,
+      "x": 9.054747581481934,
+      "y": 4.467374801635742
+    },
+    {
+      "episode_number": 140,
+      "pillar": "ALTERNATIFS",
+      "cluster": 20,
+      "x": 4.378718376159668,
+      "y": 2.3670289516448975
+    },
+    {
+      "episode_number": 141,
+      "pillar": "CRYPTO",
+      "cluster": -1,
+      "x": 3.371583938598633,
+      "y": 0.4957241714000702
+    },
+    {
+      "episode_number": 142,
+      "pillar": "BOURSE",
+      "cluster": 13,
+      "x": 3.936068058013916,
+      "y": 0.7230755686759949
+    },
+    {
+      "episode_number": 143,
+      "pillar": "FINANCES_PERSO",
+      "cluster": 13,
+      "x": 4.174473285675049,
+      "y": 0.9800044894218445
+    },
+    {
+      "episode_number": 144,
+      "pillar": "IMMOBILIER",
+      "cluster": -1,
+      "x": 8.707149505615234,
+      "y": 5.51220703125
+    },
+    {
+      "episode_number": 145,
+      "pillar": "PATRIMOINE_FISCALITE",
+      "cluster": 15,
+      "x": 8.631584167480469,
+      "y": 0.5207414031028748
+    },
+    {
+      "episode_number": 146,
+      "pillar": "IMMOBILIER",
+      "cluster": 1,
+      "x": 9.991415977478027,
+      "y": 4.516946315765381
+    },
+    {
+      "episode_number": 147,
+      "pillar": "ALTERNATIFS",
+      "cluster": 22,
+      "x": 4.873707294464111,
+      "y": 2.708812952041626
+    },
+    {
+      "episode_number": 148,
+      "pillar": "FINANCES_PERSO",
+      "cluster": 16,
+      "x": 8.369292259216309,
+      "y": -0.03676260635256767
+    },
+    {
+      "episode_number": 149,
+      "pillar": "CRYPTO",
+      "cluster": 18,
+      "x": 3.268674373626709,
+      "y": 0.0936855673789978
+    },
+    {
+      "episode_number": 150,
+      "pillar": "PATRIMOINE_FISCALITE",
+      "cluster": -1,
+      "x": 8.38125228881836,
+      "y": 2.465860605239868
+    },
+    {
+      "episode_number": 151,
+      "pillar": "IMMOBILIER",
+      "cluster": -1,
+      "x": 9.914999008178711,
+      "y": 3.860604763031006
+    },
+    {
+      "episode_number": 152,
+      "pillar": "BOURSE",
+      "cluster": 11,
+      "x": 6.455039978027344,
+      "y": -0.1931755244731903
+    },
+    {
+      "episode_number": 153,
+      "pillar": "IMMOBILIER",
+      "cluster": -1,
+      "x": 9.536757469177246,
+      "y": 3.8522074222564697
+    },
+    {
+      "episode_number": 154,
+      "pillar": "BOURSE",
+      "cluster": -1,
+      "x": 6.300923824310303,
+      "y": 0.5541669130325317
+    },
+    {
+      "episode_number": 155,
+      "pillar": "CRYPTO",
+      "cluster": 18,
+      "x": 2.987161874771118,
+      "y": -0.32756170630455017
+    },
+    {
+      "episode_number": 156,
+      "pillar": "CRYPTO",
+      "cluster": 18,
+      "x": 2.8149666786193848,
+      "y": -0.19611331820487976
+    },
+    {
+      "episode_number": 157,
+      "pillar": "IMMOBILIER",
+      "cluster": -1,
+      "x": 9.363239288330078,
+      "y": 3.7682621479034424
+    },
+    {
+      "episode_number": 158,
+      "pillar": "PATRIMOINE_FISCALITE",
+      "cluster": 14,
+      "x": 8.12351131439209,
+      "y": 1.2298680543899536
+    },
+    {
+      "episode_number": 159,
+      "pillar": "PATRIMOINE_FISCALITE",
+      "cluster": 17,
+      "x": 9.154119491577148,
+      "y": 1.3189893960952759
+    },
+    {
+      "episode_number": 160,
+      "pillar": "BOURSE",
+      "cluster": 13,
+      "x": 4.412023544311523,
+      "y": 0.8545628786087036
+    },
+    {
+      "episode_number": 161,
+      "pillar": "ALTERNATIFS",
+      "cluster": 6,
+      "x": 5.692147731781006,
+      "y": 3.8602187633514404
+    },
+    {
+      "episode_number": 162,
+      "pillar": "PATRIMOINE_FISCALITE",
+      "cluster": -1,
+      "x": 9.308347702026367,
+      "y": 0.5173500180244446
+    },
+    {
+      "episode_number": 163,
+      "pillar": "PATRIMOINE_FISCALITE",
+      "cluster": 15,
+      "x": 8.705549240112305,
+      "y": 0.8181846141815186
+    },
+    {
+      "episode_number": 164,
+      "pillar": "PATRIMOINE_FISCALITE",
+      "cluster": 5,
+      "x": 8.562653541564941,
+      "y": 3.135366916656494
+    },
+    {
+      "episode_number": 165,
+      "pillar": "PE_STARTUP",
+      "cluster": 8,
+      "x": 6.573365211486816,
+      "y": 3.014275550842285
+    },
+    {
+      "episode_number": 166,
+      "pillar": "PATRIMOINE_FISCALITE",
+      "cluster": -1,
+      "x": 9.15517520904541,
+      "y": 2.7166473865509033
+    },
+    {
+      "episode_number": 167,
+      "pillar": "IMMOBILIER",
+      "cluster": -1,
+      "x": 9.567452430725098,
+      "y": 4.110996723175049
+    },
+    {
+      "episode_number": 168,
+      "pillar": "IMMOBILIER",
+      "cluster": -1,
+      "x": 8.468330383300781,
+      "y": 4.742776870727539
+    },
+    {
+      "episode_number": 169,
+      "pillar": "IMMOBILIER",
+      "cluster": 3,
+      "x": 9.096708297729492,
+      "y": 5.385022163391113
+    },
+    {
+      "episode_number": 170,
+      "pillar": "ALTERNATIFS",
+      "cluster": 21,
+      "x": 4.53806734085083,
+      "y": 2.6910736560821533
+    },
+    {
+      "episode_number": 171,
+      "pillar": "BOURSE",
+      "cluster": 13,
+      "x": 4.466549873352051,
+      "y": 0.8912314772605896
+    },
+    {
+      "episode_number": 172,
+      "pillar": "IMMOBILIER",
+      "cluster": -1,
+      "x": 9.122479438781738,
+      "y": 5.581185340881348
+    },
+    {
+      "episode_number": 173,
+      "pillar": "FINANCES_PERSO",
+      "cluster": -1,
+      "x": 7.317964553833008,
+      "y": 0.7054424285888672
+    },
+    {
+      "episode_number": 174,
+      "pillar": "ALTERNATIFS",
+      "cluster": -1,
+      "x": 5.527472496032715,
+      "y": 1.9821370840072632
+    },
+    {
+      "episode_number": 175,
+      "pillar": "IMMOBILIER",
+      "cluster": -1,
+      "x": 9.525964736938477,
+      "y": 5.352206230163574
+    },
+    {
+      "episode_number": 176,
+      "pillar": "CRYPTO",
+      "cluster": -1,
+      "x": 3.4522476196289062,
+      "y": 0.4983053505420685
+    },
+    {
+      "episode_number": 177,
+      "pillar": "ALTERNATIFS",
+      "cluster": 20,
+      "x": 4.347040176391602,
+      "y": 2.3380632400512695
+    },
+    {
+      "episode_number": 178,
+      "pillar": "FINANCES_PERSO",
+      "cluster": -1,
+      "x": 8.35291576385498,
+      "y": 0.29711422324180603
+    },
+    {
+      "episode_number": 179,
+      "pillar": "BOURSE",
+      "cluster": 11,
+      "x": 6.408789157867432,
+      "y": -0.2951907217502594
+    },
+    {
+      "episode_number": 180,
+      "pillar": "ENTREPRENEURIAT",
+      "cluster": -1,
+      "x": 7.601515769958496,
+      "y": 2.3064396381378174
+    },
+    {
+      "episode_number": 181,
+      "pillar": "FINANCES_PERSO",
+      "cluster": 14,
+      "x": 7.825749397277832,
+      "y": 0.375444233417511
+    },
+    {
+      "episode_number": 182,
+      "pillar": "IMMOBILIER",
+      "cluster": 5,
+      "x": 8.548918724060059,
+      "y": 3.8705551624298096
+    },
+    {
+      "episode_number": 183,
+      "pillar": "IMPACT_ESG",
+      "cluster": 6,
+      "x": 6.8337531089782715,
+      "y": 4.47440767288208
+    },
+    {
+      "episode_number": 184,
+      "pillar": "ALTERNATIFS",
+      "cluster": 19,
+      "x": 5.112144470214844,
+      "y": 1.8708609342575073
+    },
+    {
+      "episode_number": 185,
+      "pillar": "BOURSE",
+      "cluster": 10,
+      "x": 6.3853044509887695,
+      "y": 0.34693679213523865
+    },
+    {
+      "episode_number": 186,
+      "pillar": "PE_STARTUP",
+      "cluster": -1,
+      "x": 5.730952739715576,
+      "y": 1.217898964881897
+    },
+    {
+      "episode_number": 187,
+      "pillar": "ALTERNATIFS",
+      "cluster": -1,
+      "x": 8.99188232421875,
+      "y": 2.738637685775757
+    },
+    {
+      "episode_number": 188,
+      "pillar": "IMMOBILIER",
+      "cluster": 1,
+      "x": 9.774042129516602,
+      "y": 4.375322341918945
+    },
+    {
+      "episode_number": 189,
+      "pillar": "IMMOBILIER",
+      "cluster": -1,
+      "x": 9.423806190490723,
+      "y": 4.693282127380371
+    },
+    {
+      "episode_number": 190,
+      "pillar": "BOURSE",
+      "cluster": 10,
+      "x": 5.983870029449463,
+      "y": 0.45672014355659485
+    },
+    {
+      "episode_number": 191,
+      "pillar": "PE_STARTUP",
+      "cluster": 8,
+      "x": 6.482153415679932,
+      "y": 2.978367805480957
+    },
+    {
+      "episode_number": 192,
+      "pillar": "PATRIMOINE_FISCALITE",
+      "cluster": 17,
+      "x": 9.125837326049805,
+      "y": 1.3567516803741455
+    },
+    {
+      "episode_number": 193,
+      "pillar": "IMMOBILIER",
+      "cluster": -1,
+      "x": 8.87893009185791,
+      "y": 5.622886657714844
+    },
+    {
+      "episode_number": 194,
+      "pillar": "FINANCES_PERSO",
+      "cluster": 13,
+      "x": 4.040917873382568,
+      "y": 1.0998345613479614
+    },
+    {
+      "episode_number": 195,
+      "pillar": "FINANCES_PERSO",
+      "cluster": 14,
+      "x": 7.870206832885742,
+      "y": 0.937073290348053
+    },
+    {
+      "episode_number": 196,
+      "pillar": "IMMOBILIER",
+      "cluster": -1,
+      "x": 9.620614051818848,
+      "y": 4.0526018142700195
+    },
+    {
+      "episode_number": 197,
+      "pillar": "ENTREPRENEURIAT",
+      "cluster": 3,
+      "x": 9.193106651306152,
+      "y": 5.098250865936279
+    },
+    {
+      "episode_number": 198,
+      "pillar": "BOURSE",
+      "cluster": 11,
+      "x": 6.33387565612793,
+      "y": -0.34443697333335876
+    },
+    {
+      "episode_number": 199,
+      "pillar": "PE_STARTUP",
+      "cluster": 7,
+      "x": 6.932708740234375,
+      "y": 3.2805473804473877
+    },
+    {
+      "episode_number": 200,
+      "pillar": "ENTREPRENEURIAT",
+      "cluster": -1,
+      "x": 7.437832832336426,
+      "y": 2.340996742248535
+    },
+    {
+      "episode_number": 201,
+      "pillar": "BOURSE",
+      "cluster": 9,
+      "x": 6.560623645782471,
+      "y": 0.6053271293640137
+    },
+    {
+      "episode_number": 202,
+      "pillar": "PATRIMOINE_FISCALITE",
+      "cluster": 17,
+      "x": 9.00054931640625,
+      "y": 1.5525792837142944
+    },
+    {
+      "episode_number": 203,
+      "pillar": "FINANCES_PERSO",
+      "cluster": 14,
+      "x": 7.629096984863281,
+      "y": 0.3270341455936432
+    },
+    {
+      "episode_number": 204,
+      "pillar": "IMMOBILIER",
+      "cluster": -1,
+      "x": 9.50467300415039,
+      "y": 5.313368320465088
+    },
+    {
+      "episode_number": 205,
+      "pillar": "FINANCES_PERSO",
+      "cluster": -1,
+      "x": 7.431241035461426,
+      "y": 1.223960280418396
+    },
+    {
+      "episode_number": 206,
+      "pillar": "IMMOBILIER",
+      "cluster": 5,
+      "x": 8.699013710021973,
+      "y": 3.2225396633148193
+    },
+    {
+      "episode_number": 207,
+      "pillar": "IMPACT_ESG",
+      "cluster": 6,
+      "x": 6.088237762451172,
+      "y": 4.36069393157959
+    },
+    {
+      "episode_number": 208,
+      "pillar": "CRYPTO",
+      "cluster": -1,
+      "x": 3.330552339553833,
+      "y": 0.354619562625885
+    },
+    {
+      "episode_number": 209,
+      "pillar": "IMMOBILIER",
+      "cluster": -1,
+      "x": 9.56933879852295,
+      "y": 5.376457214355469
+    },
+    {
+      "episode_number": 210,
+      "pillar": "IMMOBILIER",
+      "cluster": -1,
+      "x": 8.478304862976074,
+      "y": 4.576210021972656
+    },
+    {
+      "episode_number": 211,
+      "pillar": "FINANCES_PERSO",
+      "cluster": 16,
+      "x": 8.407805442810059,
+      "y": 0.1455899178981781
+    },
+    {
+      "episode_number": 212,
+      "pillar": "FINANCES_PERSO",
+      "cluster": 9,
+      "x": 6.6462931632995605,
+      "y": 0.842928946018219
+    },
+    {
+      "episode_number": 213,
+      "pillar": "ALTERNATIFS",
+      "cluster": 19,
+      "x": 5.279017448425293,
+      "y": 1.964698076248169
+    },
+    {
+      "episode_number": 214,
+      "pillar": "FINANCES_PERSO",
+      "cluster": -1,
+      "x": 7.537758827209473,
+      "y": 1.4186787605285645
+    },
+    {
+      "episode_number": 215,
+      "pillar": "FINANCES_PERSO",
+      "cluster": 14,
+      "x": 8.044717788696289,
+      "y": 0.49770587682724
+    },
+    {
+      "episode_number": 216,
+      "pillar": "FINANCES_PERSO",
+      "cluster": 21,
+      "x": 4.741099834442139,
+      "y": 3.054617404937744
+    },
+    {
+      "episode_number": 217,
+      "pillar": "FINANCES_PERSO",
+      "cluster": -1,
+      "x": 9.860200881958008,
+      "y": 3.5754945278167725
+    },
+    {
+      "episode_number": 218,
+      "pillar": "BOURSE",
+      "cluster": 12,
+      "x": 5.693710803985596,
+      "y": 0.7274569272994995
+    },
+    {
+      "episode_number": 219,
+      "pillar": "ALTERNATIFS",
+      "cluster": -1,
+      "x": 5.685368061065674,
+      "y": 1.5980501174926758
+    },
+    {
+      "episode_number": 220,
+      "pillar": "FINANCES_PERSO",
+      "cluster": 13,
+      "x": 4.233394622802734,
+      "y": 1.2183904647827148
+    },
+    {
+      "episode_number": 221,
+      "pillar": "IMMOBILIER",
+      "cluster": -1,
+      "x": 8.899310111999512,
+      "y": 5.454526901245117
+    },
+    {
+      "episode_number": 222,
+      "pillar": "IMMOBILIER",
+      "cluster": 1,
+      "x": 9.478039741516113,
+      "y": 4.286962032318115
+    },
+    {
+      "episode_number": 223,
+      "pillar": "CRYPTO",
+      "cluster": 18,
+      "x": 3.1801295280456543,
+      "y": -0.22306890785694122
+    },
+    {
+      "episode_number": 225,
+      "pillar": "BOURSE",
+      "cluster": -1,
+      "x": 6.129575729370117,
+      "y": 1.1876039505004883
+    },
+    {
+      "episode_number": 226,
+      "pillar": "ALTERNATIFS",
+      "cluster": -1,
+      "x": 4.6541643142700195,
+      "y": 2.0780832767486572
+    },
+    {
+      "episode_number": 227,
+      "pillar": "ALTERNATIFS",
+      "cluster": 22,
+      "x": 5.068489074707031,
+      "y": 2.522068500518799
+    },
+    {
+      "episode_number": 228,
+      "pillar": "PATRIMOINE_FISCALITE",
+      "cluster": -1,
+      "x": 8.778346061706543,
+      "y": 1.3022511005401611
+    },
+    {
+      "episode_number": 229,
+      "pillar": "IMMOBILIER",
+      "cluster": -1,
+      "x": 9.522038459777832,
+      "y": 5.321342945098877
+    },
+    {
+      "episode_number": 230,
+      "pillar": "IMMOBILIER",
+      "cluster": -1,
+      "x": 8.97177791595459,
+      "y": 4.7232537269592285
+    },
+    {
+      "episode_number": 231,
+      "pillar": "IMMOBILIER",
+      "cluster": -1,
+      "x": 9.485307693481445,
+      "y": 4.937554836273193
+    },
+    {
+      "episode_number": 232,
+      "pillar": "IMMOBILIER",
+      "cluster": 5,
+      "x": 8.458349227905273,
+      "y": 3.575967788696289
+    },
+    {
+      "episode_number": 233,
+      "pillar": "PATRIMOINE_FISCALITE",
+      "cluster": -1,
+      "x": 8.736595153808594,
+      "y": 1.4327975511550903
+    },
+    {
+      "episode_number": 234,
+      "pillar": "PATRIMOINE_FISCALITE",
+      "cluster": 17,
+      "x": 9.319445610046387,
+      "y": 1.4711209535598755
+    },
+    {
+      "episode_number": 235,
+      "pillar": "PE_STARTUP",
+      "cluster": 8,
+      "x": 6.373528003692627,
+      "y": 2.872312307357788
+    },
+    {
+      "episode_number": 236,
+      "pillar": "PATRIMOINE_FISCALITE",
+      "cluster": 14,
+      "x": 7.4309401512146,
+      "y": 0.22278878092765808
+    },
+    {
+      "episode_number": 237,
+      "pillar": "PATRIMOINE_FISCALITE",
+      "cluster": 17,
+      "x": 9.381609916687012,
+      "y": 1.3912097215652466
+    },
+    {
+      "episode_number": 238,
+      "pillar": "PATRIMOINE_FISCALITE",
+      "cluster": -1,
+      "x": 8.39530086517334,
+      "y": 1.7028595209121704
+    },
+    {
+      "episode_number": 239,
+      "pillar": "ALTERNATIFS",
+      "cluster": 6,
+      "x": 5.71341609954834,
+      "y": 3.9574811458587646
+    },
+    {
+      "episode_number": 240,
+      "pillar": "FINANCES_PERSO",
+      "cluster": 7,
+      "x": 6.822268486022949,
+      "y": 2.8812906742095947
+    },
+    {
+      "episode_number": 241,
+      "pillar": "FINANCES_PERSO",
+      "cluster": 14,
+      "x": 7.764181613922119,
+      "y": 0.18156829476356506
+    },
+    {
+      "episode_number": 242,
+      "pillar": "CRYPTO",
+      "cluster": 18,
+      "x": 2.952240228652954,
+      "y": -0.09794039279222488
+    },
+    {
+      "episode_number": 243,
+      "pillar": "PATRIMOINE_FISCALITE",
+      "cluster": 12,
+      "x": 4.840784549713135,
+      "y": 0.5187510848045349
+    },
+    {
+      "episode_number": 244,
+      "pillar": "PATRIMOINE_FISCALITE",
+      "cluster": -1,
+      "x": 8.926462173461914,
+      "y": 1.0459915399551392
+    },
+    {
+      "episode_number": 245,
+      "pillar": "FINANCES_PERSO",
+      "cluster": -1,
+      "x": 9.310736656188965,
+      "y": 0.44616568088531494
+    },
+    {
+      "episode_number": 246,
+      "pillar": "FINANCES_PERSO",
+      "cluster": 13,
+      "x": 4.100158214569092,
+      "y": 1.1316425800323486
+    },
+    {
+      "episode_number": 247,
+      "pillar": "FINANCES_PERSO",
+      "cluster": 16,
+      "x": 8.45067310333252,
+      "y": -0.013264796696603298
+    },
+    {
+      "episode_number": 248,
+      "pillar": "BOURSE",
+      "cluster": 11,
+      "x": 6.35178279876709,
+      "y": -0.010080911219120026
+    },
+    {
+      "episode_number": 249,
+      "pillar": "BOURSE",
+      "cluster": -1,
+      "x": 6.198314189910889,
+      "y": 0.09104716777801514
+    },
+    {
+      "episode_number": 250,
+      "pillar": "IMMOBILIER",
+      "cluster": -1,
+      "x": 8.17977523803711,
+      "y": 4.25657320022583
+    },
+    {
+      "episode_number": 251,
+      "pillar": "CRYPTO",
+      "cluster": 18,
+      "x": 2.7215511798858643,
+      "y": -0.05324840173125267
+    },
+    {
+      "episode_number": 252,
+      "pillar": "IMMOBILIER",
+      "cluster": 3,
+      "x": 9.264378547668457,
+      "y": 5.152154445648193
+    },
+    {
+      "episode_number": 253,
+      "pillar": "ALTERNATIFS",
+      "cluster": 20,
+      "x": 4.340231895446777,
+      "y": 2.1151998043060303
+    },
+    {
+      "episode_number": 254,
+      "pillar": "PE_STARTUP",
+      "cluster": 7,
+      "x": 7.083608150482178,
+      "y": 3.5140342712402344
+    },
+    {
+      "episode_number": 255,
+      "pillar": "FINANCES_PERSO",
+      "cluster": -1,
+      "x": 6.944395065307617,
+      "y": 0.31618016958236694
+    },
+    {
+      "episode_number": 256,
+      "pillar": "ALTERNATIFS",
+      "cluster": 22,
+      "x": 4.883840560913086,
+      "y": 2.468400716781616
+    },
+    {
+      "episode_number": 257,
+      "pillar": "PE_STARTUP",
+      "cluster": 8,
+      "x": 6.428927898406982,
+      "y": 2.8451387882232666
+    },
+    {
+      "episode_number": 258,
+      "pillar": "IMMOBILIER",
+      "cluster": 0,
+      "x": 9.092818260192871,
+      "y": 4.453053951263428
+    },
+    {
+      "episode_number": 259,
+      "pillar": "IMMOBILIER",
+      "cluster": 2,
+      "x": 9.811530113220215,
+      "y": 4.869855880737305
+    },
+    {
+      "episode_number": 260,
+      "pillar": "ENTREPRENEURIAT",
+      "cluster": -1,
+      "x": 8.193679809570312,
+      "y": 2.6683804988861084
+    },
+    {
+      "episode_number": 261,
+      "pillar": "FINANCES_PERSO",
+      "cluster": 16,
+      "x": 8.588196754455566,
+      "y": -0.05240277573466301
+    },
+    {
+      "episode_number": 262,
+      "pillar": "ENTREPRENEURIAT",
+      "cluster": -1,
+      "x": 7.756341457366943,
+      "y": 2.0010948181152344
+    },
+    {
+      "episode_number": 263,
+      "pillar": "FINANCES_PERSO",
+      "cluster": -1,
+      "x": 7.005711555480957,
+      "y": 1.053317904472351
+    },
+    {
+      "episode_number": 265,
+      "pillar": "IMMOBILIER",
+      "cluster": 2,
+      "x": 9.749537467956543,
+      "y": 4.87791633605957
+    },
+    {
+      "episode_number": 266,
+      "pillar": "BOURSE",
+      "cluster": 11,
+      "x": 6.360200881958008,
+      "y": -0.3835865557193756
+    },
+    {
+      "episode_number": 267,
+      "pillar": "IMMOBILIER",
+      "cluster": 1,
+      "x": 9.694279670715332,
+      "y": 4.365914344787598
+    },
+    {
+      "episode_number": 268,
+      "pillar": "IMMOBILIER",
+      "cluster": -1,
+      "x": 7.932670593261719,
+      "y": 4.193395614624023
+    },
+    {
+      "episode_number": 269,
+      "pillar": "FINANCES_PERSO",
+      "cluster": -1,
+      "x": 7.446523666381836,
+      "y": 1.4504824876785278
+    },
+    {
+      "episode_number": 270,
+      "pillar": "BOURSE",
+      "cluster": 14,
+      "x": 7.606709957122803,
+      "y": 0.34806549549102783
+    },
+    {
+      "episode_number": 271,
+      "pillar": "ALTERNATIFS",
+      "cluster": 19,
+      "x": 4.792099475860596,
+      "y": 1.9389036893844604
+    },
+    {
+      "episode_number": 272,
+      "pillar": "PE_STARTUP",
+      "cluster": 7,
+      "x": 6.876884460449219,
+      "y": 3.1092936992645264
+    },
+    {
+      "episode_number": 273,
+      "pillar": "IMPACT_ESG",
+      "cluster": -1,
+      "x": 5.433563232421875,
+      "y": 1.2591891288757324
+    },
+    {
+      "episode_number": 274,
+      "pillar": "BOURSE",
+      "cluster": 12,
+      "x": 5.057271480560303,
+      "y": 0.6019552946090698
+    },
+    {
+      "episode_number": 275,
+      "pillar": "PE_STARTUP",
+      "cluster": 7,
+      "x": 6.987886428833008,
+      "y": 3.3277597427368164
+    },
+    {
+      "episode_number": 276,
+      "pillar": "BOURSE",
+      "cluster": 11,
+      "x": 6.250948429107666,
+      "y": -0.14636963605880737
+    },
+    {
+      "episode_number": 277,
+      "pillar": "PATRIMOINE_FISCALITE",
+      "cluster": -1,
+      "x": 8.305206298828125,
+      "y": 1.5825477838516235
+    },
+    {
+      "episode_number": 278,
+      "pillar": "FINANCES_PERSO",
+      "cluster": 9,
+      "x": 6.707356929779053,
+      "y": 0.9319930672645569
+    },
+    {
+      "episode_number": 279,
+      "pillar": "ALTERNATIFS",
+      "cluster": 6,
+      "x": 5.542910575866699,
+      "y": 3.5363893508911133
+    },
+    {
+      "episode_number": 280,
+      "pillar": "PE_STARTUP",
+      "cluster": 8,
+      "x": 6.421838283538818,
+      "y": 2.948295831680298
+    },
+    {
+      "episode_number": 281,
+      "pillar": "BOURSE",
+      "cluster": 12,
+      "x": 4.951719284057617,
+      "y": 0.49146848917007446
+    },
+    {
+      "episode_number": 282,
+      "pillar": "BOURSE",
+      "cluster": 10,
+      "x": 6.614132404327393,
+      "y": 0.32278135418891907
+    },
+    {
+      "episode_number": 283,
+      "pillar": "FINANCES_PERSO",
+      "cluster": 15,
+      "x": 8.366837501525879,
+      "y": 0.269824743270874
+    },
+    {
+      "episode_number": 284,
+      "pillar": "IMMOBILIER",
+      "cluster": 0,
+      "x": 9.22575569152832,
+      "y": 4.634383201599121
+    },
+    {
+      "episode_number": 285,
+      "pillar": "BOURSE",
+      "cluster": 11,
+      "x": 6.350053310394287,
+      "y": -0.34408774971961975
+    },
+    {
+      "episode_number": 286,
+      "pillar": "BOURSE",
+      "cluster": 12,
+      "x": 5.1613006591796875,
+      "y": 0.5163667798042297
+    },
+    {
+      "episode_number": 287,
+      "pillar": "BOURSE",
+      "cluster": 11,
+      "x": 6.39227819442749,
+      "y": -0.31946924328804016
+    },
+    {
+      "episode_number": 288,
+      "pillar": "IMPACT_ESG",
+      "cluster": 6,
+      "x": 6.228956699371338,
+      "y": 4.463670253753662
+    },
+    {
+      "episode_number": 289,
+      "pillar": "BOURSE",
+      "cluster": -1,
+      "x": 6.226630210876465,
+      "y": 1.016613483428955
+    },
+    {
+      "episode_number": 290,
+      "pillar": "IMMOBILIER",
+      "cluster": -1,
+      "x": 7.990208148956299,
+      "y": 4.954715728759766
+    },
+    {
+      "episode_number": 291,
+      "pillar": "PE_STARTUP",
+      "cluster": 8,
+      "x": 6.400113105773926,
+      "y": 2.909419298171997
+    },
+    {
+      "episode_number": 292,
+      "pillar": "PATRIMOINE_FISCALITE",
+      "cluster": -1,
+      "x": 9.133265495300293,
+      "y": 0.7770586013793945
+    },
+    {
+      "episode_number": 293,
+      "pillar": "ENTREPRENEURIAT",
+      "cluster": -1,
+      "x": 7.426089286804199,
+      "y": 2.4919965267181396
+    },
+    {
+      "episode_number": 294,
+      "pillar": "PE_STARTUP",
+      "cluster": -1,
+      "x": 5.530506610870361,
+      "y": 1.3916053771972656
+    },
+    {
+      "episode_number": 295,
+      "pillar": "ALTERNATIFS",
+      "cluster": 21,
+      "x": 4.39808464050293,
+      "y": 2.793980121612549
+    },
+    {
+      "episode_number": 296,
+      "pillar": "FINANCES_PERSO",
+      "cluster": 14,
+      "x": 8.163468360900879,
+      "y": 1.2312259674072266
+    },
+    {
+      "episode_number": 297,
+      "pillar": "FINANCES_PERSO",
+      "cluster": 13,
+      "x": 3.853140354156494,
+      "y": 0.7491445541381836
+    },
+    {
+      "episode_number": 298,
+      "pillar": "PATRIMOINE_FISCALITE",
+      "cluster": 15,
+      "x": 8.636124610900879,
+      "y": 0.5791379809379578
+    },
+    {
+      "episode_number": 299,
+      "pillar": "BOURSE",
+      "cluster": -1,
+      "x": 6.146337985992432,
+      "y": 1.328856110572815
+    },
+    {
+      "episode_number": 300,
+      "pillar": "IMMOBILIER",
+      "cluster": 4,
+      "x": 8.673087120056152,
+      "y": 5.021110534667969
+    },
+    {
+      "episode_number": 301,
+      "pillar": "BOURSE",
+      "cluster": 9,
+      "x": 6.722476959228516,
+      "y": 0.771607518196106
+    },
+    {
+      "episode_number": 302,
+      "pillar": "BOURSE",
+      "cluster": -1,
+      "x": 6.678096771240234,
+      "y": 0.18116062879562378
+    },
+    {
+      "episode_number": 303,
+      "pillar": "PATRIMOINE_FISCALITE",
+      "cluster": -1,
+      "x": 8.360522270202637,
+      "y": 1.6555655002593994
+    },
+    {
+      "episode_number": 304,
+      "pillar": "CRYPTO",
+      "cluster": 18,
+      "x": 3.2050912380218506,
+      "y": -0.24492818117141724
+    },
+    {
+      "episode_number": 305,
+      "pillar": "BOURSE",
+      "cluster": 10,
+      "x": 6.275624752044678,
+      "y": 0.3730379045009613
+    },
+    {
+      "episode_number": 306,
+      "pillar": "IMMOBILIER",
+      "cluster": -1,
+      "x": 9.145941734313965,
+      "y": 0.22133852541446686
+    },
+    {
+      "episode_number": 307,
+      "pillar": "BOURSE",
+      "cluster": -1,
+      "x": 4.9999308586120605,
+      "y": 1.1770902872085571
+    },
+    {
+      "episode_number": 308,
+      "pillar": "PATRIMOINE_FISCALITE",
+      "cluster": -1,
+      "x": 8.413726806640625,
+      "y": 1.6436506509780884
+    },
+    {
+      "episode_number": 309,
+      "pillar": "ALTERNATIFS",
+      "cluster": 20,
+      "x": 4.255680561065674,
+      "y": 2.492753267288208
+    },
+    {
+      "episode_number": 310,
+      "pillar": "BOURSE",
+      "cluster": 12,
+      "x": 4.665798187255859,
+      "y": 0.7550586462020874
+    },
+    {
+      "episode_number": 311,
+      "pillar": "IMMOBILIER",
+      "cluster": -1,
+      "x": 8.786850929260254,
+      "y": 4.700467586517334
+    },
+    {
+      "episode_number": 312,
+      "pillar": "IMPACT_ESG",
+      "cluster": 6,
+      "x": 6.261572360992432,
+      "y": 4.458353519439697
+    }
+  ]
+}
