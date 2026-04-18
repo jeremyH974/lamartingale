@@ -14,7 +14,12 @@
     "migrate": "npx tsx src/db/migrate-json.ts",
     "test:regression": "npx tsx src/db/test-regression.ts",
     "embeddings": "npx tsx src/ai/embeddings.ts",
+    "embeddings:force": "npx tsx src/ai/embeddings.ts --force",
     "similarity": "npx tsx src/ai/similarity.ts",
+    "scrape:deep": "npx tsx src/scrape-deep.ts",
+    "scrape:deep:force": "npx tsx src/scrape-deep.ts --force",
+    "scrape:rss": "npx tsx src/scrape-rss.ts",
+    "audit:deep": "npx tsx src/db/audit-deep-scraping.ts",
     "deploy": "vercel --yes --prod --scope jeremyh974s-projects",
     "build": "tsc",
     "start": "node dist/api.js"

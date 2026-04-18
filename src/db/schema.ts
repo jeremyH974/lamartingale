@@ -28,7 +28,11 @@ export const episodes = pgTable('episodes', {
   difficulty: text('difficulty'),
   dateCreated: timestamp('date_created'),
   abstract: text('abstract'),
-  articleContent: text('article_content'),   // full article HTML/text from episode page
+  articleContent: text('article_content'),   // full article text (cleaned from HTML)
+  articleHtml: text('article_html'),         // raw HTML of the article (for re-parsing)
+  chapters: jsonb('chapters').$type<{ title: string; order: number }[]>().default([]),
+  durationSeconds: integer('duration_seconds'),
+  rssDescription: text('rss_description'),
   keyTakeaways: jsonb('key_takeaways').$type<string[]>(),
   relatedEpisodes: jsonb('related_episodes').$type<number[]>(),
   externalReferences: jsonb('external_references').$type<{ title: string; url: string }[]>(),
@@ -69,7 +73,21 @@ export const guests = pgTable('guests', {
   specialty: text('specialty').array(),
   authorityScore: integer('authority_score'),
   episodesCount: integer('episodes_count'),
+  linkedinUrl: text('linkedin_url'),
 });
+
+export const episodeLinks = pgTable('episode_links', {
+  id: serial('id').primaryKey(),
+  episodeId: integer('episode_id').references(() => episodes.id, { onDelete: 'cascade' }),
+  url: text('url').notNull(),
+  label: text('label'),
+  linkType: text('link_type').notNull(),   // 'resource' | 'linkedin' | 'episode_ref' | 'company' | 'tool'
+  createdAt: timestamp('created_at').defaultNow(),
+}, (table) => [
+  unique('uq_episode_link').on(table.episodeId, table.url),
+  index('idx_episode_links_episode').on(table.episodeId),
+  index('idx_episode_links_type').on(table.linkType),
+]);
 
 export const guestEpisodes = pgTable('guest_episodes', {
   id: serial('id').primaryKey(),
