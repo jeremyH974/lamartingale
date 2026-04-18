@@ -14,13 +14,15 @@ import { neon } from '@neondatabase/serverless';
 
 const sql = neon(process.env.DATABASE_URL!);
 
-function firstString(v: any): string | null {
-  if (v == null) return null;
-  if (typeof v === 'string') return v.trim() || null;
-  if (typeof v === 'number') return String(v);
-  if (typeof v === 'object') {
-    if (typeof v['#cdata'] === 'string') return v['#cdata'].trim() || null;
-    if (typeof v['#text'] === 'string') return v['#text'].trim() || null;
+function firstString(...vals: any[]): string | null {
+  for (const v of vals) {
+    if (v == null) continue;
+    if (typeof v === 'string') { const t = v.trim(); if (t) return t; continue; }
+    if (typeof v === 'number') return String(v);
+    if (typeof v === 'object') {
+      if (typeof v['#cdata'] === 'string') { const t = v['#cdata'].trim(); if (t) return t; continue; }
+      if (typeof v['#text'] === 'string') { const t = v['#text'].trim(); if (t) return t; continue; }
+    }
   }
   return null;
 }

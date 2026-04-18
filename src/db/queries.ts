@@ -89,10 +89,14 @@ export async function getEpisodeById(episodeNumber: number) {
   const t = tenant();
 
   // Raw SQL pour contourner le cache Drizzle en runtime Vercel.
+  // LEFT JOIN guests pour récupérer la bio curée (guests.bio est autoritative
+  // par rapport à episodes.guest_bio qui contient souvent une intro d'épisode).
   const rows = await sqlInstance`
-    SELECT e.*, em.thumbnail_350, em.thumbnail_full, em.audio_player_url
+    SELECT e.*, em.thumbnail_350, em.thumbnail_full, em.audio_player_url,
+           g.bio AS guest_bio_curated, g.company AS guest_company_curated
     FROM episodes e
     LEFT JOIN episodes_media em ON em.episode_id = e.id
+    LEFT JOIN guests g ON g.tenant_id = e.tenant_id AND g.name = e.guest
     WHERE e.episode_number = ${episodeNumber} AND e.tenant_id = ${t}
   `;
 
@@ -103,8 +107,8 @@ export async function getEpisodeById(episodeNumber: number) {
     id: row.episode_number,
     title: row.title,
     guest_name: row.guest || '',
-    guest_company: row.guest_company || '',
-    guest_bio: row.guest_bio || '',
+    guest_company: row.guest_company_curated || row.guest_company || '',
+    guest_bio: row.guest_bio_curated || row.guest_bio || '',
     format: 'INTERVIEW',
     pillar: row.pillar,
     sub_theme: '',
