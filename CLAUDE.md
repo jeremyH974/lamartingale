@@ -1,24 +1,45 @@
-# La Martingale — Éducation Financière
+# Podcast Factory — Multi-tenant
 
-Plateforme data-driven basée sur le podcast La Martingale (313 épisodes, Matthieu Stefani / Orso Media). Couches 0-3 terminées + pipeline deep content (avr 2026).
+Plateforme data-driven générique (Couches 0-3 + deep content + multi-tenant).
+Instances actives :
+- **La Martingale** (tenant `lamartingale`, 313 eps, Matthieu Stefani / Orso Media, bleu #004cff)
+- **Génération Do It Yourself** (tenant `gdiy`, 533 eps, Matthieu Stefani / Cosa Vostra, noir + vert néon)
+
+DB Neon unique, isolation par `tenant_id`. Un podcast = une config + un projet Vercel.
+Onboarding nouveau podcast : voir [`docs/NEW_PODCAST.md`](docs/NEW_PODCAST.md).
 
 ## Commandes
 
+Toutes les commandes d'un tenant donné doivent être préfixées par `PODCAST_ID=<id>`.
+Défaut = `lamartingale`.
+
 ```bash
-npx tsx src/api.ts                 # API Express (port 3001, détecte DATABASE_URL auto)
-npm run build                      # tsc
-npx tsx src/db/migrate-json.ts     # Migration JSON → Postgres (base)
-npx tsx src/db/migrate-enriched.ts # Migration enrichie (articles, bios, takeaways)
-npx tsx src/db/migrate-deep-scraping.ts # +article_html, chapters, duration, rss_description, episode_links
-npx tsx src/db/test-regression.ts  # 15 tests non-régression
-npx tsx src/ai/embeddings.ts       # Embeddings OpenAI (--force pour re-embed)
-npx tsx src/ai/similarity.ts       # Similarités pgvector (~6200 paires)
-npx tsx src/scrape-media.ts        # Scraper thumbnails + audio
-npx tsx src/scrape-bios.ts         # Scraper bios invités
-npx tsx src/scrape-deep.ts         # Articles complets + chapitres + liens classifiés
-npx tsx src/scrape-rss.ts          # Durée + description RSS Audiomeans
-python scripts/clustering.py       # UMAP + OPTICS
-npm run deploy                     # Vercel prod
+# API locale (port 3001=LM, 3002=GDIY — voir .claude/launch.json)
+PODCAST_ID=gdiy PORT=3002 npx tsx src/api.ts
+
+# Ingestion (nouveau podcast / refresh)
+PODCAST_ID=<id> npx tsx src/ingest-rss.ts                     # --dry, --limit N, --feed-file <path>
+PODCAST_ID=<id> npx tsx src/ai/embeddings.ts                  # --force pour re-embed
+PODCAST_ID=<id> npx tsx src/ai/similarity.ts                  # ~10×N paires intra-tenant
+PODCAST_ID=<id> npx tsx src/ai/classify-predefined.ts --prune # mode='predefined'
+PODCAST_ID=<id> npx tsx src/ai/auto-taxonomy.ts               # mode='auto'
+
+# Migrations (one-shot, idempotent)
+npx tsx src/db/migrate-multi-tenant.ts          # M1 : ajoute tenant_id partout
+npx tsx src/db/migrate-rss-exhaustive.ts        # M3 : 13 colonnes + podcast_metadata
+
+# Scraping (LM uniquement — hasArticles=true)
+PODCAST_ID=lamartingale npx tsx src/scrape-media.ts
+PODCAST_ID=lamartingale npx tsx src/scrape-bios.ts
+PODCAST_ID=lamartingale npx tsx src/scrape-deep.ts
+PODCAST_ID=lamartingale npx tsx src/scrape-rss.ts
+
+# Tests + build
+npx vitest run                     # 48 tests multi-tenant (tenant-isolation + rss-extractors)
+npm run build                      # tsc strict
+
+# Deploy Vercel (projet distinct par tenant)
+vercel --prod                      # depuis le projet linké
 ```
 
 ## Architecture
@@ -27,10 +48,13 @@ Arborescence détaillée : voir [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 
 ## God Nodes (ne pas casser)
 
-- `src/api.ts` — 26 endpoints, charge DB via process.env.DATABASE_URL
-- `src/db/schema.ts` — 9 tables (episodes a 20 colonnes dont article_html/chapters/duration_seconds/rss_description)
-- `src/db/queries.ts` — Raw SQL pour Vercel (pas Drizzle ORM pour les queries critiques)
-- `src/ai/search.ts` — hybridSearch() utilisé par RAG
+- `src/api.ts` — 26 endpoints, charge DB via process.env.DATABASE_URL, expose `/api/config` (public tenant)
+- `src/db/schema.ts` — 10 tables scopées `tenant_id` + `podcast_metadata` (1 ligne / tenant)
+- `src/db/queries.ts` — Raw SQL pour Vercel, **toutes les queries filtrent `tenant()`**
+- `src/ai/search.ts` — hybridSearch() filtrée par tenant_id
+- `src/config/podcast.config.ts` — interface PodcastConfig (identité, branding, taxonomy, platforms, socials)
+- `src/config/index.ts` — REGISTRY + `getConfig()` résout depuis `PODCAST_ID`
+- `public/v2.html` — frontend unique config-driven (`/api/config` → DOM)
 
 ## LLM — provider centralisé
 
@@ -46,6 +70,9 @@ Arborescence détaillée : voir [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 2. **Raw SQL** (neon tagged template) pour getEpisodeById — Drizzle cache le schema au build time
 3. **Embeddings enrichis** : title + abstract + article(2000c) + chapters + rss_description + takeaways + tags = ~4x plus de signal vs abstract seul
 4. **Deep scraping** : 312/313 épisodes ont article complet (avg 5000c), 290/313 chapitrage, 9901 liens classifiés (tool/company/linkedin/episode_ref/resource)
+5. **Multi-tenant** : 1 DB Neon partagée, isolation via `tenant_id` sur 10 tables + contraintes uniques composites `(tenant_id, X)`. 0 paire cross-tenant dans `episode_similarities`.
+6. **Frontend config-driven** : un seul `public/v2.html`, pilote tout (branding, tagline, platforms, socials, logo, CTA accent) via `/api/config`. Luminance WCAG pour choisir le texte hero/CTA.
+7. **Vercel = 1 projet par tenant** : pas de subpath, pas de rewrites. `lamartingale-v2` et `gdiy-v2` partagent la même DB.
 
 ## Dette technique ouverte (à investiguer)
 - **22 épisodes (#126..#279) avec slug="" en BDD** → titres non-canoniques ("Crise SCPI", "5 regles or investissement"). Articles présumés exister sur lamartingale.io sous un autre slug. Script à écrire : re-crawler le listing pour retrouver les vrais slugs, puis scrape-deep --episode.
@@ -55,12 +82,15 @@ Arborescence détaillée : voir [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 
 ## URLs prod
 
-- V1 : https://lamartingale.vercel.app | V2 : https://lamartingale.vercel.app/v2.html
+- LaMartingale V1 : https://lamartingale.vercel.app
+- LaMartingale V2 : https://lamartingale-v2.vercel.app (à vérifier — projet séparé)
+- GDIY V2 : `gdiy-v2.vercel.app` (projet Vercel à créer — action externe, non déployée)
 - GitHub : https://github.com/jeremyH974/lamartingale
 
-## Charte graphique
+## Chartes graphiques
 
-Couleur : #004cff | Font : Poppins | Tagline : "Prenez le contrôle de votre argent"
+- **La Martingale** : primary #004cff · Poppins · "Prenez le contrôle de votre argent"
+- **GDIY** : primary #000000 · secondary #00F5A0 (accent vert néon) · Inter · "Les histoires de celles et ceux qui se sont construits par eux-mêmes" · logo Symbol_Full_Black
 
 ## Model routing (80/15/5)
 
