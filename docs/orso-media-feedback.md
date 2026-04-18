@@ -11,7 +11,7 @@
 
 J'ai passé les dernières semaines à construire une base de données enrichie autour des 313 épisodes de La Martingale (transcriptions d'articles, recherche sémantique, quiz adaptatifs, etc. — projet perso, 100 % admirateur du podcast). En croisant systématiquement trois sources — **le site lamartingale.io**, **le flux RSS Audiomeans**, **les pages épisode elles-mêmes** — j'ai repéré quelques petites incohérences qui peuvent mériter un coup d'œil côté CMS.
 
-**Rien d'urgent.** L'archive est globalement propre — 99 % des épisodes ont une page article, 93 % ont un vrai chapitrage H2, la synchronisation RSS/site fonctionne. Ce document liste les 5 anomalies résiduelles.
+**Rien d'urgent.** L'archive est globalement propre — 94,6 % des épisodes ont une page article sur le site, 100 % de ces articles ont un chapitrage H2 propre, la synchronisation RSS/site fonctionne à 98,7 %. Ce document liste les 4 anomalies résiduelles.
 
 ---
 
@@ -19,23 +19,42 @@ J'ai passé les dernières semaines à construire une base de données enrichie 
 
 | # | Sujet | Impact | Volume |
 |---|---|---|---|
-| 1 | Un épisode sans page web | Invisible en SEO & apps | **1 ép** (#224) |
+| 1 | Épisodes sans page article sur le site | Invisibles en SEO & pour apps podcast | **17 ép** (range #126–#232) |
 | 2 | Désynchronisation titre site / RSS | Non-match dans apps podcast | **4 ép** |
-| 3 | URL CMS partagée entre 2 numéros | Mauvaise redirection depuis les apps | **2 ép** (#262/#264) |
-| 4 | Articles sans sous-titres H2 | SEO & lisibilité dégradés | **~22 ép** à vérifier |
-| 5 | Écart bios invités consolidées | Potentiel annuaire invités | **~233 noms** à structurer |
+| 3 | URL CMS partagée entre 2 numéros | Mauvaise redirection depuis les apps | **1 cas** (#262/#264) |
+| 4 | Écart bios invités consolidées | Potentiel annuaire invités | **~233 noms** à structurer |
 
 ---
 
-## 1. Un épisode sans article publié
+## 1. Dix-sept épisodes sans article publié sur le site
 
-**Épisode #224 — "Crowdfunding et immobilier fractionné : la fin de la récré ?" (Yann Balthazard, 25 juillet 2024)**
+Ces 17 épisodes existent dans le flux RSS Audiomeans (donc écoutables sur Spotify, Apple Podcasts, etc.) mais aucune page article `/tous/…` n'est trouvable sur lamartingale.io — tous les slugs plausibles testés renvoient en 404.
 
-L'épisode existe dans le flux RSS Audiomeans (donc écoutable sur Spotify, Apple Podcasts, etc.), mais aucune page article `/tous/…` n'a pu être trouvée sur lamartingale.io. J'ai testé cinq variantes de slug plausibles — toutes en 404.
+Tous se situent dans la plage **#126–#232** (fin 2022 à mi-2024). Hypothèse : migration CMS partielle qui a perdu ces articles, ou choix éditorial de les retirer du site sans les dépublier du podcast.
 
-> **Conséquence concrète :** un visiteur qui cherche « Yann Balthazard » ou « crowdfunding fractionné » sur Google ne retrouve pas l'épisode via votre site. Les autres canaux (Spotify, YouTube potentiellement) prennent le relais, mais la valeur SEO est perdue.
+| # | Titre (depuis le RSS) |
+|---|---|
+| #232 | Crise des SCPI : a-t-on touché le fond ? |
+| #231 | Négociation immobilière : tous les arguments pour la réussir ! |
+| #230 | Travaux immobilier : comment rénover sans se ruiner ? |
+| #229 | 3 millions d'étudiants à loger : c'est la rentrée des opportunités ! |
+| #228 | Comment gérer l'argent de poche des enfants et ados ? |
+| #227 | Orlinski, Combas, JR, Murakami : investir dans l'art contemporain quand on n'est pas millionnaire |
+| #225 | Au-delà des géants : pourquoi s'intéresser aux small caps ? |
+| #224 | Crowdfunding et immobilier fractionné : la fin de la récré ? (Yann Balthazard) |
+| #219 | Booba, JuL, Gazo : comment investir dans leurs droits musicaux ? |
+| #218 | Les crises se multiplient : vive les crises ? |
+| #213 | Voitures de collection, montres, art, vin : le point sur le marché des actifs alternatifs en 2024 |
+| #209 | Le guide ultime Airbnb : les 15 meilleurs conseils d'un insider |
+| #208 | Halving, ATH & ETF BTC : on fait le point sur les cryptos en 2024 ! |
+| #192 | Anticiper le coût de la dépendance de vos parents |
+| #178 | Les 3 étapes pour négocier une augmentation |
+| #173 | Les 5 questions incontournables à se poser avant d'investir |
+| #126 | Investir dans le futur Bitcoin |
 
-**Recommandation :** republier un article dédié, ou rediriger vers un épisode proche si le contenu a été remplacé.
+> **Conséquence concrète :** ces 17 épisodes représentent une audience totale importante (cumulée) mais invisible sur Google. Un prospect qui cherche « Crise des SCPI » ou « investir dans l'art contemporain » ne retrouve pas l'épisode via votre site. Le podcast existe toujours dans toutes les apps, mais le trafic SEO web est perdu.
+
+**Recommandation :** publier (ou re-publier) ces 17 pages article sur lamartingale.io, ou à défaut créer des redirections depuis un slug prévisible vers l'écoute Audiomeans. Un stagiaire peut traiter ça en 1-2 semaines.
 
 ---
 
@@ -58,8 +77,7 @@ Les titres diffèrent entre la page lamartingale.io et le flux RSS Audiomeans, a
 
 ## 3. Deux numéros d'épisode pointant sur la même URL
 
-- Slug `investir-comme-chez-goldman-sachs` partagé par **#262** et **#264**.
-- (Les 22 « slugs vides » que vous verrez parfois évoqués dans des audits proviennent d'un import historique côté projet, pas d'une anomalie site — voir section 4.)
+Le slug `investir-comme-chez-goldman-sachs` est partagé par **#262** et **#264**.
 
 > **Conséquence concrète :** un auditeur qui clique sur le lien de l'épisode #264 depuis son app podcast arrive sur la page de l'épisode #262 (ou vice-versa). Soit les deux sont bien la même rediffusion — auquel cas il suffit de ne garder qu'un numéro dans le RSS — soit c'est une erreur de slug CMS qu'il faut corriger.
 
@@ -67,19 +85,7 @@ Les titres diffèrent entre la page lamartingale.io et le flux RSS Audiomeans, a
 
 ---
 
-## 4. 22 articles anciens sans chapitrage H2 (SEO)
-
-Sur ~20 épisodes dans la plage #126–#279, la page article ne comporte aucun sous-titre `<h2>`. Les moteurs de recherche (et les lecteurs humains) ne peuvent donc pas naviguer rapidement dans le texte.
-
-C'est probablement lié à un template éditorial plus ancien, utilisé avant d'adopter le format « Les cases à ne pas oublier — … » systématique qu'on voit sur les épisodes récents.
-
-> **Conséquence concrète :** ces 22 articles sont moins bien référencés sur Google (Google valorise la structure `h2/h3`), et sont moins agréables à parcourir sans ctrl+F. Pour un lecteur qui arrive sur l'article via un featured snippet, le décrochage est plus rapide.
-
-**Recommandation :** batch éditorial d'ajout de 3-5 H2 sur les anciens articles. Pour un stagiaire ou un rédacteur, c'est ~1 h par article. Impact SEO mesurable sous 2-3 mois. Liste précise disponible sur demande.
-
----
-
-## 5. Annuaire d'invités — opportunité de consolidation
+## 4. Annuaire d'invités — opportunité de consolidation
 
 Sur les 313 épisodes, il y a **~261 noms d'invités distincts**. Actuellement, seuls ~28 sont consolidés quelque part avec une bio formelle (si j'interprète correctement la structure apparente du site). Pour les 233 autres, la bio, l'entreprise et les liens LinkedIn sont uniquement dans le corps de l'article.
 
@@ -95,12 +101,12 @@ Sur les 313 épisodes, il y a **~261 noms d'invités distincts**. Actuellement, 
 |---|---|
 | Épisodes numérotés | 313 (range #1–#313) |
 | Trous de numérotation | **0** — continuité parfaite |
-| Articles propres (>200 caractères) | 312 / 313 (99,7 %) |
-| Articles avec H2 | 290 / 313 (92,7 %) |
+| Articles propres sur le site (>200 c) | 296 / 313 (94,6 %) |
+| Articles avec chapitrage H2 | 296 / 296 (100 %) |
 | Épisodes matchés RSS | 309 / 313 (98,7 %) |
 | Durée moyenne | 65 minutes |
-| Liens externes moyens par article | ~32 |
-| Invités avec LinkedIn identifié | 259 profils uniques |
+| Liens externes moyens par article | ~33 |
+| Invités avec LinkedIn identifié | 263 profils uniques |
 
 Franchement, pour une archive de **9 ans et 313 épisodes** gérée dans un CMS et un host RSS séparés, ce niveau de propreté est remarquable. La plupart des podcasts que j'ai regardés ont un taux d'anomalies bien supérieur. Bravo.
 

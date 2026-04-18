@@ -263,7 +263,7 @@ async function loadEpisodes(opts: { force: boolean; onlyId?: number; limit?: num
   const rows = (await sql`
     SELECT id, episode_number, slug, title, guest, article_content, article_html
     FROM episodes
-    WHERE slug IS NOT NULL
+    WHERE slug IS NOT NULL AND slug <> ''
     ORDER BY episode_number DESC NULLS LAST, id DESC
   `) as EpisodeRow[];
 
