@@ -36,11 +36,15 @@ d('M2 — Tenant Isolation', () => {
     }
   });
 
-  it('2. episodes are all tagged with lamartingale tenant_id', async () => {
-    const [{ c: total }] = await sql`SELECT count(*) as c FROM episodes`;
-    const [{ c: tagged }] = await sql`SELECT count(*) as c FROM episodes WHERE tenant_id = ${TENANT}`;
-    expect(Number(tagged)).toBe(Number(total));
-    expect(Number(total)).toBeGreaterThan(300);
+  it('2. lamartingale tenant has its episodes tagged', async () => {
+    // Post-GDIY ingestion : la DB contient plusieurs tenants. On vérifie
+    // juste que LM garde son volume attendu (>300).
+    const [{ c: lm }] = await sql`SELECT count(*) as c FROM episodes WHERE tenant_id = ${TENANT}`;
+    expect(Number(lm)).toBeGreaterThan(300);
+
+    // Et que chaque épisode a bien un tenant non vide.
+    const [{ c: untagged }] = await sql`SELECT count(*) as c FROM episodes WHERE tenant_id IS NULL OR tenant_id = ''`;
+    expect(Number(untagged)).toBe(0);
   });
 
   it('3. no orphan rows with NULL tenant_id in episodes', async () => {
@@ -67,5 +71,25 @@ d('M2 — Tenant Isolation', () => {
       WHERE e1.tenant_id != e2.tenant_id
     `;
     expect(Number(c)).toBe(0);
+  });
+
+  it('6. GDIY tenant has its own episodes + taxonomy (cross-podcast coexistence)', async () => {
+    const [{ c: gdiyEp }] = await sql`SELECT count(*) as c FROM episodes WHERE tenant_id = 'gdiy'`;
+    const [{ c: gdiyTax }] = await sql`SELECT count(*) as c FROM taxonomy WHERE tenant_id = 'gdiy'`;
+    // Si GDIY a été ingéré dans cette base, on attend >500 épisodes + 10 piliers.
+    // Si non (DB propre), le test reste valide (0, 0).
+    if (Number(gdiyEp) > 0) {
+      expect(Number(gdiyEp)).toBeGreaterThan(500);
+      expect(Number(gdiyTax)).toBeGreaterThanOrEqual(1);
+    }
+  });
+
+  it('7. composite uniques (tenant_id, X) allow same episode_number across tenants', async () => {
+    // Contrainte qui doit exister post-migration M3.1.
+    const rows = await sql`
+      SELECT conname FROM pg_constraint
+      WHERE conname = 'uq_episodes_tenant_episode_number'
+    ` as any[];
+    expect(rows.length).toBe(1);
   });
 });
