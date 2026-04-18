@@ -21,6 +21,9 @@ package-lock.json
 # Secrets
 .env
 
+# Intermediate HTML for PDF generation
+docs/orso-media-feedback.html
+
 # Ajouts token-safe-v3
 .vercel/
 __pycache__/

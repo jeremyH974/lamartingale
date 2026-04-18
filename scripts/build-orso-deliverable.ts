@@ -192,7 +192,7 @@ function buildDoc() {
     'J\u2019ai passé les dernières semaines à construire une base de données enrichie autour des 313 épisodes de La Martingale (transcriptions d\u2019articles, recherche sémantique, quiz adaptatifs, etc. — projet perso, 100 % admirateur du podcast). En croisant systématiquement trois sources — le site lamartingale.io, le flux RSS Audiomeans, les pages épisode elles-mêmes — j\u2019ai repéré quelques petites incohérences qui peuvent mériter un coup d\u2019œil côté CMS.'
   ));
   children.push(para(
-    'Rien d\u2019urgent. L\u2019archive est globalement propre — 99 % des épisodes ont une page article, 93 % ont un vrai chapitrage H2, la synchronisation RSS/site fonctionne. Ce document liste les 5 anomalies résiduelles.',
+    'Rien d\u2019urgent. L\u2019archive est globalement propre — 94,6 % des épisodes ont une page article sur le site, 100 % de ces articles ont un chapitrage H2, la synchronisation RSS/site fonctionne à 98,7 %. Ce document liste les 4 anomalies résiduelles.',
     { italic: true }
   ));
 
@@ -201,26 +201,50 @@ function buildDoc() {
   children.push(simpleTable(
     ['#', 'Sujet', 'Impact', 'Volume'],
     [
-      ['1', 'Un épisode sans page web', 'Invisible en SEO & apps', '1 ép (#224)'],
+      ['1', 'Épisodes sans page article sur le site', 'Invisibles en SEO & pour apps podcast', '17 ép (range #126-#232)'],
       ['2', 'Désynchronisation titre site / RSS', 'Non-match dans apps podcast', '4 ép'],
-      ['3', 'URL CMS partagée entre 2 numéros', 'Mauvaise redirection depuis les apps', '2 ép (#262/#264)'],
-      ['4', 'Articles sans sous-titres H2', 'SEO & lisibilité dégradés', '~22 ép à vérifier'],
-      ['5', 'Écart bios invités consolidées', 'Potentiel annuaire invités', '~233 noms à structurer'],
+      ['3', 'URL CMS partagée entre 2 numéros', 'Mauvaise redirection depuis les apps', '1 cas (#262/#264)'],
+      ['4', 'Écart bios invités consolidées', 'Potentiel annuaire invités', '~233 noms à structurer'],
     ],
     [600, 4000, 2800, 1626]
   ));
 
-  // Section 1
-  children.push(heading1('1. Un épisode sans article publié'));
-  children.push(para('Épisode #224 — « Crowdfunding et immobilier fractionné : la fin de la récré ? » (Yann Balthazard, 25 juillet 2024)', { bold: true }));
+  // Section 1 — 17 missing articles
+  children.push(heading1('1. Dix-sept épisodes sans article publié sur le site'));
   children.push(para(
-    'L\u2019épisode existe dans le flux RSS Audiomeans (donc écoutable sur Spotify, Apple Podcasts, etc.), mais aucune page article /tous/… n\u2019a pu être trouvée sur lamartingale.io. J\u2019ai testé cinq variantes de slug plausibles — toutes en 404.'
+    'Ces 17 épisodes existent dans le flux RSS Audiomeans (donc écoutables sur Spotify, Apple Podcasts, etc.) mais aucune page article /tous/… n\u2019est trouvable sur lamartingale.io — tous les slugs plausibles testés renvoient en 404.'
   ));
   children.push(para(
-    'Conséquence concrète : un visiteur qui cherche « Yann Balthazard » ou « crowdfunding fractionné » sur Google ne retrouve pas l\u2019épisode via votre site. Les autres canaux (Spotify, YouTube potentiellement) prennent le relais, mais la valeur SEO est perdue.',
+    'Tous se situent dans la plage #126-#232 (fin 2022 à mi-2024). Hypothèse : migration CMS partielle qui a perdu ces articles, ou choix éditorial de les retirer du site sans les dépublier du podcast.'
+  ));
+  children.push(simpleTable(
+    ['#', 'Titre (depuis le RSS)'],
+    [
+      ['#232', 'Crise des SCPI : a-t-on touché le fond ?'],
+      ['#231', 'Négociation immobilière : tous les arguments pour la réussir !'],
+      ['#230', 'Travaux immobilier : comment rénover sans se ruiner ?'],
+      ['#229', '3 millions d\u2019étudiants à loger : c\u2019est la rentrée des opportunités !'],
+      ['#228', 'Comment gérer l\u2019argent de poche des enfants et ados ?'],
+      ['#227', 'Orlinski, Combas, JR, Murakami : investir dans l\u2019art contemporain quand on n\u2019est pas millionnaire'],
+      ['#225', 'Au-delà des géants : pourquoi s\u2019intéresser aux small caps ?'],
+      ['#224', 'Crowdfunding et immobilier fractionné : la fin de la récré ? (Yann Balthazard)'],
+      ['#219', 'Booba, JuL, Gazo : comment investir dans leurs droits musicaux ?'],
+      ['#218', 'Les crises se multiplient : vive les crises ?'],
+      ['#213', 'Voitures de collection, montres, art, vin : le point sur les actifs alternatifs en 2024'],
+      ['#209', 'Le guide ultime Airbnb : les 15 meilleurs conseils d\u2019un insider'],
+      ['#208', 'Halving, ATH & ETF BTC : on fait le point sur les cryptos en 2024 !'],
+      ['#192', 'Anticiper le coût de la dépendance de vos parents'],
+      ['#178', 'Les 3 étapes pour négocier une augmentation'],
+      ['#173', 'Les 5 questions incontournables à se poser avant d\u2019investir'],
+      ['#126', 'Investir dans le futur Bitcoin'],
+    ],
+    [900, 8126]
+  ));
+  children.push(para(
+    'Conséquence concrète : ces 17 épisodes représentent une audience cumulée importante mais invisible sur Google. Un prospect qui cherche « Crise des SCPI » ou « investir dans l\u2019art contemporain » ne retrouve pas l\u2019épisode via votre site. Le podcast existe toujours dans toutes les apps, mais le trafic SEO web est perdu.',
     { italic: true, color: '555555' }
   ));
-  children.push(para('Recommandation : républier un article dédié, ou rediriger vers un épisode proche si le contenu a été remplacé.', { bold: true }));
+  children.push(para('Recommandation : publier (ou re-publier) ces 17 pages article sur lamartingale.io, ou à défaut créer des redirections depuis un slug prévisible vers l\u2019écoute Audiomeans. Un stagiaire peut traiter ça en 1-2 semaines.', { bold: true }));
 
   // Section 2
   children.push(heading1('2. Quatre épisodes mal synchronisés entre site & RSS'));
@@ -243,28 +267,15 @@ function buildDoc() {
 
   // Section 3
   children.push(heading1('3. Deux numéros d\u2019épisode pointant sur la même URL'));
-  children.push(bullet('Slug investir-comme-chez-goldman-sachs partagé par #262 et #264.'));
-  children.push(bullet('Les 22 « slugs vides » que vous verrez parfois évoqués dans des audits proviennent d\u2019un import historique côté projet, pas d\u2019une anomalie site — voir section 4.'));
+  children.push(para('Le slug investir-comme-chez-goldman-sachs est partagé par #262 et #264.'));
   children.push(para(
     'Conséquence concrète : un auditeur qui clique sur le lien de l\u2019épisode #264 depuis son app podcast arrive sur la page de l\u2019épisode #262 (ou vice-versa). Soit les deux sont bien la même rediffusion — auquel cas il suffit de ne garder qu\u2019un numéro dans le RSS — soit c\u2019est une erreur de slug CMS qu\u2019il faut corriger.',
     { italic: true, color: '555555' }
   ));
   children.push(para('Recommandation : clarifier si #264 est une rediffusion de #262 ou un épisode distinct, et ajuster la numérotation RSS ou le slug.', { bold: true }));
 
-  // Section 4
-  children.push(heading1('4. 22 articles anciens sans chapitrage H2 (SEO)'));
-  children.push(para(
-    'Sur environ 20 épisodes dans la plage #126–#279, la page article ne comporte aucun sous-titre H2. Les moteurs de recherche (et les lecteurs humains) ne peuvent donc pas naviguer rapidement dans le texte.'
-  ));
-  children.push(para('C\u2019est probablement lié à un template éditorial plus ancien, utilisé avant d\u2019adopter le format « Les cases à ne pas oublier — … » systématique qu\u2019on voit sur les épisodes récents.'));
-  children.push(para(
-    'Conséquence concrète : ces 22 articles sont moins bien référencés sur Google (Google valorise la structure h2/h3), et sont moins agréables à parcourir sans ctrl+F. Pour un lecteur qui arrive sur l\u2019article via un featured snippet, le décrochage est plus rapide.',
-    { italic: true, color: '555555' }
-  ));
-  children.push(para('Recommandation : batch éditorial d\u2019ajout de 3-5 H2 sur les anciens articles. Pour un stagiaire ou un rédacteur, c\u2019est ~1 h par article. Impact SEO mesurable sous 2-3 mois. Liste précise disponible sur demande.', { bold: true }));
-
-  // Section 5
-  children.push(heading1('5. Annuaire d\u2019invités — opportunité de consolidation'));
+  // Section 4 (was 5)
+  children.push(heading1('4. Annuaire d\u2019invités — opportunité de consolidation'));
   children.push(para(
     'Sur les 313 épisodes, il y a environ 261 noms d\u2019invités distincts. Actuellement, seuls ~28 sont consolidés quelque part avec une bio formelle (si j\u2019interprète correctement la structure apparente du site). Pour les 233 autres, la bio, l\u2019entreprise et les liens LinkedIn sont uniquement dans le corps de l\u2019article.'
   ));
@@ -279,14 +290,14 @@ function buildDoc() {
   children.push(simpleTable(
     ['Dimension', 'Valeur'],
     [
-      ['Épisodes numérotés', '313 (range #1–#313)'],
+      ['Épisodes numérotés', '313 (range #1-#313)'],
       ['Trous de numérotation', '0 — continuité parfaite'],
-      ['Articles propres (>200 caractères)', '312 / 313 (99,7 %)'],
-      ['Articles avec H2', '290 / 313 (92,7 %)'],
+      ['Articles propres sur le site (>200 c)', '296 / 313 (94,6 %)'],
+      ['Articles avec chapitrage H2', '296 / 296 (100 %)'],
       ['Épisodes matchés RSS', '309 / 313 (98,7 %)'],
       ['Durée moyenne', '65 minutes'],
-      ['Liens externes moyens par article', '~32'],
-      ['Invités avec LinkedIn identifié', '259 profils uniques'],
+      ['Liens externes moyens par article', '~33'],
+      ['Invités avec LinkedIn identifié', '263 profils uniques'],
     ],
     [5000, 4026]
   ));
