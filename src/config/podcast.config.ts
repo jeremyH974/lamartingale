@@ -39,6 +39,17 @@ export interface PodcastConfig {
     apple?: string;
     deezer?: string;
     youtube?: string;
+    youtubeMusic?: string;
+    amazonMusic?: string;
+  };
+
+  // Réseaux sociaux (optionnel)
+  socials?: {
+    instagram?: string;
+    tiktok?: string;
+    linkedin?: string;
+    twitter?: string;
+    youtube?: string;
   };
 
   // Scraping
@@ -93,6 +104,7 @@ export interface PublicPodcastConfig {
   description: string;
   website: string;
   platforms: PodcastConfig['platforms'];
+  socials?: PodcastConfig['socials'];
   branding: PodcastConfig['branding'];
   taxonomy: { mode: 'predefined' | 'auto'; pillars?: TaxonomyPillar[] };
 }
@@ -108,6 +120,7 @@ export function toPublicConfig(c: PodcastConfig): PublicPodcastConfig {
     description: c.description,
     website: c.website,
     platforms: c.platforms,
+    socials: c.socials,
     branding: c.branding,
     taxonomy: {
       mode: c.taxonomy.mode,

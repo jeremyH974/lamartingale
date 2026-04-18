@@ -130,9 +130,9 @@
 
     /* ====== HERO ====== */
     .hero {
-      background: linear-gradient(135deg, #004cff 0%, #0066ff 50%, #1a7aff 100%);
+      background: var(--hero-bg, linear-gradient(135deg, #004cff 0%, #0066ff 50%, #1a7aff 100%));
       padding: 72px 32px 64px;
-      color: white;
+      color: var(--hero-fg, white);
       text-align: center;
       position: relative;
       overflow: hidden;
@@ -196,8 +196,8 @@
       align-items: center;
       gap: 8px;
       padding: 14px 32px;
-      background: white;
-      color: var(--blue);
+      background: var(--cta-bg, white);
+      color: var(--cta-fg, var(--blue));
       font-size: 15px;
       font-weight: 600;
       border-radius: 10px;
@@ -1120,8 +1120,9 @@
   <header class="header">
     <div class="header-inner">
       <div class="brand">
-        <span class="brand-logo">La Martingale</span>
-        <span class="brand-tag">Education</span>
+        <img class="brand-logo-img" id="brand-logo-img" alt="" style="display:none;height:32px;width:auto" />
+        <span class="brand-logo" id="brand-logo-text">La Martingale</span>
+        <span class="brand-tag" id="brand-tag">Education</span>
       </div>
       <nav class="nav" id="main-nav">
         <button class="nav-link active" onclick="go('home',this)">Accueil</button>
@@ -1144,8 +1145,8 @@
   <!-- HERO (home only) -->
   <section class="hero" id="hero-section">
     <div class="hero-inner">
-      <h1>Prenez le controle<br>de votre argent</h1>
-      <p>Le premier podcast francais sur les finances personnelles, transforme en plateforme educative interactive. Recherche semantique IA, assistant conversationnel, quiz adaptatif, 310 episodes analyses.</p>
+      <h1 id="hero-h1">Prenez le controle<br>de votre argent</h1>
+      <p id="hero-p">Le premier podcast francais sur les finances personnelles, transforme en plateforme educative interactive. Recherche semantique IA, assistant conversationnel, quiz adaptatif, 310 episodes analyses.</p>
       <div class="hero-stats">
         <div><div class="hero-stat-value" id="hs-ep">307</div><div class="hero-stat-label">episodes</div></div>
         <div><div class="hero-stat-value" id="hs-ex">28</div><div class="hero-stat-label">experts</div></div>
@@ -1308,20 +1309,9 @@
         <div class="footer-brand">La Martingale</div>
         <div class="footer-desc">Le premier podcast natif francais sur les finances personnelles. Un episode chaque semaine pour apprendre a investir et gerer son argent.</div>
       </div>
-      <div class="footer-links">
-        <div style="display:flex;flex-direction:column;gap:8px">
-          <a href="https://lamartingale.io" target="_blank">Site officiel</a>
-          <a href="https://podcasts.apple.com/fr/podcast/la-martingale/id1457342478" target="_blank">Apple Podcasts</a>
-          <a href="https://open.spotify.com/show/33GxJdsxabjNWHl6whIsiS" target="_blank">Spotify</a>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:8px">
-          <a href="https://www.linkedin.com/company/lamartingalepodcast/" target="_blank">LinkedIn</a>
-          <a href="https://www.youtube.com/@LaMartingaleMedia" target="_blank">YouTube</a>
-          <a href="https://www.instagram.com/lamartingalepodcast/" target="_blank">Instagram</a>
-        </div>
-      </div>
+      <div class="footer-links" id="footer-links"></div>
     </div>
-    <div class="footer-copy">Produit par Orso Media · Matthieu Stefani · &copy; 2026</div>
+    <div class="footer-copy" id="footer-copy">Produit par Orso Media · Matthieu Stefani · &copy; 2026</div>
   </footer>
 
   <!-- MODAL -->
@@ -1331,7 +1321,11 @@
   <div class="graph-tt" id="graph-tt"></div>
 
   <script>
-    const API = window.location.hostname === 'localhost' ? 'http://localhost:3001/api' : '/api';
+    // Same-origin : supporte les multi-déploiements (lamartingale-v2, gdiy-v2)
+    // ainsi que les ports locaux multiples (PORT=3002 PODCAST_ID=gdiy).
+    const API = (window.location.protocol === 'file:' || !window.location.hostname)
+      ? 'http://localhost:3001/api'
+      : `${window.location.origin}/api`;
     let allEp = [], graphD = null, mediaMap = {};
     let curPillar = null, curDiff = null, curPage = 1;
 
@@ -1365,16 +1359,54 @@
     const F = url => fetch(url).then(r=>r.json());
 
     // ===== CONFIG (multi-podcast) =====
+    // Luminance WCAG pour choisir un texte noir ou blanc sur fond primaire.
+    function pickFg(hex) {
+      const h = (hex || '').replace('#','');
+      if (h.length !== 6) return '#fff';
+      const r = parseInt(h.slice(0,2),16), g = parseInt(h.slice(2,4),16), b = parseInt(h.slice(4,6),16);
+      const lum = (0.299*r + 0.587*g + 0.114*b) / 255;
+      return lum > 0.6 ? '#111' : '#fff';
+    }
     async function applyConfig() {
       try {
         const cfg = await F(`${API}/config`);
         window.PODCAST_CFG = cfg;
         const root = document.documentElement;
-        if (cfg.branding?.primaryColor) {
-          root.style.setProperty('--blue', cfg.branding.primaryColor);
-          root.style.setProperty('--blue-hover', cfg.branding.primaryColor);
+        const primary = cfg.branding?.primaryColor || '#004cff';
+        const secondary = cfg.branding?.secondaryColor || null;
+        const heroFg = pickFg(primary);
+        root.style.setProperty('--blue', primary);
+        root.style.setProperty('--blue-hover', primary);
+        root.style.setProperty('--hero-bg', primary);
+        root.style.setProperty('--hero-fg', heroFg);
+
+        // Accent vibrant (optionnel) : si primaryColor est sombre et secondaryColor
+        // est vif (luminance > 0.5), on l'utilise pour le CTA. Sinon, on garde
+        // le fallback blanc-sur-primary (charte La Martingale).
+        if (secondary) {
+          const secLum = (() => {
+            const h = secondary.replace('#',''); if (h.length !== 6) return 0;
+            const r = parseInt(h.slice(0,2),16), g = parseInt(h.slice(2,4),16), b = parseInt(h.slice(4,6),16);
+            return (0.299*r + 0.587*g + 0.114*b) / 255;
+          })();
+          const priLum = (() => {
+            const h = primary.replace('#',''); if (h.length !== 6) return 1;
+            const r = parseInt(h.slice(0,2),16), g = parseInt(h.slice(2,4),16), b = parseInt(h.slice(4,6),16);
+            return (0.299*r + 0.587*g + 0.114*b) / 255;
+          })();
+          if (priLum < 0.3 && secLum > 0.5) {
+            root.style.setProperty('--cta-bg', secondary);
+            root.style.setProperty('--cta-fg', pickFg(secondary));
+            root.style.setProperty('--accent', secondary);
+            // Highlight sur les stats-value du hero
+            document.querySelectorAll('.hero-stat-value').forEach(el => {
+              el.style.color = secondary;
+            });
+          }
         }
-        if (cfg.branding?.fontFamily && cfg.branding.font !== 'Poppins') {
+
+        // Font Google Fonts — chargé si != Poppins (déjà preload dans <head>).
+        if (cfg.branding?.font && cfg.branding.font !== 'Poppins') {
           const fam = encodeURIComponent(cfg.branding.font);
           const link = document.createElement('link');
           link.rel = 'stylesheet';
@@ -1382,23 +1414,70 @@
           document.head.appendChild(link);
           document.body.style.fontFamily = `'${cfg.branding.font}', -apple-system, BlinkMacSystemFont, sans-serif`;
         }
+
+        // Identité
         if (cfg.name) {
           document.title = `${cfg.name} — ${cfg.tagline || 'Education'}`;
-          document.querySelectorAll('.brand-logo, .footer-brand').forEach(el => el.textContent = cfg.name);
+          const brandText = document.getElementById('brand-logo-text');
+          const brandImg = document.getElementById('brand-logo-img');
+          const brandTag = document.getElementById('brand-tag');
+          if (cfg.branding?.logoUrl && brandImg) {
+            brandImg.src = cfg.branding.logoUrl;
+            brandImg.style.display = 'block';
+            brandImg.alt = cfg.name;
+            if (brandText) brandText.style.display = 'none';
+            // Charte minimaliste (noir/blanc) → cache le tag "Education"
+            if (brandTag && (primary === '#000000' || primary === '#000' || heroFg === '#fff' && primary.toLowerCase() === '#000000')) {
+              brandTag.style.display = 'none';
+            }
+          } else if (brandText) {
+            brandText.textContent = cfg.name;
+          }
+          document.querySelectorAll('.footer-brand').forEach(el => el.textContent = cfg.name);
         }
+
+        // Hero tagline + description
+        const h1 = document.getElementById('hero-h1');
+        const p = document.getElementById('hero-p');
+        if (h1 && cfg.tagline) h1.textContent = cfg.tagline;
+        if (p && cfg.description) p.textContent = cfg.description;
+
+        // Footer desc
         if (cfg.description) {
           const fd = document.querySelector('.footer-desc');
           if (fd) fd.textContent = cfg.description;
         }
-        if (cfg.platforms) {
-          const map = { spotify: 'Spotify', apple: 'Apple Podcasts', youtube: 'YouTube', deezer: 'Deezer' };
-          document.querySelectorAll('.footer-links a').forEach(a => {
-            const txt = a.textContent.trim();
-            if (txt === 'Site officiel' && cfg.website) a.href = cfg.website;
-            for (const [k, label] of Object.entries(map)) {
-              if (txt === label && cfg.platforms[k]) a.href = cfg.platforms[k];
-            }
-          });
+
+        // Footer links — reconstruits dynamiquement
+        const footerLinks = document.getElementById('footer-links');
+        if (footerLinks) {
+          const platformLabels = {
+            apple: 'Apple Podcasts', spotify: 'Spotify', deezer: 'Deezer',
+            youtube: 'YouTube', youtubeMusic: 'YouTube Music', amazonMusic: 'Amazon Music',
+          };
+          const socialLabels = {
+            instagram: 'Instagram', tiktok: 'TikTok', linkedin: 'LinkedIn',
+            twitter: 'X / Twitter', youtube: 'YouTube',
+          };
+          const col1 = [];
+          if (cfg.website) col1.push(`<a href="${cfg.website}" target="_blank" rel="noopener">Site officiel</a>`);
+          for (const [k, label] of Object.entries(platformLabels)) {
+            if (cfg.platforms?.[k]) col1.push(`<a href="${cfg.platforms[k]}" target="_blank" rel="noopener">${label}</a>`);
+          }
+          const col2 = [];
+          for (const [k, label] of Object.entries(socialLabels)) {
+            if (cfg.socials?.[k]) col2.push(`<a href="${cfg.socials[k]}" target="_blank" rel="noopener">${label}</a>`);
+          }
+          footerLinks.innerHTML = `
+            <div style="display:flex;flex-direction:column;gap:8px">${col1.join('')}</div>
+            <div style="display:flex;flex-direction:column;gap:8px">${col2.join('')}</div>
+          `;
+        }
+
+        // Footer copy
+        const fcopy = document.getElementById('footer-copy');
+        if (fcopy && cfg.producer && cfg.host) {
+          fcopy.innerHTML = `Produit par ${cfg.producer} · ${cfg.host} · &copy; ${new Date().getFullYear()}`;
         }
       } catch (e) {
         console.warn('[config] fallback to defaults:', e);
@@ -1417,6 +1496,7 @@
       document.getElementById('hs-ep').textContent = stats.total_episodes;
       document.getElementById('hs-ex').textContent = stats.total_experts;
       document.getElementById('hs-p').textContent = stats.total_paths;
+      document.getElementById('hs-q').textContent = stats.total_quiz ?? 0;
       renderHomePaths(paths.paths);
       renderHomeEp();
       renderHomeExperts(experts.experts);
