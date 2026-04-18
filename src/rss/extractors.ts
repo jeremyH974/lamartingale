@@ -77,6 +77,16 @@ export interface GuestFromTitle {
   role: string | null;
 }
 
+// Un "token nom" = Title Case (+ diacritiques, apostrophe, tiret) OU particule
+// nobiliaire/composée en minuscule (de, du, des, la, le, les, van, von, d',
+// l', van der, de la, etc.). Regex pensée pour matcher "Sixte de Vauplane",
+// "Jean-Marie Le Pen", "Marie-Amélie Le Fur", "Pierre-Édouard Stérin".
+const NAME_TOKEN = "(?:[A-ZÀ-Ý][a-zà-ÿ'’\\-]+|d[ae']|de|du|des|la|le|les|van|von|der|dos|da|del|di|y)";
+const NAME_REGEX = new RegExp(`(${NAME_TOKEN}(?:[ ’'\\-]${NAME_TOKEN}){1,4})`);
+
+// Blocklist : ces premiers mots ne sont pas des noms (faux positifs courants).
+const NOT_NAME_PREFIX = /^(?:[Cc]omment|[Pp]ourquoi|[Tt]out|[Qq]uand|[Qq]uoi|[Qq]u[ei]|[Qq]uels?|[Ll]e [A-Z]|[Ll]a [A-Z]|[Ll]es [A-Z]|[Uu]n |[Uu]ne |[Dd]es |[Ii]nvestir|[Ii]nvestissement|[Pp]rendre|[Ff]aut-il|[Ss]aas|[Ll]'|[Ll]'|[Ii]mmobilier|[Bb]ourse|[Cc]rypto|[Hh]ors[-\s]*[Ss][ée]rie|[Ee]xtrait|[Bb]onus|[Ee]pisode|[Ss]aison)\b/;
+
 export function extractGuestFromTitle(title: string): GuestFromTitle {
   if (!title) return { name: null, company: null, role: null };
 
@@ -84,7 +94,13 @@ export function extractGuestFromTitle(title: string): GuestFromTitle {
   let s = title
     .replace(/^#?\s*\d+\s*[-–—:]\s*/, '')
     .replace(/^episode\s+\d+\s*[:\-–—]\s*/i, '')
+    .replace(/^\[(?:EXTRAIT|BONUS|HORS[-\s]S[ÉE]RIE|HORS[-\s]SERIE)[^\]]*\]\s*[-–—]?\s*/i, '')
+    .replace(/^VF\s*[-–—]\s*/i, '')
     .trim();
+
+  // Si le titre commence par un mot non-nom ("Comment", "Pourquoi", "Investir"...) :
+  // format LM question → pas de guest extractable.
+  if (NOT_NAME_PREFIX.test(s)) return { name: null, company: null, role: null };
 
   // Variante "Name (Company)" ou "Name (Company) : titre"
   const parenMatch = s.match(/^([^(|,]{2,80})\s*\(([^)]+)\)\s*(?:[:\-–—]\s*(.+))?$/);
@@ -97,7 +113,7 @@ export function extractGuestFromTitle(title: string): GuestFromTitle {
   }
 
   // Variante "Name, Role at/chez/de Company"
-  const commaMatch = s.match(/^([^,|]{2,80}),\s*([^|–—-]+?)\s+(?:at|chez|de|from|@)\s+([^|–—-]{2,80})/i);
+  const commaMatch = s.match(/^([^,|]{2,80}),\s*([^|–—-]+?)\s+(?:at|chez|from|@)\s+([^|–—-]{2,80})/i);
   if (commaMatch) {
     return {
       name: commaMatch[1].trim(),
@@ -106,25 +122,37 @@ export function extractGuestFromTitle(title: string): GuestFromTitle {
     };
   }
 
-  // Variante "Name - Role at/chez/de Company"
-  const dashMatch = s.match(/^([^-–—|]{2,80})\s*[-–—]\s*(.+?)\s+(?:at|chez|de|from|@)\s+([^|–—-]{2,80})/i);
-  if (dashMatch) {
+  // Variante "Name - Role de/at/chez Company" (ex. "Matthieu Stefani - CEO de Cosa Vostra")
+  const dashRoleMatch = s.match(/^([^-–—|]{2,80})\s*[-–—]\s*(.+?)\s+(?:at|chez|de|from|@)\s+([^|–—-]{2,80})$/i);
+  if (dashRoleMatch) {
     return {
-      name: dashMatch[1].trim(),
-      role: dashMatch[2].trim(),
-      company: dashMatch[3].trim(),
+      name: dashRoleMatch[1].trim(),
+      role: dashRoleMatch[2].trim(),
+      company: dashRoleMatch[3].trim(),
     };
   }
 
-  // Variante "Name - Company" (simple)
-  const simpleDash = s.match(/^([A-ZÀ-Ý][a-zà-ÿ'’\-]+(?:\s+[A-ZÀ-Ý][a-zà-ÿ'’\-]+){1,3})\s*[-–—|]\s*(.{2,80})$/);
-  if (simpleDash) {
-    return { name: simpleDash[1].trim(), company: simpleDash[2].trim().split(/[–—:|]/)[0].trim(), role: null };
+  // Format GDIY classique : "Name - Company - Titre" ou "Name - Company - Role - Titre"
+  // Name = NAME_REGEX (avec particules). Company = texte libre ≤ 60 chars.
+  const gdiyMatch = s.match(new RegExp(`^${NAME_TOKEN}(?:[ ’'\\-]${NAME_TOKEN}){1,4}\\s*[-–—]\\s*([^-–—]{2,60})(?:\\s*[-–—]\\s*(.+))?$`));
+  if (gdiyMatch) {
+    const nameMatch = s.match(new RegExp(`^(${NAME_TOKEN}(?:[ ’'\\-]${NAME_TOKEN}){1,4})`));
+    if (nameMatch) {
+      return {
+        name: nameMatch[1].trim(),
+        company: gdiyMatch[1].trim(),
+        role: (gdiyMatch[2] || '').trim() || null,
+      };
+    }
   }
 
-  // Fallback : prendre les 2-4 premiers tokens en Title Case comme nom probable.
-  const nameMatch = s.match(/^([A-ZÀ-Ý][a-zà-ÿ'’\-]+(?:\s+[A-ZÀ-Ý][a-zà-ÿ'’\-]+){1,3})/);
-  if (nameMatch) return { name: nameMatch[1].trim(), company: null, role: null };
+  // Fallback : 2-5 tokens de nom en début de titre.
+  const nameOnly = s.match(new RegExp(`^(${NAME_TOKEN}(?:[ ’'\\-]${NAME_TOKEN}){1,4})`));
+  if (nameOnly) {
+    const n = nameOnly[1].trim();
+    // Guard : doit contenir au moins un token Title-Case (pas que des particules).
+    if (/[A-ZÀ-Ý]/.test(n)) return { name: n, company: null, role: null };
+  }
 
   return { name: null, company: null, role: null };
 }
@@ -145,12 +173,68 @@ const SPONSOR_MARKERS = [
   /brought\s+to\s+you\s+by\s+([A-Z][\w&'’\s.\-]{1,40})/i,
 ];
 
+// Détecte un bloc "Un grand MERCI à nos sponsors : X : url  Y : url  Z : url"
+// puis parse chaque entrée. Markers début : "merci à nos (sponsors|partenaires)",
+// "grand merci à nos…". Fin : "Vous souhaitez sponsoriser", "TIMELINE", "Hébergé
+// par", fin de texte.
+const SPONSOR_BLOCK_START = /(?:un\s+(?:grand|[ée]norme)\s+)?merci\s+(?:à|a)\s+(?:tous\s+)?(?:nos|mes)\s+(?:sponsors|partenaires)\s*[:\-—]?\s*/i;
+const SPONSOR_BLOCK_END = /(?:vous\s+souhaitez\s+sponsoriser|TIMELINE|timeline\s*:|h[ée]berg[ée]\s+par|montages?\s+[:\-]|ecr[iy]vez[- ]nous|retrouvez[- ]nous|hors[- ]s[ée]rie)/i;
+
+function parseSponsorBlock(block: string): SponsorMention[] {
+  const out: SponsorMention[] = [];
+  const seen = new Set<string>();
+  // Cible stricte : "Name : url" avec `:` obligatoire (pas `-`, trop bruyant).
+  // Name = Title Case 3-30 chars, max 4 tokens. Chaque token significatif
+  // doit commencer par majuscule (les particules de/du/la/& sont tolérées).
+  const urlPart = `(?:https?:\\/\\/\\S+|[a-z0-9][a-z0-9.\\-]*\\.[a-z]{2,}(?:\\/\\S*)?)`;
+  const entryRx = new RegExp(
+    `([A-ZÀ-Ý][A-Za-zÀ-ÿ0-9&'’\\- ]{2,30}?)\\s*:\\s*(${urlPart})`,
+    'g',
+  );
+  const PARTICLES = new Set(['de', 'du', 'des', 'la', 'le', 'les', 'd', '&', 'et', 'y']);
+  let m: RegExpExecArray | null;
+  while ((m = entryRx.exec(block)) !== null) {
+    const name = m[1].replace(/\s+/g, ' ').trim();
+    if (!name || name.length < 3) continue;
+    if (/^(?:et|aussi|plus|ainsi|aujourd'hui|merci|grand|[ée]norme|http|https)$/i.test(name)) continue;
+    const tokens = name.split(' ');
+    if (tokens.length > 4) continue;
+    // Tous les tokens non-particule doivent commencer par majuscule.
+    const looksProper = tokens.every((t) => {
+      if (!t) return false;
+      if (PARTICLES.has(t.toLowerCase())) return true;
+      return /^[A-ZÀ-Ý0-9]/.test(t);
+    });
+    if (!looksProper) continue;
+    const key = name.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push({ name, context: (m[2] || '').trim() });
+  }
+  return out;
+}
+
 export function extractSponsors(text: string): SponsorMention[] {
   if (!text) return [];
   const plain = htmlToText(text);
   const found: SponsorMention[] = [];
   const seen = new Set<string>();
 
+  // 1. Bloc "Merci à nos sponsors : …" (multi-sponsors GDIY)
+  const blockStart = plain.search(SPONSOR_BLOCK_START);
+  if (blockStart >= 0) {
+    const rest = plain.slice(blockStart + (plain.match(SPONSOR_BLOCK_START)?.[0].length || 0));
+    const endMatch = rest.search(SPONSOR_BLOCK_END);
+    const block = endMatch > 0 ? rest.slice(0, endMatch) : rest.slice(0, 600);
+    for (const s of parseSponsorBlock(block)) {
+      const key = s.name.toLowerCase();
+      if (seen.has(key)) continue;
+      seen.add(key);
+      found.push(s);
+    }
+  }
+
+  // 2. Markers single-sponsor ("cet épisode est sponsorisé par X")
   for (const rx of SPONSOR_MARKERS) {
     const m = plain.match(rx);
     if (!m) continue;
@@ -159,7 +243,6 @@ export function extractSponsors(text: string): SponsorMention[] {
     const key = name.toLowerCase();
     if (seen.has(key)) continue;
     seen.add(key);
-
     const idx = m.index ?? 0;
     const ctxStart = Math.max(0, idx - 60);
     const ctxEnd = Math.min(plain.length, idx + m[0].length + 60);
