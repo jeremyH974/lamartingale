@@ -32,6 +32,8 @@ export async function getEpisodes(opts: {
   const t = tenant();
 
   const conditions: any[] = [eq(s.episodes.tenantId, t)];
+  // Exclure bonus/trailer : on ne veut que les full (ou NULL pour tenants historiques comme LM).
+  conditions.push(sql`(${s.episodes.episodeType} = 'full' OR ${s.episodes.episodeType} IS NULL)`);
   if (pillar) conditions.push(eq(s.episodes.pillar, pillar));
   if (difficulty) conditions.push(eq(s.episodes.difficulty, difficulty));
 
@@ -75,7 +77,8 @@ export async function getEpisodes(opts: {
     difficulty: r.episodes.difficulty || 'INTERMEDIAIRE',
     learning_paths: [],
     url: r.episodes.url || '',
-    thumbnail: r.episodes_media?.thumbnail350 || null,
+    thumbnail: r.episodes_media?.thumbnail350 || r.episodes.episodeImageUrl || null,
+    episode_image_url: r.episodes.episodeImageUrl || null,
   }));
 
   return { total, page, limit, pages: Math.ceil(total / limit), episodes };
@@ -303,14 +306,14 @@ export async function getStats() {
   const sqlInstance = neon(process.env.DATABASE_URL!);
   const t = tenant();
 
-  const [epCount] = await sqlInstance`SELECT count(*) as c FROM episodes WHERE tenant_id = ${t}`;
+  const [epCount] = await sqlInstance`SELECT count(*) as c FROM episodes WHERE tenant_id = ${t} AND (episode_type = 'full' OR episode_type IS NULL)`;
   const [gCount] = await sqlInstance`SELECT count(*) as c FROM guests WHERE tenant_id = ${t}`;
   const [pCount] = await sqlInstance`SELECT count(*) as c FROM learning_paths WHERE tenant_id = ${t}`;
   const [tCount] = await sqlInstance`SELECT count(*) as c FROM taxonomy WHERE tenant_id = ${t}`;
   const [qCount] = await sqlInstance`SELECT count(*) as c FROM quiz_questions WHERE tenant_id = ${t}`;
 
-  const pillarRows = await sqlInstance`SELECT pillar, count(*) as c FROM episodes WHERE tenant_id = ${t} GROUP BY pillar ORDER BY c DESC`;
-  const diffRows = await sqlInstance`SELECT difficulty, count(*) as c FROM episodes WHERE tenant_id = ${t} GROUP BY difficulty`;
+  const pillarRows = await sqlInstance`SELECT pillar, count(*) as c FROM episodes WHERE tenant_id = ${t} AND (episode_type = 'full' OR episode_type IS NULL) GROUP BY pillar ORDER BY c DESC`;
+  const diffRows = await sqlInstance`SELECT difficulty, count(*) as c FROM episodes WHERE tenant_id = ${t} AND (episode_type = 'full' OR episode_type IS NULL) GROUP BY difficulty`;
 
   const topExperts = await sqlInstance`SELECT name, authority_score, episodes_count FROM guests WHERE tenant_id = ${t} ORDER BY authority_score DESC LIMIT 5`;
 

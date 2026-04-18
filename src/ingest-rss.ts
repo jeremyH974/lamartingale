@@ -158,15 +158,26 @@ async function main() {
   `) as { episode_number: number }[];
   const existingNums = new Set(existing.map((r) => r.episode_number));
 
-  let inserted = 0, updated = 0, skipped = 0;
+  let inserted = 0, updated = 0, skipped = 0, insertedExtracts = 0;
   const stats = { withGuid: 0, withAudio: 0, withImage: 0, withSponsors: 0, withLinks: 0 };
 
-  for (const { parsed } of items) {
-    if (parsed.episodeNumber == null) {
+  // Tri : full FIRST, puis bonuses/trailers. Evite qu'un bonus ne clobber
+  // un full pour un meme itunes:episode (voir M4-fix).
+  const sortedItems = [...items].sort((a, b) => {
+    const pa = a.parsed.episodeType === 'full' ? 0 : 1;
+    const pb = b.parsed.episodeType === 'full' ? 0 : 1;
+    return pa - pb;
+  });
+
+  for (const { parsed } of sortedItems) {
+    if (parsed.episodeNumber == null && !parsed.guid) {
       skipped++;
       continue;
     }
-    const isNew = !existingNums.has(parsed.episodeNumber);
+
+    const isFull = parsed.episodeType === 'full' || parsed.episodeType == null;
+    const epNumForRow = isFull ? parsed.episodeNumber : null;
+    const parentEpNum = isFull ? null : parsed.episodeNumber;
 
     const slug = sluggify(parsed.title);
     const dateCreated = parsed.pubDate ? new Date(parsed.pubDate) : null;
@@ -177,55 +188,93 @@ async function main() {
     if (parsed.sponsors.length) stats.withSponsors++;
     if (parsed.links.length) stats.withLinks++;
 
+    const isNew = isFull
+      ? epNumForRow != null && !existingNums.has(epNumForRow)
+      : true;
+
     if (DRY_RUN) {
-      if (isNew) inserted++; else updated++;
+      if (isFull) { if (isNew) inserted++; else updated++; }
+      else insertedExtracts++;
       continue;
     }
 
-    await sql`
-      INSERT INTO episodes (
-        tenant_id, episode_number, title, slug, pillar, date_created,
-        guid, season, episode_type, explicit,
-        duration_seconds, audio_url, audio_size_bytes, episode_image_url,
-        rss_description, rss_content_encoded, guest_from_title,
-        sponsors, rss_links, cross_refs, publish_frequency_days
-      ) VALUES (
-        ${TENANT}, ${parsed.episodeNumber}, ${parsed.title}, ${slug}, ${pillarPlaceholder}, ${dateCreated},
-        ${parsed.guid}, ${parsed.season}, ${parsed.episodeType}, ${parsed.explicit},
-        ${parsed.durationSeconds}, ${parsed.audioUrl}, ${parsed.audioSizeBytes}, ${parsed.episodeImageUrl},
-        ${parsed.description}, ${parsed.rssContentEncoded}, ${parsed.guestFromTitle.name},
-        ${JSON.stringify(parsed.sponsors)}::jsonb,
-        ${JSON.stringify(parsed.links)}::jsonb,
-        ${JSON.stringify(parsed.crossRefs)}::jsonb,
-        ${freq}
-      )
-      ON CONFLICT (tenant_id, episode_number) DO UPDATE SET
-        title                = EXCLUDED.title,
-        slug                 = COALESCE(EXCLUDED.slug, episodes.slug),
-        date_created         = COALESCE(EXCLUDED.date_created, episodes.date_created),
-        guid                 = COALESCE(EXCLUDED.guid, episodes.guid),
-        season               = COALESCE(EXCLUDED.season, episodes.season),
-        episode_type         = COALESCE(EXCLUDED.episode_type, episodes.episode_type),
-        explicit             = COALESCE(EXCLUDED.explicit, episodes.explicit),
-        duration_seconds     = COALESCE(EXCLUDED.duration_seconds, episodes.duration_seconds),
-        audio_url            = COALESCE(EXCLUDED.audio_url, episodes.audio_url),
-        audio_size_bytes     = COALESCE(EXCLUDED.audio_size_bytes, episodes.audio_size_bytes),
-        episode_image_url    = COALESCE(EXCLUDED.episode_image_url, episodes.episode_image_url),
-        rss_description      = COALESCE(EXCLUDED.rss_description, episodes.rss_description),
-        rss_content_encoded  = COALESCE(EXCLUDED.rss_content_encoded, episodes.rss_content_encoded),
-        guest_from_title     = COALESCE(EXCLUDED.guest_from_title, episodes.guest_from_title),
-        sponsors             = EXCLUDED.sponsors,
-        rss_links            = EXCLUDED.rss_links,
-        cross_refs           = EXCLUDED.cross_refs,
-        publish_frequency_days = COALESCE(EXCLUDED.publish_frequency_days, episodes.publish_frequency_days)
-    `;
-    if (isNew) inserted++; else updated++;
+    // 2 chemins d'upsert : full par (tenant_id, episode_number), bonus par (tenant_id, guid).
+    if (isFull) {
+      await sql`
+        INSERT INTO episodes (
+          tenant_id, episode_number, parent_episode_number, title, slug, pillar, date_created,
+          guid, season, episode_type, explicit,
+          duration_seconds, audio_url, audio_size_bytes, episode_image_url,
+          rss_description, rss_content_encoded, guest_from_title,
+          sponsors, rss_links, cross_refs, publish_frequency_days
+        ) VALUES (
+          ${TENANT}, ${epNumForRow}, NULL, ${parsed.title}, ${slug}, ${pillarPlaceholder}, ${dateCreated},
+          ${parsed.guid}, ${parsed.season}, ${parsed.episodeType}, ${parsed.explicit},
+          ${parsed.durationSeconds}, ${parsed.audioUrl}, ${parsed.audioSizeBytes}, ${parsed.episodeImageUrl},
+          ${parsed.description}, ${parsed.rssContentEncoded}, ${parsed.guestFromTitle.name},
+          ${JSON.stringify(parsed.sponsors)}::jsonb,
+          ${JSON.stringify(parsed.links)}::jsonb,
+          ${JSON.stringify(parsed.crossRefs)}::jsonb,
+          ${freq}
+        )
+        ON CONFLICT (tenant_id, episode_number) DO UPDATE SET
+          title                = EXCLUDED.title,
+          slug                 = COALESCE(EXCLUDED.slug, episodes.slug),
+          date_created         = COALESCE(EXCLUDED.date_created, episodes.date_created),
+          guid                 = COALESCE(EXCLUDED.guid, episodes.guid),
+          season               = COALESCE(EXCLUDED.season, episodes.season),
+          episode_type         = COALESCE(EXCLUDED.episode_type, episodes.episode_type),
+          explicit             = COALESCE(EXCLUDED.explicit, episodes.explicit),
+          duration_seconds     = COALESCE(EXCLUDED.duration_seconds, episodes.duration_seconds),
+          audio_url            = COALESCE(EXCLUDED.audio_url, episodes.audio_url),
+          audio_size_bytes     = COALESCE(EXCLUDED.audio_size_bytes, episodes.audio_size_bytes),
+          episode_image_url    = COALESCE(EXCLUDED.episode_image_url, episodes.episode_image_url),
+          rss_description      = COALESCE(EXCLUDED.rss_description, episodes.rss_description),
+          rss_content_encoded  = COALESCE(EXCLUDED.rss_content_encoded, episodes.rss_content_encoded),
+          guest_from_title     = COALESCE(EXCLUDED.guest_from_title, episodes.guest_from_title),
+          sponsors             = EXCLUDED.sponsors,
+          rss_links            = EXCLUDED.rss_links,
+          cross_refs           = EXCLUDED.cross_refs,
+          publish_frequency_days = COALESCE(EXCLUDED.publish_frequency_days, episodes.publish_frequency_days)
+      `;
+      if (isNew) inserted++; else updated++;
+    } else {
+      // bonus / trailer : upsert par guid, episode_number NULL
+      await sql`
+        INSERT INTO episodes (
+          tenant_id, episode_number, parent_episode_number, title, slug, pillar, date_created,
+          guid, season, episode_type, explicit,
+          duration_seconds, audio_url, audio_size_bytes, episode_image_url,
+          rss_description, rss_content_encoded, guest_from_title,
+          sponsors, rss_links, cross_refs, publish_frequency_days
+        ) VALUES (
+          ${TENANT}, NULL, ${parentEpNum}, ${parsed.title}, ${slug}, ${pillarPlaceholder}, ${dateCreated},
+          ${parsed.guid}, ${parsed.season}, ${parsed.episodeType}, ${parsed.explicit},
+          ${parsed.durationSeconds}, ${parsed.audioUrl}, ${parsed.audioSizeBytes}, ${parsed.episodeImageUrl},
+          ${parsed.description}, ${parsed.rssContentEncoded}, ${parsed.guestFromTitle.name},
+          ${JSON.stringify(parsed.sponsors)}::jsonb,
+          ${JSON.stringify(parsed.links)}::jsonb,
+          ${JSON.stringify(parsed.crossRefs)}::jsonb,
+          ${freq}
+        )
+        ON CONFLICT (tenant_id, guid) DO UPDATE SET
+          title                = EXCLUDED.title,
+          parent_episode_number= COALESCE(EXCLUDED.parent_episode_number, episodes.parent_episode_number),
+          episode_type         = EXCLUDED.episode_type,
+          duration_seconds     = COALESCE(EXCLUDED.duration_seconds, episodes.duration_seconds),
+          audio_url            = COALESCE(EXCLUDED.audio_url, episodes.audio_url),
+          episode_image_url    = COALESCE(EXCLUDED.episode_image_url, episodes.episode_image_url),
+          rss_description      = COALESCE(EXCLUDED.rss_description, episodes.rss_description)
+      `;
+      insertedExtracts++;
+    }
   }
 
   console.log('\n[INGEST-RSS] complete');
-  console.log(`  Inserted           : ${inserted}`);
-  console.log(`  Updated            : ${updated}`);
-  console.log(`  Skipped (no epNum) : ${skipped}`);
+  console.log(`  Full inserted      : ${inserted}`);
+  console.log(`  Full updated       : ${updated}`);
+  console.log(`  Extracts upserted  : ${insertedExtracts}`);
+  console.log(`  Skipped (no id)    : ${skipped}`);
   console.log(`  Coverage :`);
   console.log(`    guid              : ${stats.withGuid}/${items.length}`);
   console.log(`    audio_url         : ${stats.withAudio}/${items.length}`);

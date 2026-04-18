@@ -1172,7 +1172,7 @@
 
       <section class="section">
         <div class="section-header">
-          <div><div class="section-title">Derniers episodes</div><div class="section-subtitle">Les plus recents du podcast La Martingale</div></div>
+          <div><div class="section-title">Derniers episodes</div><div class="section-subtitle" id="home-ep-subtitle">Les plus recents</div></div>
           <button class="section-action" onclick="go('episodes')">Tous les episodes →</button>
         </div>
         <div class="episodes-grid" id="home-episodes"></div>
@@ -1180,7 +1180,7 @@
 
       <section class="section">
         <div class="section-header">
-          <div><div class="section-title">Nos experts</div><div class="section-subtitle">Les voix qui comptent en finance personnelle</div></div>
+          <div><div class="section-title">Nos experts</div><div class="section-subtitle">Les invités du podcast</div></div>
           <button class="section-action" onclick="go('experts')">Tous les experts →</button>
         </div>
         <div class="experts-grid" id="home-experts"></div>
@@ -1238,13 +1238,12 @@
     <!-- CHAT (RAG) -->
     <div class="view" id="v-chat">
       <section class="section">
-        <div class="section-title" style="margin-bottom:4px">Assistant La Martingale</div>
-        <div class="section-subtitle" style="margin-bottom:20px">Posez vos questions sur l'investissement. L'assistant repond en citant les episodes pertinents.</div>
+        <div class="section-title" id="chat-title" style="margin-bottom:4px">Assistant</div>
+        <div class="section-subtitle" id="chat-subtitle" style="margin-bottom:20px">Posez vos questions. L'assistant repond en citant les episodes pertinents.</div>
         <div class="chat-container">
           <div class="chat-messages" id="chat-messages">
-            <div class="chat-msg assistant">
-              Bonjour ! Je suis l'assistant La Martingale. Posez-moi n'importe quelle question sur l'investissement, la finance personnelle ou le patrimoine. Je vous repondrai en m'appuyant sur les 310 episodes du podcast.<br><br>
-              <em style="color:var(--text-muted)">Exemples : "Quels episodes pour debuter en SCPI ?", "Comment optimiser sa fiscalite immobiliere ?", "Bitcoin est-il un bon investissement ?"</em>
+            <div class="chat-msg assistant" id="chat-greeting">
+              Bonjour ! Posez-moi une question sur le podcast. Je vous repondrai en m'appuyant sur les episodes.
             </div>
           </div>
           <div class="chat-input-wrap">
@@ -1329,12 +1328,15 @@
     let allEp = [], graphD = null, mediaMap = {};
     let curPillar = null, curDiff = null, curPage = 1;
 
-    const PC = {
+    // PC (pillar colors) et PN (pillar names) sont config-driven : remplis
+    // par applyConfig() depuis cfg.taxonomy.pillars. Les defaults LM restent
+    // en fallback pour compat retro au cas où /api/config echoue.
+    let PC = {
       IMMOBILIER:'#2563EB', BOURSE:'#16A34A', CRYPTO:'#F59E0B', ALTERNATIFS:'#9333EA',
       PE_STARTUP:'#DC2626', PATRIMOINE_FISCALITE:'#0891B2', FINANCES_PERSO:'#EA580C',
       IMPACT_ESG:'#059669', CROWDFUNDING:'#7C3AED', ENTREPRENEURIAT:'#BE185D'
     };
-    const PN = {
+    let PN = {
       IMMOBILIER:'Immobilier', BOURSE:'Bourse', CRYPTO:'Crypto', ALTERNATIFS:'Alternatifs',
       PE_STARTUP:'PE & Startups', PATRIMOINE_FISCALITE:'Patrimoine', FINANCES_PERSO:'Finances Perso',
       IMPACT_ESG:'Impact ESG', CROWDFUNDING:'Crowdfunding', ENTREPRENEURIAT:'Entrepreneuriat'
@@ -1436,6 +1438,18 @@
           document.querySelectorAll('.footer-brand').forEach(el => el.textContent = cfg.name);
         }
 
+        // Taxonomy config-driven : remplace les defauts LM par les piliers du tenant.
+        if (Array.isArray(cfg.taxonomy?.pillars) && cfg.taxonomy.pillars.length) {
+          const nextPC = {}, nextPN = {};
+          for (const pil of cfg.taxonomy.pillars) {
+            if (!pil?.id) continue;
+            nextPC[pil.id] = pil.color || secondary || primary || '#999';
+            nextPN[pil.id] = pil.name || pil.id;
+          }
+          PC = nextPC;
+          PN = nextPN;
+        }
+
         // Hero tagline + description
         const h1 = document.getElementById('hero-h1');
         const p = document.getElementById('hero-p');
@@ -1446,6 +1460,14 @@
         if (cfg.description) {
           const fd = document.querySelector('.footer-desc');
           if (fd) fd.textContent = cfg.description;
+        }
+
+        // Chat assistant — titre + greeting
+        if (cfg.name) {
+          const ct = document.getElementById('chat-title');
+          if (ct) ct.textContent = `Assistant ${cfg.name}`;
+          const cg = document.getElementById('chat-greeting');
+          if (cg) cg.innerHTML = `Bonjour ! Je suis l'assistant ${cfg.name}. Posez-moi une question sur le podcast — je m'appuie sur les episodes pour repondre.`;
         }
 
         // Footer links — reconstruits dynamiquement
@@ -1550,7 +1572,7 @@
         <div class="ep-tags">
           <span class="ep-pillar-dot" style="background:${PC[ep.pillar]||'#999'}"></span>
           <span class="ep-pillar-name">${PN[ep.pillar]||ep.pillar}</span>
-          <span style="font-size:10px;color:var(--text-muted);margin-left:4px">#${ep.id}</span>
+          ${ep.id != null ? `<span style="font-size:10px;color:var(--text-muted);margin-left:4px">#${ep.id}</span>` : ''}
         </div>
         ${d?'<span class="ep-check">✓</span>':''}
       </div>`;
