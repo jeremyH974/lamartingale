@@ -1,13 +1,13 @@
-import Anthropic from '@anthropic-ai/sdk';
+import { generateText } from 'ai';
 import * as fs from 'fs';
 import * as path from 'path';
+import { getLLMFast, getModelId } from './ai/llm';
 
 // ============================================================================
 // La Martingale - Enrichissement IA
 // Genere resumes pedagogiques, quiz, classifications, tags pour chaque episode
+// Modèle : Claude Haiku (rapide, batch, extraction) via src/ai/llm.ts
 // ============================================================================
-
-const client = new Anthropic();
 
 interface EpisodeIndex {
   id: number;
@@ -40,12 +40,7 @@ async function enrichBatch(episodes: EpisodeIndex[]): Promise<EnrichedEpisode[]>
     `- #${ep.id} "${ep.title}" (Invite: ${ep.guest}, Pilier: ${ep.pillar}, Difficulte: ${ep.difficulty})`
   ).join('\n');
 
-  const response = await client.messages.create({
-    model: 'claude-sonnet-4-20250514',
-    max_tokens: 8000,
-    messages: [{
-      role: 'user',
-      content: `Tu es un expert en education financiere. Pour chaque episode du podcast La Martingale ci-dessous, genere un enrichissement pedagogique structure.
+  const prompt = `Tu es un expert en education financiere. Pour chaque episode du podcast La Martingale ci-dessous, genere un enrichissement pedagogique structure.
 
 Episodes:
 ${episodeList}
@@ -60,11 +55,13 @@ Pour CHAQUE episode, genere un objet JSON avec:
 7. "difficulty_justification": pourquoi ce niveau de difficulte
 8. "target_audience": description du public cible ideal en 1 phrase
 
-Reponds UNIQUEMENT avec un tableau JSON valide. Pas de markdown, pas de commentaires.`
-    }]
-  });
+Reponds UNIQUEMENT avec un tableau JSON valide. Pas de markdown, pas de commentaires.`;
 
-  const text = response.content[0].type === 'text' ? response.content[0].text : '';
+  const { text } = await generateText({
+    model: getLLMFast(),
+    prompt,
+    maxOutputTokens: 8000,
+  });
 
   // Extract JSON from response
   const jsonMatch = text.match(/\[[\s\S]*\]/);
@@ -129,7 +126,7 @@ async function enrichAllEpisodes(batchSize = 10): Promise<void> {
         metadata: {
           last_updated: new Date().toISOString(),
           total_enriched: allEnriched.length,
-          model: 'claude-sonnet-4-20250514',
+          model: getModelId('fast'),
         },
         episodes: allEnriched,
       }, null, 2));
@@ -146,7 +143,7 @@ async function enrichAllEpisodes(batchSize = 10): Promise<void> {
         metadata: {
           last_updated: new Date().toISOString(),
           total_enriched: allEnriched.length,
-          model: 'claude-sonnet-4-20250514',
+          model: getModelId('fast'),
           error_at_batch: batchNum,
         },
         episodes: allEnriched,

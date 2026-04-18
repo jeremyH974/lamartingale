@@ -1,4 +1,5 @@
-import 'dotenv/config';
+import * as dotenv from 'dotenv';
+dotenv.config({ override: true }); // override : la valeur du .env prime sur l'env shell (évite le cas où ANTHROPIC_API_KEY="" dans le shell masque la vraie clé)
 import express from 'express';
 import cors from 'cors';
 import * as fs from 'fs';

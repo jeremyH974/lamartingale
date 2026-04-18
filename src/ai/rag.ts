@@ -1,7 +1,9 @@
 import 'dotenv/config';
+import { generateText } from 'ai';
 import { hybridSearch } from './search';
 import { neon } from '@neondatabase/serverless';
 import { getConfig } from '../config';
+import { getLLM, getModelId } from './llm';
 
 // ============================================================================
 // Couche 3.2 — Pipeline RAG (retrieve + augment + generate) — multi-podcast
@@ -9,15 +11,16 @@ import { getConfig } from '../config';
 
 function buildSystemPrompt(): string {
   const cfg = getConfig();
-  return `Tu es un assistant expert basé sur le podcast ${cfg.name}, animé par ${cfg.host}${cfg.description ? ` (${cfg.description})` : ''}.
+  return `Tu es l'assistant expert du podcast ${cfg.name}, animé par ${cfg.host}${cfg.description ? ` (${cfg.description})` : ''}.
 
 Règles :
-- Réponds toujours en français
-- Cite les épisodes par numéro et titre (ex: "L'épisode #312 avec X...")
-- Base tes réponses UNIQUEMENT sur le contexte fourni
-- Si le contexte ne contient pas la réponse, dis-le honnêtement
-- Sois pédagogique et accessible, comme le ton du podcast
-- Termine par 1-2 épisodes recommandés pour approfondir`;
+- Réponds en français, de façon précise et structurée.
+- Cite les épisodes par numéro et titre (ex: "L'épisode #312 avec X...").
+- Base tes réponses UNIQUEMENT sur le contexte fourni.
+- Quand pertinent, indique le chapitre spécifique et les ressources mentionnées.
+- Si la question est hors du périmètre du podcast, dis-le clairement.
+- Ne fais pas de conseil en investissement — oriente vers les épisodes pertinents.
+- Termine par 1-2 épisodes recommandés pour approfondir.`;
 }
 
 export interface RagResponse {
@@ -70,39 +73,17 @@ Sous-thèmes: ${(enriched?.sub_themes || []).join(', ')}
   // 3. Call LLM
   const userPrompt = `Contexte (épisodes du podcast ${cfg.name}) :\n\n${context}\n\nQuestion de l'utilisateur : ${message}`;
 
-  let responseText = '';
-  let model = 'claude-sonnet-4-20250514';
-
-  try {
-    if (process.env.ANTHROPIC_API_KEY) {
-      const Anthropic = (await import('@anthropic-ai/sdk')).default;
-      const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-      const response = await client.messages.create({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1024,
-        system: systemPrompt,
-        messages: [{ role: 'user', content: userPrompt }],
-      });
-      responseText = response.content[0].type === 'text' ? response.content[0].text : '';
-      model = 'claude-sonnet-4-20250514';
-    } else {
-      throw new Error('No Anthropic key, trying OpenAI');
-    }
-  } catch {
-    const OpenAI = (await import('openai')).default;
-    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-    const response = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
-      max_tokens: 1024,
-      temperature: 0.3,
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: userPrompt },
-      ],
-    });
-    responseText = response.choices[0]?.message?.content || '';
-    model = 'gpt-4o-mini';
-  }
+  // LLM call centralisé via src/ai/llm.ts — Anthropic Claude Sonnet par défaut,
+  // fallback OpenAI gpt-4o-mini si ANTHROPIC_API_KEY absent.
+  const { text } = await generateText({
+    model: getLLM(),
+    system: systemPrompt,
+    prompt: userPrompt,
+    maxOutputTokens: 1024,
+    temperature: 0.3,
+  });
+  const responseText = text;
+  const model = getModelId('main');
 
   return {
     response: responseText,

@@ -32,6 +32,14 @@ Arborescence détaillée : voir [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 - `src/db/queries.ts` — Raw SQL pour Vercel (pas Drizzle ORM pour les queries critiques)
 - `src/ai/search.ts` — hybridSearch() utilisé par RAG
 
+## LLM — provider centralisé
+
+- **RAG / chat** : Anthropic Claude Sonnet 4.6 (`claude-sonnet-4-6`) via `@ai-sdk/anthropic`
+- **Extraction / batch** : Anthropic Claude Haiku 4.5 (`claude-haiku-4-5-20251001`)
+- **Embeddings** : OpenAI `text-embedding-3-large` (pas d'alternative Anthropic — inchangé)
+- **Fallback auto** : `gpt-4o-mini` si `ANTHROPIC_API_KEY` absent
+- **Provider unique** : `src/ai/llm.ts` → `getLLM()` / `getLLMFast()` / `getModelId()`. **Ne jamais importer `@ai-sdk/anthropic` ou `@ai-sdk/openai` directement ailleurs** pour la génération texte.
+
 ## Décisions techniques clés
 
 1. **process.env.DATABASE_URL** au lieu de constante USE_DB — Vercel injecte env vars au runtime
