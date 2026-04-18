@@ -4,6 +4,7 @@ import { neon } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
 import { eq, isNull } from 'drizzle-orm';
 import * as schema from '../db/schema';
+import { getConfig } from '../config';
 
 // ============================================================================
 // Couche 2.1 — Génération d'embeddings OpenAI text-embedding-3-large
@@ -17,7 +18,10 @@ const DIMENSIONS = 3072;
 function sleep(ms: number) { return new Promise(r => setTimeout(r, ms)); }
 
 async function main() {
-  console.log('[COUCHE 2][EMBEDDINGS] Starting embedding generation');
+  const cfg = getConfig();
+  const TENANT = cfg.database.tenantId;
+
+  console.log(`[COUCHE 2][EMBEDDINGS] podcast=${cfg.id} tenant=${TENANT}`);
   console.log(`  Model: ${MODEL} (${DIMENSIONS} dims)`);
   console.log(`  Batch size: ${BATCH_SIZE}, delay: ${DELAY_MS}ms\n`);
 
@@ -27,8 +31,7 @@ async function main() {
 
   const forceAll = process.argv.includes('--force');
 
-  // Get episodes with enriched content for better embeddings
-  // Includes deep-scraped fields: chapters, rss_description, extended article_content
+  // Get episodes (tenant-scoped) avec contenu enrichi pour de meilleurs embeddings.
   const episodes = await sql`
     SELECT e.id, e.episode_number, e.title, e.guest, e.pillar, e.difficulty,
            e.abstract, e.article_content, e.key_takeaways, e.guest_bio,
@@ -36,6 +39,7 @@ async function main() {
            en.id as enrichment_id, en.tags, en.sub_themes, en.embedding
     FROM episodes e
     LEFT JOIN episodes_enrichment en ON en.episode_id = e.id
+    WHERE e.tenant_id = ${TENANT}
     ORDER BY e.episode_number DESC
   `;
 
@@ -110,10 +114,10 @@ async function main() {
             WHERE id = ${ep.enrichment_id}
           `;
         } else {
-          // Create enrichment row with embedding
+          // Create enrichment row with embedding + tenant
           await sql`
-            INSERT INTO episodes_enrichment (episode_id, tags, sub_themes, search_text, embedding)
-            VALUES (${ep.id}, '{}', '{}', '', ${`[${embedding.join(',')}]`}::vector)
+            INSERT INTO episodes_enrichment (tenant_id, episode_id, tags, sub_themes, search_text, embedding)
+            VALUES (${TENANT}, ${ep.id}, '{}', '{}', '', ${`[${embedding.join(',')}]`}::vector)
           `;
         }
         processed++;

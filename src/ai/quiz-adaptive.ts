@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import { neon } from '@neondatabase/serverless';
+import { getConfig } from '../config';
 
 // ============================================================================
 // Couche 3.3 — Quiz adaptatif (IRT simplifié)
@@ -59,6 +60,7 @@ export function initProfile(): QuizProfile {
 
 export async function getNextQuestion(profile: QuizProfile): Promise<AdaptiveQuestion | null> {
   const sql = neon(process.env.DATABASE_URL!);
+  const TENANT = getConfig().database.tenantId;
 
   // Strategy: explore pillars with fewest questions, or exploit uncertain ones
   let strategy: 'exploration' | 'exploitation';
@@ -90,6 +92,7 @@ export async function getNextQuestion(profile: QuizProfile): Promise<AdaptiveQue
     SELECT id, episode_id, question, options, correct_answer, explanation, difficulty, pillar
     FROM quiz_questions
     WHERE pillar = ${targetPillar}
+      AND tenant_id = ${TENANT}
       AND id != ALL(${historyIds}::int[])
     ORDER BY
       CASE WHEN difficulty = ${targetDiff} THEN 0
@@ -104,7 +107,8 @@ export async function getNextQuestion(profile: QuizProfile): Promise<AdaptiveQue
     const fallback = await sql`
       SELECT id, episode_id, question, options, correct_answer, explanation, difficulty, pillar
       FROM quiz_questions
-      WHERE id != ALL(${historyIds}::int[])
+      WHERE tenant_id = ${TENANT}
+        AND id != ALL(${historyIds}::int[])
       ORDER BY RANDOM()
       LIMIT 1
     `;
@@ -145,9 +149,10 @@ export async function processAnswer(
   profile: QuizProfile
 ): Promise<AnswerResult> {
   const sql = neon(process.env.DATABASE_URL!);
+  const TENANT = getConfig().database.tenantId;
 
   // Get the question
-  const [q] = await sql`SELECT * FROM quiz_questions WHERE id = ${questionId}`;
+  const [q] = await sql`SELECT * FROM quiz_questions WHERE id = ${questionId} AND tenant_id = ${TENANT}`;
   if (!q) throw new Error('Question not found');
 
   const correct = selectedAnswer === q.correct_answer;
@@ -182,6 +187,8 @@ export async function processAnswer(
       FROM episode_similarities es
       INNER JOIN episodes e2 ON e2.id = es.similar_episode_id
       WHERE es.episode_id = ${q.episode_id}
+        AND es.tenant_id = ${TENANT}
+        AND e2.tenant_id = ${TENANT}
       ORDER BY es.similarity_score DESC
       LIMIT 1
     `;

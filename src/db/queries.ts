@@ -1,12 +1,18 @@
 import 'dotenv/config';
 import { neon } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
-import { eq, ilike, or, sql, desc, asc, inArray, and } from 'drizzle-orm';
+import { eq, ilike, or, sql, desc, inArray, and } from 'drizzle-orm';
 import * as s from './schema';
+import { getConfig } from '../config';
 
 // ============================================================================
-// Drizzle query layer — returns same shapes as the JSON-based API
+// Drizzle query layer — multi-tenant : filtre par tenant_id = config actuelle.
+// Raw SQL (neon tagged template) pour les endpoints critiques (Vercel schema cache bypass).
 // ============================================================================
+
+function tenant(): string {
+  return getConfig().database.tenantId;
+}
 
 function getDb() {
   const url = process.env.DATABASE_URL;
@@ -23,9 +29,9 @@ export async function getEpisodes(opts: {
   pillar?: string; difficulty?: string; search?: string; page?: number; limit?: number;
 }) {
   const { pillar, difficulty, search, page = 1, limit = 20 } = opts;
-  const sqlInstance = neon(process.env.DATABASE_URL!);
+  const t = tenant();
 
-  const conditions: any[] = [];
+  const conditions: any[] = [eq(s.episodes.tenantId, t)];
   if (pillar) conditions.push(eq(s.episodes.pillar, pillar));
   if (difficulty) conditions.push(eq(s.episodes.difficulty, difficulty));
 
@@ -48,15 +54,13 @@ export async function getEpisodes(opts: {
   } else {
     rows = await db().select().from(s.episodes)
       .leftJoin(s.episodesMedia, eq(s.episodes.id, s.episodesMedia.episodeId))
-      .where(conditions.length ? and(...conditions) : undefined)
+      .where(and(...conditions))
       .orderBy(desc(s.episodes.episodeNumber))
       .limit(limit).offset((page - 1) * limit);
   }
 
-  // Get total count
-  const [countResult] = conditions.length
-    ? await db().select({ count: sql<number>`count(*)` }).from(s.episodes).where(and(...conditions))
-    : await db().select({ count: sql<number>`count(*)` }).from(s.episodes);
+  const [countResult] = await db().select({ count: sql<number>`count(*)` })
+    .from(s.episodes).where(and(...conditions));
   const total = Number(countResult.count);
 
   const episodes = rows.map(r => ({
@@ -79,13 +83,14 @@ export async function getEpisodes(opts: {
 
 export async function getEpisodeById(episodeNumber: number) {
   const sqlInstance = neon(process.env.DATABASE_URL!);
+  const t = tenant();
 
-  // Raw SQL to ensure all enriched columns are included (Vercel caching workaround)
+  // Raw SQL pour contourner le cache Drizzle en runtime Vercel.
   const rows = await sqlInstance`
     SELECT e.*, em.thumbnail_350, em.thumbnail_full, em.audio_player_url
     FROM episodes e
     LEFT JOIN episodes_media em ON em.episode_id = e.id
-    WHERE e.episode_number = ${episodeNumber}
+    WHERE e.episode_number = ${episodeNumber} AND e.tenant_id = ${t}
   `;
 
   if (!rows.length) return null;
@@ -115,12 +120,11 @@ export async function getEpisodeById(episodeNumber: number) {
     thumbnail_full: row.thumbnail_full || null,
   };
 
-  // Related episodes (same pillar) - raw SQL for consistency
   const relatedRows = await sqlInstance`
     SELECT e.episode_number, e.title, e.guest, e.pillar, e.difficulty, em.thumbnail_350
     FROM episodes e
     LEFT JOIN episodes_media em ON em.episode_id = e.id
-    WHERE e.pillar = ${row.pillar} AND e.episode_number != ${episodeNumber}
+    WHERE e.pillar = ${row.pillar} AND e.episode_number != ${episodeNumber} AND e.tenant_id = ${t}
     ORDER BY e.episode_number DESC LIMIT 5
   `;
 
@@ -133,15 +137,13 @@ export async function getEpisodeById(episodeNumber: number) {
     thumbnail: r.thumbnail_350 || null,
   }));
 
-  // Audio player
   const audioPlayer = row.audio_player_url || null;
 
-  // Expert
   const expertRows = await sqlInstance`
     SELECT g.name, g.company, g.specialty, g.authority_score
     FROM guest_episodes ge
     INNER JOIN guests g ON g.id = ge.guest_id
-    WHERE ge.episode_id = ${row.id}
+    WHERE ge.episode_id = ${row.id} AND ge.tenant_id = ${t}
     LIMIT 1
   `;
   const expert = expertRows.length ? {
@@ -157,16 +159,13 @@ export async function getEpisodeById(episodeNumber: number) {
 // ---- Experts ----
 
 export async function getExperts(specialty?: string) {
-  let rows;
-  if (specialty) {
-    const q = `%${specialty}%`;
-    rows = await db().select().from(s.guests)
-      .where(sql`array_to_string(${s.guests.specialty}, ',') ILIKE ${q}`)
-      .orderBy(desc(s.guests.authorityScore));
-  } else {
-    rows = await db().select().from(s.guests)
-      .orderBy(desc(s.guests.authorityScore));
-  }
+  const t = tenant();
+  const conditions: any[] = [eq(s.guests.tenantId, t)];
+  if (specialty) conditions.push(sql`array_to_string(${s.guests.specialty}, ',') ILIKE ${`%${specialty}%`}`);
+
+  const rows = await db().select().from(s.guests)
+    .where(and(...conditions))
+    .orderBy(desc(s.guests.authorityScore));
 
   return {
     total: rows.length,
@@ -175,7 +174,7 @@ export async function getExperts(specialty?: string) {
       name: r.name,
       company: r.company || '',
       specialty: r.specialty || [],
-      episodes: [],  // Will be filled below
+      episodes: [],
       authority_score: r.authorityScore || 1,
       bio: r.bio || '',
     })),
@@ -183,23 +182,23 @@ export async function getExperts(specialty?: string) {
 }
 
 export async function getExpertById(expertId: string) {
+  const t = tenant();
   const name = expertId.replace(/-/g, ' ');
   const [row] = await db().select().from(s.guests)
-    .where(ilike(s.guests.name, `%${name}%`))
+    .where(and(eq(s.guests.tenantId, t), ilike(s.guests.name, `%${name}%`)))
     .limit(1);
   if (!row) return null;
 
   const eps = await db().select({ episodeId: s.guestEpisodes.episodeId })
     .from(s.guestEpisodes)
-    .where(eq(s.guestEpisodes.guestId, row.id));
+    .where(and(eq(s.guestEpisodes.tenantId, t), eq(s.guestEpisodes.guestId, row.id)));
 
-  // Get actual episode numbers
   const epIds = eps.map(e => e.episodeId).filter(Boolean) as number[];
   let epNumbers: number[] = [];
   if (epIds.length) {
     const epRows = await db().select({ epNum: s.episodes.episodeNumber })
       .from(s.episodes)
-      .where(inArray(s.episodes.id, epIds));
+      .where(and(eq(s.episodes.tenantId, t), inArray(s.episodes.id, epIds)));
     epNumbers = epRows.map(r => r.epNum!);
   }
 
@@ -219,7 +218,8 @@ export async function getExpertById(expertId: string) {
 // ---- Paths ----
 
 export async function getPaths() {
-  const rows = await db().select().from(s.learningPaths);
+  const t = tenant();
+  const rows = await db().select().from(s.learningPaths).where(eq(s.learningPaths.tenantId, t));
   return {
     total: rows.length,
     paths: rows.map(r => ({
@@ -236,21 +236,20 @@ export async function getPaths() {
 }
 
 export async function getPathById(pathId: string) {
+  const t = tenant();
   const [row] = await db().select().from(s.learningPaths)
-    .where(eq(s.learningPaths.pathId, pathId));
+    .where(and(eq(s.learningPaths.tenantId, t), eq(s.learningPaths.pathId, pathId)));
   if (!row) return null;
 
-  // Resolve episodes
   const steps = (row.episodesOrdered as any[] || []).map((step: any) => ({
     ...step,
-    episode: null, // Will be resolved below
+    episode: null,
   }));
 
-  // Batch fetch episodes
   const epNums = steps.map((step: any) => step.episode_id).filter(Boolean);
   if (epNums.length) {
     const epRows = await db().select().from(s.episodes)
-      .where(inArray(s.episodes.episodeNumber, epNums));
+      .where(and(eq(s.episodes.tenantId, t), inArray(s.episodes.episodeNumber, epNums)));
     const epMap: Record<number, any> = {};
     for (const ep of epRows) {
       epMap[ep.episodeNumber!] = {
@@ -284,7 +283,8 @@ export async function getPathById(pathId: string) {
 // ---- Taxonomy ----
 
 export async function getTaxonomy() {
-  const rows = await db().select().from(s.taxonomy);
+  const t = tenant();
+  const rows = await db().select().from(s.taxonomy).where(eq(s.taxonomy.tenantId, t));
   return {
     pillars: rows.map(r => ({
       id: r.pillar,
@@ -301,16 +301,18 @@ export async function getTaxonomy() {
 
 export async function getStats() {
   const sqlInstance = neon(process.env.DATABASE_URL!);
-  const [epCount] = await sqlInstance`SELECT count(*) as c FROM episodes`;
-  const [gCount] = await sqlInstance`SELECT count(*) as c FROM guests`;
-  const [pCount] = await sqlInstance`SELECT count(*) as c FROM learning_paths`;
-  const [tCount] = await sqlInstance`SELECT count(*) as c FROM taxonomy`;
-  const [qCount] = await sqlInstance`SELECT count(*) as c FROM quiz_questions`;
+  const t = tenant();
 
-  const pillarRows = await sqlInstance`SELECT pillar, count(*) as c FROM episodes GROUP BY pillar ORDER BY c DESC`;
-  const diffRows = await sqlInstance`SELECT difficulty, count(*) as c FROM episodes GROUP BY difficulty`;
+  const [epCount] = await sqlInstance`SELECT count(*) as c FROM episodes WHERE tenant_id = ${t}`;
+  const [gCount] = await sqlInstance`SELECT count(*) as c FROM guests WHERE tenant_id = ${t}`;
+  const [pCount] = await sqlInstance`SELECT count(*) as c FROM learning_paths WHERE tenant_id = ${t}`;
+  const [tCount] = await sqlInstance`SELECT count(*) as c FROM taxonomy WHERE tenant_id = ${t}`;
+  const [qCount] = await sqlInstance`SELECT count(*) as c FROM quiz_questions WHERE tenant_id = ${t}`;
 
-  const topExperts = await sqlInstance`SELECT name, authority_score, episodes_count FROM guests ORDER BY authority_score DESC LIMIT 5`;
+  const pillarRows = await sqlInstance`SELECT pillar, count(*) as c FROM episodes WHERE tenant_id = ${t} GROUP BY pillar ORDER BY c DESC`;
+  const diffRows = await sqlInstance`SELECT difficulty, count(*) as c FROM episodes WHERE tenant_id = ${t} GROUP BY difficulty`;
+
+  const topExperts = await sqlInstance`SELECT name, authority_score, episodes_count FROM guests WHERE tenant_id = ${t} ORDER BY authority_score DESC LIMIT 5`;
 
   return {
     total_episodes: Number(epCount.c),
@@ -328,12 +330,13 @@ export async function getStats() {
 
 export async function getQuiz(opts: { pillar?: string; difficulty?: string; limit?: number }) {
   const { pillar, difficulty, limit = 10 } = opts;
-  const conditions: any[] = [];
+  const t = tenant();
+  const conditions: any[] = [eq(s.quizQuestions.tenantId, t)];
   if (pillar) conditions.push(eq(s.quizQuestions.pillar, pillar));
   if (difficulty) conditions.push(eq(s.quizQuestions.difficulty, difficulty));
 
   const rows = await db().select().from(s.quizQuestions)
-    .where(conditions.length ? and(...conditions) : undefined)
+    .where(and(...conditions))
     .orderBy(sql`RANDOM()`)
     .limit(limit);
 
@@ -341,7 +344,7 @@ export async function getQuiz(opts: { pillar?: string; difficulty?: string; limi
     total_available: rows.length,
     count: rows.length,
     questions: rows.map(r => ({
-      episode_id: null, // need to resolve
+      episode_id: null,
       question: r.question,
       options: r.options,
       correct_answer: r.correctAnswer,
@@ -353,12 +356,13 @@ export async function getQuiz(opts: { pillar?: string; difficulty?: string; limi
 }
 
 export async function getQuizByEpisode(episodeNumber: number) {
+  const t = tenant();
   const [ep] = await db().select({ id: s.episodes.id }).from(s.episodes)
-    .where(eq(s.episodes.episodeNumber, episodeNumber));
+    .where(and(eq(s.episodes.tenantId, t), eq(s.episodes.episodeNumber, episodeNumber)));
   if (!ep) return { episode_id: episodeNumber, count: 0, questions: [] };
 
   const rows = await db().select().from(s.quizQuestions)
-    .where(eq(s.quizQuestions.episodeId, ep.id));
+    .where(and(eq(s.quizQuestions.tenantId, t), eq(s.quizQuestions.episodeId, ep.id)));
 
   return {
     episode_id: episodeNumber,
@@ -375,9 +379,10 @@ export async function getQuizByEpisode(episodeNumber: number) {
 // ---- Enriched ----
 
 export async function getEnrichedById(episodeNumber: number) {
+  const t = tenant();
   const [row] = await db().select().from(s.episodes)
     .innerJoin(s.episodesEnrichment, eq(s.episodes.id, s.episodesEnrichment.episodeId))
-    .where(eq(s.episodes.episodeNumber, episodeNumber));
+    .where(and(eq(s.episodes.tenantId, t), eq(s.episodes.episodeNumber, episodeNumber)));
   if (!row) return null;
 
   return {
@@ -391,29 +396,39 @@ export async function getEnrichedById(episodeNumber: number) {
 // ---- Search ----
 
 export async function searchAll(query: string) {
+  const t = tenant();
   const q = `%${query}%`;
 
   const matchedEpisodes = await db().select().from(s.episodes)
     .leftJoin(s.episodesEnrichment, eq(s.episodes.id, s.episodesEnrichment.episodeId))
-    .where(or(
-      ilike(s.episodes.title, q),
-      ilike(s.episodes.guest, q),
-      ilike(s.episodesEnrichment.searchText, q),
+    .where(and(
+      eq(s.episodes.tenantId, t),
+      or(
+        ilike(s.episodes.title, q),
+        ilike(s.episodes.guest, q),
+        ilike(s.episodesEnrichment.searchText, q),
+      ),
     ))
     .orderBy(desc(s.episodes.episodeNumber))
     .limit(20);
 
   const matchedExperts = await db().select().from(s.guests)
-    .where(or(
-      ilike(s.guests.name, q),
-      ilike(s.guests.company, q),
+    .where(and(
+      eq(s.guests.tenantId, t),
+      or(
+        ilike(s.guests.name, q),
+        ilike(s.guests.company, q),
+      ),
     ))
     .limit(10);
 
   const matchedPaths = await db().select().from(s.learningPaths)
-    .where(or(
-      ilike(s.learningPaths.name, q),
-      ilike(s.learningPaths.description, q),
+    .where(and(
+      eq(s.learningPaths.tenantId, t),
+      or(
+        ilike(s.learningPaths.name, q),
+        ilike(s.learningPaths.description, q),
+      ),
     ));
 
   return {
@@ -445,9 +460,11 @@ export async function searchAll(query: string) {
 
 export async function getTags() {
   const sqlInstance = neon(process.env.DATABASE_URL!);
+  const t = tenant();
   const rows = await sqlInstance`
     SELECT tag, count(*) as c
     FROM episodes_enrichment, unnest(tags) AS tag
+    WHERE tenant_id = ${t}
     GROUP BY tag
     ORDER BY c DESC
   `;
@@ -461,8 +478,10 @@ export async function getTags() {
 // ---- Media ----
 
 export async function getMediaAll() {
+  const t = tenant();
   const rows = await db().select().from(s.episodesMedia)
-    .innerJoin(s.episodes, eq(s.episodesMedia.episodeId, s.episodes.id));
+    .innerJoin(s.episodes, eq(s.episodesMedia.episodeId, s.episodes.id))
+    .where(eq(s.episodes.tenantId, t));
 
   const byId: Record<number, any> = {};
   for (const r of rows) {
@@ -476,9 +495,10 @@ export async function getMediaAll() {
 }
 
 export async function getMediaById(episodeNumber: number) {
+  const t = tenant();
   const [row] = await db().select().from(s.episodesMedia)
     .innerJoin(s.episodes, eq(s.episodesMedia.episodeId, s.episodes.id))
-    .where(eq(s.episodes.episodeNumber, episodeNumber));
+    .where(and(eq(s.episodes.tenantId, t), eq(s.episodes.episodeNumber, episodeNumber)));
   if (!row) return null;
   return {
     thumbnail_350: row.episodes_media.thumbnail350,

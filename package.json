@@ -23,7 +23,9 @@
     "deploy": "vercel --yes --prod --scope jeremyh974s-projects",
     "deploy:v2": "vercel --yes --prod --scope jeremyh974s-projects --name lamartingale-v2 --local-config vercel-v2.json",
     "build": "tsc",
-    "start": "node dist/api.js"
+    "start": "node dist/api.js",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "keywords": [],
   "author": "",
@@ -53,6 +55,7 @@
     "@vercel/node": "^5.7.5",
     "docx": "^9.6.1",
     "drizzle-kit": "^0.31.10",
-    "marked": "^18.0.2"
+    "marked": "^18.0.2",
+    "vitest": "^4.1.4"
   }
 }

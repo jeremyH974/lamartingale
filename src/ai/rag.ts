@@ -1,20 +1,24 @@
 import 'dotenv/config';
 import { hybridSearch } from './search';
 import { neon } from '@neondatabase/serverless';
+import { getConfig } from '../config';
 
 // ============================================================================
-// Couche 3.2 — Pipeline RAG (retrieve + augment + generate)
+// Couche 3.2 — Pipeline RAG (retrieve + augment + generate) — multi-podcast
 // ============================================================================
 
-const SYSTEM_PROMPT = `Tu es un assistant expert en finances personnelles basé sur le podcast La Martingale, animé par Matthieu Stefani.
+function buildSystemPrompt(): string {
+  const cfg = getConfig();
+  return `Tu es un assistant expert basé sur le podcast ${cfg.name}, animé par ${cfg.host}${cfg.description ? ` (${cfg.description})` : ''}.
 
 Règles :
 - Réponds toujours en français
-- Cite les épisodes par numéro et titre (ex: "L'épisode #312 avec Arthur Auboeuf...")
+- Cite les épisodes par numéro et titre (ex: "L'épisode #312 avec X...")
 - Base tes réponses UNIQUEMENT sur le contexte fourni
 - Si le contexte ne contient pas la réponse, dis-le honnêtement
 - Sois pédagogique et accessible, comme le ton du podcast
 - Termine par 1-2 épisodes recommandés pour approfondir`;
+}
 
 export interface RagResponse {
   response: string;
@@ -31,21 +35,22 @@ export interface RagResponse {
 
 export async function ragQuery(message: string): Promise<RagResponse> {
   const start = Date.now();
+  const cfg = getConfig();
+  const TENANT = cfg.database.tenantId;
 
   // 1. Retrieve top 5 episodes
   const searchResults = await hybridSearch(message, 5);
 
-  // 2. Build context from search results
+  // 2. Build context from search results (tenant-scoped)
   const sql = neon(process.env.DATABASE_URL!);
   const contextParts: string[] = [];
 
   for (const result of searchResults.results) {
-    // Get full enriched data
     const [enriched] = await sql`
       SELECT en.tags, en.sub_themes
       FROM episodes_enrichment en
       INNER JOIN episodes e ON e.id = en.episode_id
-      WHERE e.episode_number = ${result.episode_number}
+      WHERE e.episode_number = ${result.episode_number} AND e.tenant_id = ${TENANT}
     `;
 
     contextParts.push(`
@@ -60,14 +65,14 @@ Sous-thèmes: ${(enriched?.sub_themes || []).join(', ')}
   }
 
   const context = contextParts.join('\n\n');
+  const systemPrompt = buildSystemPrompt();
 
   // 3. Call LLM
-  const userPrompt = `Contexte (épisodes du podcast La Martingale) :\n\n${context}\n\nQuestion de l'utilisateur : ${message}`;
+  const userPrompt = `Contexte (épisodes du podcast ${cfg.name}) :\n\n${context}\n\nQuestion de l'utilisateur : ${message}`;
 
   let responseText = '';
   let model = 'claude-sonnet-4-20250514';
 
-  // Try Anthropic first, fallback to OpenAI
   try {
     if (process.env.ANTHROPIC_API_KEY) {
       const Anthropic = (await import('@anthropic-ai/sdk')).default;
@@ -75,7 +80,7 @@ Sous-thèmes: ${(enriched?.sub_themes || []).join(', ')}
       const response = await client.messages.create({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 1024,
-        system: SYSTEM_PROMPT,
+        system: systemPrompt,
         messages: [{ role: 'user', content: userPrompt }],
       });
       responseText = response.content[0].type === 'text' ? response.content[0].text : '';
@@ -84,7 +89,6 @@ Sous-thèmes: ${(enriched?.sub_themes || []).join(', ')}
       throw new Error('No Anthropic key, trying OpenAI');
     }
   } catch {
-    // Fallback to OpenAI
     const OpenAI = (await import('openai')).default;
     const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
     const response = await openai.chat.completions.create({
@@ -92,7 +96,7 @@ Sous-thèmes: ${(enriched?.sub_themes || []).join(', ')}
       max_tokens: 1024,
       temperature: 0.3,
       messages: [
-        { role: 'system', content: SYSTEM_PROMPT },
+        { role: 'system', content: systemPrompt },
         { role: 'user', content: userPrompt },
       ],
     });

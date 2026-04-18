@@ -13,12 +13,15 @@
 import 'dotenv/config';
 import { XMLParser } from 'fast-xml-parser';
 import { neon } from '@neondatabase/serverless';
+import { getConfig } from './config';
 
 const sql = neon(process.env.DATABASE_URL!);
+const cfg = getConfig();
+const TENANT = cfg.database.tenantId;
 
-const FEEDS = [
-  { name: 'La Martingale',     url: 'https://feed.audiomeans.fr/feed/la-martingale-010afa69a4c1.xml' },
-  { name: 'Allô la Martingale', url: 'https://feed.audiomeans.fr/feed/allo-la-martingale-5d56dcf7.xml' },
+const FEEDS: { name: string; url: string }[] = [
+  { name: cfg.name, url: cfg.rssFeeds.main },
+  ...(cfg.rssFeeds.secondary ? [{ name: `${cfg.name} (secondary)`, url: cfg.rssFeeds.secondary }] : []),
 ];
 
 // ---------------------------------------------------------------------------
@@ -67,7 +70,7 @@ interface RssItem {
 }
 
 async function fetchFeed(url: string): Promise<RssItem[]> {
-  const res = await fetch(url, { headers: { 'User-Agent': 'LaMartingale-DataBot/1.0' } });
+  const res = await fetch(url, { headers: { 'User-Agent': cfg.scraping.userAgent } });
   if (!res.ok) throw new Error(`Feed ${url} → HTTP ${res.status}`);
   const xml = await res.text();
 
@@ -120,9 +123,9 @@ async function main() {
   }
   console.log(`  total items: ${allItems.length}`);
 
-  // Charger les épisodes BDD pour matcher
+  // Charger les épisodes BDD du tenant actif pour matcher
   const episodes = (await sql`
-    SELECT id, episode_number, title FROM episodes
+    SELECT id, episode_number, title FROM episodes WHERE tenant_id = ${TENANT}
   `) as { id: number; episode_number: number | null; title: string }[];
 
   const byNumber = new Map<number, typeof episodes[0]>();

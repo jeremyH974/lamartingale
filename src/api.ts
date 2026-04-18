@@ -6,6 +6,7 @@ import * as path from 'path';
 import type { Episode, Expert, LearningPath, Difficulty, Pillar, UserProfile, Recommendation } from './types';
 import { getRecommendations } from './types';
 import * as dbQueries from './db/queries';
+import { getConfig, toPublicConfig } from './config';
 
 const app = express();
 app.use(cors());
@@ -17,6 +18,16 @@ app.use(express.static(path.join(__dirname, '..', 'public')));
 // V2 brand-aligned route
 app.get('/v2', (_req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'v2.html'));
+});
+
+// Public config endpoint — exposé au frontend pour branding dynamique.
+// Ne renvoie JAMAIS les sections database ou deploy.
+app.get('/api/config', (_req, res) => {
+  try {
+    res.json(toPublicConfig(getConfig()));
+  } catch (e: any) {
+    res.status(500).json({ error: e.message });
+  }
 });
 
 const PORT = process.env.PORT || 3001;
@@ -73,11 +84,12 @@ if (!USE_DB) {
     return title.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').substring(0, 80);
   }
 
+  const urlPattern = getConfig().episodeUrlPattern;
   episodes = episodesData.episodes.map((ep: any) => ({
     id: ep.id, title: ep.title, guest_name: ep.guest, guest_company: '',
     format: 'INTERVIEW' as const, pillar: ep.pillar as Pillar, sub_theme: '', tags: [],
     difficulty: mapDifficulty(ep.difficulty), learning_paths: [],
-    url: urlMap[ep.id] || `https://lamartingale.io/tous/${slugify(ep.title)}/`,
+    url: urlMap[ep.id] || urlPattern.replace('{slug}', slugify(ep.title)),
   }));
 }
 
@@ -308,6 +320,7 @@ app.get('/api/similar/:id', async (req, res) => {
     const sql = (await import('@neondatabase/serverless')).neon(process.env.DATABASE_URL!);
     const episodeNumber = parseInt(req.params.id);
     const limit = parseInt(req.query.limit as string) || 10;
+    const tenantId = getConfig().database.tenantId;
 
     const similar = await sql`
       SELECT e2.episode_number, e2.title, e2.guest, e2.pillar, e2.difficulty,
@@ -318,6 +331,8 @@ app.get('/api/similar/:id', async (req, res) => {
       INNER JOIN episodes e2 ON e2.id = es.similar_episode_id
       LEFT JOIN episodes_media em ON em.episode_id = e2.id
       WHERE e1.episode_number = ${episodeNumber}
+        AND e1.tenant_id = ${tenantId}
+        AND e2.tenant_id = ${tenantId}
       ORDER BY es.similarity_score DESC
       LIMIT ${limit}
     `;

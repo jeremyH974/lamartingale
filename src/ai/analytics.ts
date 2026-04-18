@@ -1,12 +1,14 @@
 import 'dotenv/config';
 import { neon } from '@neondatabase/serverless';
+import { getConfig } from '../config';
 
 // ============================================================================
-// Couche 2.3 — Analytics SQL (métriques data science)
+// Couche 2.3 — Analytics SQL (métriques data science) — multi-tenant
 // ============================================================================
 
 export async function getAnalytics() {
   const sql = neon(process.env.DATABASE_URL!);
+  const TENANT = getConfig().database.tenantId;
 
   const [
     pillarMonthly,
@@ -21,7 +23,7 @@ export async function getAnalytics() {
     sql`
       SELECT pillar, date_trunc('month', date_created) as month, count(*) as count
       FROM episodes
-      WHERE date_created IS NOT NULL
+      WHERE date_created IS NOT NULL AND tenant_id = ${TENANT}
       GROUP BY pillar, month
       ORDER BY month DESC, count DESC
       LIMIT 100
@@ -31,7 +33,7 @@ export async function getAnalytics() {
     sql`
       SELECT guest, count(*) as episode_count, array_agg(DISTINCT pillar) as pillars
       FROM episodes
-      WHERE guest IS NOT NULL AND guest != ''
+      WHERE guest IS NOT NULL AND guest != '' AND tenant_id = ${TENANT}
       GROUP BY guest
       HAVING count(*) > 1
       ORDER BY count(*) DESC
@@ -45,7 +47,7 @@ export async function getAnalytics() {
              count(*) as total_episodes,
              ROUND(count(DISTINCT guest)::numeric / NULLIF(count(*), 0), 3) as diversity_ratio
       FROM episodes
-      WHERE guest IS NOT NULL
+      WHERE guest IS NOT NULL AND tenant_id = ${TENANT}
       GROUP BY pillar
       ORDER BY diversity_ratio DESC
     `,
@@ -54,7 +56,7 @@ export async function getAnalytics() {
     sql`
       SELECT EXTRACT(YEAR FROM date_created) as year, difficulty, count(*) as count
       FROM episodes
-      WHERE date_created IS NOT NULL AND difficulty IS NOT NULL
+      WHERE date_created IS NOT NULL AND difficulty IS NOT NULL AND tenant_id = ${TENANT}
       GROUP BY year, difficulty
       ORDER BY year DESC, difficulty
     `,
@@ -65,7 +67,7 @@ export async function getAnalytics() {
       FROM episodes_enrichment e1,
            unnest(e1.tags) AS t1(tag),
            unnest(e1.tags) AS t2(tag)
-      WHERE t1.tag < t2.tag
+      WHERE t1.tag < t2.tag AND e1.tenant_id = ${TENANT}
       GROUP BY t1.tag, t2.tag
       ORDER BY co_count DESC
       LIMIT 20
@@ -79,21 +81,21 @@ export async function getAnalytics() {
         percentile_cont(0.5) WITHIN GROUP (ORDER BY similarity_score) as median_similarity,
         min(similarity_score) as min_similarity,
         max(similarity_score) as max_similarity
-      FROM episode_similarities
+      FROM episode_similarities WHERE tenant_id = ${TENANT}
     `,
 
     // 7. Couverture embeddings
     sql`
       SELECT
-        (SELECT count(*) FROM episodes) as total_episodes,
-        (SELECT count(*) FROM episodes_enrichment WHERE embedding IS NOT NULL) as with_embedding,
-        (SELECT count(*) FROM episode_similarities) as similarity_pairs
+        (SELECT count(*) FROM episodes WHERE tenant_id = ${TENANT}) as total_episodes,
+        (SELECT count(*) FROM episodes_enrichment WHERE tenant_id = ${TENANT} AND embedding IS NOT NULL) as with_embedding,
+        (SELECT count(*) FROM episode_similarities WHERE tenant_id = ${TENANT}) as similarity_pairs
     `,
   ]);
 
   // 8. Score diversité global (Gini-like)
   const pillarCounts = await sql`
-    SELECT pillar, count(*) as c FROM episodes GROUP BY pillar ORDER BY c DESC
+    SELECT pillar, count(*) as c FROM episodes WHERE tenant_id = ${TENANT} GROUP BY pillar ORDER BY c DESC
   `;
   const counts = pillarCounts.map((r: any) => Number(r.c));
   const total = counts.reduce((a: number, b: number) => a + b, 0);

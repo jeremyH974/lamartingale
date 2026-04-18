@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import OpenAI from 'openai';
 import { neon } from '@neondatabase/serverless';
+import { getConfig } from '../config';
 
 // ============================================================================
 // Couche 3.1 — Hybrid Search (pgvector cosine + pg_trgm trigram + RRF)
@@ -34,6 +35,7 @@ export async function hybridSearch(query: string, limit: number = 10): Promise<{
   const start = Date.now();
   const sql = neon(process.env.DATABASE_URL!);
   const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  const TENANT = getConfig().database.tenantId;
 
   // 1. Generate query embedding
   const embResponse = await openai.embeddings.create({
@@ -46,7 +48,7 @@ export async function hybridSearch(query: string, limit: number = 10): Promise<{
 
   // 2. Parallel: semantic search + lexical search
   const [semanticResults, lexicalResults] = await Promise.all([
-    // Semantic: pgvector cosine similarity
+    // Semantic: pgvector cosine similarity — tenant-scoped
     sql`
       SELECT e.episode_number, e.title, e.guest, e.pillar, e.difficulty, e.abstract,
              em.thumbnail_350,
@@ -54,12 +56,12 @@ export async function hybridSearch(query: string, limit: number = 10): Promise<{
       FROM episodes e
       INNER JOIN episodes_enrichment en ON en.episode_id = e.id
       LEFT JOIN episodes_media em ON em.episode_id = e.id
-      WHERE en.embedding IS NOT NULL
+      WHERE en.embedding IS NOT NULL AND e.tenant_id = ${TENANT}
       ORDER BY en.embedding <=> ${embVector}::vector
       LIMIT 20
     `,
 
-    // Lexical: pg_trgm on title + abstract + tags
+    // Lexical: pg_trgm on title + abstract + tags — tenant-scoped
     sql`
       SELECT e.episode_number, e.title, e.guest, e.pillar, e.difficulty, e.abstract,
              em.thumbnail_350,
@@ -70,9 +72,10 @@ export async function hybridSearch(query: string, limit: number = 10): Promise<{
              ) AS trgm_score
       FROM episodes e
       LEFT JOIN episodes_media em ON em.episode_id = e.id
-      WHERE similarity(lower(e.title), lower(${query})) > 0.1
+      WHERE e.tenant_id = ${TENANT}
+        AND (similarity(lower(e.title), lower(${query})) > 0.1
          OR similarity(lower(coalesce(e.abstract, '')), lower(${query})) > 0.1
-         OR similarity(lower(coalesce(e.guest, '')), lower(${query})) > 0.1
+         OR similarity(lower(coalesce(e.guest, '')), lower(${query})) > 0.1)
       ORDER BY trgm_score DESC
       LIMIT 20
     `,

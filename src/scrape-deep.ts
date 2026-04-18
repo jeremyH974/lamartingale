@@ -22,14 +22,20 @@
 import 'dotenv/config';
 import * as cheerio from 'cheerio';
 import { neon } from '@neondatabase/serverless';
+import { getConfig } from './config';
 
 const sql = neon(process.env.DATABASE_URL!);
+const cfg = getConfig();
+const TENANT = cfg.database.tenantId;
 
-const BASE = 'https://lamartingale.io';
-const USER_AGENT = 'LaMartingale-DataBot/1.0';
-const DELAY_MS = 2000;                    // politesse : 2s entre requêtes
+// BASE : racine du site du podcast — pour résoudre les URLs relatives
+// et classifier les liens internes comme episode_ref.
+const BASE = cfg.website;
+const WEBSITE_HOST = new URL(BASE).hostname.replace(/^www\./, '');
+const USER_AGENT = cfg.scraping.userAgent;
+const DELAY_MS = cfg.scraping.rateLimit;
 const TIMEOUT_MS = 10_000;
-const MIN_ARTICLE_CHARS = 200;            // seuil "article réel"
+const MIN_ARTICLE_CHARS = 200;
 const CONSECUTIVE_ERRORS_BEFORE_PAUSE = 5;
 const PAUSE_MS = 5 * 60_000;
 
@@ -56,7 +62,8 @@ function classifyLink(url: string): LinkType {
     const host = u.hostname.replace(/^www\./, '').toLowerCase();
 
     if (host.includes('linkedin.com') && u.pathname.startsWith('/in/')) return 'linkedin';
-    if (host === 'lamartingale.io' && u.pathname.startsWith('/tous/')) return 'episode_ref';
+    // episode_ref = lien vers le site du podcast lui-même (issu de la config)
+    if (host === WEBSITE_HOST) return 'episode_ref';
     if (TOOL_DOMAINS.some((t) => host.includes(t))) return 'tool';
     if (SOCIAL_NON_LINKEDIN.some((s) => host.includes(s))) return 'resource';
 
@@ -117,14 +124,8 @@ interface Extracted {
   guestLinkedin: string | null;
 }
 
-const ARTICLE_SELECTORS = [
-  '.entry-content',
-  '.post-content',
-  'article .content',
-  'main .article-body',
-  'article',
-  'main',
-];
+const ARTICLE_SELECTORS = cfg.scraping.articleSelectors;
+const EXCLUDE_SELECTORS = cfg.scraping.excludeSelectors.join(', ');
 
 function pickArticleRoot($: cheerio.CheerioAPI): cheerio.Cheerio<any> | null {
   for (const sel of ARTICLE_SELECTORS) {
@@ -155,8 +156,8 @@ function extract($: cheerio.CheerioAPI): Extracted | null {
   const root = pickArticleRoot($);
   if (!root) return null;
 
-  // Enlever éléments non-contenu dans la zone
-  root.find('script, style, nav, .share, .social, form').remove();
+  // Enlever éléments non-contenu dans la zone (selon config.scraping.excludeSelectors)
+  if (EXCLUDE_SELECTORS) root.find(EXCLUDE_SELECTORS).remove();
 
   const articleHtml = $.html(root);
   const articleText = normalize(root.text());
@@ -256,14 +257,14 @@ async function loadEpisodes(opts: { force: boolean; onlyId?: number; limit?: num
   if (opts.onlyId) {
     return (await sql`
       SELECT id, episode_number, slug, title, guest, article_content, article_html
-      FROM episodes WHERE id = ${opts.onlyId}
+      FROM episodes WHERE id = ${opts.onlyId} AND tenant_id = ${TENANT}
     `) as EpisodeRow[];
   }
 
   const rows = (await sql`
     SELECT id, episode_number, slug, title, guest, article_content, article_html
     FROM episodes
-    WHERE slug IS NOT NULL AND slug <> ''
+    WHERE tenant_id = ${TENANT} AND slug IS NOT NULL AND slug <> ''
     ORDER BY episode_number DESC NULLS LAST, id DESC
   `) as EpisodeRow[];
 
@@ -282,7 +283,12 @@ async function main() {
   const limitIdx = args.indexOf('--limit');
   const limit = limitIdx >= 0 ? Number(args[limitIdx + 1]) : undefined;
 
-  console.log('[DEEP-SCRAPE] start');
+  console.log(`[DEEP-SCRAPE] start — podcast=${cfg.id} site=${BASE}`);
+  if (!cfg.scraping.hasArticles) {
+    console.log(`  [SKIP] Ce podcast (${cfg.id}) n'a pas d'articles web par épisode (config.scraping.hasArticles=false).`);
+    console.log(`  Le RSS est la source principale — lance scrape-rss.ts à la place.`);
+    return;
+  }
   console.log(`  mode: ${force ? 'FORCE (re-scrape all)' : 'incremental (skip filled)'}`);
   if (onlyId) console.log(`  single episode id: ${onlyId}`);
   if (limit) console.log(`  limit: ${limit}`);
@@ -303,7 +309,7 @@ async function main() {
     const label = `#${ep.episode_number ?? '?'} "${ep.title.slice(0, 60)}"`;
     process.stdout.write(`  [${i + 1}/${episodes.length}] ${label} ... `);
 
-    const url = `${BASE}/tous/${ep.slug}/`;
+    const url = cfg.episodeUrlPattern.replace('{slug}', ep.slug || '');
     const html = await fetchPage(url);
 
     if (html === null) {

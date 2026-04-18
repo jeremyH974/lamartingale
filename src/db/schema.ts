@@ -13,11 +13,18 @@ const vector = customType<{ data: number[]; driverParam: string }>({
 });
 
 // ============================================================================
+// Multi-tenant column helper — utilisé par toutes les tables.
+// DEFAULT 'lamartingale' pour rétrocompat.
+// ============================================================================
+const tenantId = () => text('tenant_id').notNull().default('lamartingale');
+
+// ============================================================================
 // Tables
 // ============================================================================
 
 export const episodes = pgTable('episodes', {
   id: serial('id').primaryKey(),
+  tenantId: tenantId(),
   episodeNumber: integer('episode_number').unique(),
   title: text('title').notNull(),
   slug: text('slug'),
@@ -30,7 +37,7 @@ export const episodes = pgTable('episodes', {
   abstract: text('abstract'),
   articleContent: text('article_content'),   // full article text (cleaned from HTML)
   articleHtml: text('article_html'),         // raw HTML of the article (for re-parsing)
-  chapters: jsonb('chapters').$type<{ title: string; order: number }[]>().default([]),
+  chapters: jsonb('chapters').$type<{ title: string; order: number; timestamp_seconds?: number }[]>().default([]),
   durationSeconds: integer('duration_seconds'),
   rssDescription: text('rss_description'),
   keyTakeaways: jsonb('key_takeaways').$type<string[]>(),
@@ -46,10 +53,12 @@ export const episodes = pgTable('episodes', {
   index('idx_episodes_difficulty').on(table.difficulty),
   index('idx_episodes_guest').on(table.guest),
   index('idx_episodes_date').on(table.dateCreated),
+  index('idx_episodes_tenant_pillar').on(table.tenantId, table.pillar),
 ]);
 
 export const episodesMedia = pgTable('episodes_media', {
   id: serial('id').primaryKey(),
+  tenantId: tenantId(),
   episodeId: integer('episode_id').references(() => episodes.id),
   thumbnail350: text('thumbnail_350'),
   thumbnailFull: text('thumbnail_full'),
@@ -58,6 +67,7 @@ export const episodesMedia = pgTable('episodes_media', {
 
 export const episodesEnrichment = pgTable('episodes_enrichment', {
   id: serial('id').primaryKey(),
+  tenantId: tenantId(),
   episodeId: integer('episode_id').references(() => episodes.id),
   tags: text('tags').array(),
   subThemes: text('sub_themes').array(),
@@ -67,6 +77,7 @@ export const episodesEnrichment = pgTable('episodes_enrichment', {
 
 export const guests = pgTable('guests', {
   id: serial('id').primaryKey(),
+  tenantId: tenantId(),
   name: text('name').unique().notNull(),
   company: text('company'),
   bio: text('bio'),
@@ -74,23 +85,28 @@ export const guests = pgTable('guests', {
   authorityScore: integer('authority_score'),
   episodesCount: integer('episodes_count'),
   linkedinUrl: text('linkedin_url'),
-});
+}, (table) => [
+  index('idx_guests_tenant_name').on(table.tenantId, table.name),
+]);
 
 export const episodeLinks = pgTable('episode_links', {
   id: serial('id').primaryKey(),
+  tenantId: tenantId(),
   episodeId: integer('episode_id').references(() => episodes.id, { onDelete: 'cascade' }),
   url: text('url').notNull(),
   label: text('label'),
-  linkType: text('link_type').notNull(),   // 'resource' | 'linkedin' | 'episode_ref' | 'company' | 'tool'
+  linkType: text('link_type').notNull(),   // 'resource' | 'linkedin' | 'episode_ref' | 'company' | 'tool' | 'cross_podcast_ref'
   createdAt: timestamp('created_at').defaultNow(),
 }, (table) => [
   unique('uq_episode_link').on(table.episodeId, table.url),
   index('idx_episode_links_episode').on(table.episodeId),
   index('idx_episode_links_type').on(table.linkType),
+  index('idx_episode_links_tenant_type').on(table.tenantId, table.linkType),
 ]);
 
 export const guestEpisodes = pgTable('guest_episodes', {
   id: serial('id').primaryKey(),
+  tenantId: tenantId(),
   guestId: integer('guest_id').references(() => guests.id),
   episodeId: integer('episode_id').references(() => episodes.id),
 }, (table) => [
@@ -99,6 +115,7 @@ export const guestEpisodes = pgTable('guest_episodes', {
 
 export const quizQuestions = pgTable('quiz_questions', {
   id: serial('id').primaryKey(),
+  tenantId: tenantId(),
   episodeId: integer('episode_id').references(() => episodes.id),
   question: text('question').notNull(),
   options: jsonb('options').notNull().$type<string[]>(),
@@ -109,10 +126,15 @@ export const quizQuestions = pgTable('quiz_questions', {
 }, (table) => [
   index('idx_quiz_episode').on(table.episodeId),
   index('idx_quiz_pillar').on(table.pillar),
+  index('idx_quiz_tenant_pillar').on(table.tenantId, table.pillar),
 ]);
 
+// NOTE : la contrainte UNIQUE actuelle en DB porte sur pillar seul (héritage LM).
+// En M3, avant l'ingestion GDIY, swap pour composite (tenant_id, pillar).
+// Voir src/db/migrate-tenant-uniques.ts (à écrire en M3).
 export const taxonomy = pgTable('taxonomy', {
   id: serial('id').primaryKey(),
+  tenantId: tenantId(),
   pillar: text('pillar').unique().notNull(),
   name: text('name'),
   color: text('color'),
@@ -123,6 +145,7 @@ export const taxonomy = pgTable('taxonomy', {
 
 export const learningPaths = pgTable('learning_paths', {
   id: serial('id').primaryKey(),
+  tenantId: tenantId(),
   pathId: text('path_id').unique().notNull(),
   name: text('name').notNull(),
   description: text('description'),
@@ -136,6 +159,7 @@ export const learningPaths = pgTable('learning_paths', {
 
 export const episodeSimilarities = pgTable('episode_similarities', {
   id: serial('id').primaryKey(),
+  tenantId: tenantId(),
   episodeId: integer('episode_id').references(() => episodes.id),
   similarEpisodeId: integer('similar_episode_id').references(() => episodes.id),
   similarityScore: real('similarity_score'),

@@ -1364,8 +1364,50 @@
     // ===== FETCH =====
     const F = url => fetch(url).then(r=>r.json());
 
+    // ===== CONFIG (multi-podcast) =====
+    async function applyConfig() {
+      try {
+        const cfg = await F(`${API}/config`);
+        window.PODCAST_CFG = cfg;
+        const root = document.documentElement;
+        if (cfg.branding?.primaryColor) {
+          root.style.setProperty('--blue', cfg.branding.primaryColor);
+          root.style.setProperty('--blue-hover', cfg.branding.primaryColor);
+        }
+        if (cfg.branding?.fontFamily && cfg.branding.font !== 'Poppins') {
+          const fam = encodeURIComponent(cfg.branding.font);
+          const link = document.createElement('link');
+          link.rel = 'stylesheet';
+          link.href = `https://fonts.googleapis.com/css2?family=${fam}:wght@300;400;500;600;700;800&display=swap`;
+          document.head.appendChild(link);
+          document.body.style.fontFamily = `'${cfg.branding.font}', -apple-system, BlinkMacSystemFont, sans-serif`;
+        }
+        if (cfg.name) {
+          document.title = `${cfg.name} — ${cfg.tagline || 'Education'}`;
+          document.querySelectorAll('.brand-logo, .footer-brand').forEach(el => el.textContent = cfg.name);
+        }
+        if (cfg.description) {
+          const fd = document.querySelector('.footer-desc');
+          if (fd) fd.textContent = cfg.description;
+        }
+        if (cfg.platforms) {
+          const map = { spotify: 'Spotify', apple: 'Apple Podcasts', youtube: 'YouTube', deezer: 'Deezer' };
+          document.querySelectorAll('.footer-links a').forEach(a => {
+            const txt = a.textContent.trim();
+            if (txt === 'Site officiel' && cfg.website) a.href = cfg.website;
+            for (const [k, label] of Object.entries(map)) {
+              if (txt === label && cfg.platforms[k]) a.href = cfg.platforms[k];
+            }
+          });
+        }
+      } catch (e) {
+        console.warn('[config] fallback to defaults:', e);
+      }
+    }
+
     // ===== INIT =====
     async function init() {
+      await applyConfig();
       const [stats,paths,experts,epRes,media] = await Promise.all([
         F(`${API}/stats`), F(`${API}/paths`), F(`${API}/experts`), F(`${API}/episodes?limit=312`),
         F(`${API}/media`).catch(()=>({}))
