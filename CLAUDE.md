@@ -23,7 +23,7 @@ npm run deploy                     # Vercel prod
 
 ## Architecture
 
-Arborescence détaillée : voir [`docs/architecture.md`](docs/architecture.md).
+Arborescence détaillée : voir [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 
 ## God Nodes (ne pas casser)
 
