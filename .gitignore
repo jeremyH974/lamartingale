@@ -4,6 +4,16 @@ dist/
 *.env
 .claude/
 graphify-out/
+.graphify_python
 
 .vercel
 docs/orso-media-feedback.html
+
+# RSS dumps + scratch data
+data/tmp/
+
+# One-shot debug/sample scripts (non-reusable, pollue scripts/)
+scripts/debug*.ts
+scripts/sample-*.ts
+scripts/check-*.ts
+scripts/find-gdiy-sponsor-patterns.ts
