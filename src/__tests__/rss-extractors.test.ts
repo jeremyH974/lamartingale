@@ -61,6 +61,26 @@ describe('extractGuestFromTitle', () => {
     const g = extractGuestFromTitle('économie du futur');
     expect(g.name).toBeNull();
   });
+  it('particule nobiliaire : "Sixte de Vauplane - Hanna - CEO"', () => {
+    const g = extractGuestFromTitle('Sixte de Vauplane - Hanna - CEO');
+    expect(g.name).toBe('Sixte de Vauplane');
+  });
+  it('prénom composé : "Jean-Marie Le Pen - Politique - FN"', () => {
+    const g = extractGuestFromTitle('Jean-Marie Le Pen - Politique - FN');
+    expect(g.name).toMatch(/Jean-Marie Le Pen/);
+  });
+  it('strip prefix [EXTRAIT]', () => {
+    const g = extractGuestFromTitle('[EXTRAIT] Nina Métayer - Pâtissière - Delicatisserie');
+    expect(g.name).toMatch(/Nina M[eé]tayer/);
+  });
+  it('rejette titre question LM "Comment investir en 2026 ?"', () => {
+    const g = extractGuestFromTitle('Comment investir en 2026 ?');
+    expect(g.name).toBeNull();
+  });
+  it('rejette titre LM "Pourquoi les SCPI s\'effondrent"', () => {
+    const g = extractGuestFromTitle("Pourquoi les SCPI s'effondrent");
+    expect(g.name).toBeNull();
+  });
 });
 
 describe('extractSponsors', () => {
@@ -79,6 +99,25 @@ describe('extractSponsors', () => {
   });
   it('array vide si aucun', () => {
     expect(extractSponsors('contenu lambda sans sponsor')).toEqual([]);
+  });
+  it('bloc GDIY "Un grand MERCI à nos sponsors : Qonto: qonto.com Payfit: payfit.com"', () => {
+    const text = 'Un grand MERCI à nos sponsors : \n\n Qonto: https://qonto.com/r/2i7tk9\n\n Payfit: https://payfit.com/gdiy\n\n Brevo: brevo.com/gdiy\n\nTIMELINE : 00:00 intro';
+    const s = extractSponsors(text);
+    const names = s.map((x) => x.name.toLowerCase());
+    expect(names).toContain('qonto');
+    expect(names).toContain('payfit');
+    expect(names).toContain('brevo');
+  });
+  it('rejette noms minuscules ou trop verbeux dans bloc sponsor', () => {
+    const text = 'Merci à nos sponsors : red bull d\'avoir rendu possible : https://redbull.com';
+    const s = extractSponsors(text);
+    // "red bull d'avoir rendu possible" doit être rejeté (minuscules + trop long)
+    expect(s.find((x) => /avoir/i.test(x.name))).toBeUndefined();
+  });
+  it('flag /i sur MERCI uppercase', () => {
+    const text = 'MERCI À NOS SPONSORS : Acme: acme.com';
+    const s = extractSponsors(text);
+    expect(s.find((x) => /acme/i.test(x.name))).toBeTruthy();
   });
 });
 
