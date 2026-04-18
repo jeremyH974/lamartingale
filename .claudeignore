@@ -20,3 +20,15 @@ package-lock.json
 
 # Secrets
 .env
+
+# Ajouts token-safe-v3
+.vercel/
+__pycache__/
+*.pyc
+.venv/
+.DS_Store
+Thumbs.db
+*.tsbuildinfo
+coverage/
+.turbo/
+.graphify_python/

@@ -20,33 +20,7 @@ npm run deploy                     # Vercel prod
 
 ## Architecture
 
-```
-src/
-├── api.ts              # 26 endpoints Express, dual-mode DB/JSON (process.env.DATABASE_URL)
-├── types.ts            # Types + getRecommendations()
-├── scraper.ts          # Scraper épisodes (JSON-LD)
-├── scrape-media.ts     # Scraper thumbnails + audio Audiomeans
-├── scrape-bios.ts      # Scraper bios invités
-├── enrich-local.ts     # Enrichissement local (tags, sub_themes, quiz)
-├── enrichment.ts       # Legacy (à unifier avec enrich-local)
-├── db/
-│   ├── schema.ts       # 8 tables Drizzle + pgvector (15 colonnes episodes)
-│   ├── queries.ts      # Raw SQL (neon tagged template) — Vercel compatible
-│   ├── migrate-json.ts # Migration base (310 ep, 614 quiz, 28 experts)
-│   ├── migrate-enriched.ts  # +articles, bios, takeaways, ratings
-│   └── test-regression.ts   # 15 tests
-└── ai/
-    ├── embeddings.ts   # OpenAI text-embedding-3-large (3072d, contenu enrichi)
-    ├── similarity.ts   # Top-20 voisins pgvector (6200 paires, max=0.94)
-    ├── search.ts       # Hybrid search (pgvector + pg_trgm + RRF, 9/10 validation)
-    ├── rag.ts          # RAG (gpt-4o-mini, system prompt pédagogique)
-    ├── quiz-adaptive.ts # IRT simplifié (theta Bayesian, exploration/exploitation)
-    └── analytics.ts    # Métriques SQL (Gini, co-occurrences, diversité)
-
-public/
-├── index.html          # V1 dark mode (D3.js graph, 7 vues)
-└── v2.html             # V2 brand (#004cff, Poppins, 9 vues: search, chat, quiz adaptatif)
-```
+Arborescence détaillée : voir [`docs/architecture.md`](docs/architecture.md).
 
 ## God Nodes (ne pas casser)
 
@@ -69,3 +43,28 @@ public/
 ## Charte graphique
 
 Couleur : #004cff | Font : Poppins | Tagline : "Prenez le contrôle de votre argent"
+
+## Model routing (80/15/5)
+
+Avant chaque tâche, auto-classifie dans HAIKU, SONNET ou OPUS.
+
+- **HAIKU (~5%)** — renommages, ajout console.log, fix lint/typo trivial, lookup d'un nom d'endpoint
+- **SONNET (~80%) — défaut** — nouvel endpoint, query SQL, composant HTML/D3, scraper, test de régression, enrichissement
+- **OPUS (~15%)** — modif `src/db/schema.ts` (god node), refactor cross-fichiers `api.ts ↔ queries.ts ↔ schema.ts`, debug divergence Vercel runtime vs local, décision archi dual-mode DB/JSON ou pgvector
+
+### Overrides projet
+- Toute modif d'un god node → OPUS minimum
+- Raw SQL vs Drizzle sur un endpoint existant → SONNET mais lire `queries.ts` d'abord
+- Migration schema (ajout colonne) → OPUS (impact migrate-json + migrate-enriched + regression)
+- Front V2 isolé (`public/v2.html`) → SONNET
+- Ajout script Python `scripts/` isolé → SONNET
+
+### Protocole
+1. Affiche `[Classification: X] — [justification 10 mots]` au début de chaque tâche
+2. Si mismatch avec modèle actif : propose switch, ATTENDS validation
+3. Escalation si >3 fichiers modifiés, décision archi, ou boucle d'erreurs Vercel
+
+## Compact instructions
+
+When compacting, preserve: file paths modified, SQL queries added/changed, endpoint signatures, migration decisions, test results, Vercel deploy errors, god-node impacts.
+Discard: exploratory reasoning, intermediate attempts, verbose tool outputs, raw JSON dumps.
