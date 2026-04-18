@@ -21,6 +21,7 @@
     "scrape:rss": "npx tsx src/scrape-rss.ts",
     "audit:deep": "npx tsx src/db/audit-deep-scraping.ts",
     "deploy": "vercel --yes --prod --scope jeremyh974s-projects",
+    "deploy:v2": "vercel --yes --prod --scope jeremyh974s-projects --name lamartingale-v2 --local-config vercel-v2.json",
     "build": "tsc",
     "start": "node dist/api.js"
   },
@@ -50,6 +51,8 @@
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@vercel/node": "^5.7.5",
-    "drizzle-kit": "^0.31.10"
+    "docx": "^9.6.1",
+    "drizzle-kit": "^0.31.10",
+    "marked": "^18.0.2"
   }
 }

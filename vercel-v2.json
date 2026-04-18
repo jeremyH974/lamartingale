@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/index.ts",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "public/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/index.ts" },
+    { "source": "/", "destination": "/public/v2.html" },
+    { "source": "/index.html", "destination": "/public/v2.html" },
+    { "source": "/(.*)", "destination": "/public/$1" }
+  ]
+}
