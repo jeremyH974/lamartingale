@@ -1,19 +1,27 @@
 /**
- * RSS Scraper — flux Audiomeans La Martingale / Allô la Martingale
+ * RSS Scraper — extraction exhaustive ("capturer maintenant, exploiter plus tard")
  *
- * Extrait pour chaque item :
- *   - title, itunes:episode (number)
- *   - itunes:duration → duration_seconds
- *   - description / content:encoded → rss_description
+ * Pour chaque <item> RSS :
+ *   - champs scalaires : title, guid, pubDate, season, episode_number,
+ *     episode_type, explicit, duration_seconds, audio_url, audio_size_bytes,
+ *     episode_image_url, guest_from_title
+ *   - JSONB : sponsors, rss_links (classifiés), cross_refs
+ *   - texte enrichi : rss_description, rss_content_encoded
  *
- * Match avec episodes en BDD par (episode_number) d'abord, puis fuzzy title.
+ * Pour le <channel> : 1 ligne dans podcast_metadata (upsert par tenant_id).
  *
- * Usage : npx tsx src/scrape-rss.ts
+ * Matching item↔BDD : (episode_number) d'abord, sinon fuzzy title.
+ *
+ * Usage :
+ *   npx tsx src/scrape-rss.ts                   # tenant actif (getConfig)
+ *   PODCAST_ID=gdiy npx tsx src/scrape-rss.ts   # force tenant (pas d'insert,
+ *                                                 seulement update des rows existantes)
  */
 import 'dotenv/config';
 import { XMLParser } from 'fast-xml-parser';
 import { neon } from '@neondatabase/serverless';
 import { getConfig } from './config';
+import { extractItem, extractChannelMetadata, computePublishFrequencyDays } from './rss/extractors';
 
 const sql = neon(process.env.DATABASE_URL!);
 const cfg = getConfig();
@@ -24,22 +32,6 @@ const FEEDS: { name: string; url: string }[] = [
   ...(cfg.rssFeeds.secondary ? [{ name: `${cfg.name} (secondary)`, url: cfg.rssFeeds.secondary }] : []),
 ];
 
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
-function parseDuration(v: unknown): number | null {
-  if (v == null) return null;
-  const s = String(v).trim();
-  if (!s) return null;
-  // Formats : "HH:MM:SS", "MM:SS", "1234" (secondes brutes)
-  if (/^\d+$/.test(s)) return parseInt(s, 10);
-  const parts = s.split(':').map(Number);
-  if (parts.some(Number.isNaN)) return null;
-  if (parts.length === 3) return parts[0] * 3600 + parts[1] * 60 + parts[2];
-  if (parts.length === 2) return parts[0] * 60 + parts[1];
-  return null;
-}
-
 function normalizeTitle(s: string): string {
   return s.toLowerCase()
     .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
@@ -47,29 +39,7 @@ function normalizeTitle(s: string): string {
     .trim();
 }
 
-function firstString(...vals: unknown[]): string | null {
-  for (const v of vals) {
-    if (v == null) continue;
-    if (typeof v === 'string' && v.trim()) return v.trim();
-    if (typeof v === 'number') return String(v);
-    if (typeof v === 'object') {
-      const obj = v as any;
-      if (typeof obj['#cdata'] === 'string' && obj['#cdata'].trim()) return obj['#cdata'].trim();
-      if (typeof obj['#text'] === 'string' && obj['#text'].trim()) return obj['#text'].trim();
-      if (typeof obj['#text'] === 'number') return String(obj['#text']);
-    }
-  }
-  return null;
-}
-
-interface RssItem {
-  title: string;
-  episodeNumber: number | null;
-  durationSeconds: number | null;
-  description: string | null;
-}
-
-async function fetchFeed(url: string): Promise<RssItem[]> {
+async function fetchAndParse(url: string): Promise<{ channel: any; items: any[]; rawXml: string }> {
   const res = await fetch(url, { headers: { 'User-Agent': cfg.scraping.userAgent } });
   if (!res.ok) throw new Error(`Feed ${url} → HTTP ${res.status}`);
   const xml = await res.text();
@@ -81,49 +51,96 @@ async function fetchFeed(url: string): Promise<RssItem[]> {
     cdataPropName: '#cdata',
   });
   const data = parser.parse(xml);
-  const items = data?.rss?.channel?.item;
-  if (!items) return [];
-  const arr = Array.isArray(items) ? items : [items];
-
-  return arr.map((it: any): RssItem => {
-    const title = firstString(it.title) || '';
-
-    // Episode number: itunes:episode first, else parse "#NNN" prefix from title
-    let episodeNumber: number | null = null;
-    const episodeRaw = firstString(it['itunes:episode']);
-    if (episodeRaw) episodeNumber = parseInt(episodeRaw, 10) || null;
-    if (episodeNumber == null) {
-      const m = title.match(/^#?\s*(\d+)\s*[-–]/);
-      if (m) episodeNumber = parseInt(m[1], 10);
-    }
-
-    const durationSeconds = parseDuration(firstString(it['itunes:duration']));
-    const description =
-      firstString(it['content:encoded'], it.description, it['itunes:summary']) || null;
-
-    return { title, episodeNumber, durationSeconds, description };
-  });
+  const channel = data?.rss?.channel || null;
+  const rawItems = channel?.item;
+  const items = rawItems ? (Array.isArray(rawItems) ? rawItems : [rawItems]) : [];
+  return { channel, items, rawXml: xml };
 }
 
-// ---------------------------------------------------------------------------
-// Main
-// ---------------------------------------------------------------------------
-async function main() {
-  console.log('[RSS-SCRAPE] start');
+async function upsertChannelMetadata(channel: any, rawXml: string) {
+  const m = extractChannelMetadata(channel);
 
-  const allItems: (RssItem & { source: string })[] = [];
+  await sql`
+    INSERT INTO podcast_metadata (
+      tenant_id, title, subtitle, description, author,
+      owner_name, owner_email, managing_editor, language, copyright,
+      explicit, podcast_type, image_url, itunes_image_url, link, new_feed_url,
+      categories, keywords, social_links, contact_emails,
+      last_build_date, generator, raw_channel_xml, updated_at
+    ) VALUES (
+      ${TENANT}, ${m.title}, ${m.subtitle}, ${m.description}, ${m.author},
+      ${m.ownerName}, ${m.ownerEmail}, ${m.managingEditor}, ${m.language}, ${m.copyright},
+      ${m.explicit}, ${m.podcastType}, ${m.imageUrl}, ${m.itunesImageUrl}, ${m.link}, ${m.newFeedUrl},
+      ${JSON.stringify(m.categories)}::jsonb,
+      ${m.keywords.length ? m.keywords : null},
+      ${JSON.stringify(m.socialLinks)}::jsonb,
+      ${m.contactEmails.length ? m.contactEmails : null},
+      ${m.lastBuildDate ? new Date(m.lastBuildDate) : null},
+      ${m.generator},
+      ${rawXml.length > 500_000 ? rawXml.slice(0, 500_000) : rawXml},
+      NOW()
+    )
+    ON CONFLICT (tenant_id) DO UPDATE SET
+      title           = EXCLUDED.title,
+      subtitle        = EXCLUDED.subtitle,
+      description     = EXCLUDED.description,
+      author          = EXCLUDED.author,
+      owner_name      = EXCLUDED.owner_name,
+      owner_email     = EXCLUDED.owner_email,
+      managing_editor = EXCLUDED.managing_editor,
+      language        = EXCLUDED.language,
+      copyright       = EXCLUDED.copyright,
+      explicit        = EXCLUDED.explicit,
+      podcast_type    = EXCLUDED.podcast_type,
+      image_url       = EXCLUDED.image_url,
+      itunes_image_url= EXCLUDED.itunes_image_url,
+      link            = EXCLUDED.link,
+      new_feed_url    = EXCLUDED.new_feed_url,
+      categories      = EXCLUDED.categories,
+      keywords        = EXCLUDED.keywords,
+      social_links    = EXCLUDED.social_links,
+      contact_emails  = EXCLUDED.contact_emails,
+      last_build_date = EXCLUDED.last_build_date,
+      generator       = EXCLUDED.generator,
+      raw_channel_xml = EXCLUDED.raw_channel_xml,
+      updated_at      = NOW()
+  `;
+  return m;
+}
+
+async function main() {
+  console.log(`[RSS-SCRAPE] start (tenant=${TENANT}, feeds=${FEEDS.length})`);
+
+  const allItems: { source: string; parsed: ReturnType<typeof extractItem> }[] = [];
+  let channelForMeta: any = null;
+  let rawXmlForMeta = '';
+
   for (const feed of FEEDS) {
     try {
-      const items = await fetchFeed(feed.url);
+      const { channel, items, rawXml } = await fetchAndParse(feed.url);
       console.log(`  [feed] ${feed.name}: ${items.length} items`);
-      for (const it of items) allItems.push({ ...it, source: feed.name });
+      if (!channelForMeta) { channelForMeta = channel; rawXmlForMeta = rawXml; }
+      for (const it of items) {
+        allItems.push({ source: feed.name, parsed: extractItem(it) });
+      }
     } catch (e: any) {
       console.warn(`  [feed] ${feed.name}: FAIL ${e?.message}`);
     }
   }
   console.log(`  total items: ${allItems.length}`);
 
-  // Charger les épisodes BDD du tenant actif pour matcher
+  // Upsert channel metadata
+  if (channelForMeta) {
+    const meta = await upsertChannelMetadata(channelForMeta, rawXmlForMeta);
+    console.log(`  [channel] upsert OK — title="${meta.title}" author="${meta.author}" categories=${meta.categories.length}`);
+  }
+
+  // Publish frequency (tenant-wide)
+  const pubDates = allItems.map((x) => x.parsed.pubDate).filter(Boolean) as string[];
+  const freq = computePublishFrequencyDays(pubDates);
+  console.log(`  [freq] publish_frequency_days (median) = ${freq ?? 'n/a'}`);
+
+  // Charger episodes BDD du tenant pour matcher
   const episodes = (await sql`
     SELECT id, episode_number, title FROM episodes WHERE tenant_id = ${TENANT}
   `) as { id: number; episode_number: number | null; title: string }[];
@@ -135,45 +152,64 @@ async function main() {
     byTitle.set(normalizeTitle(e.title), e);
   }
 
-  let matched = 0;
-  let updated = 0;
-  let unmatched = 0;
-  const durations: number[] = [];
+  let matched = 0, updated = 0, unmatched = 0;
+  const stats = {
+    withDuration: 0, withGuid: 0, withAudio: 0, withSponsors: 0,
+    withLinks: 0, withCrossRefs: 0, withGuestFromTitle: 0, withImage: 0,
+  };
 
-  for (const item of allItems) {
+  for (const { parsed } of allItems) {
     let dbRow: typeof episodes[0] | undefined;
-    if (item.episodeNumber != null) dbRow = byNumber.get(item.episodeNumber);
-    if (!dbRow && item.title) dbRow = byTitle.get(normalizeTitle(item.title));
+    if (parsed.episodeNumber != null) dbRow = byNumber.get(parsed.episodeNumber);
+    if (!dbRow && parsed.title) dbRow = byTitle.get(normalizeTitle(parsed.title));
 
     if (!dbRow) { unmatched++; continue; }
     matched++;
 
-    const dur = item.durationSeconds;
-    const desc = item.description;
-    if (dur == null && !desc) continue;
+    if (parsed.durationSeconds != null) stats.withDuration++;
+    if (parsed.guid) stats.withGuid++;
+    if (parsed.audioUrl) stats.withAudio++;
+    if (parsed.sponsors.length) stats.withSponsors++;
+    if (parsed.links.length) stats.withLinks++;
+    if (parsed.crossRefs.length) stats.withCrossRefs++;
+    if (parsed.guestFromTitle.name) stats.withGuestFromTitle++;
+    if (parsed.episodeImageUrl) stats.withImage++;
 
     await sql`
-      UPDATE episodes
-      SET duration_seconds = COALESCE(${dur}, duration_seconds),
-          rss_description  = COALESCE(${desc}, rss_description)
+      UPDATE episodes SET
+        duration_seconds       = COALESCE(${parsed.durationSeconds}, duration_seconds),
+        rss_description        = COALESCE(${parsed.description}, rss_description),
+        rss_content_encoded    = COALESCE(${parsed.rssContentEncoded}, rss_content_encoded),
+        guid                   = COALESCE(${parsed.guid}, guid),
+        season                 = COALESCE(${parsed.season}, season),
+        episode_type           = COALESCE(${parsed.episodeType}, episode_type),
+        explicit               = COALESCE(${parsed.explicit}, explicit),
+        audio_url              = COALESCE(${parsed.audioUrl}, audio_url),
+        audio_size_bytes       = COALESCE(${parsed.audioSizeBytes}, audio_size_bytes),
+        episode_image_url      = COALESCE(${parsed.episodeImageUrl}, episode_image_url),
+        guest_from_title       = COALESCE(${parsed.guestFromTitle.name}, guest_from_title),
+        sponsors               = ${JSON.stringify(parsed.sponsors)}::jsonb,
+        rss_links              = ${JSON.stringify(parsed.links)}::jsonb,
+        cross_refs             = ${JSON.stringify(parsed.crossRefs)}::jsonb,
+        publish_frequency_days = COALESCE(${freq}, publish_frequency_days)
       WHERE id = ${dbRow.id}
     `;
     updated++;
-    if (dur != null) durations.push(dur);
   }
-
-  // Stats durée
-  const durMin = durations.length ? Math.min(...durations) : 0;
-  const durMax = durations.length ? Math.max(...durations) : 0;
-  const durAvg = durations.length ? Math.round(durations.reduce((a, b) => a + b, 0) / durations.length) : 0;
 
   console.log('\n[RSS-SCRAPE] complete');
   console.log(`  Matched   : ${matched}/${allItems.length}`);
   console.log(`  Updated   : ${updated}`);
   console.log(`  Unmatched : ${unmatched}`);
-  if (durations.length) {
-    console.log(`  Duration  : ${Math.round(durMin / 60)}min — ${Math.round(durMax / 60)}min (avg: ${Math.round(durAvg / 60)}min)`);
-  }
+  console.log(`  Coverage  :`);
+  console.log(`    duration          : ${stats.withDuration}/${matched}`);
+  console.log(`    guid              : ${stats.withGuid}/${matched}`);
+  console.log(`    audio_url         : ${stats.withAudio}/${matched}`);
+  console.log(`    episode_image     : ${stats.withImage}/${matched}`);
+  console.log(`    guest_from_title  : ${stats.withGuestFromTitle}/${matched}`);
+  console.log(`    sponsors detected : ${stats.withSponsors}/${matched}`);
+  console.log(`    rss_links         : ${stats.withLinks}/${matched}`);
+  console.log(`    cross_refs        : ${stats.withCrossRefs}/${matched}`);
 }
 
 main().catch((e) => {

@@ -1,4 +1,4 @@
-import { pgTable, serial, integer, text, timestamp, real, jsonb, unique, index, customType } from 'drizzle-orm/pg-core';
+import { pgTable, serial, integer, bigint, boolean, text, timestamp, real, jsonb, unique, index, customType } from 'drizzle-orm/pg-core';
 
 // ============================================================================
 // Custom type: pgvector (vector column)
@@ -25,7 +25,7 @@ const tenantId = () => text('tenant_id').notNull().default('lamartingale');
 export const episodes = pgTable('episodes', {
   id: serial('id').primaryKey(),
   tenantId: tenantId(),
-  episodeNumber: integer('episode_number').unique(),
+  episodeNumber: integer('episode_number'),
   title: text('title').notNull(),
   slug: text('slug'),
   guest: text('guest'),
@@ -35,8 +35,8 @@ export const episodes = pgTable('episodes', {
   difficulty: text('difficulty'),
   dateCreated: timestamp('date_created'),
   abstract: text('abstract'),
-  articleContent: text('article_content'),   // full article text (cleaned from HTML)
-  articleHtml: text('article_html'),         // raw HTML of the article (for re-parsing)
+  articleContent: text('article_content'),
+  articleHtml: text('article_html'),
   chapters: jsonb('chapters').$type<{ title: string; order: number; timestamp_seconds?: number }[]>().default([]),
   durationSeconds: integer('duration_seconds'),
   rssDescription: text('rss_description'),
@@ -47,13 +47,31 @@ export const episodes = pgTable('episodes', {
   sponsor: text('sponsor'),
   articleUrl: text('article_url'),
   url: text('url'),
+  // === RSS exhaustive extraction (M3.1) — "capturer maintenant, exploiter plus tard" ===
+  season: integer('season'),
+  episodeType: text('episode_type'),                       // full|trailer|bonus
+  explicit: boolean('explicit'),
+  guid: text('guid'),                                      // itunes GUID canonique
+  audioUrl: text('audio_url'),
+  audioSizeBytes: bigint('audio_size_bytes', { mode: 'number' }),
+  rssContentEncoded: text('rss_content_encoded'),
+  episodeImageUrl: text('episode_image_url'),
+  guestFromTitle: text('guest_from_title'),
+  sponsors: jsonb('sponsors').$type<{ name: string; context?: string }[]>().default([]),
+  rssLinks: jsonb('rss_links').$type<{ url: string; label?: string; link_type?: string }[]>().default([]),
+  crossRefs: jsonb('cross_refs').$type<{ podcast?: string; episode_ref?: string; url?: string }[]>().default([]),
+  publishFrequencyDays: real('publish_frequency_days'),
   createdAt: timestamp('created_at').defaultNow(),
 }, (table) => [
+  unique('uq_episodes_tenant_episode_number').on(table.tenantId, table.episodeNumber),
   index('idx_episodes_pillar').on(table.pillar),
   index('idx_episodes_difficulty').on(table.difficulty),
   index('idx_episodes_guest').on(table.guest),
   index('idx_episodes_date').on(table.dateCreated),
   index('idx_episodes_tenant_pillar').on(table.tenantId, table.pillar),
+  index('idx_episodes_guid').on(table.guid),
+  index('idx_episodes_tenant_guid').on(table.tenantId, table.guid),
+  index('idx_episodes_season').on(table.tenantId, table.season),
 ]);
 
 export const episodesMedia = pgTable('episodes_media', {
@@ -78,7 +96,7 @@ export const episodesEnrichment = pgTable('episodes_enrichment', {
 export const guests = pgTable('guests', {
   id: serial('id').primaryKey(),
   tenantId: tenantId(),
-  name: text('name').unique().notNull(),
+  name: text('name').notNull(),
   company: text('company'),
   bio: text('bio'),
   specialty: text('specialty').array(),
@@ -86,6 +104,7 @@ export const guests = pgTable('guests', {
   episodesCount: integer('episodes_count'),
   linkedinUrl: text('linkedin_url'),
 }, (table) => [
+  unique('uq_guests_tenant_name').on(table.tenantId, table.name),
   index('idx_guests_tenant_name').on(table.tenantId, table.name),
 ]);
 
@@ -129,24 +148,23 @@ export const quizQuestions = pgTable('quiz_questions', {
   index('idx_quiz_tenant_pillar').on(table.tenantId, table.pillar),
 ]);
 
-// NOTE : la contrainte UNIQUE actuelle en DB porte sur pillar seul (héritage LM).
-// En M3, avant l'ingestion GDIY, swap pour composite (tenant_id, pillar).
-// Voir src/db/migrate-tenant-uniques.ts (à écrire en M3).
 export const taxonomy = pgTable('taxonomy', {
   id: serial('id').primaryKey(),
   tenantId: tenantId(),
-  pillar: text('pillar').unique().notNull(),
+  pillar: text('pillar').notNull(),
   name: text('name'),
   color: text('color'),
   icon: text('icon'),
   episodeCount: integer('episode_count'),
   subThemes: text('sub_themes').array(),
-});
+}, (table) => [
+  unique('uq_taxonomy_tenant_pillar').on(table.tenantId, table.pillar),
+]);
 
 export const learningPaths = pgTable('learning_paths', {
   id: serial('id').primaryKey(),
   tenantId: tenantId(),
-  pathId: text('path_id').unique().notNull(),
+  pathId: text('path_id').notNull(),
   name: text('name').notNull(),
   description: text('description'),
   difficulty: text('difficulty'),
@@ -155,6 +173,38 @@ export const learningPaths = pgTable('learning_paths', {
   prerequisites: text('prerequisites').array(),
   outcomes: text('outcomes').array(),
   episodesOrdered: jsonb('episodes_ordered').$type<{ order: number; episode_id: number; why: string }[]>(),
+}, (table) => [
+  unique('uq_learning_paths_tenant_path_id').on(table.tenantId, table.pathId),
+]);
+
+// Channel-level RSS metadata (1 ligne par tenant). Rempli par scrape-rss.ts.
+export const podcastMetadata = pgTable('podcast_metadata', {
+  id: serial('id').primaryKey(),
+  tenantId: text('tenant_id').notNull().unique(),
+  title: text('title'),
+  subtitle: text('subtitle'),
+  description: text('description'),
+  author: text('author'),
+  ownerName: text('owner_name'),
+  ownerEmail: text('owner_email'),
+  managingEditor: text('managing_editor'),
+  language: text('language'),
+  copyright: text('copyright'),
+  explicit: boolean('explicit'),
+  podcastType: text('podcast_type'),
+  imageUrl: text('image_url'),
+  itunesImageUrl: text('itunes_image_url'),
+  link: text('link'),
+  newFeedUrl: text('new_feed_url'),
+  categories: jsonb('categories').$type<{ text: string; sub?: string[] }[]>().default([]),
+  keywords: text('keywords').array(),
+  socialLinks: jsonb('social_links').$type<{ platform: string; url: string }[]>().default([]),
+  contactEmails: text('contact_emails').array(),
+  lastBuildDate: timestamp('last_build_date'),
+  generator: text('generator'),
+  rawChannelXml: text('raw_channel_xml'),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
 });
 
 export const episodeSimilarities = pgTable('episode_similarities', {
