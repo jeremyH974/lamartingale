@@ -28,9 +28,11 @@ async function main() {
   const forceAll = process.argv.includes('--force');
 
   // Get episodes with enriched content for better embeddings
+  // Includes deep-scraped fields: chapters, rss_description, extended article_content
   const episodes = await sql`
     SELECT e.id, e.episode_number, e.title, e.guest, e.pillar, e.difficulty,
            e.abstract, e.article_content, e.key_takeaways, e.guest_bio,
+           e.chapters, e.rss_description,
            en.id as enrichment_id, en.tags, en.sub_themes, en.embedding
     FROM episodes e
     LEFT JOIN episodes_enrichment en ON en.episode_id = e.id
@@ -60,23 +62,30 @@ async function main() {
 
     console.log(`  Batch ${batchNum}/${totalBatches} (${batch.length} episodes)...`);
 
-    // Build embedding text with full enriched content
+    // Build embedding text with deep-scraped enriched content
+    // Target ~500-800 tokens per episode (well under 8191 limit)
     const texts = batch.map((ep: any) => {
+      const chapterTitles = Array.isArray(ep.chapters)
+        ? ep.chapters.map((c: any) => c?.title).filter(Boolean).join(' · ')
+        : '';
+
       const parts = [
         ep.title || '',
         ep.guest ? `Invité: ${ep.guest}` : '',
-        ep.abstract || '',
-        // Article content (truncated to ~500 chars for embedding efficiency)
-        ep.article_content ? ep.article_content.replace(/##\s*/g, '').substring(0, 500) : '',
-        // Key takeaways add strong semantic signal
-        (ep.key_takeaways || []).length ? `Points clés: ${ep.key_takeaways.join('. ')}` : '',
         ep.pillar ? `Pilier: ${ep.pillar}` : '',
         ep.difficulty ? `Niveau: ${ep.difficulty}` : '',
+        ep.abstract || '',
+        chapterTitles ? `Chapitres: ${chapterTitles}` : '',
+        // Full article content (truncated to 2000 chars — richer signal from deep-scraping)
+        ep.article_content ? ep.article_content.replace(/\s+/g, ' ').substring(0, 2000) : '',
+        // RSS description (often complements the web article)
+        ep.rss_description ? ep.rss_description.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').substring(0, 500) : '',
+        (ep.key_takeaways || []).length ? `Points clés: ${ep.key_takeaways.join('. ')}` : '',
         (ep.tags || []).length ? `Tags: ${ep.tags.join(', ')}` : '',
         (ep.sub_themes || []).length ? `Sous-thèmes: ${ep.sub_themes.join(', ')}` : '',
       ].filter(Boolean);
-      // Limit total to ~2000 chars (within embedding model's optimal range)
-      return parts.join(' | ').substring(0, 2000);
+      // Cap at ~5000 chars (~1200 tokens) — room for deep article + chapters + takeaways
+      return parts.join(' | ').substring(0, 5000);
     });
 
     try {
