@@ -1,7 +1,7 @@
 import type { PodcastConfig } from './podcast.config';
-import { lamartingaleConfig } from '@instances/lamartingale.config';
-import { gdiyConfig } from '@instances/gdiy.config';
-import { hubConfig } from '@instances/hub.config';
+import { lamartingaleConfig } from '../../instances/lamartingale.config';
+import { gdiyConfig } from '../../instances/gdiy.config';
+import { hubConfig } from '../../instances/hub.config';
 
 // Registry des configs disponibles. Ajouter un nouveau podcast =
 // importer sa config ici + enregistrer l'entrée.
