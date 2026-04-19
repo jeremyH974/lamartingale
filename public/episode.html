@@ -796,6 +796,42 @@
         </div>`;
     }
 
+    function renderCrossSimilarPlaceholder() {
+      // Section remplie async par loadCrossSimilar() — masquée si pas de résultats.
+      return `<div class="section" id="cross-similar-section" style="display:none">
+        <div class="section-title">🌐 À explorer dans l'autre podcast de l'univers MS</div>
+        <div class="similar-grid" id="cross-similar-grid"></div>
+      </div>`;
+    }
+
+    async function loadCrossSimilar(epId) {
+      if (!epId) return;
+      try {
+        const r = await fetch(`${API}/episodes/${epId}/cross-similar?limit=4`);
+        if (!r.ok) return;
+        const d = await r.json();
+        const recs = d && d.recommendations;
+        if (!recs || !recs.length) return;
+        const grid = document.getElementById('cross-similar-grid');
+        const sec = document.getElementById('cross-similar-section');
+        if (!grid || !sec) return;
+        grid.innerHTML = recs.map(x => {
+          const isLm = x.podcast === 'lamartingale';
+          const badgeClr = isLm ? '#004cff' : '#00F5A0';
+          const badgeFg = isLm ? 'white' : '#000';
+          const label = isLm ? 'LM' : 'GDIY';
+          return `<a href="${x.podcast_url}" target="_blank" rel="noopener" class="similar-card" style="text-decoration:none;color:inherit;position:relative;">
+            <span style="position:absolute;top:8px;right:8px;background:${badgeClr};color:${badgeFg};font-size:10px;font-weight:700;padding:3px 8px;border-radius:99px;">${label}</span>
+            <div class="similar-num">#${x.episode_number}</div>
+            <div class="similar-title">${esc(x.title)}</div>
+            ${x.guest ? `<div style="font-size:11px;color:var(--text-muted);margin-top:4px;">${esc(x.guest)}</div>` : ''}
+            <span class="similar-score">${Math.round(x.score * 100)}%</span>
+          </a>`;
+        }).join('');
+        sec.style.display = '';
+      } catch {}
+    }
+
     function renderPrevNext(ep) {
       if (!ep.prev_episode && !ep.next_episode) return '';
       return `
@@ -874,9 +910,11 @@
         ${renderReferences(ep)}
         ${renderCrossEps(ep)}
         ${renderSimilar(ep)}
+        ${renderCrossSimilarPlaceholder()}
         ${renderPrevNext(ep)}
         ${renderSponsors(ep)}
       `;
+      loadCrossSimilar(ep.id);
     }
 
     window.seekAudio = seekAudio;

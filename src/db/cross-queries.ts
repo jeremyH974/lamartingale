@@ -521,6 +521,156 @@ export async function getCrossTimeline(opts: { limit?: number } = {}) {
 }
 
 // ============================================================================
+// /api/episodes/:id/cross-similar — recos cross-podcast pour un épisode donné
+// ============================================================================
+
+export async function getCrossSimilarEpisodes(episodeId: number, limit: number = 5) {
+  const sql = sqlClient();
+
+  // Récupère embedding de l'épisode source + son tenant
+  const srcRows = await sql`
+    SELECT e.tenant_id, e.episode_number, e.title, en.embedding
+    FROM episodes e
+    INNER JOIN episodes_enrichment en ON en.episode_id = e.id
+    WHERE e.id = ${episodeId}
+      AND en.embedding IS NOT NULL
+    LIMIT 1
+  ` as any[];
+  if (!srcRows.length) return { source: null, recommendations: [] };
+  const src = srcRows[0];
+  const otherTenants = TENANTS.filter(t => t !== src.tenant_id);
+  if (!otherTenants.length) return { source: { tenant_id: src.tenant_id, episode_number: src.episode_number, title: src.title }, recommendations: [] };
+
+  // Search similar in OTHER tenants by cosine distance
+  const rows = await sql`
+    SELECT e.id,
+           e.tenant_id,
+           e.episode_number,
+           e.title,
+           e.guest,
+           e.pillar,
+           e.abstract,
+           1 - (en.embedding <=> ${src.embedding}::vector) AS score
+    FROM episodes e
+    INNER JOIN episodes_enrichment en ON en.episode_id = e.id
+    WHERE en.embedding IS NOT NULL
+      AND e.tenant_id = ANY(${[...otherTenants]})
+      AND (e.episode_type = 'full' OR e.episode_type IS NULL)
+    ORDER BY en.embedding <=> ${src.embedding}::vector
+    LIMIT ${limit}
+  ` as any[];
+
+  return {
+    source: { tenant_id: src.tenant_id, episode_number: src.episode_number, title: src.title },
+    recommendations: rows.map((r: any) => ({
+      id: r.id,
+      podcast: r.tenant_id,
+      podcast_name: TENANT_META[r.tenant_id as TenantId]?.name || r.tenant_id,
+      podcast_url: TENANT_META[r.tenant_id as TenantId]?.url || null,
+      episode_number: r.episode_number,
+      title: r.title,
+      guest: r.guest || null,
+      pillar: r.pillar || null,
+      score: Number(r.score || 0),
+      snippet: (r.abstract || '').slice(0, 180),
+    })),
+  };
+}
+
+// ============================================================================
+// /api/cross/chat — RAG sur TOUT l'univers (LM + GDIY)
+// ============================================================================
+
+export async function crossChat(message: string): Promise<{
+  response: string;
+  sources: Array<{ podcast: string; podcast_name: string; episode_number: number; title: string; guest: string | null; pillar: string | null; score: number }>;
+  model: string;
+  timing_ms: number;
+}> {
+  const t0 = Date.now();
+  const sql = sqlClient();
+  const tenants = [...TENANTS];
+  const OpenAI = (await import('openai')).default;
+
+  // 1. Embedding de la question
+  let embedding: number[] | null = null;
+  if (process.env.OPENAI_API_KEY) {
+    try {
+      const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+      const r = await openai.embeddings.create({ model: 'text-embedding-3-large', input: message, dimensions: 3072 });
+      embedding = r.data[0].embedding;
+    } catch { embedding = null; }
+  }
+  if (!embedding) {
+    return {
+      response: 'Recherche sémantique indisponible (OPENAI_API_KEY manquante).',
+      sources: [], model: 'none', timing_ms: Date.now() - t0,
+    };
+  }
+
+  // 2. Top 6 épisodes sur les deux tenants
+  const embVec = `[${embedding.join(',')}]`;
+  const rows = await sql`
+    SELECT e.tenant_id, e.episode_number, e.title, e.guest, e.pillar, e.abstract,
+           e.key_takeaways, e.chapters,
+           1 - (en.embedding <=> ${embVec}::vector) AS score
+    FROM episodes e
+    INNER JOIN episodes_enrichment en ON en.episode_id = e.id
+    WHERE en.embedding IS NOT NULL
+      AND e.tenant_id = ANY(${tenants})
+      AND (e.episode_type = 'full' OR e.episode_type IS NULL)
+    ORDER BY en.embedding <=> ${embVec}::vector
+    LIMIT 6
+  ` as any[];
+
+  // 3. Contexte pour le LLM
+  const contextParts = rows.map((r: any) => {
+    const pod = TENANT_META[r.tenant_id as TenantId]?.name || r.tenant_id;
+    const takeaways = Array.isArray(r.key_takeaways) ? r.key_takeaways.slice(0, 3).map((t: string) => `- ${t}`).join('\n') : '';
+    return `[${pod} #${r.episode_number}] ${r.title}${r.guest ? ` avec ${r.guest}` : ''}${r.pillar ? ` (pilier : ${r.pillar})` : ''}
+Résumé : ${(r.abstract || '').slice(0, 600)}${takeaways ? '\nPoints clés :\n' + takeaways : ''}`;
+  });
+  const context = contextParts.join('\n\n---\n\n');
+
+  // 4. Génération
+  const { getLLM, getModelId } = await import('../ai/llm');
+  const { generateText } = await import('ai');
+  const systemPrompt = `Tu es l'assistant expert de l'Univers MS — l'écosystème Matthieu Stefani qui réunit La Martingale (argent & investissement) et Génération Do It Yourself (entrepreneuriat).
+
+Règles :
+- Réponds en français, précis et structuré.
+- Cite TOUJOURS le podcast d'origine : "Dans La Martingale #312..." ou "Dans GDIY #456...".
+- Quand les deux podcasts traitent le sujet, croise les angles (LM = finance/investissement, GDIY = construction d'entreprise).
+- Base ta réponse UNIQUEMENT sur le contexte fourni.
+- Termine par 2 recos : 1 épisode LM + 1 épisode GDIY si possible.
+- Pas de conseil en investissement — oriente vers les épisodes.`;
+
+  const llm = getLLM();
+  const modelId = getModelId();
+  const { text } = await generateText({
+    model: llm,
+    system: systemPrompt,
+    prompt: `Contexte (épisodes pertinents des deux podcasts) :\n\n${context}\n\n---\n\nQuestion : ${message}`,
+    temperature: 0.4,
+  });
+
+  return {
+    response: text,
+    sources: rows.map((r: any) => ({
+      podcast: r.tenant_id,
+      podcast_name: TENANT_META[r.tenant_id as TenantId]?.name || r.tenant_id,
+      episode_number: r.episode_number,
+      title: r.title,
+      guest: r.guest || null,
+      pillar: r.pillar || null,
+      score: Number(r.score || 0),
+    })),
+    model: modelId,
+    timing_ms: Date.now() - t0,
+  };
+}
+
+// ============================================================================
 // /api/cross/analytics — agrégats pour le dashboard hub
 // ============================================================================
 

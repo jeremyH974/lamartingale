@@ -848,6 +848,37 @@ app.get('/api/cross/timeline', async (req, res) => {
   } catch (e: any) { console.error('[API] /api/cross/timeline error:', e.message); res.status(500).json({ error: e.message }); }
 });
 
+app.get('/api/episodes/:id/cross-similar', async (req, res) => {
+  try {
+    if (!process.env.DATABASE_URL) return res.status(503).json({ error: 'DB required' });
+    const id = parseInt(req.params.id);
+    if (!Number.isFinite(id)) return res.status(400).json({ error: 'Invalid episode id' });
+    const limit = parseInt(req.query.limit as string) || 5;
+    const result = await getCached(`cross:similar:${id}:${limit}`, 3600, async () => {
+      const { getCrossSimilarEpisodes } = await import('./db/cross-queries');
+      return await getCrossSimilarEpisodes(id, limit);
+    });
+    res.json(result);
+  } catch (e: any) { console.error('[API] /api/episodes/:id/cross-similar error:', e.message); res.status(500).json({ error: e.message }); }
+});
+
+app.post('/api/cross/chat', async (req, res) => {
+  try {
+    if (!process.env.DATABASE_URL || !process.env.OPENAI_API_KEY) {
+      return res.status(503).json({ error: 'Chat requires DATABASE_URL + OPENAI_API_KEY' });
+    }
+    const { message } = req.body;
+    if (!message) return res.status(400).json({ error: 'Missing message' });
+    const normalized = String(message).toLowerCase().trim().replace(/\s+/g, ' ').replace(/[?!.,;:]+$/g, '');
+    const cacheKey = `cross:chat:${normalized.substring(0, 300)}`;
+    const result = await getCached(cacheKey, 86400, async () => {
+      const { crossChat } = await import('./db/cross-queries');
+      return await crossChat(message);
+    });
+    res.json(result);
+  } catch (e: any) { console.error('[API] /api/cross/chat error:', e.message); res.status(500).json({ error: e.message }); }
+});
+
 app.get('/api/cross/analytics', async (_req, res) => {
   try {
     if (!process.env.DATABASE_URL) return res.status(503).json({ error: 'DB required' });
