@@ -81,6 +81,22 @@ describe('extractGuestFromTitle', () => {
     const g = extractGuestFromTitle("Pourquoi les SCPI s'effondrent");
     expect(g.name).toBeNull();
   });
+  it('format CCG : "#12 - Combien ça gagne une pharmacie ? - Morgane et Benjamin"', () => {
+    const g = extractGuestFromTitle('#12 - Combien ça gagne une pharmacie ? - Morgane et Benjamin');
+    expect(g.name).toMatch(/Morgane/);
+  });
+  it('format CCG : "#1 - Combien ça gagne un opticien ? - Jean-Sébastien FARGEAS"', () => {
+    const g = extractGuestFromTitle('#1 - Combien ça gagne un opticien ? - Jean-Sébastien FARGEAS');
+    expect(g.name).toMatch(/Jean-S[eé]bastien/);
+  });
+  it('format CCG ZOOM : "[ZOOM] Les chiffres de Sara Balzer - escrimeuse olympique"', () => {
+    const g = extractGuestFromTitle('[ZOOM] Les chiffres de Sara Balzer - escrimeuse olympique');
+    expect(g.name).toMatch(/Sara Balzer/);
+  });
+  it('rejette "Combien ça gagne un X" sans nom final', () => {
+    const g = extractGuestFromTitle('Combien ça gagne un journaliste ?');
+    expect(g.name).toBeNull();
+  });
 });
 
 describe('extractSponsors', () => {

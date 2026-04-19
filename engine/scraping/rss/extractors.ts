@@ -85,7 +85,7 @@ const NAME_TOKEN = "(?:[A-ZÀ-Ý][a-zà-ÿ'’\\-]+|d[ae']|de|du|des|la|le|les|v
 const NAME_REGEX = new RegExp(`(${NAME_TOKEN}(?:[ ’'\\-]${NAME_TOKEN}){1,4})`);
 
 // Blocklist : ces premiers mots ne sont pas des noms (faux positifs courants).
-const NOT_NAME_PREFIX = /^(?:[Cc]omment|[Pp]ourquoi|[Tt]out|[Qq]uand|[Qq]uoi|[Qq]u[ei]|[Qq]uels?|[Ll]e [A-Z]|[Ll]a [A-Z]|[Ll]es [A-Z]|[Uu]n |[Uu]ne |[Dd]es |[Ii]nvestir|[Ii]nvestissement|[Pp]rendre|[Ff]aut-il|[Ss]aas|[Ll]'|[Ll]'|[Ii]mmobilier|[Bb]ourse|[Cc]rypto|[Hh]ors[-\s]*[Ss][ée]rie|[Ee]xtrait|[Bb]onus|[Ee]pisode|[Ss]aison)\b/;
+const NOT_NAME_PREFIX = /^(?:[Cc]omment|[Cc]ombien|[Pp]ourquoi|[Tt]out|[Qq]uand|[Qq]uoi|[Qq]u[ei]|[Qq]uels?|[Ll]e [A-Z]|[Ll]a [A-Z]|[Ll]es [A-Z]|[Uu]n |[Uu]ne |[Dd]es |[Ii]nvestir|[Ii]nvestissement|[Pp]rendre|[Ff]aut-il|[Ss]aas|[Ll]'|[Ll]'|[Ii]mmobilier|[Bb]ourse|[Cc]rypto|[Hh]ors[-\s]*[Ss][ée]rie|[Ee]xtrait|[Bb]onus|[Ee]pisode|[Ss]aison|[Ll]es chiffres|[ZzCc][Oo][Oo][Mm]|S[ée]rie|\[)\b/;
 
 export function extractGuestFromTitle(title: string): GuestFromTitle {
   if (!title) return { name: null, company: null, role: null };
@@ -98,9 +98,28 @@ export function extractGuestFromTitle(title: string): GuestFromTitle {
     .replace(/^VF\s*[-–—]\s*/i, '')
     .trim();
 
-  // Si le titre commence par un mot non-nom ("Comment", "Pourquoi", "Investir"...) :
-  // format LM question → pas de guest extractable.
-  if (NOT_NAME_PREFIX.test(s)) return { name: null, company: null, role: null };
+  // Variante "Question ? - Name" ou "Topic — Name" (ex. CCG "#12 - Combien ça
+  // gagne une pharmacie ? - Morgane et Benjamin" ou "[ZOOM] Les chiffres de
+  // Sara Balzer - escrimeuse olympique"). On cherche un NAME_TOKEN juste après
+  // le dernier ` - ` / ` — ` quand le début du titre est un préfixe non-nom.
+  if (NOT_NAME_PREFIX.test(s)) {
+    // Variante "Les chiffres de NAME, role" — marqueur `de` + nom. Tenté avant
+    // le dash, car plus spécifique (évite de capter un dash intra-titre).
+    const deMatch = s.match(new RegExp(`\\b(?:de|d'|d’)\\s+(${NAME_TOKEN}(?:[ ’'\\-]${NAME_TOKEN}){1,4})\\b`));
+    if (deMatch && /[A-ZÀ-Ý]/.test(deMatch[1])) {
+      return { name: deMatch[1].trim(), company: null, role: null };
+    }
+    // Variante "Question ? - Name" ou "Topic — Name" (ex. CCG "#12 - Combien
+    // ça gagne une pharmacie ? - Morgane et Benjamin"). On cherche un
+    // NAME_TOKEN juste après le dernier séparateur ` - ` / ` — ` (suivant un
+    // `?`, `.`, `!` ou un dash). `{0,4}` : on accepte 1 seul NAME_TOKEN
+    // (prénom seul, ex. "Morgane"), guard len≥4 sur le nom retourné.
+    const tailMatch = s.match(new RegExp(`(?:[?!.]|[-–—])\\s*(?:[-–—]\\s*)?(${NAME_TOKEN}(?:[ ’'\\-]${NAME_TOKEN}){0,4})(?:\\s+(?:et|and|&|,)\\s+${NAME_TOKEN}(?:[ ’'\\-]${NAME_TOKEN}){0,4})?(?:\\s+[A-ZÀ-Ý][A-Za-zÀ-ÿ'’\\-]*)*\\s*$`));
+    if (tailMatch && tailMatch[1].length >= 4 && /[A-ZÀ-Ý]/.test(tailMatch[1])) {
+      return { name: tailMatch[1].trim(), company: null, role: null };
+    }
+    return { name: null, company: null, role: null };
+  }
 
   // Variante "Name (Company)" ou "Name (Company) : titre"
   const parenMatch = s.match(/^([^(|,]{2,80})\s*\(([^)]+)\)\s*(?:[:\-–—]\s*(.+))?$/);
