@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Épisode</title>
+  <meta name="description" content="">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="">
+  <meta property="og:description" content="">
+  <meta property="og:image" content="">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue: #004cff;
+      --blue-light: #e8eeff;
+      --blue-hover: #0040d6;
+      --blue-50: rgba(0, 76, 255, 0.06);
+      --blue-100: rgba(0, 76, 255, 0.10);
+      --white: #ffffff;
+      --bg: #fafbfd;
+      --surface: #ffffff;
+      --surface-2: #f3f4f8;
+      --border: #e8eaef;
+      --text: #111827;
+      --text-secondary: #4b5563;
+      --text-muted: #9ca3af;
+      --success: #059669;
+      --warning: #d97706;
+      --radius: 14px;
+      --radius-sm: 8px;
+      --shadow: 0 2px 8px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+      --shadow-lg: 0 8px 30px rgba(0,0,0,0.08);
+      --accent: var(--blue);
+      --cta-bg: var(--blue);
+      --cta-fg: #fff;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ===== HEADER ===== */
+    .header {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 60;
+    }
+    .header-inner {
+      max-width: 1200px; margin: 0 auto;
+      padding: 0 24px;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 60px;
+    }
+    .back-link {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 14px; font-weight: 500;
+      color: var(--text-secondary); cursor: pointer;
+      padding: 6px 10px; border-radius: var(--radius-sm);
+      transition: background 0.15s;
+      border: none; background: none;
+    }
+    .back-link:hover { background: var(--surface-2); color: var(--text); text-decoration: none; }
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand-logo-text { font-size: 20px; font-weight: 800; color: var(--blue); letter-spacing: -0.5px; }
+    .brand-logo-img { height: 32px; display: none; }
+    .brand-tag {
+      font-size: 10px; font-weight: 500; color: #fff;
+      background: var(--blue); padding: 2px 9px; border-radius: 20px;
+      letter-spacing: 0.3px;
+    }
+
+    /* ===== MAIN ===== */
+    .main {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 32px 24px 80px;
+      animation: fadeIn 0.4s ease-out;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+    .meta-line {
+      font-size: 12px; color: var(--text-muted);
+      margin-bottom: 10px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
+    }
+    .meta-line .sep { opacity: 0.5; }
+    .pillar-dot { color: var(--blue); }
+
+    .title {
+      font-size: 34px; font-weight: 700;
+      letter-spacing: -0.8px; line-height: 1.2;
+      margin-bottom: 14px;
+    }
+
+    .topic {
+      font-size: 17px; line-height: 1.6;
+      color: var(--text-secondary);
+      margin-bottom: 28px;
+      font-weight: 400;
+    }
+
+    /* ===== PLAYER (sticky) ===== */
+    .player-wrap {
+      position: sticky; top: 60px; z-index: 40;
+      margin: 0 -4px 28px; padding: 14px 4px;
+      background: linear-gradient(to bottom, var(--bg) 0%, var(--bg) 80%, transparent 100%);
+    }
+    .player-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .player-card iframe {
+      width: 100%; height: 180px; border: none;
+      display: block;
+    }
+    .player-actions {
+      display: flex; gap: 8px; flex-wrap: wrap;
+      padding: 10px 14px;
+      border-top: 1px solid var(--border);
+      background: var(--surface-2);
+    }
+    .btn-platform {
+      font-size: 12px; font-weight: 500;
+      padding: 6px 12px; border-radius: 18px;
+      background: var(--surface); border: 1px solid var(--border);
+      color: var(--text-secondary); text-decoration: none;
+      display: inline-flex; align-items: center; gap: 5px;
+      transition: all 0.15s;
+    }
+    .btn-platform:hover { color: var(--text); border-color: var(--blue); text-decoration: none; }
+
+    /* ===== GRID ===== */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    @media (max-width: 640px) { .two-col { grid-template-columns: 1fr; } }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+    }
+    .card-title {
+      font-size: 12px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.5px;
+      color: var(--text-muted); margin-bottom: 10px;
+      display: flex; align-items: center; gap: 6px;
+    }
+
+    .guest-name { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+    .guest-role { font-size: 13px; color: var(--text-secondary); margin-bottom: 8px; }
+    .guest-bio { font-size: 13px; color: var(--text-secondary); line-height: 1.55; margin-bottom: 10px; }
+    .guest-linkedin {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 13px; font-weight: 500;
+      color: var(--blue);
+    }
+    .guest-others {
+      margin-top: 10px; padding-top: 10px;
+      border-top: 1px dashed var(--border);
+      font-size: 12px; color: var(--text-muted);
+    }
+    .guest-others a { color: var(--blue); font-weight: 500; }
+
+    .discover-list { list-style: none; padding: 0; margin: 0; }
+    .discover-list li {
+      font-size: 13.5px; line-height: 1.5;
+      padding: 5px 0 5px 16px; position: relative;
+      color: var(--text-secondary);
+    }
+    .discover-list li::before {
+      content: '▸'; position: absolute; left: 0;
+      color: var(--blue); font-size: 11px; top: 7px;
+    }
+
+    /* ===== SECTIONS ===== */
+    .section { margin-bottom: 36px; }
+    .section-title {
+      font-size: 13px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.6px;
+      color: var(--text-muted); margin-bottom: 14px;
+      padding-bottom: 6px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    /* Sommaire chapitres */
+    .chapters-list { display: flex; flex-direction: column; gap: 2px; }
+    .chapter-item {
+      display: flex; align-items: center; gap: 14px;
+      padding: 9px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      transition: background 0.12s;
+    }
+    .chapter-item.clickable { cursor: pointer; }
+    .chapter-item.clickable:hover { background: var(--surface-2); }
+    .chapter-ts {
+      font-family: ui-monospace, 'SF Mono', monospace;
+      font-size: 12px; font-weight: 600;
+      color: var(--blue); min-width: 50px;
+    }
+    .chapter-title { flex: 1; color: var(--text); }
+
+    /* Takeaways */
+    .takeaways { display: flex; flex-direction: column; gap: 8px; }
+    .takeaway {
+      padding: 10px 14px 10px 34px;
+      background: var(--blue-50);
+      border-left: 3px solid var(--blue);
+      border-radius: var(--radius-sm);
+      font-size: 14px; line-height: 1.55;
+      position: relative;
+    }
+    .takeaway::before {
+      content: '💡'; position: absolute; left: 10px; top: 10px; font-size: 13px;
+    }
+
+    /* Article */
+    .article-body {
+      font-size: 16px; line-height: 1.75;
+      color: var(--text);
+    }
+    .article-body p { margin-bottom: 16px; }
+    .article-body h2 {
+      font-size: 22px; font-weight: 700;
+      margin: 32px 0 14px; letter-spacing: -0.3px;
+    }
+    .article-body h3 {
+      font-size: 18px; font-weight: 600;
+      margin: 24px 0 10px;
+    }
+    .article-body ul, .article-body ol {
+      margin: 0 0 16px 24px;
+    }
+    .article-body li { margin-bottom: 6px; }
+    .article-body a {
+      color: var(--blue); text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .article-body img { max-width: 100%; border-radius: var(--radius-sm); margin: 12px 0; }
+    .article-body blockquote {
+      border-left: 3px solid var(--blue);
+      padding-left: 14px; margin: 16px 0;
+      color: var(--text-secondary); font-style: italic;
+    }
+    /* Fallback texte brut */
+    .article-plain {
+      white-space: pre-wrap;
+      font-size: 15px; line-height: 1.75;
+      color: var(--text);
+    }
+
+    /* Links list */
+    .links-list { display: flex; flex-direction: column; gap: 6px; }
+    .links-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 14px; color: var(--text);
+      text-decoration: none !important;
+      transition: background 0.12s;
+    }
+    .links-item:hover { background: var(--surface-2); }
+    .links-item .host {
+      font-size: 11px; color: var(--text-muted);
+      margin-left: auto;
+    }
+    .links-badge {
+      display: inline-block;
+      font-size: 10px; font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 10px;
+      background: var(--blue-100);
+      color: var(--blue);
+    }
+
+    /* Cross episodes */
+    .cross-eps { display: flex; flex-direction: column; gap: 6px; }
+    .cross-ep {
+      display: flex; align-items: baseline; gap: 10px;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+    .cross-ep:hover { background: var(--surface-2); }
+    .cross-ep-num {
+      font-weight: 700; color: var(--blue);
+      font-size: 13px; min-width: 42px;
+    }
+    .cross-ep-title { flex: 1; color: var(--text); }
+    .cross-ep.missing { opacity: 0.55; cursor: default; }
+
+    /* Promo banner */
+    .promo-banner {
+      background: var(--blue-50);
+      border: 1px solid var(--blue-100);
+      border-left: 4px solid var(--blue);
+      border-radius: var(--radius);
+      padding: 18px 22px;
+      margin-bottom: 28px;
+    }
+    .promo-title { font-size: 12px; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+    .promo-line { font-size: 15px; margin-bottom: 10px; }
+    .promo-code {
+      display: inline-block;
+      font-family: ui-monospace, 'SF Mono', monospace;
+      background: var(--blue); color: #fff;
+      padding: 3px 9px; border-radius: 5px;
+      font-weight: 600;
+    }
+    .promo-cta {
+      display: inline-block;
+      padding: 7px 14px;
+      background: var(--cta-bg); color: var(--cta-fg);
+      border-radius: 22px;
+      font-size: 13px; font-weight: 600;
+      text-decoration: none;
+    }
+
+    /* Similaires */
+    .similar-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+    }
+    .similar-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 14px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .similar-card:hover {
+      border-color: var(--blue);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+    .similar-num { font-size: 11px; color: var(--text-muted); font-weight: 600; margin-bottom: 4px; }
+    .similar-title { font-size: 14px; font-weight: 600; line-height: 1.35; margin-bottom: 6px; }
+    .similar-score {
+      display: inline-block;
+      font-size: 11px; font-weight: 600;
+      color: var(--blue); background: var(--blue-50);
+      padding: 2px 8px; border-radius: 10px;
+    }
+
+    /* Prev/Next */
+    .prev-next {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 12px; margin-top: 28px; padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+    @media (max-width: 640px) { .prev-next { grid-template-columns: 1fr; } }
+    .nav-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 14px 18px;
+      cursor: pointer; transition: border-color 0.15s;
+      text-decoration: none !important; color: var(--text);
+    }
+    .nav-card:hover { border-color: var(--blue); }
+    .nav-card .dir { font-size: 11px; color: var(--text-muted); font-weight: 600; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .nav-card .tt { font-size: 14px; font-weight: 500; line-height: 1.35; }
+    .nav-card.right { text-align: right; }
+
+    /* Loader + empty */
+    .loading, .empty {
+      text-align: center;
+      padding: 80px 20px;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <button class="back-link" onclick="goBack()">← Retour aux épisodes</button>
+      <a class="brand" href="/" id="brand-link">
+        <img id="brand-logo-img" class="brand-logo-img" alt="">
+        <span id="brand-logo-text" class="brand-logo-text">La Martingale</span>
+        <span id="brand-tag" class="brand-tag">Education</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="main" id="main">
+    <div class="loading" id="loading">Chargement de l'épisode…</div>
+  </main>
+
+  <script>
+    const API = '/api';
+    const urlParams = new URLSearchParams(window.location.search);
+    const EP_ID = parseInt(urlParams.get('id') || window.location.pathname.match(/\/episode\/(\d+)/)?.[1] || '0', 10);
+
+    function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c])); }
+    async function F(p) { const r = await fetch(p); if (!r.ok) throw new Error(`${p} → ${r.status}`); return r.json(); }
+
+    function pickFg(hex) {
+      const h = (hex || '').replace('#', '');
+      if (h.length !== 6) return '#fff';
+      const r = parseInt(h.slice(0,2),16), g = parseInt(h.slice(2,4),16), b = parseInt(h.slice(4,6),16);
+      return (0.299*r + 0.587*g + 0.114*b) > 160 ? '#111827' : '#ffffff';
+    }
+
+    function hms(seconds) {
+      if (!Number.isFinite(seconds)) return '';
+      const h = Math.floor(seconds / 3600);
+      const m = Math.floor((seconds % 3600) / 60);
+      const s = seconds % 60;
+      return h > 0 ? `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}` : `${m}:${String(s).padStart(2,'0')}`;
+    }
+
+    function formatDate(iso) {
+      if (!iso) return '';
+      const d = new Date(iso); if (isNaN(d.getTime())) return '';
+      return d.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' });
+    }
+
+    function goBack() {
+      if (document.referrer && new URL(document.referrer).origin === window.location.origin) {
+        window.history.back();
+      } else {
+        window.location.href = '/';
+      }
+    }
+
+    const linkedinSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-2px"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.063 2.063 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452z"/></svg>';
+
+    // ===== CONFIG (branding) =====
+    async function applyConfig() {
+      try {
+        const cfg = await F(`${API}/config`);
+        window.__cfg = cfg;
+        const root = document.documentElement;
+        const primary = cfg.branding?.primaryColor || '#004cff';
+        const secondary = cfg.branding?.secondaryColor || null;
+        root.style.setProperty('--blue', primary);
+        root.style.setProperty('--blue-hover', primary);
+
+        // Blue-50 / blue-100 avec opacity sur primary
+        const hex = primary.replace('#','');
+        if (hex.length === 6) {
+          const r = parseInt(hex.slice(0,2),16), g = parseInt(hex.slice(2,4),16), b = parseInt(hex.slice(4,6),16);
+          root.style.setProperty('--blue-50', `rgba(${r},${g},${b},0.06)`);
+          root.style.setProperty('--blue-100', `rgba(${r},${g},${b},0.12)`);
+        }
+
+        // Accent vibrant si primary sombre
+        if (secondary) {
+          const lum = (c) => { const h=c.replace('#',''); if (h.length!==6) return 0.5;
+            const r=parseInt(h.slice(0,2),16), g=parseInt(h.slice(2,4),16), b=parseInt(h.slice(4,6),16);
+            return (0.299*r+0.587*g+0.114*b)/255; };
+          if (lum(primary) < 0.3 && lum(secondary) > 0.5) {
+            root.style.setProperty('--cta-bg', secondary);
+            root.style.setProperty('--cta-fg', pickFg(secondary));
+            root.style.setProperty('--accent', secondary);
+          }
+        }
+
+        // Font
+        if (cfg.branding?.font && cfg.branding.font !== 'Poppins') {
+          const fam = encodeURIComponent(cfg.branding.font);
+          const link = document.createElement('link');
+          link.rel = 'stylesheet';
+          link.href = `https://fonts.googleapis.com/css2?family=${fam}:wght@300;400;500;600;700;800&display=swap`;
+          document.head.appendChild(link);
+          document.body.style.fontFamily = `'${cfg.branding.font}', -apple-system, sans-serif`;
+        }
+
+        // Brand
+        if (cfg.name) {
+          const txt = document.getElementById('brand-logo-text');
+          const img = document.getElementById('brand-logo-img');
+          const tag = document.getElementById('brand-tag');
+          if (cfg.branding?.logoUrl && img) {
+            img.src = cfg.branding.logoUrl;
+            img.style.display = 'block';
+            img.alt = cfg.name;
+            if (txt) txt.style.display = 'none';
+            if (tag && primary.toLowerCase() === '#000000') tag.style.display = 'none';
+          } else if (txt) {
+            txt.textContent = cfg.name;
+          }
+        }
+
+        // PillarColor map
+        const PC = {};
+        if (Array.isArray(cfg.taxonomy?.pillars)) {
+          for (const p of cfg.taxonomy.pillars) if (p?.id) PC[p.id] = p.color || primary;
+        }
+        window.__PC = PC;
+
+        return cfg;
+      } catch (e) {
+        console.warn('[config] default fallback', e);
+        return null;
+      }
+    }
+
+    // ===== RENDER =====
+    function renderMeta(ep, cfg) {
+      const date = formatDate(ep.date_created);
+      const dur = ep.duration_minutes ? `${ep.duration_minutes} min` : '';
+      const pillarColor = window.__PC?.[ep.pillar] || 'var(--blue)';
+      const parts = [];
+      parts.push(`<span>#${ep.episode_number}</span>`);
+      if (ep.pillar) parts.push(`<span class="sep">·</span><span class="pillar-dot" style="color:${pillarColor}">●</span><span>${esc(ep.pillar)}</span>`);
+      if (ep.difficulty) parts.push(`<span class="sep">·</span><span>${esc(ep.difficulty)}</span>`);
+      if (dur) parts.push(`<span class="sep">·</span><span>${dur}</span>`);
+      if (date) parts.push(`<span class="sep">·</span><span>${date}</span>`);
+      return `<div class="meta-line">${parts.join('')}</div>`;
+    }
+
+    function renderPlayer(ep, cfg) {
+      const audio = ep.audio_player_url;
+      const platforms = cfg?.platforms || {};
+      const btn = (href, label) => href ? `<a class="btn-platform" href="${esc(href)}" target="_blank" rel="noopener">${label}</a>` : '';
+      const buttons = [
+        btn(platforms.spotify, 'Spotify'),
+        btn(platforms.apple, 'Apple'),
+        btn(platforms.deezer, 'Deezer'),
+        btn(ep.youtube_url || platforms.youtube, 'YouTube'),
+      ].filter(Boolean).join('');
+      if (!audio && !buttons) return '';
+      return `
+        <div class="player-wrap">
+          <div class="player-card">
+            ${audio ? `<iframe src="${esc(audio)}" allow="autoplay" loading="lazy"></iframe>` : ''}
+            ${buttons ? `<div class="player-actions">${buttons}</div>` : ''}
+          </div>
+        </div>`;
+    }
+
+    function renderTopCards(ep) {
+      const blocks = [];
+      const guest = ep.guest;
+      if (guest?.name) {
+        const others = (guest.other_episodes || []).slice(0, 5);
+        blocks.push(`
+          <div class="card">
+            <div class="card-title">👤 L'invité</div>
+            <div class="guest-name">${esc(guest.name)}</div>
+            ${guest.company ? `<div class="guest-role">${esc(guest.company)}</div>` : ''}
+            ${ep.rss_guest_intro ? `<div class="guest-bio">${esc(ep.rss_guest_intro)}</div>` :
+              guest.bio ? `<div class="guest-bio">${esc(guest.bio.slice(0, 260))}${guest.bio.length > 260 ? '…' : ''}</div>` : ''}
+            ${guest.linkedin_url ? `<a class="guest-linkedin" href="${esc(guest.linkedin_url)}" target="_blank" rel="noopener">${linkedinSvg} LinkedIn</a>` : ''}
+            ${others.length ? `<div class="guest-others">Aussi dans : ${others.map(o => `<a href="/episode/${o.episode_number}">#${o.episode_number}</a>`).join(' · ')}</div>` : ''}
+          </div>`);
+      }
+      if (ep.rss_discover?.length) {
+        blocks.push(`
+          <div class="card">
+            <div class="card-title">📋 Dans cet épisode</div>
+            <ul class="discover-list">
+              ${ep.rss_discover.map(x => `<li>${esc(x)}</li>`).join('')}
+            </ul>
+          </div>`);
+      }
+      if (!blocks.length) return '';
+      // Si un seul bloc → prend toute la largeur
+      if (blocks.length === 1) return `<div style="margin-bottom:28px">${blocks[0]}</div>`;
+      return `<div class="two-col">${blocks.join('')}</div>`;
+    }
+
+    function renderChapters(ep) {
+      const ts = ep.rss_chapters_ts || [];
+      const plain = ep.chapters || [];
+      // Préfère rss_chapters_ts (avec timestamps cliquables)
+      if (ts.length) {
+        return `
+          <div class="section">
+            <div class="section-title">📋 Sommaire</div>
+            <div class="chapters-list">
+              ${ts.map(c => `
+                <div class="chapter-item clickable" onclick="seekAudio(${c.timestamp_seconds})">
+                  <span class="chapter-ts">${hms(c.timestamp_seconds)}</span>
+                  <span class="chapter-title">${esc(c.title)}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>`;
+      }
+      if (plain.length) {
+        return `
+          <div class="section">
+            <div class="section-title">📋 Sommaire</div>
+            <div class="chapters-list">
+              ${plain.map((c, i) => `
+                <div class="chapter-item">
+                  <span class="chapter-ts">${i + 1}.</span>
+                  <span class="chapter-title">${esc(c.title)}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>`;
+      }
+      return '';
+    }
+
+    function renderTakeaways(ep) {
+      const t = ep.key_takeaways || [];
+      if (!t.length) return '';
+      return `
+        <div class="section">
+          <div class="section-title">💡 À retenir</div>
+          <div class="takeaways">
+            ${t.slice(0, 10).map(x => `<div class="takeaway">${esc(x)}</div>`).join('')}
+          </div>
+        </div>`;
+    }
+
+    function renderArticle(ep) {
+      const html = ep.article_html;
+      const text = ep.article_content;
+      const rssHtml = ep.rss_content_encoded;
+      if (html && html.length > 200) {
+        return `<div class="section"><div class="section-title">📝 Article complet</div><div class="article-body">${html}</div></div>`;
+      }
+      if (text && text.length > 200) {
+        return `<div class="section"><div class="section-title">📝 Article complet</div><div class="article-plain">${esc(text)}</div></div>`;
+      }
+      if (rssHtml && rssHtml.length > 200) {
+        return `<div class="section"><div class="section-title">📝 Notes de l'épisode</div><div class="article-body">${rssHtml}</div></div>`;
+      }
+      return '';
+    }
+
+    function renderReferences(ep) {
+      const refs = ep.rss_references || [];
+      const resources = ep.links?.resources || [];
+      const tools = ep.links?.tools || [];
+      const merged = new Map();
+      for (const r of refs) {
+        const key = (r.url || r.label || '').toLowerCase();
+        if (!key) continue;
+        if (!merged.has(key)) merged.set(key, { label: r.label, url: r.url });
+      }
+      for (const r of [...resources, ...tools]) {
+        const key = (r.url || r.label || '').toLowerCase();
+        if (!key || merged.has(key)) continue;
+        merged.set(key, { label: r.label, url: r.url });
+      }
+      if (!merged.size) return '';
+      const items = Array.from(merged.values()).slice(0, 30);
+      return `
+        <div class="section">
+          <div class="section-title">🔗 Références et ressources</div>
+          <div class="links-list">
+            ${items.map(r => {
+              const host = (() => { try { return new URL(r.url).hostname.replace(/^www\./, ''); } catch { return ''; } })();
+              if (r.url) {
+                return `<a class="links-item" href="${esc(r.url)}" target="_blank" rel="noopener">
+                  <span>${esc(r.label || r.url)}</span>
+                  ${host ? `<span class="host">${host}</span>` : ''}
+                </a>`;
+              }
+              return `<div class="links-item"><span>${esc(r.label)}</span></div>`;
+            }).join('')}
+          </div>
+        </div>`;
+    }
+
+    function renderCrossEps(ep) {
+      const rss = ep.rss_cross_episodes || [];
+      const internal = (ep.links?.episode_refs || []).filter(x => x.episode_number);
+      const seen = new Set();
+      const items = [];
+      for (const c of rss) {
+        if (seen.has(c.number)) continue;
+        seen.add(c.number);
+        items.push({ number: c.number, title: c.title, exists: c.exists });
+      }
+      for (const c of internal) {
+        if (seen.has(c.episode_number)) continue;
+        seen.add(c.episode_number);
+        items.push({ number: c.episode_number, title: c.label, exists: true });
+      }
+      if (!items.length) return '';
+      return `
+        <div class="section">
+          <div class="section-title">📌 Épisodes mentionnés</div>
+          <div class="cross-eps">
+            ${items.map(c => c.exists
+              ? `<a class="cross-ep" href="/episode/${c.number}">
+                  <span class="cross-ep-num">#${c.number}</span>
+                  <span class="cross-ep-title">${esc(c.title || `Épisode #${c.number}`)}</span>
+                </a>`
+              : `<div class="cross-ep missing">
+                  <span class="cross-ep-num">#${c.number}</span>
+                  <span class="cross-ep-title">${esc(c.title || 'Épisode externe')}</span>
+                </div>`).join('')}
+          </div>
+        </div>`;
+    }
+
+    function renderPromo(ep) {
+      const p = ep.rss_promo;
+      if (!p) return '';
+      return `
+        <div class="promo-banner">
+          <div class="promo-title">🎁 Avantage auditeur</div>
+          <div class="promo-line">
+            ${p.description ? `${esc(p.description)}` : ''}
+            ${p.partner ? ` chez <strong>${esc(p.partner)}</strong>` : ''}
+            ${p.code ? ` — Code <span class="promo-code">${esc(p.code)}</span>` : ''}
+          </div>
+          ${p.url ? `<a class="promo-cta" href="${esc(p.url)}" target="_blank" rel="noopener">En profiter →</a>` : ''}
+        </div>`;
+    }
+
+    function renderSimilar(ep) {
+      const s = ep.similar_episodes || [];
+      if (!s.length) return '';
+      return `
+        <div class="section">
+          <div class="section-title">🔄 Épisodes similaires</div>
+          <div class="similar-grid">
+            ${s.slice(0, 6).map(x => `
+              <a href="/episode/${x.episode_number}" class="similar-card" style="text-decoration:none;color:inherit">
+                <div class="similar-num">#${x.episode_number}</div>
+                <div class="similar-title">${esc(x.title)}</div>
+                <span class="similar-score">${Math.round((x.similarity || 0) * 100)}%</span>
+              </a>
+            `).join('')}
+          </div>
+        </div>`;
+    }
+
+    function renderPrevNext(ep) {
+      if (!ep.prev_episode && !ep.next_episode) return '';
+      return `
+        <div class="prev-next">
+          ${ep.prev_episode ? `
+            <a class="nav-card" href="/episode/${ep.prev_episode.number}">
+              <div class="dir">← Précédent</div>
+              <div class="tt">#${ep.prev_episode.number} — ${esc(ep.prev_episode.title)}</div>
+            </a>` : '<div></div>'}
+          ${ep.next_episode ? `
+            <a class="nav-card right" href="/episode/${ep.next_episode.number}">
+              <div class="dir">Suivant →</div>
+              <div class="tt">#${ep.next_episode.number} — ${esc(ep.next_episode.title)}</div>
+            </a>` : '<div></div>'}
+        </div>`;
+    }
+
+    function renderSponsors(ep) {
+      const s = ep.sponsors || [];
+      if (!s.length) return '';
+      return `<div style="margin-top:24px;font-size:12px;color:var(--text-muted);text-align:center">Sponsors : ${s.map(x => esc(x.name)).join(' · ')}</div>`;
+    }
+
+    function updateSEO(ep, cfg) {
+      const podcastName = cfg?.name || '';
+      const title = `${ep.title}${podcastName ? ' — ' + podcastName : ''}`;
+      document.title = title;
+      const desc = (ep.rss_topic || ep.abstract || ep.title).slice(0, 160);
+      const img = ep.episode_image_url || ep.thumbnail_full || ep.thumbnail_350 || cfg?.branding?.logoUrl || '';
+      const set = (sel, attr, val) => { const el = document.querySelector(sel); if (el) el.setAttribute(attr, val); };
+      set('meta[name="description"]', 'content', desc);
+      set('meta[property="og:title"]', 'content', title);
+      set('meta[property="og:description"]', 'content', desc);
+      if (img) set('meta[property="og:image"]', 'content', img);
+    }
+
+    function seekAudio(seconds) {
+      // Tente de communiquer avec l'iframe audio (Ausha / Acast supportent postMessage variable selon provider).
+      // À défaut : copie le timestamp dans le presse-papier comme fallback utile.
+      const iframe = document.querySelector('.player-card iframe');
+      if (iframe) {
+        try { iframe.contentWindow?.postMessage({ event: 'seek', seconds }, '*'); } catch {}
+        // Remonte le player en vue
+        iframe.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    // ===== MAIN =====
+    async function load() {
+      const main = document.getElementById('main');
+      if (!Number.isFinite(EP_ID) || EP_ID <= 0) {
+        main.innerHTML = '<div class="empty">Épisode introuvable.</div>';
+        return;
+      }
+      const cfg = await applyConfig();
+      let ep;
+      try {
+        ep = await F(`${API}/episodes/${EP_ID}/full`);
+      } catch (e) {
+        main.innerHTML = `<div class="empty">Épisode #${EP_ID} non trouvé.</div>`;
+        return;
+      }
+      updateSEO(ep, cfg);
+
+      main.innerHTML = `
+        ${renderMeta(ep, cfg)}
+        <h1 class="title">${esc(ep.title)}</h1>
+        ${ep.rss_topic ? `<p class="topic">${esc(ep.rss_topic)}</p>` :
+          ep.abstract ? `<p class="topic">${esc(ep.abstract.slice(0, 400))}${ep.abstract.length > 400 ? '…' : ''}</p>` : ''}
+        ${renderPlayer(ep, cfg)}
+        ${renderTopCards(ep)}
+        ${renderChapters(ep)}
+        ${renderTakeaways(ep)}
+        ${renderPromo(ep)}
+        ${renderArticle(ep)}
+        ${renderReferences(ep)}
+        ${renderCrossEps(ep)}
+        ${renderSimilar(ep)}
+        ${renderPrevNext(ep)}
+        ${renderSponsors(ep)}
+      `;
+    }
+
+    window.seekAudio = seekAudio;
+    window.goBack = goBack;
+    load();
+  </script>
+</body>
+</html>

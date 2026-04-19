@@ -2211,8 +2211,9 @@
             <iframe src="${esc(audio)}" style="width:100%;height:200px;border:none" allow="autoplay" loading="lazy"></iframe>
           </div>
         ` : ''}
-        <div style="display:flex;gap:8px;margin-bottom:8px">
-          <a href="${esc(ep.url)}" target="_blank" class="btn-listen">Voir l'article →</a>
+        <div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap">
+          <a href="/episode/${ep.id}" class="btn-listen">Voir la page complète →</a>
+          ${ep.url ? `<a href="${esc(ep.url)}" target="_blank" class="btn-listen" style="background:transparent;color:var(--blue);border:1px solid var(--blue)">Article original ↗</a>` : ''}
           <button class="btn-mark ${d?'done':''}" onclick="togD(${ep.id});this.classList.toggle('done');this.textContent=isD(${ep.id})?'✓ Vu':'Marquer vu';renderEpList();renderHomeEp();">${d?'✓ Vu':'Marquer vu'}</button>
         </div>
         ${ep.abstract ? `<div class="modal-section"><div class="modal-section-title">📝 Résumé</div><p style="font-size:14px;line-height:1.65;color:var(--text-secondary)">${esc(ep.abstract)}</p></div>` : ''}
