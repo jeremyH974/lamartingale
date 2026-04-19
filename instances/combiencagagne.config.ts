@@ -42,8 +42,19 @@ const config: PodcastConfig = {
   },
 
   taxonomy: {
-    mode: 'auto',
-    autoPillarCount: 10,
+    mode: 'predefined',
+    pillars: [
+      { id: 'TECH_DIGITAL', name: 'Tech & digital', icon: 'laptop', color: '#2563EB' },
+      { id: 'SANTE', name: 'Santé & médical', icon: 'stethoscope', color: '#DC2626' },
+      { id: 'ARTISANAT', name: 'Artisanat & métiers manuels', icon: 'hammer', color: '#EA580C' },
+      { id: 'FINANCE_BUSINESS', name: 'Finance & business', icon: 'banknote', color: '#16A34A' },
+      { id: 'JURIDIQUE', name: 'Juridique & public', icon: 'scale', color: '#9333EA' },
+      { id: 'CREATIF', name: 'Créatif & média', icon: 'palette', color: '#BE185D' },
+      { id: 'SERVICES', name: 'Services & commerce', icon: 'store', color: '#0891B2' },
+      { id: 'EDUCATION', name: 'Éducation & recherche', icon: 'graduation-cap', color: '#059669' },
+      { id: 'SPORT_LOISIR', name: 'Sport & loisirs', icon: 'dumbbell', color: '#F59E0B' },
+      { id: 'INDUSTRIE_AGRI', name: 'Industrie & agriculture', icon: 'factory', color: '#7C3AED' },
+    ],
   },
 
   database: {

@@ -32,6 +32,10 @@
       "destination": "/frontend/episode.html"
     },
     {
+      "source": "/dashboard",
+      "destination": "/frontend/v2-dashboard.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "/frontend/$1"
     }

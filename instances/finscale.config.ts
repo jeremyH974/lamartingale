@@ -42,8 +42,19 @@ const config: PodcastConfig = {
   },
 
   taxonomy: {
-    mode: 'auto',
-    autoPillarCount: 10,
+    mode: 'predefined',
+    pillars: [
+      { id: 'INNOVATION_FINANCIERE', name: 'Innovation Financière', icon: 'innovation', color: '#FFEB3B' },
+      { id: 'TECHNOLOGIE_FINANCIERE', name: 'Technologie Financière', icon: 'tech', color: '#2196F3' },
+      { id: 'INVESTISSEMENT', name: 'Investissement', icon: 'investment', color: '#4CAF50' },
+      { id: 'CRYPTO_ACTIFS', name: 'Crypto-actifs', icon: 'bitcoin', color: '#FFC107' },
+      { id: 'STARTUPS', name: 'Startups', icon: 'rocket', color: '#FF5722' },
+      { id: 'MARCHES_PRIVES', name: 'Marchés Privés', icon: 'market', color: '#E91E63' },
+      { id: 'FINANCE_PERSONNELLE', name: 'Finance Personnelle', icon: 'wallet', color: '#3F51B5' },
+      { id: 'GOUVERNANCE', name: 'Gouvernance', icon: 'shield', color: '#9C27B0' },
+      { id: 'EDUCATION_FINANCIERE', name: 'Éducation Financière', icon: 'book', color: '#8BC34A' },
+      { id: 'DURABILITE', name: 'Durabilité', icon: 'leaf', color: '#FF9800' },
+    ],
   },
 
   database: {

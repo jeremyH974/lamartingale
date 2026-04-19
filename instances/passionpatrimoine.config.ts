@@ -42,8 +42,19 @@ const config: PodcastConfig = {
   },
 
   taxonomy: {
-    mode: 'auto',
-    autoPillarCount: 10,
+    mode: 'predefined',
+    pillars: [
+      { id: 'IMMOBILIER', name: 'Immobilier', icon: 'building', color: '#2563EB' },
+      { id: 'BOURSE', name: 'Bourse & marchés', icon: 'trending-up', color: '#16A34A' },
+      { id: 'FISCALITE', name: 'Fiscalité', icon: 'receipt', color: '#0891B2' },
+      { id: 'ASSURANCE_VIE', name: 'Assurance-vie & épargne', icon: 'piggy-bank', color: '#9333EA' },
+      { id: 'TRANSMISSION', name: 'Transmission & succession', icon: 'users', color: '#BE185D' },
+      { id: 'RETRAITE', name: 'Retraite & prévoyance', icon: 'shield', color: '#EA580C' },
+      { id: 'CRYPTO', name: 'Crypto & actifs numériques', icon: 'bitcoin', color: '#F59E0B' },
+      { id: 'ENTREPRISE', name: 'Entreprise & dirigeants', icon: 'briefcase', color: '#DC2626' },
+      { id: 'ALTERNATIFS', name: 'Investissements alternatifs', icon: 'gem', color: '#7C3AED' },
+      { id: 'MINDSET_FINANCE', name: 'Mindset & éducation financière', icon: 'brain', color: '#059669' },
+    ],
   },
 
   database: {

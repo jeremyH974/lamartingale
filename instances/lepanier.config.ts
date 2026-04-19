@@ -42,8 +42,19 @@ const config: PodcastConfig = {
   },
 
   taxonomy: {
-    mode: 'auto',
-    autoPillarCount: 10,
+    mode: 'predefined',
+    pillars: [
+      { id: 'FOOD_TECH', name: 'FoodTech & innovation alimentaire', icon: 'utensils', color: '#F97316' },
+      { id: 'DISTRIBUTION', name: 'Distribution & retail', icon: 'store', color: '#2563EB' },
+      { id: 'RESTAURATION', name: 'Restauration', icon: 'chef-hat', color: '#DC2626' },
+      { id: 'ECOMMERCE', name: 'E-commerce alimentaire', icon: 'shopping-cart', color: '#0891B2' },
+      { id: 'DTC_BRAND', name: 'Marques DNVB', icon: 'tag', color: '#9333EA' },
+      { id: 'AGRICULTURE', name: 'Agriculture & production', icon: 'leaf', color: '#16A34A' },
+      { id: 'MARQUE_GRANDE_CONSO', name: 'Grandes marques', icon: 'building-2', color: '#EA580C' },
+      { id: 'FINANCEMENT', name: 'Financement & levées', icon: 'banknote', color: '#BE185D' },
+      { id: 'IMPACT', name: 'Impact & durabilité', icon: 'sprout', color: '#059669' },
+      { id: 'MEDIA_COMMUNICATION', name: 'Média & communication', icon: 'megaphone', color: '#7C3AED' },
+    ],
   },
 
   database: {

@@ -37,6 +37,24 @@ function isHost(normName: string): boolean {
   return HOSTS_NORMALIZED.some(h => normName.includes(h));
 }
 
+// Filtre permettant d'exclure les faux noms générés par l'extracteur RSS :
+// marqueurs `[REDIFF]`/`[EXTRAIT]`, prénoms seuls (`Jean`), tokens génériques.
+function isValidPersonName(raw: string): boolean {
+  const trimmed = raw.trim();
+  if (!trimmed) return false;
+  if (trimmed.startsWith('[') || trimmed.startsWith('#')) return false;
+  if (/^\d+$/.test(trimmed)) return false;
+  // Doit comporter au moins 2 tokens (nom + prénom ou prénom composé avec tiret)
+  const tokenCount = trimmed.split(/[\s\-]+/).filter(Boolean).length;
+  if (tokenCount < 2) return false;
+  // Premier caractère doit être une majuscule (pas une particule seule)
+  if (!/^[A-ZÀ-Ý]/.test(trimmed)) return false;
+  // Blocklist de faux positifs courants
+  const BAD_NAMES = /^(rediff|extrait|bonus|zoom|episode|hors[- ]?serie|interview|special|partenariat|replay|bande[- ]?annonce|teaser)\b/i;
+  if (BAD_NAMES.test(trimmed)) return false;
+  return true;
+}
+
 type AppearanceRow = {
   tenant_id: string;
   episode_number: number | null;
@@ -119,6 +137,7 @@ async function main() {
   for (const r of rows) {
     const raw = (r.guest_raw || '').trim();
     if (!raw) continue;
+    if (!isValidPersonName(raw)) continue;
     const canon = normalizeName(raw);
     if (canon.length < 3) continue;
 
