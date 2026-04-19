@@ -158,6 +158,17 @@ app.get('/api/episodes', async (req, res) => {
 
 // --- Deep content endpoints (C1) ---
 
+app.get('/api/episodes/:id/full', async (req, res) => {
+  try {
+    if (!process.env.DATABASE_URL) return res.status(503).json({ error: 'DB required' });
+    const id = parseInt(req.params.id);
+    if (!Number.isFinite(id)) return res.status(400).json({ error: 'Invalid episode id' });
+    const result = await getCached(`episode:full:${id}`, 600, () => dbQueries.getEpisodeFull(id));
+    if (!result) return res.status(404).json({ error: 'Episode not found' });
+    res.json(result);
+  } catch (e: any) { console.error('[API] episodes/:id/full error:', e.message); res.status(500).json({ error: e.message }); }
+});
+
 app.get('/api/episodes/:id/chapters', async (req, res) => {
   try {
     if (!process.env.DATABASE_URL) return res.status(503).json({ error: 'DB required' });

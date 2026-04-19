@@ -614,6 +614,199 @@ export async function getMediaById(episodeNumber: number) {
 }
 
 // ============================================================================
+// Full episode page — un seul appel qui agrège tout pour /episode/:id
+// ============================================================================
+
+export async function getEpisodeFull(episodeNumber: number) {
+  const sqlInstance = neon(process.env.DATABASE_URL!);
+  const t = tenant();
+
+  const rows = await sqlInstance`
+    SELECT e.*,
+           em.thumbnail_350, em.thumbnail_full, em.audio_player_url,
+           g.id AS guest_id, g.bio AS guest_bio_curated,
+           g.company AS guest_company_curated,
+           g.linkedin_url AS guest_linkedin,
+           g.authority_score AS guest_authority
+    FROM episodes e
+    LEFT JOIN episodes_media em ON em.episode_id = e.id
+    LEFT JOIN guests g ON g.tenant_id = e.tenant_id AND g.name = e.guest
+    WHERE e.episode_number = ${episodeNumber} AND e.tenant_id = ${t}
+  `;
+  if (!rows.length) return null;
+  const row = rows[0] as any;
+
+  // --- Links groupés + résolution cross-episode ---
+  const linkRows = await sqlInstance`
+    SELECT url, label, link_type
+    FROM episode_links
+    WHERE episode_id = ${row.id} AND tenant_id = ${t}
+    ORDER BY link_type, id
+  `;
+  const links: Record<string, any[]> = { resources: [], linkedin: [], episode_refs: [], companies: [], tools: [], other: [] };
+  for (const l of linkRows as any[]) {
+    const item: any = { url: l.url, label: l.label || l.url };
+    switch (l.link_type) {
+      case 'resource': links.resources.push(item); break;
+      case 'linkedin': links.linkedin.push(item); break;
+      case 'episode_ref': links.episode_refs.push(item); break;
+      case 'company': links.companies.push(item); break;
+      case 'tool': links.tools.push(item); break;
+      default: links.other.push(item);
+    }
+  }
+  if (links.episode_refs.length) {
+    const urls = links.episode_refs.map((l: any) => l.url);
+    const matched = await sqlInstance`
+      SELECT url, episode_number, title FROM episodes
+      WHERE tenant_id = ${t} AND url = ANY(${urls})
+    `;
+    const byUrl = new Map<string, any>((matched as any[]).map((r) => [r.url, r]));
+    for (const l of links.episode_refs) {
+      const m = byUrl.get(l.url);
+      if (m) { l.episode_number = m.episode_number; l.label = l.label || m.title; }
+    }
+  }
+
+  // --- Guest detail + autres épisodes ---
+  const guestDetail = row.guest ? await (async () => {
+    const others = await sqlInstance`
+      SELECT episode_number, title FROM episodes
+      WHERE tenant_id = ${t} AND guest = ${row.guest} AND episode_number != ${episodeNumber}
+        AND (episode_type = 'full' OR episode_type IS NULL)
+      ORDER BY episode_number DESC LIMIT 10
+    `;
+    return {
+      name: row.guest,
+      company: row.guest_company_curated || row.guest_company || null,
+      bio: row.guest_bio_curated || row.guest_bio || null,
+      linkedin_url: row.guest_linkedin || null,
+      authority_score: row.guest_authority || null,
+      other_episodes: (others as any[]).map((o) => ({ episode_number: o.episode_number, title: o.title })),
+    };
+  })() : null;
+
+  // --- Similar episodes (pgvector) ---
+  const similarRows = await sqlInstance`
+    SELECT e2.episode_number, e2.title, e2.guest, e2.pillar, e2.difficulty,
+           es.similarity_score, em2.thumbnail_350
+    FROM episode_similarities es
+    INNER JOIN episodes e1 ON e1.id = es.episode_id
+    INNER JOIN episodes e2 ON e2.id = es.similar_episode_id
+    LEFT JOIN episodes_media em2 ON em2.episode_id = e2.id
+    WHERE e1.episode_number = ${episodeNumber}
+      AND e1.tenant_id = ${t} AND e2.tenant_id = ${t}
+    ORDER BY es.similarity_score DESC LIMIT 6
+  `;
+  const similar_episodes = (similarRows as any[]).map((r) => ({
+    episode_number: r.episode_number,
+    title: r.title,
+    guest: r.guest || '',
+    pillar: r.pillar,
+    difficulty: r.difficulty,
+    similarity: Number(r.similarity_score),
+    thumbnail: r.thumbnail_350 || null,
+  }));
+
+  // --- Résolution des cross-episodes RSS (titre à jour + existence tenant) ---
+  const rssCrossRaw = (row.rss_cross_episodes as any[]) || [];
+  let rss_cross_episodes: any[] = [];
+  if (rssCrossRaw.length) {
+    const nums = rssCrossRaw.map((c) => c.number).filter((n) => typeof n === 'number');
+    const existing = nums.length ? await sqlInstance`
+      SELECT episode_number, title FROM episodes
+      WHERE tenant_id = ${t} AND episode_number = ANY(${nums})
+    ` : [];
+    const byNum = new Map<number, any>((existing as any[]).map((r) => [r.episode_number, r]));
+    rss_cross_episodes = rssCrossRaw.map((c) => {
+      const match = byNum.get(c.number);
+      return {
+        number: c.number,
+        title: match?.title || c.title || null,
+        exists: !!match,
+      };
+    });
+  }
+
+  // --- Prev/Next (même tenant, type full) ---
+  const [prevRow] = (await sqlInstance`
+    SELECT episode_number, title FROM episodes
+    WHERE tenant_id = ${t} AND episode_number < ${episodeNumber}
+      AND (episode_type = 'full' OR episode_type IS NULL)
+    ORDER BY episode_number DESC LIMIT 1
+  `) as any[];
+  const [nextRow] = (await sqlInstance`
+    SELECT episode_number, title FROM episodes
+    WHERE tenant_id = ${t} AND episode_number > ${episodeNumber}
+      AND (episode_type = 'full' OR episode_type IS NULL)
+    ORDER BY episode_number ASC LIMIT 1
+  `) as any[];
+
+  // --- Enrichment (tags, takeaways) ---
+  const enrRows = await sqlInstance`
+    SELECT tags, sub_themes FROM episodes_enrichment
+    WHERE episode_id = ${row.id} AND tenant_id = ${t} LIMIT 1
+  `;
+  const enr = (enrRows as any[])[0] || {};
+
+  // Slugify simple pour URLs (cohérent avec src/api.ts côté JSON)
+  const slug = (row.title || '')
+    .toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 80);
+
+  return {
+    episode_number: row.episode_number,
+    title: row.title,
+    slug,
+    pillar: row.pillar,
+    difficulty: row.difficulty || 'INTERMEDIAIRE',
+    date_created: row.date_created || null,
+    duration_seconds: row.duration_seconds || null,
+    duration_minutes: row.duration_seconds ? Math.round(row.duration_seconds / 60) : null,
+    episode_type: row.episode_type || 'full',
+    season: row.season || null,
+
+    abstract: row.abstract || null,
+    article_content: row.article_content || null,
+    article_html: row.article_html || null,
+    chapters: row.chapters || [],
+    key_takeaways: row.key_takeaways || [],
+    tags: enr.tags || [],
+    sub_themes: enr.sub_themes || [],
+
+    rss_description: row.rss_description || null,
+    rss_content_encoded: row.rss_content_encoded || null,
+    rss_topic: row.rss_topic || null,
+    rss_guest_intro: row.rss_guest_intro || null,
+    rss_discover: row.rss_discover || [],
+    rss_references: row.rss_references || [],
+    rss_cross_episodes,
+    rss_promo: row.rss_promo || null,
+    rss_chapters_ts: row.rss_chapters_ts || [],
+    youtube_url: row.youtube_url || null,
+    cross_promo: row.cross_promo || null,
+
+    thumbnail_350: row.thumbnail_350 || null,
+    thumbnail_full: row.thumbnail_full || null,
+    episode_image_url: row.episode_image_url || null,
+    audio_url: row.audio_url || null,
+    audio_player_url: row.audio_player_url || null,
+
+    url: row.url || null,
+    article_url: row.article_url || null,
+
+    guest: guestDetail,
+    links,
+    similar_episodes,
+    sponsors: row.sponsors || [],
+
+    prev_episode: prevRow ? { number: prevRow.episode_number, title: prevRow.title } : null,
+    next_episode: nextRow ? { number: nextRow.episode_number, title: nextRow.title } : null,
+  };
+}
+
+// ============================================================================
 // Deep content — chapters split, links stats, guest profile, episode graph
 // ============================================================================
 
