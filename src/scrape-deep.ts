@@ -126,6 +126,7 @@ interface Extracted {
 
 const ARTICLE_SELECTORS = cfg.scraping.articleSelectors;
 const EXCLUDE_SELECTORS = cfg.scraping.excludeSelectors.join(', ');
+const CHAPTER_SELECTOR = cfg.scraping.chapterSelector || 'h2';
 
 function pickArticleRoot($: cheerio.CheerioAPI): cheerio.Cheerio<any> | null {
   for (const sel of ARTICLE_SELECTORS) {
@@ -166,9 +167,9 @@ function extract($: cheerio.CheerioAPI): Extracted | null {
     return { articleText, articleHtml, chapters: [], links: [], guestLinkedin: null };
   }
 
-  // Chapitres : H2 dans la zone
+  // Chapitres : selector configure (cfg.scraping.chapterSelector, defaut h2)
   const chapters: { title: string; order: number }[] = [];
-  root.find('h2').each((i, el) => {
+  root.find(CHAPTER_SELECTOR).each((i, el) => {
     const t = normalize($(el).text());
     if (t) chapters.push({ title: t, order: i + 1 });
   });
@@ -247,6 +248,7 @@ interface EpisodeRow {
   id: number;
   episode_number: number | null;
   slug: string | null;
+  article_url: string | null;
   title: string;
   guest: string | null;
   article_content: string | null;
@@ -256,17 +258,35 @@ interface EpisodeRow {
 async function loadEpisodes(opts: { force: boolean; onlyId?: number; limit?: number }): Promise<EpisodeRow[]> {
   if (opts.onlyId) {
     return (await sql`
-      SELECT id, episode_number, slug, title, guest, article_content, article_html
+      SELECT id, episode_number, slug, article_url, title, guest, article_content, article_html
       FROM episodes WHERE id = ${opts.onlyId} AND tenant_id = ${TENANT}
     `) as EpisodeRow[];
   }
 
-  const rows = (await sql`
-    SELECT id, episode_number, slug, title, guest, article_content, article_html
-    FROM episodes
-    WHERE tenant_id = ${TENANT} AND slug IS NOT NULL AND slug <> ''
-    ORDER BY episode_number DESC NULLS LAST, id DESC
-  `) as EpisodeRow[];
+  // Selection :
+  //  - si cfg.requiresArticleUrl (GDIY) : article_url obligatoire
+  //  - sinon (LM legacy) : slug + episodeUrlPattern suffit
+  const requiresUrl = cfg.scraping.requiresArticleUrl === true;
+  const rows = requiresUrl
+    ? ((await sql`
+        SELECT id, episode_number, slug, article_url, title, guest, article_content, article_html
+        FROM episodes
+        WHERE tenant_id = ${TENANT}
+          AND article_url IS NOT NULL AND article_url <> ''
+          AND (episode_type = 'full' OR episode_type IS NULL)
+        ORDER BY episode_number DESC NULLS LAST, id DESC
+      `) as EpisodeRow[])
+    : ((await sql`
+        SELECT id, episode_number, slug, article_url, title, guest, article_content, article_html
+        FROM episodes
+        WHERE tenant_id = ${TENANT}
+          AND (
+            (article_url IS NOT NULL AND article_url <> '')
+            OR (slug IS NOT NULL AND slug <> '')
+          )
+          AND (episode_type = 'full' OR episode_type IS NULL)
+        ORDER BY episode_number DESC NULLS LAST, id DESC
+      `) as EpisodeRow[]);
 
   const filtered = opts.force
     ? rows
@@ -309,7 +329,11 @@ async function main() {
     const label = `#${ep.episode_number ?? '?'} "${ep.title.slice(0, 60)}"`;
     process.stdout.write(`  [${i + 1}/${episodes.length}] ${label} ... `);
 
-    const url = cfg.episodeUrlPattern.replace('{slug}', ep.slug || '');
+    // Prefere article_url quand pose explicitement (ex: GDIY ou LM override),
+    // sinon construit via episodeUrlPattern + slug.
+    const url = ep.article_url && ep.article_url.trim()
+      ? ep.article_url.trim()
+      : cfg.episodeUrlPattern.replace('{slug}', ep.slug || '');
     const html = await fetchPage(url);
 
     if (html === null) {

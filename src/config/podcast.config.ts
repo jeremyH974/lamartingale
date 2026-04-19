@@ -61,6 +61,7 @@ export interface PodcastConfig {
     userAgent: string;
     hasArticles: boolean;          // true → lance deep-scrape ; false → RSS only
     timelineInRss: boolean;        // true → parse TIMELINE dans description RSS (GDIY)
+    requiresArticleUrl?: boolean;  // true → deep-scrape ignore episodes sans article_url (GDIY)
   };
 
   // Branding

@@ -18,7 +18,7 @@ export const gdiyConfig: PodcastConfig = {
     'Le podcast qui part à la rencontre de celles et ceux qui se sont construits par eux-mêmes. Portraits de fondateurs, créateurs et dirigeants qui racontent leurs parcours, leurs doutes et leurs apprentissages.',
 
   website: 'https://www.gdiy.fr',
-  episodeUrlPattern: 'https://www.gdiy.fr/podcast/{slug}',
+  episodeUrlPattern: 'https://www.gdiy.fr/podcast/{slug}/',
   github: 'https://github.com/jeremyH974/lamartingale',
 
   rssFeeds: {
@@ -42,13 +42,19 @@ export const gdiyConfig: PodcastConfig = {
   },
 
   scraping: {
-    articleSelectors: [],
-    chapterSelector: '',
-    excludeSelectors: [],
-    rateLimit: 4000,
+    articleSelectors: ['.single__content.rich-text', '.single__content'],
+    chapterSelector: 'h2, h3',
+    excludeSelectors: [
+      '.single-content__rating',
+      '.kk-star-ratings',
+      '.wp-block-embed',
+      '.single-footer',
+    ],
+    rateLimit: 2000,
     userAgent: 'GDIY-DataBot/1.0 (contact: jeremyhenry974@gmail.com)',
-    hasArticles: false,
+    hasArticles: true,
     timelineInRss: true,
+    requiresArticleUrl: true,
   },
 
   // Charte gdiy.fr : noir (fond principal) + vert néon signature en accent
