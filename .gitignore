@@ -17,3 +17,5 @@ scripts/debug*.ts
 scripts/sample-*.ts
 scripts/check-*.ts
 scripts/find-gdiy-sponsor-patterns.ts
+
+.vercel
