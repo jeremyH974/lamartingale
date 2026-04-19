@@ -2,11 +2,16 @@ import { neon } from '@neondatabase/serverless';
 
 // ============================================================================
 // Cross-tenant queries — agrègent TOUS les podcasts de l'univers MS.
-// Contrairement à src/db/queries.ts, ces queries ne filtrent PAS par tenant_id
-// actuel. Elles listent les tenants explicitement pour garder le contrôle.
 //
-// Ajouter un nouveau podcast à l'univers = ajouter son tenant_id dans TENANTS
-// + son entrée dans TENANT_META. Aucune autre modif de code.
+// EXCEPTION d'isolation documentée : ce module est l'agrégateur cross-podcast
+// (hub "Univers MS"). Par nature, il connaît la liste des tenants du réseau.
+// La liste TENANTS + TENANT_META + HOSTS_NORMALIZED ci-dessous EST la
+// définition d'univers — pas une fuite de config dans l'engine générique.
+// Un podcast standalone (Le Gratin, etc.) n'importe JAMAIS ce fichier ;
+// il passe par engine/db/queries.ts (scopé au tenant actif via getConfig()).
+//
+// Ajouter un nouveau podcast à l'univers MS = ajouter son tenant_id dans
+// TENANTS + son entrée dans TENANT_META. Aucune autre modif de code.
 // ============================================================================
 
 export const TENANTS = ['lamartingale', 'gdiy'] as const;

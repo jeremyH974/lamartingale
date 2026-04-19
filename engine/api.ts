@@ -549,6 +549,9 @@ app.post('/api/cache/warm', async (_req, res) => {
 });
 
 // --- Demo summary (cheat sheet pitch) ---
+// EXCEPTION d'isolation : endpoint spécifique à l'univers MS (LM + GDIY).
+// Codé en dur volontairement — utilisé uniquement pour le pitch, pas par le
+// frontend des podcasts standalone. Cf. engine/db/cross-queries.ts.
 app.get('/api/demo/summary', async (_req, res) => {
   try {
     if (!process.env.DATABASE_URL) return res.status(503).json({ error: 'DB required' });
@@ -980,7 +983,7 @@ app.get('/api/search', async (req, res) => {
 
 if (require.main === module) {
   app.listen(PORT, () => {
-    console.log(`\n=== La Martingale API ===`);
+    console.log(`\n=== ${getConfig().name} API ===`);
     console.log(`Server: http://localhost:${PORT}`);
     console.log(`Data source: ${USE_DB ? 'Neon Postgres' : 'JSON files'}`);
     console.log(`Endpoints: 20+ (episodes, experts, paths, quiz, graph, search, media, tags, stats, recommend)`);
