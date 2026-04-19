@@ -23,7 +23,6 @@
     "dashboard": "npx tsx src/ai/dashboard.ts",
     "cache:clear": "curl -X POST http://localhost:3001/api/cache/clear",
     "deploy": "vercel --yes --prod --scope jeremyh974s-projects",
-    "deploy:v2": "vercel --yes --prod --scope jeremyh974s-projects --name lamartingale-v2 --local-config vercel-v2.json",
     "build": "tsc",
     "start": "node dist/api.js",
     "test": "vitest run",

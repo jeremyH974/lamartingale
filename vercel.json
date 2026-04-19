@@ -12,6 +12,8 @@
   ],
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/index.ts" },
+    { "source": "/", "destination": "/public/v2.html" },
+    { "source": "/index.html", "destination": "/public/v2.html" },
     { "source": "/(.*)", "destination": "/public/$1" }
   ]
 }

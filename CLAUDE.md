@@ -38,8 +38,8 @@ PODCAST_ID=lamartingale npx tsx src/scrape-rss.ts
 npx vitest run                     # 48 tests multi-tenant (tenant-isolation + rss-extractors)
 npm run build                      # tsc strict
 
-# Deploy Vercel (projet distinct par tenant)
-vercel --prod                      # depuis le projet linké
+# Deploy Vercel (projet distinct par tenant, .vercel/project.json à re-linker)
+npm run deploy                     # = vercel --yes --prod, utilise vercel.json (config V2)
 ```
 
 ## Architecture
@@ -85,7 +85,7 @@ Arborescence détaillée : voir [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 4. **Deep scraping** : 312/313 épisodes ont article complet (avg 5000c), 290/313 chapitrage, 9901 liens classifiés (tool/company/linkedin/episode_ref/resource)
 5. **Multi-tenant** : 1 DB Neon partagée, isolation via `tenant_id` sur 10 tables + contraintes uniques composites `(tenant_id, X)`. 0 paire cross-tenant dans `episode_similarities`.
 6. **Frontend config-driven** : un seul `public/v2.html`, pilote tout (branding, tagline, platforms, socials, logo, CTA accent) via `/api/config`. Luminance WCAG pour choisir le texte hero/CTA.
-7. **Vercel = 1 projet par tenant** : pas de subpath, pas de rewrites. `lamartingale-v2` et `gdiy-v2` partagent la même DB.
+7. **Vercel = 1 projet par tenant** : pas de subpath, pas de rewrites. `lamartingale-v2` et `gdiy-v2` partagent la même DB. V1 La Martingale archivée (public/archive/v1.html), une seule version maintenue.
 
 ## Dette technique ouverte (à investiguer)
 - **22 épisodes (#126..#279) avec slug="" en BDD** → titres non-canoniques ("Crise SCPI", "5 regles or investissement"). Articles présumés exister sur lamartingale.io sous un autre slug. Script à écrire : re-crawler le listing pour retrouver les vrais slugs, puis scrape-deep --episode.
@@ -95,10 +95,10 @@ Arborescence détaillée : voir [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 
 ## URLs prod
 
-- LaMartingale V1 : https://lamartingale.vercel.app
-- LaMartingale V2 : https://lamartingale-v2.vercel.app (à vérifier — projet séparé)
-- GDIY V2 : `gdiy-v2.vercel.app` (projet Vercel à créer — action externe, non déployée)
+- La Martingale : https://lamartingale-v2.vercel.app (unique version)
+- GDIY : https://gdiy-v2.vercel.app
 - GitHub : https://github.com/jeremyH974/lamartingale
+- V1 archivée : `public/archive/v1.html` (plus déployée, domaine `lamartingale.vercel.app` non maintenu)
 
 ## Chartes graphiques
 
@@ -117,7 +117,7 @@ Avant chaque tâche, auto-classifie dans HAIKU, SONNET ou OPUS.
 - Toute modif d'un god node → OPUS minimum
 - Raw SQL vs Drizzle sur un endpoint existant → SONNET mais lire `queries.ts` d'abord
 - Migration schema (ajout colonne) → OPUS (impact migrate-json + migrate-enriched + regression)
-- Front V2 isolé (`public/v2.html`) → SONNET
+- Front (`public/v2.html`, `public/v2-dashboard.html`) → SONNET
 - Ajout script Python `scripts/` isolé → SONNET
 
 ### Protocole
