@@ -224,11 +224,11 @@ async function persist(
     const labels = ex.links.map((l) => l.label);
     const types = ex.links.map((l) => l.link_type);
     await sql`
-      INSERT INTO episode_links (episode_id, url, label, link_type)
-      SELECT ${episodeId}::int, u, l, t
+      INSERT INTO episode_links (tenant_id, episode_id, url, label, link_type)
+      SELECT ${TENANT}, ${episodeId}::int, u, l, t
       FROM unnest(${urls}::text[], ${labels}::text[], ${types}::text[]) AS x(u, l, t)
       ON CONFLICT (episode_id, url) DO UPDATE
-      SET label = EXCLUDED.label, link_type = EXCLUDED.link_type
+      SET label = EXCLUDED.label, link_type = EXCLUDED.link_type, tenant_id = EXCLUDED.tenant_id
     `;
   }
 

@@ -10,6 +10,8 @@ Prêt pour le 19 mai 2026. Voir `docs/DEMO_SCRIPT.md`.
 - [x] Endpoint `/api/demo/summary` (cheat sheet pitch)
 - [x] Homepage OPT-4 (hero premium, count-up, CTA pulse, Sillon footer)
 - [x] Badge "Généré par IA" sur quiz
+- [x] GDIY scrape-deep complet (468/469 articles, 4005 liens, bug tenant_id fixé)
+- [x] Rapport d'anomalies LM + GDIY pour pitch (`docs/anomalies-sites-orso.md`)
 
 ## Post-pitch (juin 2026+)
 

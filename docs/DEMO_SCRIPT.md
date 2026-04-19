@@ -1,6 +1,6 @@
 # Script de démo — Pitch Matthieu Stefani
 
-**Durée cible : 15 min · Audience : Matthieu Stefani · Date : 2026-05-19**
+**Durée cible : 17 min · Audience : Matthieu Stefani · Date : 2026-05-19**
 
 URLs :
 - La Martingale : https://lamartingale-v2.vercel.app
@@ -104,7 +104,25 @@ URL : `https://gdiy-v2.vercel.app`
 
 ---
 
-## Étape 6 — Sillon (3 min) — **CLOSER**
+## Étape 6 — Rapport d'anomalies (2 min) — **SURPRISE**
+
+Sortir `docs/anomalies-sites-orso.md` imprimé ou en PDF.
+
+> « Bonus. En ingérant ton contenu, on a fait un audit complet des deux sites. 260+ anomalies remontées sur 1272 épisodes. »
+
+Points à montrer :
+- 17 épisodes LM sans slug (5.5% du catalogue invisible pour SEO)
+- 68 épisodes GDIY sans `article_url` dans le RSS (Orso Media à alerter)
+- 95 épisodes GDIY sans info invité exploitable
+- Table `guests` GDIY vide (pipeline de dénormalisation pas lancé)
+
+**Réaction attendue** : « Tu me fais ce rapport pour nos autres podcasts ? »
+
+**Message** : ce rapport est un sous-produit gratuit de l'ingestion — il se régénère à chaque refresh.
+
+---
+
+## Étape 7 — Sillon (3 min) — **CLOSER**
 
 Pas de démo technique. Pitch verbal.
 
