@@ -217,6 +217,25 @@ export const podcastMetadata = pgTable('podcast_metadata', {
   updatedAt: timestamp('updated_at').defaultNow(),
 });
 
+// Vue unifiée des invités de l'univers MS — pas scoped tenant.
+// Peuplée par src/cross/match-guests.ts. tenant_appearances jsonb décrit
+// les apparitions par tenant : [{ tenant_id, episode_numbers: [136, 198] }].
+export const crossPodcastGuests = pgTable('cross_podcast_guests', {
+  id: serial('id').primaryKey(),
+  canonicalName: text('canonical_name').notNull().unique(),
+  displayName: text('display_name').notNull(),
+  bio: text('bio'),
+  linkedinUrl: text('linkedin_url'),
+  instagramUrl: text('instagram_url'),
+  websiteUrl: text('website_url'),
+  tenantAppearances: jsonb('tenant_appearances').$type<{ tenant_id: string; episode_numbers: number[] }[]>().default([]),
+  totalEpisodes: integer('total_episodes').default(0),
+  totalPodcasts: integer('total_podcasts').default(0),
+  isHost: boolean('is_host').default(false),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+});
+
 export const episodeSimilarities = pgTable('episode_similarities', {
   id: serial('id').primaryKey(),
   tenantId: tenantId(),
