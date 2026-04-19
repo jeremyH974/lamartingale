@@ -21,14 +21,33 @@ export function listConfigs(): string[] {
   return Object.keys(REGISTRY);
 }
 
+function tryDynamicLoad(id: string): PodcastConfig | null {
+  // Charge instances/{id}.config.ts au runtime — permet d'ajouter un
+  // podcast sans modifier ce fichier (workflow CLI init).
+  try {
+    const path = require('path') as typeof import('path');
+    const modulePath = path.resolve(__dirname, '..', '..', 'instances', `${id}.config`);
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const mod = require(modulePath);
+    const cfg: PodcastConfig = mod.default ?? mod[`${id}Config`] ?? mod.config;
+    if (cfg && cfg.id === id) {
+      REGISTRY[id] = cfg;
+      return cfg;
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
 function resolveConfig(): PodcastConfig {
   const id = (process.env.PODCAST_ID || 'lamartingale').trim().toLowerCase();
-  const cfg = REGISTRY[id];
+  let cfg = REGISTRY[id] ?? tryDynamicLoad(id);
   if (!cfg) {
     const known = Object.keys(REGISTRY).join(', ') || '(none)';
     throw new Error(
       `[config] Unknown PODCAST_ID="${id}". Known: ${known}. ` +
-      `Register via src/config/index.ts → REGISTRY.`,
+      `Ajoute instances/${id}.config.ts ou enregistre via registerConfig().`,
     );
   }
   return cfg;
