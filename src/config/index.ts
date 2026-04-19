@@ -1,12 +1,14 @@
 import type { PodcastConfig } from './podcast.config';
 import { lamartingaleConfig } from './lamartingale.config';
 import { gdiyConfig } from './gdiy.config';
+import { hubConfig } from './hub.config';
 
 // Registry des configs disponibles. Ajouter un nouveau podcast =
 // importer sa config ici + enregistrer l'entrée.
 const REGISTRY: Record<string, PodcastConfig> = {
   lamartingale: lamartingaleConfig,
   gdiy: gdiyConfig,
+  hub: hubConfig,
 };
 
 // Ajout paresseux pour les podcasts suivants (évite les imports circulaires

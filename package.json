@@ -25,6 +25,7 @@
     "dashboard": "npx tsx src/ai/dashboard.ts",
     "cache:clear": "curl -X POST http://localhost:3001/api/cache/clear",
     "deploy": "vercel --yes --prod --scope jeremyh974s-projects",
+    "deploy:hub": "vercel --yes --prod --scope jeremyh974s-projects --local-config vercel-hub.json",
     "build": "tsc",
     "start": "node dist/api.js",
     "test": "vitest run",
