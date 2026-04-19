@@ -1,0 +1,60 @@
+import type { PodcastConfig } from '@engine/config/podcast.config';
+
+// Template pour un nouveau podcast — généré par `cli/index.ts init`.
+// Les {{PLACEHOLDERS}} sont remplacés par la CLI ; à adapter manuellement
+// ensuite (catégories, sélecteurs scraping, plateformes, etc.).
+
+const config: PodcastConfig = {
+  id: 'passionpatrimoine',
+  name: 'Passion Patrimoine',
+  tagline: 'Le podcast qui donne la parole aux CGP',
+  host: 'Carine Dany',
+  producer: 'Orso Media',
+  description:
+    "Carine Dany reçoit les artisans de la gestion de patrimoine : CGP, experts, dirigeants qui racontent leur quotidien, leur vision du métier et l'actualité économique et financière.",
+
+  website: 'https://passionpatrimoine.com',
+  episodeUrlPattern: '',
+
+  rssFeeds: {
+    main: 'https://feeds.audiomeans.fr/feed/88200bee-f7c5-4573-9d12-e29368f16aa8.xml',
+  },
+
+  platforms: {
+    apple: 'https://podcasts.apple.com/fr/podcast/passion-patrimoine/id1650655065',
+    spotify: 'https://open.spotify.com/show/0yPV3XqFI1dvC774zGBCJ0',
+  },
+
+  scraping: {
+    articleSelectors: ['.entry-content', '.post-content', 'article .content'],
+    chapterSelector: 'h2',
+    excludeSelectors: ['.sidebar', '.footer', 'nav'],
+    rateLimit: 2000,
+    userAgent: 'passionpatrimoine-DataBot/1.0',
+    hasArticles: false,
+    timelineInRss: false,
+  },
+
+  branding: {
+    primaryColor: '#7A2D98',
+    font: 'Inter',
+    logoUrl: 'https://static.audiomeans.fr/img/podcast/37875255-45e3-491a-9d28-479018191b3d.jpg',
+  },
+
+  taxonomy: {
+    mode: 'auto',
+    autoPillarCount: 10,
+  },
+
+  database: {
+    tenantId: 'passionpatrimoine',
+  },
+
+  deploy: {
+    vercelProject: 'passionpatrimoine-v2',
+    vercelScope: 'jeremyh974s-projects',
+  },
+};
+
+export const passionpatrimoineConfig = config;
+export default config;
