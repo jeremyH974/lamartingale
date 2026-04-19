@@ -30,6 +30,13 @@ async function main() {
   const db = drizzle(sql, { schema });
 
   const forceAll = process.argv.includes('--force');
+  // --new-only est explicite mais c'est déjà le comportement par défaut (filter !embedding)
+  // on le reconnaît pour documenter l'intention dans `npm run refresh`.
+  const newOnly = process.argv.includes('--new-only');
+  if (newOnly && forceAll) {
+    console.error('[COUCHE 2][EMBEDDINGS] --new-only et --force sont mutuellement exclusifs');
+    process.exit(1);
+  }
 
   // Get episodes (tenant-scoped) avec contenu enrichi pour de meilleurs embeddings.
   const episodes = await sql`

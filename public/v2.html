@@ -130,8 +130,8 @@
 
     /* ====== HERO ====== */
     .hero {
-      background: var(--hero-bg, linear-gradient(135deg, #004cff 0%, #0066ff 50%, #1a7aff 100%));
-      padding: 72px 32px 64px;
+      background: var(--hero-bg, linear-gradient(180deg, #003ce0 0%, #004cff 100%));
+      padding: 96px 32px 88px;
       color: var(--hero-fg, white);
       text-align: center;
       position: relative;
@@ -141,73 +141,89 @@
     .hero::before {
       content: '';
       position: absolute;
-      top: -50%;
-      right: -20%;
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+      top: -40%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 960px;
+      height: 960px;
+      background: radial-gradient(circle, rgba(255,255,255,0.07) 0%, transparent 60%);
       border-radius: 50%;
+      pointer-events: none;
     }
 
     .hero-inner {
-      max-width: 720px;
+      max-width: 760px;
       margin: 0 auto;
       position: relative;
       z-index: 1;
     }
 
     .hero h1 {
-      font-size: 42px;
-      font-weight: 800;
-      line-height: 1.15;
-      letter-spacing: -1px;
-      margin-bottom: 16px;
+      font-size: 48px;
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -1.5px;
+      margin-bottom: 20px;
     }
 
     .hero p {
       font-size: 17px;
       font-weight: 300;
-      opacity: 0.9;
-      margin-bottom: 36px;
+      opacity: 0.85;
+      margin-bottom: 44px;
       line-height: 1.6;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .hero-stats {
       display: flex;
       justify-content: center;
-      gap: 48px;
-      margin-bottom: 36px;
+      gap: 56px;
+      margin-bottom: 44px;
     }
 
     .hero-stat-value {
-      font-size: 36px;
+      font-size: 38px;
       font-weight: 700;
       line-height: 1;
+      letter-spacing: -0.5px;
+      font-variant-numeric: tabular-nums;
     }
 
     .hero-stat-label {
-      font-size: 13px;
-      opacity: 0.7;
-      margin-top: 4px;
+      font-size: 12px;
+      opacity: 0.65;
+      margin-top: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
     }
 
     .hero-cta {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 14px 32px;
+      gap: 10px;
+      padding: 16px 36px;
       background: var(--cta-bg, white);
       color: var(--cta-fg, var(--blue));
       font-size: 15px;
       font-weight: 600;
-      border-radius: 10px;
+      border-radius: 12px;
       border: none;
       cursor: pointer;
-      transition: all 0.2s;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+      transition: transform 0.25s cubic-bezier(.2,.8,.2,1), box-shadow 0.25s;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+      position: relative;
+      animation: ctaPulse 3.6s ease-in-out infinite;
     }
 
-    .hero-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
+    .hero-cta:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(0,0,0,0.22); animation: none; }
+
+    @keyframes ctaPulse {
+      0%, 100% { box-shadow: 0 4px 14px rgba(0,0,0,0.12), 0 0 0 0 rgba(255,255,255,0.35); }
+      50%      { box-shadow: 0 4px 14px rgba(0,0,0,0.12), 0 0 0 10px rgba(255,255,255,0); }
+    }
 
     /* ====== CONTAINER ====== */
     .container {
@@ -263,13 +279,17 @@
       box-shadow: var(--shadow-sm);
     }
 
+    .card {
+      transition: transform 0.22s cubic-bezier(.2,.8,.2,1), box-shadow 0.22s, border-color 0.22s;
+    }
+
     .card:hover {
-      box-shadow: var(--shadow);
-      border-color: #d1d5db;
+      box-shadow: 0 8px 24px rgba(17,24,39,0.06);
+      border-color: #e5e7eb;
     }
 
     .card-clickable { cursor: pointer; }
-    .card-clickable:hover { transform: translateY(-2px); }
+    .card-clickable:hover { transform: translateY(-3px); }
 
     /* ====== PATH CARDS ====== */
     .paths-grid {
@@ -1335,7 +1355,10 @@
     <!-- QUIZ (adaptatif) -->
     <div class="view" id="v-quiz">
       <section class="section">
-        <div class="section-title" style="margin-bottom:4px">Quiz adaptatif</div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
+          <div class="section-title">Quiz adaptatif</div>
+          <span title="Les questions de ce quiz sont générées par intelligence artificielle à partir du contenu des épisodes. Corrigez-moi si vous repérez une erreur." style="display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:999px;background:var(--blue-50);color:var(--blue);font-size:10.5px;font-weight:600;letter-spacing:0.4px;text-transform:uppercase;border:1px solid var(--blue-100);cursor:help">⚡ Généré par IA</span>
+        </div>
         <div class="section-subtitle" style="margin-bottom:20px">L'IA adapte la difficulte et le theme a votre niveau. Plus vous repondez, plus les questions sont pertinentes.</div>
         <div class="quiz-wrap" id="quiz-area"></div>
       </section>
@@ -1389,6 +1412,7 @@
       <div class="footer-links" id="footer-links"></div>
     </div>
     <div class="footer-copy" id="footer-copy">Produit par Orso Media · Matthieu Stefani · &copy; 2026</div>
+    <div style="text-align:center;font-size:11px;color:var(--text-muted);padding:8px 0 20px;letter-spacing:0.3px">Infrastructure propulsée par <span style="font-weight:600;color:var(--text-secondary)">Sillon</span></div>
   </footer>
 
   <!-- MODAL -->
@@ -1593,10 +1617,10 @@
       ]);
       allEp = epRes.episodes;
       mediaMap = media || {};
-      document.getElementById('hs-ep').textContent = stats.total_episodes;
-      document.getElementById('hs-ex').textContent = stats.total_experts;
-      document.getElementById('hs-p').textContent = stats.total_paths;
-      document.getElementById('hs-q').textContent = stats.total_quiz ?? 0;
+      countUp('hs-ep', stats.total_episodes);
+      countUp('hs-ex', stats.total_experts);
+      countUp('hs-p', stats.total_paths);
+      countUp('hs-q', stats.total_quiz ?? 0);
       renderHomePaths(paths.paths);
       renderHomeEp();
       renderHomeExperts(experts.experts);
@@ -1762,23 +1786,30 @@
       el.innerHTML = '<div style="color:var(--text-muted);padding:20px">Recherche semantique en cours...</div>';
 
       try {
-        const d = await F(`${API}/search/hybrid?q=${encodeURIComponent(q)}&limit=10`);
+        const d = await F(`${API}/search/hybrid?q=${encodeURIComponent(q)}&limit=10&depth=chapter`);
         el.innerHTML = `
           <div class="search-timing">${d.results.length} resultats en ${d.timing_ms}ms (recherche hybride semantique + lexicale)</div>
-          ${d.results.map(r => `
+          ${d.results.map(r => {
+            const chapLine = r.best_chapter ? `
+              <div style="margin-top:6px;padding:8px 10px;background:var(--blue-50);border-left:2px solid var(--blue);border-radius:4px;font-size:12px;color:var(--text-secondary)">
+                <div style="font-weight:600;color:var(--blue);font-size:11px;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:3px">Chapitre · ${escapeHtml(r.best_chapter.title)}</div>
+                <div style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${escapeHtml(r.best_chapter.snippet)}</div>
+              </div>` : '';
+            return `
             <div class="search-result" onclick="showEpM(${r.episode_number})">
               ${r.thumbnail ? `<img class="search-result-thumb" src="${r.thumbnail}" alt="">` : `<div style="width:56px;height:56px;border-radius:10px;background:var(--blue-50);display:flex;align-items:center;justify-content:center;color:var(--blue);font-weight:700;flex-shrink:0">#${r.episode_number}</div>`}
               <div style="flex:1;min-width:0">
                 <div style="font-weight:600;font-size:14px;margin-bottom:2px">#${r.episode_number} — ${r.title}</div>
                 <div style="font-size:12px;color:var(--text-muted);margin-bottom:4px">${r.guest} · <span style="color:${PC[r.pillar]}">●</span> ${PN[r.pillar]}</div>
-                ${r.abstract ? `<div style="font-size:12px;color:var(--text-secondary);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${r.abstract}</div>` : ''}
+                ${!r.best_chapter && r.abstract ? `<div style="font-size:12px;color:var(--text-secondary);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${r.abstract}</div>` : ''}
+                ${chapLine}
               </div>
               <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-end;flex-shrink:0">
                 <span class="search-result-score">${(r.score * 100).toFixed(1)}</span>
                 <span class="search-result-type">${r.match_type}</span>
               </div>
-            </div>
-          `).join('')}
+            </div>`;
+          }).join('')}
         `;
       } catch (e) {
         el.innerHTML = `<div style="color:var(--danger);padding:20px">Erreur : ${e.message}. La recherche semantique necessite la base de donnees.</div>`;
@@ -1830,6 +1861,23 @@
     }
 
     function escapeHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+    // Count-up anime — hero stats au chargement
+    function countUp(id, target, duration = 900) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const n = Number(target) || 0;
+      if (n === 0) { el.textContent = '0'; return; }
+      const start = performance.now();
+      function tick(now) {
+        const p = Math.min(1, (now - start) / duration);
+        // easeOutCubic
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.round(n * eased).toLocaleString('fr-FR');
+        if (p < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
     function formatChatResponse(text) {
       return text
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')

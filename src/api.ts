@@ -163,7 +163,7 @@ app.get('/api/episodes/:id/full', async (req, res) => {
     if (!process.env.DATABASE_URL) return res.status(503).json({ error: 'DB required' });
     const id = parseInt(req.params.id);
     if (!Number.isFinite(id)) return res.status(400).json({ error: 'Invalid episode id' });
-    const result = await getCached(`episode:full:${id}`, 600, () => dbQueries.getEpisodeFull(id));
+    const result = await getCached(`episode:full:${id}`, 21600, () => dbQueries.getEpisodeFull(id));
     if (!result) return res.status(404).json({ error: 'Episode not found' });
     res.json(result);
   } catch (e: any) { console.error('[API] episodes/:id/full error:', e.message); res.status(500).json({ error: e.message }); }
@@ -384,7 +384,7 @@ app.get('/api/analytics', async (_req, res) => {
 app.get('/api/analytics/dashboard', async (_req, res) => {
   try {
     if (!process.env.DATABASE_URL) return res.status(503).json({ error: 'DB required' });
-    const result = await getCached('analytics:dashboard', 600, async () => {
+    const result = await getCached('analytics:dashboard', 21600, async () => {
       const { getDashboard } = await import('./ai/dashboard');
       return await getDashboard();
     });
@@ -474,7 +474,7 @@ app.get('/api/search/hybrid', async (req, res) => {
     if (!q || q.length < 2) return res.status(400).json({ error: 'Query must be at least 2 characters' });
     const limit = parseInt(req.query.limit as string) || 10;
     const depth = (req.query.depth as string) === 'chapter' ? 'chapter' : 'episode';
-    const result = await getCached(`search:hybrid:${depth}:${limit}:${q}`, 180, async () => {
+    const result = await getCached(`search:hybrid:${depth}:${limit}:${q}`, 3600, async () => {
       const { hybridSearch } = await import('./ai/search');
       return await hybridSearch(q, limit, { depth });
     });
@@ -491,10 +491,138 @@ app.post('/api/chat', async (req, res) => {
     }
     const { message } = req.body;
     if (!message) return res.status(400).json({ error: 'Missing message' });
-    const { ragQuery } = await import('./ai/rag');
-    const result = await ragQuery(message);
+    // Normalise pour maximiser les hits cache : lower + trim + collapse whitespace + strip ponctuation finale
+    const normalized = String(message).toLowerCase().trim().replace(/\s+/g, ' ').replace(/[?!.,;:]+$/g, '');
+    const cacheKey = `chat:${normalized.substring(0, 300)}`;
+    const result = await getCached(cacheKey, 86400, async () => {
+      const { ragQuery } = await import('./ai/rag');
+      return await ragQuery(message);
+    });
     res.json(result);
   } catch (e: any) { console.error('[API] /api/chat error:', e.message); res.status(500).json({ error: e.message }); }
+});
+
+// --- Cache warm-up (pre-chauffe les queries d\u00e9mo) ---
+app.post('/api/cache/warm', async (_req, res) => {
+  try {
+    if (!process.env.DATABASE_URL || !process.env.OPENAI_API_KEY) {
+      return res.status(503).json({ error: 'warm requires DATABASE_URL + OPENAI_API_KEY' });
+    }
+    const queries = [
+      'investir en SCPI',
+      'ETF ou stock picking',
+      'optimiser sa fiscalité',
+      'investir dans la crypto',
+      'private equity',
+      'épargne de précaution',
+      'investissement responsable',
+      'crowdfunding immobilier',
+      'négocier une augmentation',
+      'lancer un side business',
+    ];
+
+    const { hybridSearch } = await import('./ai/search');
+    const { ragQuery } = await import('./ai/rag');
+
+    const t0 = Date.now();
+    const [searchResults, chatResults] = await Promise.all([
+      Promise.all(queries.map(q =>
+        getCached(`search:hybrid:chapter:10:${q}`, 3600, () => hybridSearch(q, 10, { depth: 'chapter' }))
+          .then(() => ({ q, ok: true }))
+          .catch((e: any) => ({ q, ok: false, error: e.message }))
+      )),
+      Promise.all(queries.map(q => {
+        const normalized = q.toLowerCase().trim().replace(/\s+/g, ' ');
+        return getCached(`chat:${normalized.substring(0, 300)}`, 86400, () => ragQuery(q))
+          .then(() => ({ q, ok: true }))
+          .catch((e: any) => ({ q, ok: false, error: e.message }));
+      })),
+    ]);
+
+    res.json({
+      warmed_ms: Date.now() - t0,
+      queries_count: queries.length,
+      search: searchResults,
+      chat: chatResults,
+    });
+  } catch (e: any) { console.error('[API] /api/cache/warm error:', e.message); res.status(500).json({ error: e.message }); }
+});
+
+// --- Demo summary (cheat sheet pitch) ---
+app.get('/api/demo/summary', async (_req, res) => {
+  try {
+    if (!process.env.DATABASE_URL) return res.status(503).json({ error: 'DB required' });
+    const result = await getCached('demo:summary', 21600, async () => {
+      const { neon } = await import('@neondatabase/serverless');
+      const sql = neon(process.env.DATABASE_URL!);
+
+      async function statsFor(tenant: string) {
+        const [ov, sponsor, guest, quizCount, articles] = await Promise.all([
+          sql`SELECT count(*)::int AS episodes,
+                     COALESCE(SUM(duration_seconds),0)::bigint AS total_seconds,
+                     count(DISTINCT guest) FILTER (WHERE guest IS NOT NULL AND guest != '')::int AS guests
+              FROM episodes
+              WHERE tenant_id = ${tenant}
+                AND (episode_type='full' OR episode_type IS NULL)`,
+          sql`SELECT label, count(DISTINCT episode_id)::int AS mentions
+              FROM episode_links
+              WHERE tenant_id = ${tenant} AND link_type IN ('company','tool')
+                AND label IS NOT NULL AND length(label) BETWEEN 2 AND 40
+                AND label !~* '(podcast|orso media|cosavostra|deezer|spotify|apple|youtube)'
+              GROUP BY label ORDER BY mentions DESC LIMIT 1`,
+          sql`SELECT guest, count(*)::int AS eps
+              FROM episodes WHERE tenant_id = ${tenant}
+                AND guest IS NOT NULL AND guest != ''
+                AND (episode_type='full' OR episode_type IS NULL)
+              GROUP BY guest ORDER BY eps DESC LIMIT 1`,
+          sql`SELECT count(*)::int AS c FROM quiz_questions WHERE tenant_id = ${tenant}`,
+          sql`SELECT count(*)::int AS c FROM episodes
+              WHERE tenant_id = ${tenant}
+                AND article_content IS NOT NULL AND length(article_content) > 200`,
+        ]) as any[];
+        const linksCount = (await sql`SELECT count(*)::int AS c FROM episode_links WHERE tenant_id = ${tenant}`)[0]?.c ?? 0;
+        const crossRefs = (await sql`SELECT count(*)::int AS c FROM episode_links WHERE tenant_id = ${tenant} AND link_type = 'episode_ref'`)[0]?.c ?? 0;
+        return {
+          episodes: Number(ov[0]?.episodes || 0),
+          hours: Math.round(Number(ov[0]?.total_seconds || 0) / 3600),
+          guests: Number(ov[0]?.guests || 0),
+          articles: Number(articles[0]?.c || 0),
+          links: Number(linksCount),
+          quiz: Number(quizCount[0]?.c || 0),
+          top_sponsor: sponsor[0] ? `${sponsor[0].label} (${sponsor[0].mentions} mentions)` : null,
+          top_guest: guest[0] ? `${guest[0].guest} (${guest[0].eps} eps)` : null,
+          cross_references: Number(crossRefs),
+        };
+      }
+
+      const [lm, gdiy] = await Promise.all([statsFor('lamartingale'), statsFor('gdiy')]);
+
+      // Invités partagés entre les deux tenants
+      const sharedGuestsRow = await sql`
+        SELECT count(DISTINCT a.guest)::int AS c
+        FROM episodes a
+        INNER JOIN episodes b ON lower(trim(a.guest)) = lower(trim(b.guest))
+        WHERE a.tenant_id = 'lamartingale' AND b.tenant_id = 'gdiy'
+          AND a.guest IS NOT NULL AND a.guest != ''
+      ` as any[];
+      const sharedGuests = Number(sharedGuestsRow[0]?.c || 0);
+
+      return {
+        lamartingale: lm,
+        gdiy,
+        cross_podcast: {
+          shared_guests: sharedGuests,
+          total_cross_refs: lm.cross_references + gdiy.cross_references,
+          combined_hours: lm.hours + gdiy.hours,
+          combined_episodes: lm.episodes + gdiy.episodes,
+          combined_articles: lm.articles + gdiy.articles,
+          combined_links: lm.links + gdiy.links,
+          combined_quiz: lm.quiz + gdiy.quiz,
+        },
+      };
+    });
+    res.json(result);
+  } catch (e: any) { console.error('[API] /api/demo/summary error:', e.message); res.status(500).json({ error: e.message }); }
 });
 
 // --- Adaptive Quiz (Couche 3) ---
