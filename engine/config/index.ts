@@ -2,13 +2,23 @@ import type { PodcastConfig } from './podcast.config';
 import { lamartingaleConfig } from '../../instances/lamartingale.config';
 import { gdiyConfig } from '../../instances/gdiy.config';
 import { hubConfig } from '../../instances/hub.config';
+import { lepanierConfig } from '../../instances/lepanier.config';
+import { finscaleConfig } from '../../instances/finscale.config';
+import { passionpatrimoineConfig } from '../../instances/passionpatrimoine.config';
+import { combiencagagneConfig } from '../../instances/combiencagagne.config';
 
 // Registry des configs disponibles. Ajouter un nouveau podcast =
 // importer sa config ici + enregistrer l'entrée.
+// NB : imports STATIQUES obligatoires pour que esbuild Vercel les bundle
+// (tryDynamicLoad ne fonctionne qu'en dev/Node, pas en serverless bundle).
 const REGISTRY: Record<string, PodcastConfig> = {
   lamartingale: lamartingaleConfig,
   gdiy: gdiyConfig,
   hub: hubConfig,
+  lepanier: lepanierConfig,
+  finscale: finscaleConfig,
+  passionpatrimoine: passionpatrimoineConfig,
+  combiencagagne: combiencagagneConfig,
 };
 
 // Ajout paresseux pour les podcasts suivants (évite les imports circulaires
