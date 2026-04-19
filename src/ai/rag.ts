@@ -41,30 +41,73 @@ export async function ragQuery(message: string): Promise<RagResponse> {
   const cfg = getConfig();
   const TENANT = cfg.database.tenantId;
 
-  // 1. Retrieve top 5 episodes
-  const searchResults = await hybridSearch(message, 5);
+  // 1. Retrieve top 5 episodes with chapter-level awareness
+  const searchResults = await hybridSearch(message, 5, { depth: 'chapter' });
 
-  // 2. Build context from search results (tenant-scoped)
+  // 2. Build enriched context (tenant-scoped, deep content when available)
   const sql = neon(process.env.DATABASE_URL!);
   const contextParts: string[] = [];
 
-  for (const result of searchResults.results) {
-    const [enriched] = await sql`
-      SELECT en.tags, en.sub_themes
-      FROM episodes_enrichment en
-      INNER JOIN episodes e ON e.id = en.episode_id
-      WHERE e.episode_number = ${result.episode_number} AND e.tenant_id = ${TENANT}
-    `;
+  const epNumbers = searchResults.results.map(r => r.episode_number);
+  const deepRows = epNumbers.length ? await sql`
+    SELECT e.episode_number, e.duration_seconds, e.article_content, e.chapters, e.key_takeaways,
+           g.linkedin_url AS guest_linkedin,
+           en.tags, en.sub_themes
+    FROM episodes e
+    LEFT JOIN guests g ON g.tenant_id = e.tenant_id AND g.name = e.guest
+    LEFT JOIN episodes_enrichment en ON en.episode_id = e.id
+    WHERE e.tenant_id = ${TENANT} AND e.episode_number = ANY(${epNumbers})
+  ` as any[] : [];
+  const byNum = new Map<number, any>(deepRows.map((r: any) => [r.episode_number, r]));
 
-    contextParts.push(`
---- Épisode #${result.episode_number}: "${result.title}" ---
-Invité: ${result.guest}
-Pilier: ${result.pillar}
-Difficulté: ${result.difficulty}
-Résumé: ${result.abstract || 'Non disponible'}
-Tags: ${(enriched?.tags || []).join(', ')}
-Sous-thèmes: ${(enriched?.sub_themes || []).join(', ')}
-`.trim());
+  // Liens les plus pertinents par épisode (limite 5)
+  const linksRows = epNumbers.length ? await sql`
+    SELECT e.episode_number, el.label, el.url, el.link_type
+    FROM episode_links el
+    INNER JOIN episodes e ON e.id = el.episode_id
+    WHERE e.tenant_id = ${TENANT} AND e.episode_number = ANY(${epNumbers})
+      AND el.link_type IN ('resource','tool','company')
+    ORDER BY el.id
+  ` as any[] : [];
+  const linksByNum = new Map<number, any[]>();
+  for (const l of linksRows) {
+    const list = linksByNum.get(l.episode_number) || [];
+    if (list.length < 5) list.push(l);
+    linksByNum.set(l.episode_number, list);
+  }
+
+  for (const result of searchResults.results) {
+    const deep = byNum.get(result.episode_number);
+    const durationMin = deep?.duration_seconds ? Math.round(deep.duration_seconds / 60) : null;
+    const chapters: any[] = deep?.chapters || [];
+    const takeaways: string[] = deep?.key_takeaways || [];
+    const links: any[] = linksByNum.get(result.episode_number) || [];
+
+    // Sélection intelligente : chapitre le plus pertinent si dispo, sinon début d'article
+    let contentExcerpt = '';
+    if (result.best_chapter) {
+      contentExcerpt = `Section pertinente : "${result.best_chapter.title}"\n${result.best_chapter.snippet}`;
+    } else if (deep?.article_content) {
+      contentExcerpt = deep.article_content.substring(0, 1500);
+    }
+
+    const guestLine = result.guest + (deep?.guest_linkedin ? ` (${deep.guest_linkedin})` : '');
+
+    const parts = [
+      `--- Épisode #${result.episode_number} — ${result.title} ---`,
+      `Invité : ${guestLine}`,
+      durationMin ? `Durée : ${durationMin} min` : null,
+      `Pilier : ${result.pillar} | Difficulté : ${result.difficulty}`,
+      '',
+      `Résumé : ${result.abstract || 'Non disponible'}`,
+      chapters.length ? `\nChapitres :\n${chapters.slice(0, 8).map((c: any, i: number) => `${i + 1}. ${c.title}`).join('\n')}` : null,
+      contentExcerpt ? `\nContenu clé :\n${contentExcerpt}` : null,
+      takeaways.length ? `\nÀ retenir :\n${takeaways.slice(0, 5).map(t => `- ${t}`).join('\n')}` : null,
+      links.length ? `\nRessources mentionnées :\n${links.map(l => `- ${l.label || l.url} (${l.url})`).join('\n')}` : null,
+      `\nTags : ${(deep?.tags || []).join(', ')}`,
+    ].filter(Boolean);
+
+    contextParts.push(parts.join('\n'));
   }
 
   const context = contextParts.join('\n\n');

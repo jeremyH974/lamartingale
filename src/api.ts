@@ -430,8 +430,9 @@ app.get('/api/search/hybrid', async (req, res) => {
     const q = req.query.q as string;
     if (!q || q.length < 2) return res.status(400).json({ error: 'Query must be at least 2 characters' });
     const limit = parseInt(req.query.limit as string) || 10;
+    const depth = (req.query.depth as string) === 'chapter' ? 'chapter' : 'episode';
     const { hybridSearch } = await import('./ai/search');
-    const result = await hybridSearch(q, limit);
+    const result = await hybridSearch(q, limit, { depth });
     res.json(result);
   } catch (e: any) { console.error('[API] /api/search/hybrid error:', e.message); res.status(500).json({ error: e.message }); }
 });
@@ -619,6 +620,13 @@ app.get('/api/tags', async (_req, res) => {
 
 app.get('/api/search', async (req, res) => {
   try {
+    // Tool search mode — retrouver épisodes mentionnant un outil/entreprise
+    const tool = req.query.tool as string;
+    if (tool) {
+      if (!process.env.DATABASE_URL) return res.status(503).json({ error: 'DB required' });
+      return res.json(await dbQueries.searchByTool(tool));
+    }
+
     const q = (req.query.q as string || '').toLowerCase();
     if (!q || q.length < 2) return res.status(400).json({ error: 'Query must be at least 2 characters' });
 

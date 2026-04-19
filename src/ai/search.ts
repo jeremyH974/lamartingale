@@ -25,9 +25,15 @@ export interface SearchResult {
   match_type: 'semantic' | 'lexical' | 'hybrid';
   semantic_rank: number | null;
   lexical_rank: number | null;
+  best_chapter?: {
+    title: string;
+    order: number;
+    snippet: string;
+    score: number;
+  } | null;
 }
 
-export async function hybridSearch(query: string, limit: number = 10): Promise<{
+export async function hybridSearch(query: string, limit: number = 10, opts: { depth?: 'episode' | 'chapter' } = {}): Promise<{
   query: string;
   results: SearchResult[];
   timing_ms: number;
@@ -126,13 +132,66 @@ export async function hybridSearch(query: string, limit: number = 10): Promise<{
     match_type: (r.semanticRank && r.lexicalRank) ? 'hybrid' : r.semanticRank ? 'semantic' : 'lexical',
     semantic_rank: r.semanticRank,
     lexical_rank: r.lexicalRank,
+    best_chapter: null,
   }));
+
+  // depth=chapter : enrichir chaque résultat avec le chapitre le plus pertinent
+  if (opts.depth === 'chapter' && results.length) {
+    const epNumbers = results.map(r => r.episode_number);
+    const deepRows = await sql`
+      SELECT episode_number, article_content, chapters
+      FROM episodes
+      WHERE tenant_id = ${TENANT} AND episode_number = ANY(${epNumbers})
+    ` as any[];
+    const byNum = new Map<number, any>(deepRows.map(r => [r.episode_number, r]));
+    // Termes de la query pour scoring lexical simple
+    const terms = query.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .split(/\W+/).filter(w => w.length >= 3);
+    for (const r of results) {
+      const deep = byNum.get(r.episode_number);
+      if (!deep || !deep.chapters || !deep.chapters.length) continue;
+      const bestCh = scoreChapters(deep.chapters, deep.article_content || '', terms);
+      if (bestCh) r.best_chapter = bestCh;
+    }
+  }
 
   return {
     query,
     results,
     timing_ms: Date.now() - start,
   };
+}
+
+function scoreChapters(chapters: any[], article: string, terms: string[]) {
+  let best: { title: string; order: number; snippet: string; score: number } | null = null;
+  let remaining = article;
+  for (let i = 0; i < chapters.length; i++) {
+    const ch = chapters[i];
+    const next = chapters[i + 1];
+    let content = '';
+    if (article && remaining) {
+      const idx = remaining.indexOf(ch.title);
+      if (idx >= 0) {
+        const after = remaining.substring(idx + ch.title.length);
+        const nextIdx = next ? after.indexOf(next.title) : -1;
+        content = nextIdx >= 0 ? after.substring(0, nextIdx) : after;
+        if (nextIdx >= 0) remaining = after.substring(nextIdx);
+        else remaining = '';
+      }
+    }
+    const text = (ch.title + ' ' + content).toLowerCase();
+    let score = 0;
+    for (const t of terms) { if (text.includes(t)) score += 1; if (ch.title.toLowerCase().includes(t)) score += 2; }
+    if (score > 0 && (!best || score > best.score)) {
+      best = {
+        title: ch.title,
+        order: ch.order ?? i + 1,
+        snippet: (content || ch.title).trim().substring(0, 200),
+        score,
+      };
+    }
+  }
+  return best;
 }
 
 // CLI test
