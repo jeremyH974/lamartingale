@@ -31,6 +31,14 @@ export function listConfigs(): string[] {
   return Object.keys(REGISTRY);
 }
 
+export function getAllConfigs(): PodcastConfig[] {
+  return Object.values(REGISTRY);
+}
+
+export function getConfigById(id: string): PodcastConfig | null {
+  return REGISTRY[id] ?? tryDynamicLoad(id);
+}
+
 function tryDynamicLoad(id: string): PodcastConfig | null {
   // Charge instances/{id}.config.ts au runtime — permet d'ajouter un
   // podcast sans modifier ce fichier (workflow CLI init).

@@ -22,7 +22,7 @@ function slug(s: string): string {
 
 function runStep(label: string, cmd: string, args: string[], extraEnv: Record<string, string> = {}): { ok: boolean; ms: number } {
   const t0 = Date.now();
-  process.stdout.write(`  ${label}... `);
+  console.log(`\n▶ ${label}`);
   const opts: SpawnSyncOptions = {
     cwd: ROOT,
     stdio: 'inherit',
@@ -32,8 +32,34 @@ function runStep(label: string, cmd: string, args: string[], extraEnv: Record<st
   const r = spawnSync(cmd, args, opts);
   const ms = Date.now() - t0;
   const ok = r.status === 0;
-  console.log(ok ? `OK (${(ms / 1000).toFixed(1)}s)` : `ECHEC`);
+  console.log(ok ? `✓ ${label} — OK (${(ms / 1000).toFixed(1)}s)` : `✗ ${label} — ÉCHEC (${(ms / 1000).toFixed(1)}s, code=${r.status})`);
   return { ok, ms };
+}
+
+// Charge une config podcast depuis instances/{id}.config.ts
+function loadPodcastConfig(id: string): any {
+  const cfgPath = path.join(INSTANCES_DIR, `${id}.config.ts`);
+  const cfg = require(cfgPath);
+  return cfg.default ?? cfg[`${id}Config`] ?? cfg.config;
+}
+
+type Step = { label: string; cmd: string; args: string[]; optional?: boolean; skip?: boolean; skipReason?: string };
+
+function runPipeline(steps: Step[], env: Record<string, string>): { ok: number; failed: number; skipped: number; results: Array<{ label: string; status: 'ok' | 'failed' | 'skipped'; ms: number }> } {
+  const results: Array<{ label: string; status: 'ok' | 'failed' | 'skipped'; ms: number }> = [];
+  let ok = 0, failed = 0, skipped = 0;
+  for (const s of steps) {
+    if (s.skip) {
+      console.log(`\n⊘ ${s.label} — SKIP (${s.skipReason || 'désactivé'})`);
+      results.push({ label: s.label, status: 'skipped', ms: 0 });
+      skipped++;
+      continue;
+    }
+    const r = runStep(s.label, s.cmd, s.args, env);
+    if (r.ok) { ok++; results.push({ label: s.label, status: 'ok', ms: r.ms }); }
+    else { failed++; results.push({ label: s.label, status: 'failed', ms: r.ms }); }
+  }
+  return { ok, failed, skipped, results };
 }
 
 async function fetchRssMetadata(url: string): Promise<{ title?: string; image?: string; language?: string; itemCount?: number; categories?: string[] }> {
@@ -124,34 +150,54 @@ async function cmdIngest(opts: { podcast: string; force?: boolean }): Promise<vo
   const cfgPath = path.join(INSTANCES_DIR, `${id}.config.ts`);
   if (!fs.existsSync(cfgPath)) throw new Error(`instances/${id}.config.ts introuvable. Lance d'abord cli init.`);
 
+  const pc = loadPodcastConfig(id);
+  const hasArticles = !!pc?.scraping?.hasArticles;
+  const taxonomyMode: 'predefined' | 'auto' = pc?.taxonomy?.mode || 'predefined';
+
   const env = { PODCAST_ID: id };
   const t0 = Date.now();
-  console.log(`\n=== Ingest ${id} ===\n`);
 
-  const steps = [
-    { label: '[1/6] Ingest RSS (INSERT+UPDATE)', cmd: 'npx', args: ['tsx', 'engine/scraping/ingest-rss.ts'] },
-    { label: '[2/6] Parse descriptions RSS', cmd: 'npx', args: ['tsx', 'engine/scraping/rss/backfill-parsed.ts'] },
-    { label: '[3/6] Deep scrape site', cmd: 'npx', args: ['tsx', 'engine/scraping/scrape-deep.ts'], optional: true },
-    { label: '[4/6] Generate quiz', cmd: 'npx', args: ['tsx', 'engine/ai/generate-quiz.ts', '--write'], optional: true },
-    { label: '[5/6] Embeddings', cmd: 'npx', args: ['tsx', 'engine/ai/embeddings.ts'] },
-    { label: '[6/6] Similarities', cmd: 'npx', args: ['tsx', 'engine/ai/similarity.ts'] },
+  console.log(`\n${'='.repeat(64)}`);
+  console.log(`  INGEST ${id} — ${pc?.name || id}`);
+  console.log(`  hasArticles=${hasArticles}  taxonomy=${taxonomyMode}  force=${!!opts.force}`);
+  console.log('='.repeat(64));
+
+  const classifyStep: Step = taxonomyMode === 'auto'
+    ? { label: '[5/10] Classify taxonomy (auto-discovery)', cmd: 'npx', args: ['tsx', 'engine/ai/auto-taxonomy.ts'] }
+    : { label: '[5/10] Classify taxonomy (predefined + prune)', cmd: 'npx', args: ['tsx', 'engine/ai/classify-predefined.ts', '--prune'] };
+
+  const steps: Step[] = [
+    { label: '[1/10] Ingest RSS (INSERT+UPDATE)',         cmd: 'npx', args: ['tsx', 'engine/scraping/ingest-rss.ts'] },
+    { label: '[2/10] Parse RSS description blocks',        cmd: 'npx', args: ['tsx', 'engine/scraping/rss/backfill-parsed.ts'] },
+    { label: '[3/10] Deep scrape articles',                cmd: 'npx', args: ['tsx', 'engine/scraping/scrape-deep.ts'], optional: true, skip: !hasArticles, skipReason: 'scraping.hasArticles=false' },
+    { label: '[4/10] Populate guests (LinkedIn + bio)',    cmd: 'npx', args: ['tsx', 'engine/cross/populate-guests.ts'] },
+    classifyStep,
+    { label: '[6/10] Generate quiz (LLM)',                 cmd: 'npx', args: ['tsx', 'engine/ai/generate-quiz.ts', '--write'], optional: true },
+    { label: '[7/10] Embeddings (text-embedding-3-large)', cmd: 'npx', args: ['tsx', 'engine/ai/embeddings.ts'] },
+    { label: '[8/10] Similarities intra-tenant',           cmd: 'npx', args: ['tsx', 'engine/ai/similarity.ts'] },
+    { label: '[9/10] Match guests cross-tenant',           cmd: 'npx', args: ['tsx', 'engine/cross/match-guests.ts'] },
+    { label: '[10/10] Stats finales',                      cmd: 'npx', args: ['tsx', 'cli/index.ts', 'status'] },
   ];
 
-  let failures = 0;
-  for (const s of steps) {
-    const r = runStep(s.label, s.cmd, s.args, env);
-    if (!r.ok) {
-      failures++;
-      if (!s.optional) {
-        console.log(`\nEtape obligatoire echouee. Stop.\n`);
-        process.exit(1);
-      }
-    }
-  }
-
+  const { ok, failed, skipped, results } = runPipeline(steps, env);
   const mins = ((Date.now() - t0) / 60000).toFixed(1);
-  console.log(`\nIngest ${id} termine en ${mins} min (${failures} etape(s) optionnelle(s) en echec)`);
-  console.log(`Prochaine etape : npx tsx cli/index.ts deploy --podcast ${id}\n`);
+
+  console.log(`\n${'='.repeat(64)}`);
+  console.log(`  INGEST ${id} — TERMINÉ en ${mins} min`);
+  console.log(`  ✓ ${ok}  ✗ ${failed}  ⊘ ${skipped}`);
+  console.log('='.repeat(64));
+  for (const r of results) {
+    const icon = r.status === 'ok' ? '✓' : r.status === 'failed' ? '✗' : '⊘';
+    const dur = r.status === 'skipped' ? '---' : `${(r.ms / 1000).toFixed(1)}s`;
+    console.log(`  ${icon} ${dur.padStart(8)}  ${r.label}`);
+  }
+  console.log();
+
+  if (failed > 0) {
+    console.log(`⚠ ${failed} étape(s) en échec. Re-run pour finir. Déploiement non-bloqué.\n`);
+  } else {
+    console.log(`Prochaine étape : npx tsx cli/index.ts deploy --podcast ${id}\n`);
+  }
 }
 
 // ============================================================================
@@ -200,14 +246,40 @@ async function cmdRefresh(opts: { podcast: string }): Promise<void> {
   const cfgPath = path.join(INSTANCES_DIR, `${id}.config.ts`);
   if (!fs.existsSync(cfgPath)) throw new Error(`instances/${id}.config.ts introuvable.`);
 
-  const env = { PODCAST_ID: id };
-  console.log(`\n=== Refresh ${id} ===\n`);
+  const pc = loadPodcastConfig(id);
+  const hasArticles = !!pc?.scraping?.hasArticles;
 
-  runStep('Scrape RSS (nouveaux)', 'npx', ['tsx', 'engine/scraping/scrape-rss.ts'], env);
-  runStep('Parse descriptions RSS', 'npx', ['tsx', 'engine/scraping/rss/backfill-parsed.ts'], env);
-  runStep('Embeddings (nouveaux)', 'npx', ['tsx', 'engine/ai/embeddings.ts'], env);
-  runStep('Recalcul similarites', 'npx', ['tsx', 'engine/ai/similarity.ts'], env);
-  console.log(`\nRefresh ${id} termine. Relance 'deploy' pour pousser.\n`);
+  const env = { PODCAST_ID: id };
+  const t0 = Date.now();
+
+  console.log(`\n${'='.repeat(64)}`);
+  console.log(`  REFRESH ${id} — ${pc?.name || id} (nouveaux épisodes uniquement)`);
+  console.log(`  hasArticles=${hasArticles}`);
+  console.log('='.repeat(64));
+
+  const steps: Step[] = [
+    { label: '[1/7] Ingest RSS (new only)',                cmd: 'npx', args: ['tsx', 'engine/scraping/ingest-rss.ts'] },
+    { label: '[2/7] Parse RSS description blocks',          cmd: 'npx', args: ['tsx', 'engine/scraping/rss/backfill-parsed.ts'] },
+    { label: '[3/7] Deep scrape articles (new)',            cmd: 'npx', args: ['tsx', 'engine/scraping/scrape-deep.ts'], optional: true, skip: !hasArticles, skipReason: 'scraping.hasArticles=false' },
+    { label: '[4/7] Populate guests (idempotent)',          cmd: 'npx', args: ['tsx', 'engine/cross/populate-guests.ts'] },
+    { label: '[5/7] Embeddings (new only)',                 cmd: 'npx', args: ['tsx', 'engine/ai/embeddings.ts'] },
+    { label: '[6/7] Similarities intra-tenant',             cmd: 'npx', args: ['tsx', 'engine/ai/similarity.ts'] },
+    { label: '[7/7] Match guests cross-tenant',             cmd: 'npx', args: ['tsx', 'engine/cross/match-guests.ts'] },
+  ];
+
+  const { ok, failed, skipped, results } = runPipeline(steps, env);
+  const mins = ((Date.now() - t0) / 60000).toFixed(1);
+
+  console.log(`\n${'='.repeat(64)}`);
+  console.log(`  REFRESH ${id} — TERMINÉ en ${mins} min`);
+  console.log(`  ✓ ${ok}  ✗ ${failed}  ⊘ ${skipped}`);
+  console.log('='.repeat(64));
+  for (const r of results) {
+    const icon = r.status === 'ok' ? '✓' : r.status === 'failed' ? '✗' : '⊘';
+    const dur = r.status === 'skipped' ? '---' : `${(r.ms / 1000).toFixed(1)}s`;
+    console.log(`  ${icon} ${dur.padStart(8)}  ${r.label}`);
+  }
+  console.log(`\nPour pousser : npx tsx cli/index.ts deploy --podcast ${id}\n`);
 }
 
 // ============================================================================

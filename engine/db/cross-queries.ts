@@ -1,67 +1,105 @@
 import { neon } from '@neondatabase/serverless';
+import { getAllConfigs } from '../config/index';
 
 // ============================================================================
-// Cross-tenant queries — agrègent TOUS les podcasts de l'univers MS.
+// Cross-tenant queries — agrègent TOUS les podcasts présents en DB.
 //
-// EXCEPTION d'isolation documentée : ce module est l'agrégateur cross-podcast
-// (hub "Univers MS"). Par nature, il connaît la liste des tenants du réseau.
-// La liste TENANTS + TENANT_META + HOSTS_NORMALIZED ci-dessous EST la
-// définition d'univers — pas une fuite de config dans l'engine générique.
-// Un podcast standalone (Le Gratin, etc.) n'importe JAMAIS ce fichier ;
-// il passe par engine/db/queries.ts (scopé au tenant actif via getConfig()).
+// Depuis l'itération dynamique (2026-04-19), TENANTS, TENANT_META et
+// HOSTS_NORMALIZED sont populés au premier appel via `initUniverse()` qui
+// lit `podcast_metadata` (tenants actifs) et recoupe avec les configs
+// statiques (`engine/config/index.ts::getAllConfigs`) pour name/host/url.
 //
-// Ajouter un nouveau podcast à l'univers MS = ajouter son tenant_id dans
-// TENANTS + son entrée dans TENANT_META. Aucune autre modif de code.
+// Toute fonction exportée doit appeler `await ensureUniverseInit()` avant
+// de lire ces tableaux — sinon ils seront vides.
 // ============================================================================
 
-export const TENANTS = [
-  'lamartingale',
-  'gdiy',
-  'lepanier',
-  'passionpatrimoine',
-  'finscale',
-  'combiencagagne',
-] as const;
-export type TenantId = typeof TENANTS[number];
+export type TenantId = string;
 
-export const TENANT_META: Record<TenantId, { name: string; url: string }> = {
-  lamartingale: {
-    name: 'La Martingale',
-    url: 'https://lamartingale-v2.vercel.app',
-  },
-  gdiy: {
-    name: 'Génération Do It Yourself',
-    url: 'https://gdiy-v2.vercel.app',
-  },
-  lepanier: {
-    name: 'Le Panier',
-    url: 'https://lepanier-v2.vercel.app',
-  },
-  passionpatrimoine: {
-    name: 'Passion Patrimoine',
-    url: 'https://passionpatrimoine-v2.vercel.app',
-  },
-  finscale: {
-    name: 'Finscale',
-    url: 'https://finscale-v2.vercel.app',
-  },
-  combiencagagne: {
-    name: 'Combien ça gagne',
-    url: 'https://combiencagagne-v2.vercel.app',
-  },
-};
+export const TENANTS: string[] = [];
+export const TENANT_META: Record<string, { name: string; url: string }> = {};
+export const HOSTS_NORMALIZED: string[] = [];
 
-// Hosts exclus des profils guests (ils animent, ils ne sont pas invités)
-export const HOSTS_NORMALIZED = [
-  'matthieu stefani',
-  'amaury de tonquedec',
-  'amaury de tonquédec',
-  'laurent kretz',
-  'carine dany',
-  'solenne niedercorn',
-  'clemence lepic',
-  'clémence lepic',
-];
+let _initPromise: Promise<void> | null = null;
+
+function normalizeHost(raw: string): string {
+  return raw
+    .toLowerCase()
+    .trim()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/\s+/g, ' ');
+}
+
+/**
+ * Initialise TENANTS / TENANT_META / HOSTS_NORMALIZED depuis la DB.
+ * Idempotent — cache une seule promesse pour toute la durée du process.
+ * À appeler en tête de chaque fonction exportée de ce module.
+ */
+export async function ensureUniverseInit(): Promise<void> {
+  if (_initPromise) return _initPromise;
+  _initPromise = (async () => {
+    const sql = sqlClient();
+    let rows: any[] = [];
+    try {
+      rows = (await sql`
+        SELECT DISTINCT tenant_id
+        FROM podcast_metadata
+        WHERE tenant_id IS NOT NULL
+        ORDER BY tenant_id
+      `) as any[];
+    } catch (_e) {
+      rows = [];
+    }
+    // Fallback : tenants avec au moins un episode en DB
+    if (!rows.length) {
+      try {
+        rows = (await sql`
+          SELECT DISTINCT tenant_id
+          FROM episodes
+          WHERE tenant_id IS NOT NULL
+          ORDER BY tenant_id
+        `) as any[];
+      } catch (_e) { /* ignore */ }
+    }
+
+    const tenantIds: string[] = rows.map((r: any) => r.tenant_id).filter(Boolean);
+
+    TENANTS.length = 0;
+    for (const k of Object.keys(TENANT_META)) delete TENANT_META[k];
+    HOSTS_NORMALIZED.length = 0;
+
+    // Indexe les configs par id pour enrichir TENANT_META / HOSTS_NORMALIZED
+    const configsById = new Map<string, any>();
+    try {
+      for (const c of getAllConfigs()) configsById.set(c.id, c);
+    } catch (_e) { /* configs non chargeables = ignore */ }
+
+    for (const id of tenantIds) {
+      TENANTS.push(id);
+      const cfg = configsById.get(id);
+      const name = cfg?.name || id;
+      const domain = cfg?.deploy?.domain || `${id}-v2.vercel.app`;
+      TENANT_META[id] = { name, url: `https://${domain}` };
+      if (cfg?.host) {
+        const norm = normalizeHost(cfg.host);
+        if (norm && !HOSTS_NORMALIZED.includes(norm)) HOSTS_NORMALIZED.push(norm);
+        // Ajoute aussi la version avec accents si différente (pour matcher
+        // guest_from_title qui peut les préserver).
+        const rawLower = cfg.host.toLowerCase().trim();
+        if (rawLower !== norm && !HOSTS_NORMALIZED.includes(rawLower)) HOSTS_NORMALIZED.push(rawLower);
+      }
+    }
+  })();
+  return _initPromise;
+}
+
+/** Réinitialise le cache — utile dans les tests. */
+export function _resetUniverseForTest(): void {
+  _initPromise = null;
+  TENANTS.length = 0;
+  for (const k of Object.keys(TENANT_META)) delete TENANT_META[k];
+  HOSTS_NORMALIZED.length = 0;
+}
 
 function sqlClient() {
   const url = process.env.DATABASE_URL;
@@ -88,6 +126,7 @@ function isHost(name: string): boolean {
 // ============================================================================
 
 export async function getCrossStats() {
+  await ensureUniverseInit();
   const sql = sqlClient();
   const tenants = [...TENANTS];
 
@@ -211,6 +250,7 @@ interface UnifiedGuest {
 }
 
 export async function getCrossGuests(opts: { sharedOnly?: boolean; limit?: number } = {}): Promise<{ guests: UnifiedGuest[]; total: number }> {
+  await ensureUniverseInit();
   const sql = sqlClient();
   const tenants = [...TENANTS];
 
@@ -341,6 +381,7 @@ export async function crossSearch(query: string, limit: number = 20): Promise<{
   timing_ms: number;
 }> {
   const t0 = Date.now();
+  await ensureUniverseInit();
   const sql = sqlClient();
   const tenants = [...TENANTS];
   const OpenAI = (await import('openai')).default;
@@ -410,6 +451,7 @@ export async function crossSearch(query: string, limit: number = 20): Promise<{
 // ============================================================================
 
 export async function getCrossReferences() {
+  await ensureUniverseInit();
   const sql = sqlClient();
 
   // Les refs cross-podcast vivent dans episodes.cross_refs (jsonb) : éléments
@@ -467,6 +509,7 @@ export async function getCrossReferences() {
 // ============================================================================
 
 export async function getCrossSponsors() {
+  await ensureUniverseInit();
   const sql = sqlClient();
 
   const rows = await sql`
@@ -524,6 +567,7 @@ export async function getCrossSponsors() {
 // ============================================================================
 
 export async function getCrossTimeline(opts: { limit?: number } = {}) {
+  await ensureUniverseInit();
   const sql = sqlClient();
   const limit = opts.limit || 500;
   const rows = await sql`
@@ -558,6 +602,7 @@ export async function getCrossTimeline(opts: { limit?: number } = {}) {
 // ============================================================================
 
 export async function getCrossSimilarEpisodes(episodeId: number, limit: number = 5) {
+  await ensureUniverseInit();
   const sql = sqlClient();
 
   // Récupère embedding de l'épisode source + son tenant
@@ -621,6 +666,7 @@ export async function crossChat(message: string): Promise<{
   timing_ms: number;
 }> {
   const t0 = Date.now();
+  await ensureUniverseInit();
   const sql = sqlClient();
   const tenants = [...TENANTS];
   const OpenAI = (await import('openai')).default;
@@ -708,6 +754,7 @@ Règles :
 // ============================================================================
 
 export async function getCrossAnalytics() {
+  await ensureUniverseInit();
   const sql = sqlClient();
   const tenants = [...TENANTS];
 

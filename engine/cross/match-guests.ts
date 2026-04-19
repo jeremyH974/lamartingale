@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import { neon } from '@neondatabase/serverless';
-import { TENANTS, TENANT_META, HOSTS_NORMALIZED } from '../db/cross-queries';
+import { TENANTS, TENANT_META, HOSTS_NORMALIZED, ensureUniverseInit } from '../db/cross-queries';
 
 // ============================================================================
 // Match & merge guests cross-tenant.
@@ -47,7 +47,12 @@ type AppearanceRow = {
 
 async function main() {
   const sql = neon(process.env.DATABASE_URL!);
+  await ensureUniverseInit();
   const tenants = [...TENANTS];
+  if (!tenants.length) {
+    console.error('[MATCH-GUESTS] aucun tenant trouvé dans podcast_metadata — abort');
+    process.exit(1);
+  }
 
   // --------------------------------------------------------------------------
   // Étape 0 : denorm GDIY linkedin_url (episode_links → guests) si manquant
