@@ -38,7 +38,7 @@ const LIGHT_BG = 'F6F8FB';
 const border = { style: BorderStyle.SINGLE, size: 4, color: GREY_BORDER };
 const cellBorders = { top: border, bottom: border, left: border, right: border };
 
-function para(text: string, opts: { bold?: boolean; italic?: boolean; size?: number; color?: string; align?: AlignmentType; spacingBefore?: number; spacingAfter?: number } = {}) {
+function para(text: string, opts: { bold?: boolean; italic?: boolean; size?: number; color?: string; align?: typeof AlignmentType[keyof typeof AlignmentType]; spacingBefore?: number; spacingAfter?: number } = {}) {
   return new Paragraph({
     alignment: opts.align,
     spacing: { before: opts.spacingBefore ?? 60, after: opts.spacingAfter ?? 60 },
