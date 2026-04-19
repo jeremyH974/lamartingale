@@ -30,55 +30,64 @@ export async function getEpisodes(opts: {
 }) {
   const { pillar, difficulty, search, page = 1, limit = 20 } = opts;
   const t = tenant();
+  const sqlInstance = neon(process.env.DATABASE_URL!);
 
-  const conditions: any[] = [eq(s.episodes.tenantId, t)];
-  // Exclure bonus/trailer : on ne veut que les full (ou NULL pour tenants historiques comme LM).
-  conditions.push(sql`(${s.episodes.episodeType} = 'full' OR ${s.episodes.episodeType} IS NULL)`);
-  if (pillar) conditions.push(eq(s.episodes.pillar, pillar));
-  if (difficulty) conditions.push(eq(s.episodes.difficulty, difficulty));
-
-  let rows;
+  // Raw SQL pour calculer chapter_count et link_count en une passe (pas de cache Drizzle build-time).
+  const filters: string[] = [`e.tenant_id = $1`, `(e.episode_type = 'full' OR e.episode_type IS NULL)`];
+  const params: any[] = [t];
+  if (pillar) { params.push(pillar); filters.push(`e.pillar = $${params.length}`); }
+  if (difficulty) { params.push(difficulty); filters.push(`e.difficulty = $${params.length}`); }
+  let searchJoin = '';
   if (search) {
-    const q = `%${search}%`;
-    rows = await db().select().from(s.episodes)
-      .leftJoin(s.episodesMedia, eq(s.episodes.id, s.episodesMedia.episodeId))
-      .leftJoin(s.episodesEnrichment, eq(s.episodes.id, s.episodesEnrichment.episodeId))
-      .where(and(
-        ...conditions,
-        or(
-          ilike(s.episodes.title, q),
-          ilike(s.episodes.guest, q),
-          ilike(s.episodesEnrichment.searchText, q),
-        ),
-      ))
-      .orderBy(desc(s.episodes.episodeNumber))
-      .limit(limit).offset((page - 1) * limit);
-  } else {
-    rows = await db().select().from(s.episodes)
-      .leftJoin(s.episodesMedia, eq(s.episodes.id, s.episodesMedia.episodeId))
-      .where(and(...conditions))
-      .orderBy(desc(s.episodes.episodeNumber))
-      .limit(limit).offset((page - 1) * limit);
+    params.push(`%${search}%`);
+    const idx = params.length;
+    searchJoin = `LEFT JOIN episodes_enrichment en_search ON en_search.episode_id = e.id`;
+    filters.push(`(e.title ILIKE $${idx} OR e.guest ILIKE $${idx} OR en_search.search_text ILIKE $${idx})`);
   }
+  params.push(limit); const limitIdx = params.length;
+  params.push((page - 1) * limit); const offsetIdx = params.length;
 
-  const [countResult] = await db().select({ count: sql<number>`count(*)` })
-    .from(s.episodes).where(and(...conditions));
-  const total = Number(countResult.count);
+  const rowsPromise = sqlInstance.query(`
+    SELECT e.id, e.episode_number, e.title, e.guest, e.pillar, e.difficulty, e.url,
+           e.duration_seconds, e.article_content, e.episode_image_url,
+           em.thumbnail_350,
+           (SELECT count(*) FROM episode_links el WHERE el.episode_id = e.id) AS link_count,
+           COALESCE(jsonb_array_length(e.chapters), 0) AS chapter_count
+    FROM episodes e
+    LEFT JOIN episodes_media em ON em.episode_id = e.id
+    ${searchJoin}
+    WHERE ${filters.join(' AND ')}
+    ORDER BY e.episode_number DESC
+    LIMIT $${limitIdx} OFFSET $${offsetIdx}
+  `, params);
 
-  const episodes = rows.map(r => ({
-    id: r.episodes.episodeNumber,
-    title: r.episodes.title,
-    guest_name: r.episodes.guest || '',
+  const countPromise = sqlInstance.query(`
+    SELECT count(*)::int AS c FROM episodes e
+    ${searchJoin}
+    WHERE ${filters.join(' AND ')}
+  `, params.slice(0, params.length - 2));
+
+  const [rows, countRows] = await Promise.all([rowsPromise, countPromise]);
+  const total = Number((countRows as any[])[0]?.c || 0);
+
+  const episodes = (rows as any[]).map(r => ({
+    id: r.episode_number,
+    title: r.title,
+    guest_name: r.guest || '',
     guest_company: '',
     format: 'INTERVIEW',
-    pillar: r.episodes.pillar,
+    pillar: r.pillar,
     sub_theme: '',
     tags: [],
-    difficulty: r.episodes.difficulty || 'INTERMEDIAIRE',
+    difficulty: r.difficulty || 'INTERMEDIAIRE',
     learning_paths: [],
-    url: r.episodes.url || '',
-    thumbnail: r.episodes_media?.thumbnail350 || r.episodes.episodeImageUrl || null,
-    episode_image_url: r.episodes.episodeImageUrl || null,
+    url: r.url || '',
+    thumbnail: r.thumbnail_350 || r.episode_image_url || null,
+    episode_image_url: r.episode_image_url || null,
+    duration_minutes: r.duration_seconds ? Math.round(r.duration_seconds / 60) : null,
+    has_article: !!(r.article_content && r.article_content.length > 200),
+    chapter_count: Number(r.chapter_count) || 0,
+    link_count: Number(r.link_count) || 0,
   }));
 
   return { total, page, limit, pages: Math.ceil(total / limit), episodes };
@@ -93,7 +102,8 @@ export async function getEpisodeById(episodeNumber: number) {
   // par rapport à episodes.guest_bio qui contient souvent une intro d'épisode).
   const rows = await sqlInstance`
     SELECT e.*, em.thumbnail_350, em.thumbnail_full, em.audio_player_url,
-           g.bio AS guest_bio_curated, g.company AS guest_company_curated
+           g.bio AS guest_bio_curated, g.company AS guest_company_curated,
+           g.linkedin_url AS guest_linkedin, g.id AS guest_id
     FROM episodes e
     LEFT JOIN episodes_media em ON em.episode_id = e.id
     LEFT JOIN guests g ON g.tenant_id = e.tenant_id AND g.name = e.guest
@@ -125,6 +135,13 @@ export async function getEpisodeById(episodeNumber: number) {
     publication_date: row.date_created || null,
     thumbnail: row.thumbnail_350 || null,
     thumbnail_full: row.thumbnail_full || null,
+    // Deep content
+    article_content: row.article_content || null,
+    chapters: row.chapters || [],
+    duration_seconds: row.duration_seconds || null,
+    duration_minutes: row.duration_seconds ? Math.round(row.duration_seconds / 60) : null,
+    rss_description: row.rss_description || null,
+    sponsors: row.sponsors || [],
   };
 
   const relatedRows = await sqlInstance`
@@ -147,7 +164,7 @@ export async function getEpisodeById(episodeNumber: number) {
   const audioPlayer = row.audio_player_url || null;
 
   const expertRows = await sqlInstance`
-    SELECT g.name, g.company, g.specialty, g.authority_score
+    SELECT g.name, g.company, g.specialty, g.authority_score, g.bio, g.linkedin_url
     FROM guest_episodes ge
     INNER JOIN guests g ON g.id = ge.guest_id
     WHERE ge.episode_id = ${row.id} AND ge.tenant_id = ${t}
@@ -158,9 +175,91 @@ export async function getEpisodeById(episodeNumber: number) {
     company: expertRows[0].company,
     specialty: expertRows[0].specialty,
     authority_score: expertRows[0].authority_score,
+    bio: expertRows[0].bio,
+    linkedin_url: expertRows[0].linkedin_url,
   } : null;
 
-  return { episode, related: relatedEps, expert, audio_player: audioPlayer };
+  // Links groupés par type — résoudre aussi episode_number quand lien interne
+  const linkRows = await sqlInstance`
+    SELECT el.url, el.label, el.link_type
+    FROM episode_links el
+    WHERE el.episode_id = ${row.id} AND el.tenant_id = ${t}
+    ORDER BY el.link_type, el.id
+  `;
+  const links: Record<string, any[]> = { resources: [], linkedin: [], episode_refs: [], companies: [], tools: [], other: [] };
+  for (const l of linkRows as any[]) {
+    const item: any = { url: l.url, label: l.label || l.url };
+    switch (l.link_type) {
+      case 'resource': links.resources.push(item); break;
+      case 'linkedin': links.linkedin.push(item); break;
+      case 'episode_ref': links.episode_refs.push(item); break;
+      case 'company': links.companies.push(item); break;
+      case 'tool': links.tools.push(item); break;
+      default: links.other.push(item);
+    }
+  }
+  // Enrichir episode_refs avec episode_number si résolvable
+  if (links.episode_refs.length) {
+    const urls = links.episode_refs.map(l => l.url);
+    const matched = await sqlInstance`
+      SELECT url, episode_number, title FROM episodes
+      WHERE tenant_id = ${t} AND url = ANY(${urls})
+    `;
+    const byUrl = new Map<string, any>((matched as any[]).map(r => [r.url, r]));
+    for (const l of links.episode_refs) {
+      const m = byUrl.get(l.url);
+      if (m) { l.episode_number = m.episode_number; l.label = l.label || m.title; }
+    }
+  }
+
+  // Guest detail : autres épisodes
+  const guestDetail = row.guest ? await (async () => {
+    const others = await sqlInstance`
+      SELECT episode_number, title FROM episodes
+      WHERE tenant_id = ${t} AND guest = ${row.guest} AND episode_number != ${episodeNumber}
+        AND (episode_type = 'full' OR episode_type IS NULL)
+      ORDER BY episode_number DESC LIMIT 10
+    `;
+    return {
+      name: row.guest,
+      company: row.guest_company_curated || row.guest_company || null,
+      bio: row.guest_bio_curated || row.guest_bio || null,
+      linkedin_url: row.guest_linkedin || null,
+      other_episodes: (others as any[]).map((o: any) => ({ episode_number: o.episode_number, title: o.title })),
+    };
+  })() : null;
+
+  // Similar episodes (pgvector)
+  const similarRows = await sqlInstance`
+    SELECT e2.episode_number, e2.title, e2.guest, e2.pillar, e2.difficulty,
+           es.similarity_score, em2.thumbnail_350
+    FROM episode_similarities es
+    INNER JOIN episodes e1 ON e1.id = es.episode_id
+    INNER JOIN episodes e2 ON e2.id = es.similar_episode_id
+    LEFT JOIN episodes_media em2 ON em2.episode_id = e2.id
+    WHERE e1.episode_number = ${episodeNumber}
+      AND e1.tenant_id = ${t} AND e2.tenant_id = ${t}
+    ORDER BY es.similarity_score DESC LIMIT 5
+  `;
+  const similarEpisodes = (similarRows as any[]).map(r => ({
+    episode_number: r.episode_number,
+    title: r.title,
+    guest: r.guest || '',
+    pillar: r.pillar,
+    difficulty: r.difficulty,
+    similarity: Number(r.similarity_score),
+    thumbnail: r.thumbnail_350 || null,
+  }));
+
+  return {
+    episode,
+    related: relatedEps,
+    expert,
+    audio_player: audioPlayer,
+    links,
+    guest_detail: guestDetail,
+    similar_episodes: similarEpisodes,
+  };
 }
 
 // ---- Experts ----
@@ -511,5 +610,287 @@ export async function getMediaById(episodeNumber: number) {
     thumbnail_350: row.episodes_media.thumbnail350,
     thumbnail_full: row.episodes_media.thumbnailFull,
     audio_player: row.episodes_media.audioPlayerUrl,
+  };
+}
+
+// ============================================================================
+// Deep content — chapters split, links stats, guest profile, episode graph
+// ============================================================================
+
+export async function getEpisodeChapters(episodeNumber: number) {
+  const sqlInstance = neon(process.env.DATABASE_URL!);
+  const t = tenant();
+  const rows = await sqlInstance`
+    SELECT episode_number, title, chapters, article_content
+    FROM episodes
+    WHERE episode_number = ${episodeNumber} AND tenant_id = ${t}
+  `;
+  if (!rows.length) return null;
+  const ep = rows[0] as any;
+  const chapters: Array<{ title: string; order: number; timestamp_seconds?: number }> = ep.chapters || [];
+  const article = ep.article_content || '';
+
+  // Si pas de chapitres, retourner 1 chapitre unique
+  if (!chapters.length) {
+    return {
+      episode_number: ep.episode_number,
+      title: ep.title,
+      chapters: article ? [{
+        title: 'Contenu',
+        order: 1,
+        content: article,
+        word_count: article.split(/\s+/).filter(Boolean).length,
+      }] : [],
+    };
+  }
+
+  // Split article_content sur les titres de chapitres (si match plain-text)
+  const out: any[] = [];
+  let remaining = article;
+  for (let i = 0; i < chapters.length; i++) {
+    const ch = chapters[i];
+    const next = chapters[i + 1];
+    let content = '';
+    if (article && remaining) {
+      // Trouver la position du titre courant et du suivant dans le remaining
+      const idx = remaining.indexOf(ch.title);
+      if (idx >= 0) {
+        const after = remaining.substring(idx + ch.title.length);
+        if (next) {
+          const nextIdx = after.indexOf(next.title);
+          if (nextIdx >= 0) {
+            content = after.substring(0, nextIdx).trim();
+            remaining = after.substring(nextIdx);
+          } else {
+            content = after.trim();
+            remaining = '';
+          }
+        } else {
+          content = after.trim();
+        }
+      }
+    }
+    out.push({
+      title: ch.title,
+      order: ch.order ?? i + 1,
+      timestamp_seconds: ch.timestamp_seconds ?? null,
+      content,
+      word_count: content ? content.split(/\s+/).filter(Boolean).length : 0,
+    });
+  }
+
+  return { episode_number: ep.episode_number, title: ep.title, chapters: out };
+}
+
+export async function getLinksStats() {
+  const sqlInstance = neon(process.env.DATABASE_URL!);
+  const t = tenant();
+
+  const [totalRow] = await sqlInstance`
+    SELECT count(*)::int AS c FROM episode_links WHERE tenant_id = ${t}
+  ` as any[];
+
+  const byType = await sqlInstance`
+    SELECT link_type, count(*)::int AS c
+    FROM episode_links WHERE tenant_id = ${t}
+    GROUP BY link_type ORDER BY c DESC
+  ` as any[];
+
+  const topDomains = await sqlInstance`
+    SELECT regexp_replace(url, '^https?://(www\\.)?([^/]+).*', '\\2') AS domain, count(*)::int AS c
+    FROM episode_links WHERE tenant_id = ${t}
+    GROUP BY domain ORDER BY c DESC LIMIT 20
+  ` as any[];
+
+  const topTools = await sqlInstance`
+    SELECT url, label, count(DISTINCT episode_id)::int AS mentioned_in
+    FROM episode_links
+    WHERE tenant_id = ${t} AND link_type IN ('tool','company')
+    GROUP BY url, label ORDER BY mentioned_in DESC LIMIT 20
+  ` as any[];
+
+  const crossRefsTotal = await sqlInstance`
+    SELECT count(*)::int AS c FROM episode_links
+    WHERE tenant_id = ${t} AND link_type = 'episode_ref'
+  ` as any[];
+
+  const episodesRef = await sqlInstance`
+    SELECT count(DISTINCT episode_id)::int AS c FROM episode_links
+    WHERE tenant_id = ${t} AND link_type = 'episode_ref'
+  ` as any[];
+
+  const mostReferenced = await sqlInstance`
+    SELECT e.episode_number, e.title, count(*)::int AS referenced_by
+    FROM episode_links el
+    INNER JOIN episodes e ON e.tenant_id = el.tenant_id AND e.url = el.url
+    WHERE el.tenant_id = ${t} AND el.link_type = 'episode_ref'
+    GROUP BY e.episode_number, e.title
+    ORDER BY referenced_by DESC LIMIT 10
+  ` as any[];
+
+  return {
+    total: Number(totalRow.c),
+    by_type: Object.fromEntries(byType.map(r => [r.link_type, Number(r.c)])),
+    top_domains: topDomains.map(r => ({ domain: r.domain, count: Number(r.c) })),
+    top_tools: topTools.map(r => ({ url: r.url, label: r.label || r.url, mentioned_in: Number(r.mentioned_in) })),
+    cross_references: {
+      total: Number(crossRefsTotal[0]?.c || 0),
+      episodes_that_reference_others: Number(episodesRef[0]?.c || 0),
+      most_referenced_episodes: mostReferenced.map(r => ({
+        episode_number: r.episode_number, title: r.title, referenced_by: Number(r.referenced_by),
+      })),
+    },
+  };
+}
+
+export async function getGuestProfile(name: string) {
+  const sqlInstance = neon(process.env.DATABASE_URL!);
+  const t = tenant();
+
+  const guestRows = await sqlInstance`
+    SELECT id, name, bio, company, specialty, linkedin_url, authority_score
+    FROM guests
+    WHERE tenant_id = ${t} AND LOWER(name) = LOWER(${name})
+    LIMIT 1
+  ` as any[];
+  if (!guestRows.length) {
+    // Fallback : match épisodes par guest column
+    const eps = await sqlInstance`
+      SELECT episode_number, title, date_created, pillar, duration_seconds
+      FROM episodes
+      WHERE tenant_id = ${t} AND guest ILIKE ${name}
+        AND (episode_type = 'full' OR episode_type IS NULL)
+      ORDER BY episode_number DESC
+    ` as any[];
+    if (!eps.length) return null;
+    const totalMinutes = eps.reduce((s: number, e: any) => s + Math.round((e.duration_seconds || 0) / 60), 0);
+    const pillars = [...new Set(eps.map((e: any) => e.pillar).filter(Boolean))];
+    return {
+      name, bio: null, linkedin_url: null, company: null,
+      episodes: eps.map((e: any) => ({
+        episode_number: e.episode_number, title: e.title, date: e.date_created,
+        pillar: e.pillar, duration_minutes: Math.round((e.duration_seconds || 0) / 60) || null,
+      })),
+      pillars_covered: pillars, total_minutes: totalMinutes, is_recurring: eps.length > 1,
+    };
+  }
+  const g = guestRows[0];
+  const eps = await sqlInstance`
+    SELECT e.episode_number, e.title, e.date_created, e.pillar, e.duration_seconds
+    FROM episodes e
+    INNER JOIN guest_episodes ge ON ge.episode_id = e.id
+    WHERE ge.guest_id = ${g.id} AND e.tenant_id = ${t}
+      AND (e.episode_type = 'full' OR e.episode_type IS NULL)
+    ORDER BY e.episode_number DESC
+  ` as any[];
+  const totalMinutes = eps.reduce((s: number, e: any) => s + Math.round((e.duration_seconds || 0) / 60), 0);
+  const pillars = [...new Set(eps.map((e: any) => e.pillar).filter(Boolean))];
+  return {
+    name: g.name, bio: g.bio, company: g.company, specialty: g.specialty,
+    linkedin_url: g.linkedin_url, authority_score: g.authority_score,
+    episodes: eps.map((e: any) => ({
+      episode_number: e.episode_number, title: e.title, date: e.date_created,
+      pillar: e.pillar, duration_minutes: Math.round((e.duration_seconds || 0) / 60) || null,
+    })),
+    pillars_covered: pillars, total_minutes: totalMinutes, is_recurring: eps.length > 1,
+  };
+}
+
+export async function getEpisodeGraph() {
+  const sqlInstance = neon(process.env.DATABASE_URL!);
+  const t = tenant();
+
+  const nodes = await sqlInstance`
+    SELECT episode_number, title, pillar, guest
+    FROM episodes
+    WHERE tenant_id = ${t} AND (episode_type = 'full' OR episode_type IS NULL)
+    ORDER BY episode_number
+  ` as any[];
+
+  const edges = await sqlInstance`
+    SELECT e1.episode_number AS source, e2.episode_number AS target
+    FROM episode_links el
+    INNER JOIN episodes e1 ON e1.id = el.episode_id AND e1.tenant_id = el.tenant_id
+    INNER JOIN episodes e2 ON e2.url = el.url AND e2.tenant_id = el.tenant_id
+    WHERE el.tenant_id = ${t} AND el.link_type = 'episode_ref'
+      AND e1.episode_number IS NOT NULL AND e2.episode_number IS NOT NULL
+      AND e1.episode_number != e2.episode_number
+  ` as any[];
+
+  // Déduper et compter
+  const edgeMap = new Map<string, { source: number; target: number; weight: number }>();
+  for (const e of edges) {
+    const key = `${e.source}->${e.target}`;
+    const existing = edgeMap.get(key);
+    if (existing) existing.weight += 1;
+    else edgeMap.set(key, { source: e.source, target: e.target, weight: 1 });
+  }
+  const edgeList = Array.from(edgeMap.values()).map(e => ({ ...e, label: 'mentionne' }));
+
+  const connectedSet = new Set<number>();
+  for (const e of edgeList) { connectedSet.add(e.source); connectedSet.add(e.target); }
+  const connectionCounts = new Map<number, number>();
+  for (const e of edgeList) {
+    connectionCounts.set(e.target, (connectionCounts.get(e.target) || 0) + e.weight);
+  }
+  let mostConnected: { episode_number: number; title: string; connections: number } | null = null;
+  for (const [num, count] of connectionCounts) {
+    if (!mostConnected || count > mostConnected.connections) {
+      const n = nodes.find((x: any) => x.episode_number === num);
+      mostConnected = { episode_number: num, title: n?.title || '', connections: count };
+    }
+  }
+
+  return {
+    nodes: nodes.map((n: any) => ({
+      id: n.episode_number, title: n.title, pillar: n.pillar, guest: n.guest || '',
+    })),
+    edges: edgeList,
+    stats: {
+      total_nodes: nodes.length,
+      total_edges: edgeList.length,
+      connected_episodes: connectedSet.size,
+      isolated_episodes: nodes.length - connectedSet.size,
+      most_connected: mostConnected,
+    },
+  };
+}
+
+// ============================================================================
+// Search par outil : retrouver épisodes qui mentionnent un tool/company/domain.
+// ============================================================================
+
+export async function searchByTool(tool: string) {
+  const sqlInstance = neon(process.env.DATABASE_URL!);
+  const t = tenant();
+  const q = `%${tool}%`;
+  const rows = await sqlInstance`
+    SELECT e.episode_number, e.title, e.guest, e.pillar,
+           el.url, el.label, el.link_type
+    FROM episode_links el
+    INNER JOIN episodes e ON e.id = el.episode_id
+    WHERE el.tenant_id = ${t}
+      AND (el.label ILIKE ${q} OR el.url ILIKE ${q})
+    ORDER BY e.episode_number DESC
+    LIMIT 50
+  ` as any[];
+
+  // Dédoublonner par episode_number, garder le premier lien comme contexte
+  const seen = new Map<number, any>();
+  for (const r of rows) {
+    if (!seen.has(r.episode_number)) {
+      seen.set(r.episode_number, {
+        episode_number: r.episode_number,
+        title: r.title,
+        guest: r.guest || '',
+        pillar: r.pillar,
+        link_context: { url: r.url, label: r.label, link_type: r.link_type },
+      });
+    }
+  }
+  return {
+    tool,
+    episodes: Array.from(seen.values()),
+    total_mentions: rows.length,
   };
 }

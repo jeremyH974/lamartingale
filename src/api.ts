@@ -135,6 +135,42 @@ app.get('/api/episodes', async (req, res) => {
   } catch (e: any) { console.error('[API] /api/episodes error:', e.message); res.status(500).json({ error: e.message }); }
 });
 
+// --- Deep content endpoints (C1) ---
+
+app.get('/api/episodes/:id/chapters', async (req, res) => {
+  try {
+    if (!process.env.DATABASE_URL) return res.status(503).json({ error: 'DB required' });
+    const id = parseInt(req.params.id);
+    const result = await dbQueries.getEpisodeChapters(id);
+    if (!result) return res.status(404).json({ error: 'Episode not found' });
+    res.json(result);
+  } catch (e: any) { console.error('[API] chapters error:', e.message); res.status(500).json({ error: e.message }); }
+});
+
+app.get('/api/links/stats', async (_req, res) => {
+  try {
+    if (!process.env.DATABASE_URL) return res.status(503).json({ error: 'DB required' });
+    res.json(await dbQueries.getLinksStats());
+  } catch (e: any) { console.error('[API] links/stats error:', e.message); res.status(500).json({ error: e.message }); }
+});
+
+app.get('/api/guests/:name', async (req, res) => {
+  try {
+    if (!process.env.DATABASE_URL) return res.status(503).json({ error: 'DB required' });
+    const name = decodeURIComponent(req.params.name);
+    const result = await dbQueries.getGuestProfile(name);
+    if (!result) return res.status(404).json({ error: 'Guest not found' });
+    res.json(result);
+  } catch (e: any) { console.error('[API] guests/:name error:', e.message); res.status(500).json({ error: e.message }); }
+});
+
+app.get('/api/graph/episodes', async (_req, res) => {
+  try {
+    if (!process.env.DATABASE_URL) return res.status(503).json({ error: 'DB required' });
+    res.json(await dbQueries.getEpisodeGraph());
+  } catch (e: any) { console.error('[API] graph/episodes error:', e.message); res.status(500).json({ error: e.message }); }
+});
+
 app.get('/api/episodes/:id', async (req, res) => {
   try {
     const id = parseInt(req.params.id);
