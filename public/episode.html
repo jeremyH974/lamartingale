@@ -386,9 +386,62 @@
       color: var(--text-muted);
       font-size: 14px;
     }
+
+    /* ====== UNIVERSE BAR (cross-podcast) ====== */
+    .universe-bar {
+      background: #0a0a0a; color: #f5f5f5; padding: 10px 32px;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 13px; border-bottom: 1px solid #222; gap: 16px; flex-wrap: wrap;
+    }
+    .universe-bar.hidden { display: none; }
+    .universe-bar .u-left { display: flex; align-items: center; gap: 12px; }
+    .universe-bar .u-mark { width: 16px; height: 16px; border-radius: 4px; background: linear-gradient(135deg, #004cff, #00F5A0); flex-shrink: 0; }
+    .universe-bar .u-label { font-weight: 700; letter-spacing: -0.01em; }
+    .universe-bar .u-stats { color: #888; font-size: 12px; }
+    .universe-bar .u-stats b { color: #ddd; font-weight: 600; }
+    .universe-bar .u-right { display: flex; align-items: center; gap: 8px; }
+    .universe-bar a.u-pill { padding: 5px 12px; border-radius: 99px; font-size: 12px; font-weight: 600; text-decoration: none; border: 1px solid transparent; transition: opacity 0.15s; }
+    .universe-bar a.u-pill:hover { opacity: 0.85; }
+    .universe-bar a.u-pill.lm { background: #004cff; color: white; }
+    .universe-bar a.u-pill.gdiy { background: #00F5A0; color: #000; }
+    .universe-bar a.u-pill.hub { border-color: #333; color: #ddd; }
+    .universe-bar a.u-pill.active { outline: 2px solid rgba(255,255,255,0.3); }
+    @media (max-width: 640px) {
+      .universe-bar { padding: 8px 16px; font-size: 12px; }
+      .universe-bar .u-stats { display: none; }
+    }
   </style>
 </head>
 <body>
+  <div class="universe-bar hidden" id="universe-bar">
+    <div class="u-left">
+      <div class="u-mark"></div>
+      <div><span class="u-label">Univers MS</span> <span class="u-stats" id="universe-stats"></span></div>
+    </div>
+    <div class="u-right">
+      <a class="u-pill lm" id="u-pill-lm" href="https://lamartingale-v2.vercel.app">La Martingale</a>
+      <a class="u-pill gdiy" id="u-pill-gdiy" href="https://gdiy-v2.vercel.app">GDIY</a>
+      <a class="u-pill hub" href="https://ms-hub.vercel.app">Explorer l'univers →</a>
+    </div>
+  </div>
+  <script>
+    (async () => {
+      try {
+        const r = await fetch('/api/cross/stats', { cache: 'no-store' });
+        if (!r.ok) return;
+        const d = await r.json();
+        const c = d.combined || {};
+        const stats = document.getElementById('universe-stats');
+        if (stats) stats.innerHTML = ` · <b>${(c.total_episodes||0).toLocaleString('fr-FR')}</b> épisodes · <b>${(c.total_hours||0).toLocaleString('fr-FR')}</b>h · <b>${c.shared_guests_count||0}</b> invités partagés`;
+        try {
+          const cfg = await (await fetch('/api/config', { cache: 'no-store' })).json();
+          if (cfg && cfg.id === 'lamartingale') document.getElementById('u-pill-lm').classList.add('active');
+          else if (cfg && cfg.id === 'gdiy') document.getElementById('u-pill-gdiy').classList.add('active');
+        } catch {}
+        document.getElementById('universe-bar').classList.remove('hidden');
+      } catch {}
+    })();
+  </script>
   <header class="header">
     <div class="header-inner">
       <button class="back-link" onclick="goBack()">← Retour aux épisodes</button>
