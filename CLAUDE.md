@@ -48,13 +48,26 @@ Arborescence détaillée : voir [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 
 ## God Nodes (ne pas casser)
 
-- `src/api.ts` — 26 endpoints, charge DB via process.env.DATABASE_URL, expose `/api/config` (public tenant)
+- `src/api.ts` — 30+ endpoints, charge DB via process.env.DATABASE_URL, expose `/api/config` (public tenant)
 - `src/db/schema.ts` — 10 tables scopées `tenant_id` + `podcast_metadata` (1 ligne / tenant)
 - `src/db/queries.ts` — Raw SQL pour Vercel, **toutes les queries filtrent `tenant()`**
-- `src/ai/search.ts` — hybridSearch() filtrée par tenant_id
+- `src/ai/search.ts` — hybridSearch() filtrée par tenant_id, support `{depth:'chapter'}`
+- `src/ai/dashboard.ts` — getDashboard() agrège 14 queries parallèles pour `/api/analytics/dashboard`
+- `src/cache.ts` — `getCached(key, ttl, fn)` + `clearCache(prefix?)`, tenant-namespaced, Vercel KV + LRU
 - `src/config/podcast.config.ts` — interface PodcastConfig (identité, branding, taxonomy, platforms, socials)
 - `src/config/index.ts` — REGISTRY + `getConfig()` résout depuis `PODCAST_ID`
 - `public/v2.html` — frontend unique config-driven (`/api/config` → DOM)
+- `public/v2-dashboard.html` — dashboard créateur (KPIs, insights, charts, D3 graph)
+
+## Endpoints deep content (ajoutés)
+- `GET /api/episodes/:id/chapters` — chapitres + extraits article
+- `GET /api/episodes/:id` — enrichi (chapters, links groupés, guest_detail, similar_episodes)
+- `GET /api/links/stats` — par type + top_domains + top_tools + cross_references
+- `GET /api/guests/:name` — profil invité (bio, linkedin, épisodes)
+- `GET /api/graph/episodes` — nodes + edges (références inter-épisodes)
+- `GET /api/analytics/dashboard` — données dashboard créateur
+- `GET /api/search/hybrid?q=...&depth=chapter` — search avec snippet chapitre
+- `GET /api/cache/stats` · `POST /api/cache/clear?prefix=X` (protection via `ADMIN_TOKEN` header `x-admin-token`)
 
 ## LLM — provider centralisé
 

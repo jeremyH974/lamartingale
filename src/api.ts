@@ -8,6 +8,7 @@ import type { Episode, Expert, LearningPath, Difficulty, Pillar, UserProfile, Re
 import { getRecommendations } from './types';
 import * as dbQueries from './db/queries';
 import { getConfig, toPublicConfig } from './config';
+import { getCached, clearCache, cacheStats } from './cache';
 
 const app = express();
 app.use(cors());
@@ -33,6 +34,23 @@ app.get('/api/config', (_req, res) => {
 
 const PORT = process.env.PORT || 3001;
 const USE_DB = process.env.USE_DB === 'true' && !!process.env.DATABASE_URL;
+
+// --- Cache admin ---
+app.get('/api/cache/stats', (_req, res) => {
+  res.json(cacheStats());
+});
+
+app.post('/api/cache/clear', async (req, res) => {
+  try {
+    const adminToken = process.env.ADMIN_TOKEN;
+    if (adminToken && req.headers['x-admin-token'] !== adminToken) {
+      return res.status(401).json({ error: 'unauthorized' });
+    }
+    const prefix = (req.query.prefix as string) || undefined;
+    const cleared = await clearCache(prefix);
+    res.json({ cleared, prefix: prefix || 'all' });
+  } catch (e: any) { res.status(500).json({ error: e.message }); }
+});
 
 // ============================================================================
 // JSON Fallback Data Loading (used when USE_DB=false)
@@ -105,13 +123,16 @@ console.log(`[COUCHE 1] Data source: ${USE_DB ? 'Neon Postgres (Drizzle)' : 'JSO
 app.get('/api/episodes', async (req, res) => {
   try {
     if (process.env.DATABASE_URL) {
-      const result = await dbQueries.getEpisodes({
-        pillar: req.query.pillar as string,
-        difficulty: req.query.difficulty as string,
-        search: req.query.search as string,
+      const params = {
+        pillar: (req.query.pillar as string) || '',
+        difficulty: (req.query.difficulty as string) || '',
+        search: (req.query.search as string) || '',
         page: parseInt(req.query.page as string) || 1,
         limit: parseInt(req.query.limit as string) || 20,
-      });
+      };
+      const cacheKey = `episodes:${params.pillar}:${params.difficulty}:${params.search}:${params.page}:${params.limit}`;
+      const ttl = params.search ? 60 : 300; // recherches volatiles, listes stables
+      const result = await getCached(cacheKey, ttl, () => dbQueries.getEpisodes(params));
       return res.json(result);
     }
 
@@ -141,7 +162,7 @@ app.get('/api/episodes/:id/chapters', async (req, res) => {
   try {
     if (!process.env.DATABASE_URL) return res.status(503).json({ error: 'DB required' });
     const id = parseInt(req.params.id);
-    const result = await dbQueries.getEpisodeChapters(id);
+    const result = await getCached(`chapters:${id}`, 900, () => dbQueries.getEpisodeChapters(id));
     if (!result) return res.status(404).json({ error: 'Episode not found' });
     res.json(result);
   } catch (e: any) { console.error('[API] chapters error:', e.message); res.status(500).json({ error: e.message }); }
@@ -150,7 +171,7 @@ app.get('/api/episodes/:id/chapters', async (req, res) => {
 app.get('/api/links/stats', async (_req, res) => {
   try {
     if (!process.env.DATABASE_URL) return res.status(503).json({ error: 'DB required' });
-    res.json(await dbQueries.getLinksStats());
+    res.json(await getCached('links:stats', 600, () => dbQueries.getLinksStats()));
   } catch (e: any) { console.error('[API] links/stats error:', e.message); res.status(500).json({ error: e.message }); }
 });
 
@@ -158,7 +179,7 @@ app.get('/api/guests/:name', async (req, res) => {
   try {
     if (!process.env.DATABASE_URL) return res.status(503).json({ error: 'DB required' });
     const name = decodeURIComponent(req.params.name);
-    const result = await dbQueries.getGuestProfile(name);
+    const result = await getCached(`guest:${name}`, 600, () => dbQueries.getGuestProfile(name));
     if (!result) return res.status(404).json({ error: 'Guest not found' });
     res.json(result);
   } catch (e: any) { console.error('[API] guests/:name error:', e.message); res.status(500).json({ error: e.message }); }
@@ -167,7 +188,7 @@ app.get('/api/guests/:name', async (req, res) => {
 app.get('/api/graph/episodes', async (_req, res) => {
   try {
     if (!process.env.DATABASE_URL) return res.status(503).json({ error: 'DB required' });
-    res.json(await dbQueries.getEpisodeGraph());
+    res.json(await getCached('graph:episodes', 600, () => dbQueries.getEpisodeGraph()));
   } catch (e: any) { console.error('[API] graph/episodes error:', e.message); res.status(500).json({ error: e.message }); }
 });
 
@@ -175,7 +196,7 @@ app.get('/api/episodes/:id', async (req, res) => {
   try {
     const id = parseInt(req.params.id);
     if (process.env.DATABASE_URL) {
-      const result = await dbQueries.getEpisodeById(id);
+      const result = await getCached(`episode:${id}`, 600, () => dbQueries.getEpisodeById(id));
       if (!result) return res.status(404).json({ error: 'Episode not found' });
       return res.json(result);
     }
@@ -352,8 +373,11 @@ app.get('/api/analytics', async (_req, res) => {
 app.get('/api/analytics/dashboard', async (_req, res) => {
   try {
     if (!process.env.DATABASE_URL) return res.status(503).json({ error: 'DB required' });
-    const { getDashboard } = await import('./ai/dashboard');
-    res.json(await getDashboard());
+    const result = await getCached('analytics:dashboard', 600, async () => {
+      const { getDashboard } = await import('./ai/dashboard');
+      return await getDashboard();
+    });
+    res.json(result);
   } catch (e: any) { console.error('[API] /api/analytics/dashboard error:', e.message); res.status(500).json({ error: e.message }); }
 });
 
@@ -439,8 +463,10 @@ app.get('/api/search/hybrid', async (req, res) => {
     if (!q || q.length < 2) return res.status(400).json({ error: 'Query must be at least 2 characters' });
     const limit = parseInt(req.query.limit as string) || 10;
     const depth = (req.query.depth as string) === 'chapter' ? 'chapter' : 'episode';
-    const { hybridSearch } = await import('./ai/search');
-    const result = await hybridSearch(q, limit, { depth });
+    const result = await getCached(`search:hybrid:${depth}:${limit}:${q}`, 180, async () => {
+      const { hybridSearch } = await import('./ai/search');
+      return await hybridSearch(q, limit, { depth });
+    });
     res.json(result);
   } catch (e: any) { console.error('[API] /api/search/hybrid error:', e.message); res.status(500).json({ error: e.message }); }
 });
