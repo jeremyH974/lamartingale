@@ -14,7 +14,14 @@ import { neon } from '@neondatabase/serverless';
 // TENANTS + son entrée dans TENANT_META. Aucune autre modif de code.
 // ============================================================================
 
-export const TENANTS = ['lamartingale', 'gdiy'] as const;
+export const TENANTS = [
+  'lamartingale',
+  'gdiy',
+  'lepanier',
+  'passionpatrimoine',
+  'finscale',
+  'combiencagagne',
+] as const;
 export type TenantId = typeof TENANTS[number];
 
 export const TENANT_META: Record<TenantId, { name: string; url: string }> = {
@@ -26,6 +33,22 @@ export const TENANT_META: Record<TenantId, { name: string; url: string }> = {
     name: 'Génération Do It Yourself',
     url: 'https://gdiy-v2.vercel.app',
   },
+  lepanier: {
+    name: 'Le Panier',
+    url: 'https://lepanier-v2.vercel.app',
+  },
+  passionpatrimoine: {
+    name: 'Passion Patrimoine',
+    url: 'https://passionpatrimoine-v2.vercel.app',
+  },
+  finscale: {
+    name: 'Finscale',
+    url: 'https://finscale-v2.vercel.app',
+  },
+  combiencagagne: {
+    name: 'Combien ça gagne',
+    url: 'https://combiencagagne-v2.vercel.app',
+  },
 };
 
 // Hosts exclus des profils guests (ils animent, ils ne sont pas invités)
@@ -33,6 +56,11 @@ export const HOSTS_NORMALIZED = [
   'matthieu stefani',
   'amaury de tonquedec',
   'amaury de tonquédec',
+  'laurent kretz',
+  'carine dany',
+  'solenne niedercorn',
+  'clemence lepic',
+  'clémence lepic',
 ];
 
 function sqlClient() {

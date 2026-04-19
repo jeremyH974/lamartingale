@@ -129,7 +129,7 @@ async function cmdIngest(opts: { podcast: string; force?: boolean }): Promise<vo
   console.log(`\n=== Ingest ${id} ===\n`);
 
   const steps = [
-    { label: '[1/6] Scraping RSS', cmd: 'npx', args: ['tsx', 'engine/scraping/scrape-rss.ts'] },
+    { label: '[1/6] Ingest RSS (INSERT+UPDATE)', cmd: 'npx', args: ['tsx', 'engine/scraping/ingest-rss.ts'] },
     { label: '[2/6] Parse descriptions RSS', cmd: 'npx', args: ['tsx', 'engine/scraping/rss/backfill-parsed.ts'] },
     { label: '[3/6] Deep scrape site', cmd: 'npx', args: ['tsx', 'engine/scraping/scrape-deep.ts'], optional: true },
     { label: '[4/6] Generate quiz', cmd: 'npx', args: ['tsx', 'engine/ai/generate-quiz.ts', '--write'], optional: true },

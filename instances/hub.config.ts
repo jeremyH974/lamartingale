@@ -9,11 +9,11 @@ import type { PodcastConfig } from '@engine/config/podcast.config';
 export const hubConfig: PodcastConfig = {
   id: 'hub',
   name: 'Univers MS',
-  tagline: 'Deux podcasts, un écosystème. La plus grande bibliothèque francophone sur le business et l\'investissement.',
+  tagline: 'Six podcasts, un écosystème. La plus grande bibliothèque francophone sur le business, la finance et l\'investissement.',
   host: 'Matthieu Stefani',
-  producer: 'Orso Media × Cosa Vostra',
+  producer: 'Orso Media × Cosa Vostra × Gokyo',
   description:
-    'L\'univers Matthieu Stefani réunit La Martingale (313 épisodes sur l\'argent et l\'investissement) et Génération Do It Yourself (537+ épisodes sur l\'entrepreneuriat). 850+ épisodes, 1200+ invités, 1300+ heures d\'expertise francophone.',
+    'L\'univers Matthieu Stefani × Orso Media réunit six podcasts : La Martingale (313 eps — argent & investissement), Génération Do It Yourself (959 eps — entrepreneuriat), Le Panier (506 eps — e-commerce), Finscale (332 eps — fintech), Passion Patrimoine (195 eps — gestion de patrimoine) et Combien ça gagne (104 eps — business models). 2400+ épisodes, 1200+ invités, 2500+ heures d\'expertise francophone.',
 
   website: 'https://ms-hub.vercel.app',
   episodeUrlPattern: '',
