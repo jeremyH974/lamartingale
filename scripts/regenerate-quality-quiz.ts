@@ -12,8 +12,8 @@
 import 'dotenv/config';
 import { neon } from '@neondatabase/serverless';
 import { generateText } from 'ai';
-import { getLLMFast, getModelId } from '../src/ai/llm';
-import { getConfig } from '../src/config';
+import { getLLMFast, getModelId } from '@engine/ai/llm';
+import { getConfig } from '@engine/config';
 
 interface GeneratedQuestion {
   question: string;

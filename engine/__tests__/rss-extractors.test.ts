@@ -6,7 +6,7 @@ import {
   extractCrossRefs, extractContact,
   computePublishFrequencyDays,
   extractChannelMetadata, extractItem,
-} from '../rss/extractors';
+} from '@engine/scraping/rss/extractors';
 
 describe('firstString', () => {
   it('renvoie la première string non vide', () => {

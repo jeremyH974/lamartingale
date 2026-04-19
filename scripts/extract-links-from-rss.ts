@@ -17,7 +17,7 @@
 import 'dotenv/config';
 import * as cheerio from 'cheerio';
 import { neon } from '@neondatabase/serverless';
-import { getConfig } from '../src/config';
+import { getConfig } from '@engine/config';
 
 const sql = neon(process.env.DATABASE_URL!);
 const cfg = getConfig();

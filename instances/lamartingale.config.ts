@@ -1,4 +1,4 @@
-import type { PodcastConfig } from './podcast.config';
+import type { PodcastConfig } from '@engine/config/podcast.config';
 
 // Toutes les valeurs auparavant hardcodées dans :
 //   - src/scrape-rss.ts (FEEDS)

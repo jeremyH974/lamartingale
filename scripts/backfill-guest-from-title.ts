@@ -4,7 +4,7 @@
  */
 import 'dotenv/config';
 import { neon } from '@neondatabase/serverless';
-import { extractGuestFromTitle } from '../src/rss/extractors.ts';
+import { extractGuestFromTitle } from '@engine/scraping/rss/extractors';
 const sql = neon(process.env.DATABASE_URL!);
 
 (async () => {

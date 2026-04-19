@@ -1,7 +1,7 @@
 import { generateText } from 'ai';
 import * as fs from 'fs';
 import * as path from 'path';
-import { getLLMFast, getModelId } from './ai/llm';
+import { getLLMFast, getModelId } from '@engine/ai/llm';
 
 // ============================================================================
 // La Martingale - Enrichissement IA

@@ -2,13 +2,13 @@
   "version": 2,
   "builds": [
     { "src": "api/index.ts", "use": "@vercel/node" },
-    { "src": "public/**", "use": "@vercel/static" }
+    { "src": "frontend/**", "use": "@vercel/static" }
   ],
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/index.ts" },
-    { "source": "/", "destination": "/public/hub.html" },
-    { "source": "/index.html", "destination": "/public/hub.html" },
-    { "source": "/guest/:name", "destination": "/public/hub.html" },
-    { "source": "/(.*)", "destination": "/public/$1" }
+    { "source": "/", "destination": "/frontend/hub.html" },
+    { "source": "/index.html", "destination": "/frontend/hub.html" },
+    { "source": "/guest/:name", "destination": "/frontend/hub.html" },
+    { "source": "/(.*)", "destination": "/frontend/$1" }
   ]
 }

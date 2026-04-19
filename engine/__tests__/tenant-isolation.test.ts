@@ -1,8 +1,8 @@
 import 'dotenv/config';
 import { describe, it, expect, beforeAll } from 'vitest';
 import { neon } from '@neondatabase/serverless';
-import { _setConfigForTest } from '../config';
-import { lamartingaleConfig } from '../config/lamartingale.config';
+import { _setConfigForTest } from '@engine/config';
+import { lamartingaleConfig } from '@instances/lamartingale.config';
 
 // M2 — Tenant isolation (DB-level)
 // Ces tests vérifient que la migration tenant_id a bien été appliquée

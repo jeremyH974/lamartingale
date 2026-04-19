@@ -1,4 +1,4 @@
-import type { PodcastConfig } from './podcast.config';
+import type { PodcastConfig } from '@engine/config/podcast.config';
 
 // Hub MS — la vitrine croisée de l'univers Matthieu Stefani.
 // Ce n'est PAS un podcast : c'est un agrégateur de La Martingale + GDIY (+ futurs).

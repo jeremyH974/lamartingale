@@ -1,21 +1,15 @@
 {
   "version": 2,
   "builds": [
-    {
-      "src": "api/index.ts",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "public/**",
-      "use": "@vercel/static"
-    }
+    { "src": "api/index.ts", "use": "@vercel/node" },
+    { "src": "frontend/**", "use": "@vercel/static" }
   ],
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/index.ts" },
-    { "source": "/", "destination": "/public/v2.html" },
-    { "source": "/index.html", "destination": "/public/v2.html" },
-    { "source": "/episode/:id", "destination": "/public/episode.html" },
-    { "source": "/episode", "destination": "/public/episode.html" },
-    { "source": "/(.*)", "destination": "/public/$1" }
+    { "source": "/", "destination": "/frontend/v2.html" },
+    { "source": "/index.html", "destination": "/frontend/v2.html" },
+    { "source": "/episode/:id", "destination": "/frontend/episode.html" },
+    { "source": "/episode", "destination": "/frontend/episode.html" },
+    { "source": "/(.*)", "destination": "/frontend/$1" }
   ]
 }

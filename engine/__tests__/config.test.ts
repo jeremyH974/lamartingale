@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { getConfig, listConfigs, registerConfig, toPublicConfig, _setConfigForTest } from '../config';
-import { lamartingaleConfig } from '../config/lamartingale.config';
-import type { PodcastConfig } from '../config';
+import { getConfig, listConfigs, registerConfig, toPublicConfig, _setConfigForTest } from '@engine/config';
+import { lamartingaleConfig } from '@instances/lamartingale.config';
+import type { PodcastConfig } from '@engine/config';
 
 describe('M1 — Config Factory', () => {
   beforeEach(() => {

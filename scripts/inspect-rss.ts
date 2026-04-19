@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import { neon } from '@neondatabase/serverless';
-import { parseRssDescription } from '../src/rss/parse-description';
+import { parseRssDescription } from '@engine/scraping/rss/parse-description';
 
 const sql = neon(process.env.DATABASE_URL!);
 

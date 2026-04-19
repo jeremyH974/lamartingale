@@ -20,7 +20,7 @@ import 'dotenv/config';
 import * as fs from 'fs';
 import { XMLParser } from 'fast-xml-parser';
 import { neon } from '@neondatabase/serverless';
-import { getConfig } from './config';
+import { getConfig } from '@engine/config';
 import { extractItem, extractChannelMetadata, computePublishFrequencyDays } from './rss/extractors';
 
 const sql = neon(process.env.DATABASE_URL!);

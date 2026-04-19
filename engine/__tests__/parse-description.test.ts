@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { parseRssDescription } from '../rss/parse-description';
+import { parseRssDescription } from '@engine/scraping/rss/parse-description';
 
 describe('parseRssDescription — La Martingale', () => {
   it('extrait "Le sujet :"', () => {

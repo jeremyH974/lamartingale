@@ -10,7 +10,7 @@
  */
 import 'dotenv/config';
 import { neon } from '@neondatabase/serverless';
-import { getConfig } from '../config';
+import { getConfig } from '@engine/config';
 import { parseRssDescription } from './parse-description';
 
 const sql = neon(process.env.DATABASE_URL!);

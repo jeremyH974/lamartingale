@@ -15,11 +15,11 @@ app.use(cors());
 app.use(express.json());
 
 // Serve static frontend
-app.use(express.static(path.join(__dirname, '..', 'public')));
+app.use(express.static(path.join(__dirname, '..', 'frontend')));
 
 // V2 brand-aligned route
 app.get('/v2', (_req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'public', 'v2.html'));
+  res.sendFile(path.join(__dirname, '..', 'frontend', 'v2.html'));
 });
 
 // Public config endpoint — exposé au frontend pour branding dynamique.

@@ -1,4 +1,4 @@
-import type { PodcastConfig } from './podcast.config';
+import type { PodcastConfig } from '@engine/config/podcast.config';
 
 // Génération Do It Yourself — Matthieu Stefani / Cosa Vostra.
 // Charte inspirée de gdiy.fr : minimalisme noir/blanc, logo carré noir, Inter.

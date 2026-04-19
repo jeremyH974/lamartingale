@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import { neon } from '@neondatabase/serverless';
-import { getConfig } from '../src/config';
+import { getConfig } from '@engine/config';
 
 // ============================================================================
 // Denormalize LinkedIn URLs from episode_links → guests.linkedin_url

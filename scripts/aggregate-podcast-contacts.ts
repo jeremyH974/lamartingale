@@ -9,7 +9,7 @@
  */
 import 'dotenv/config';
 import { neon } from '@neondatabase/serverless';
-import { extractContact } from '../src/rss/extractors.ts';
+import { extractContact } from '@engine/scraping/rss/extractors';
 
 const sql = neon(process.env.DATABASE_URL!);
 const THRESHOLD = 5; // URL doit apparaître dans ≥ 5 eps pour être retenue
