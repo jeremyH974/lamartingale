@@ -560,21 +560,24 @@ app.get('/api/demo/summary', async (_req, res) => {
         const [ov, sponsor, guest, quizCount, articles] = await Promise.all([
           sql`SELECT count(*)::int AS episodes,
                      COALESCE(SUM(duration_seconds),0)::bigint AS total_seconds,
-                     count(DISTINCT guest) FILTER (WHERE guest IS NOT NULL AND guest != '')::int AS guests
+                     count(DISTINCT COALESCE(NULLIF(guest,''), guest_from_title))
+                       FILTER (WHERE COALESCE(NULLIF(guest,''), guest_from_title) IS NOT NULL)::int AS guests
               FROM episodes
               WHERE tenant_id = ${tenant}
                 AND (episode_type='full' OR episode_type IS NULL)`,
           sql`SELECT label, count(DISTINCT episode_id)::int AS mentions
               FROM episode_links
               WHERE tenant_id = ${tenant} AND link_type IN ('company','tool')
-                AND label IS NOT NULL AND length(label) BETWEEN 2 AND 40
-                AND label !~* '(podcast|orso media|cosavostra|deezer|spotify|apple|youtube)'
+                AND label IS NOT NULL AND length(label) BETWEEN 2 AND 30
+                AND label !~* '^(ce |c[''’]est |cliquez|voir |\u00e9coutez|d\u00e9couvr|https?://|le podcast|tous|ici|lien|site)'
+                AND label !~* '(podcast|orso media|cosavostra|deezer|spotify|apple|youtube|apple podcasts|google podcasts|la martingale|g\u00e9n\u00e9ration do it)'
+                AND label ~ '[A-Za-z]'
               GROUP BY label ORDER BY mentions DESC LIMIT 1`,
-          sql`SELECT guest, count(*)::int AS eps
+          sql`SELECT COALESCE(NULLIF(guest,''), guest_from_title) AS g, count(*)::int AS eps
               FROM episodes WHERE tenant_id = ${tenant}
-                AND guest IS NOT NULL AND guest != ''
+                AND COALESCE(NULLIF(guest,''), guest_from_title) IS NOT NULL
                 AND (episode_type='full' OR episode_type IS NULL)
-              GROUP BY guest ORDER BY eps DESC LIMIT 1`,
+              GROUP BY g ORDER BY eps DESC LIMIT 1`,
           sql`SELECT count(*)::int AS c FROM quiz_questions WHERE tenant_id = ${tenant}`,
           sql`SELECT count(*)::int AS c FROM episodes
               WHERE tenant_id = ${tenant}
@@ -590,20 +593,26 @@ app.get('/api/demo/summary', async (_req, res) => {
           links: Number(linksCount),
           quiz: Number(quizCount[0]?.c || 0),
           top_sponsor: sponsor[0] ? `${sponsor[0].label} (${sponsor[0].mentions} mentions)` : null,
-          top_guest: guest[0] ? `${guest[0].guest} (${guest[0].eps} eps)` : null,
+          top_guest: guest[0] ? `${guest[0].g} (${guest[0].eps} eps)` : null,
           cross_references: Number(crossRefs),
         };
       }
 
       const [lm, gdiy] = await Promise.all([statsFor('lamartingale'), statsFor('gdiy')]);
 
-      // Invités partagés entre les deux tenants
+      // Invités partagés entre les deux tenants (fallback guest_from_title pour GDIY)
       const sharedGuestsRow = await sql`
-        SELECT count(DISTINCT a.guest)::int AS c
-        FROM episodes a
-        INNER JOIN episodes b ON lower(trim(a.guest)) = lower(trim(b.guest))
-        WHERE a.tenant_id = 'lamartingale' AND b.tenant_id = 'gdiy'
-          AND a.guest IS NOT NULL AND a.guest != ''
+        WITH lm AS (
+          SELECT DISTINCT lower(trim(COALESCE(NULLIF(guest,''), guest_from_title))) AS g
+          FROM episodes WHERE tenant_id = 'lamartingale'
+            AND COALESCE(NULLIF(guest,''), guest_from_title) IS NOT NULL
+        ),
+        gd AS (
+          SELECT DISTINCT lower(trim(COALESCE(NULLIF(guest,''), guest_from_title))) AS g
+          FROM episodes WHERE tenant_id = 'gdiy'
+            AND COALESCE(NULLIF(guest,''), guest_from_title) IS NOT NULL
+        )
+        SELECT count(*)::int AS c FROM lm INNER JOIN gd ON lm.g = gd.g
       ` as any[];
       const sharedGuests = Number(sharedGuestsRow[0]?.c || 0);
 
