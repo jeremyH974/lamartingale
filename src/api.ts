@@ -577,6 +577,7 @@ app.get('/api/demo/summary', async (_req, res) => {
               FROM episodes WHERE tenant_id = ${tenant}
                 AND COALESCE(NULLIF(guest,''), guest_from_title) IS NOT NULL
                 AND (episode_type='full' OR episode_type IS NULL)
+                AND lower(COALESCE(NULLIF(guest,''), guest_from_title)) NOT LIKE '%matthieu stefani%'
               GROUP BY g ORDER BY eps DESC LIMIT 1`,
           sql`SELECT count(*)::int AS c FROM quiz_questions WHERE tenant_id = ${tenant}`,
           sql`SELECT count(*)::int AS c FROM episodes
