@@ -748,6 +748,117 @@ app.get('/api/graph', async (_req, res) => {
   } catch (e: any) { res.status(500).json({ error: e.message }); }
 });
 
+// ============================================================================
+// Cross-tenant endpoints — univers MS (agrégats multi-podcasts)
+// Rétrocompat : les requêtes mono-tenant ne sont pas impactées.
+// ============================================================================
+
+app.get('/api/cross/stats', async (_req, res) => {
+  try {
+    if (!process.env.DATABASE_URL) return res.status(503).json({ error: 'DB required' });
+    const result = await getCached('cross:stats', 600, async () => {
+      const { getCrossStats } = await import('./db/cross-queries');
+      return await getCrossStats();
+    });
+    res.json(result);
+  } catch (e: any) { console.error('[API] /api/cross/stats error:', e.message); res.status(500).json({ error: e.message }); }
+});
+
+app.get('/api/cross/guests', async (req, res) => {
+  try {
+    if (!process.env.DATABASE_URL) return res.status(503).json({ error: 'DB required' });
+    const limit = parseInt(req.query.limit as string) || 100;
+    const result = await getCached(`cross:guests:${limit}`, 600, async () => {
+      const { getCrossGuests } = await import('./db/cross-queries');
+      return await getCrossGuests({ limit });
+    });
+    res.json(result);
+  } catch (e: any) { console.error('[API] /api/cross/guests error:', e.message); res.status(500).json({ error: e.message }); }
+});
+
+app.get('/api/cross/guests/shared', async (_req, res) => {
+  try {
+    if (!process.env.DATABASE_URL) return res.status(503).json({ error: 'DB required' });
+    const result = await getCached('cross:guests:shared', 600, async () => {
+      const { getCrossGuests } = await import('./db/cross-queries');
+      return await getCrossGuests({ sharedOnly: true });
+    });
+    res.json(result);
+  } catch (e: any) { console.error('[API] /api/cross/guests/shared error:', e.message); res.status(500).json({ error: e.message }); }
+});
+
+app.get('/api/cross/guests/:name', async (req, res) => {
+  try {
+    if (!process.env.DATABASE_URL) return res.status(503).json({ error: 'DB required' });
+    const name = decodeURIComponent(req.params.name);
+    const result = await getCached(`cross:guest:${name}`, 600, async () => {
+      const { getCrossGuestByName } = await import('./db/cross-queries');
+      return await getCrossGuestByName(name);
+    });
+    if (!result) return res.status(404).json({ error: 'Guest not found in universe' });
+    res.json(result);
+  } catch (e: any) { console.error('[API] /api/cross/guests/:name error:', e.message); res.status(500).json({ error: e.message }); }
+});
+
+app.get('/api/cross/search', async (req, res) => {
+  try {
+    if (!process.env.DATABASE_URL) return res.status(503).json({ error: 'DB required' });
+    const q = req.query.q as string;
+    if (!q || q.length < 2) return res.status(400).json({ error: 'Query must be at least 2 characters' });
+    const limit = parseInt(req.query.limit as string) || 20;
+    const result = await getCached(`cross:search:${limit}:${q}`, 3600, async () => {
+      const { crossSearch } = await import('./db/cross-queries');
+      return await crossSearch(q, limit);
+    });
+    res.json(result);
+  } catch (e: any) { console.error('[API] /api/cross/search error:', e.message); res.status(500).json({ error: e.message }); }
+});
+
+app.get('/api/cross/references', async (_req, res) => {
+  try {
+    if (!process.env.DATABASE_URL) return res.status(503).json({ error: 'DB required' });
+    const result = await getCached('cross:references', 600, async () => {
+      const { getCrossReferences } = await import('./db/cross-queries');
+      return await getCrossReferences();
+    });
+    res.json(result);
+  } catch (e: any) { console.error('[API] /api/cross/references error:', e.message); res.status(500).json({ error: e.message }); }
+});
+
+app.get('/api/cross/sponsors', async (_req, res) => {
+  try {
+    if (!process.env.DATABASE_URL) return res.status(503).json({ error: 'DB required' });
+    const result = await getCached('cross:sponsors', 600, async () => {
+      const { getCrossSponsors } = await import('./db/cross-queries');
+      return await getCrossSponsors();
+    });
+    res.json(result);
+  } catch (e: any) { console.error('[API] /api/cross/sponsors error:', e.message); res.status(500).json({ error: e.message }); }
+});
+
+app.get('/api/cross/timeline', async (req, res) => {
+  try {
+    if (!process.env.DATABASE_URL) return res.status(503).json({ error: 'DB required' });
+    const limit = parseInt(req.query.limit as string) || 500;
+    const result = await getCached(`cross:timeline:${limit}`, 600, async () => {
+      const { getCrossTimeline } = await import('./db/cross-queries');
+      return await getCrossTimeline({ limit });
+    });
+    res.json(result);
+  } catch (e: any) { console.error('[API] /api/cross/timeline error:', e.message); res.status(500).json({ error: e.message }); }
+});
+
+app.get('/api/cross/analytics', async (_req, res) => {
+  try {
+    if (!process.env.DATABASE_URL) return res.status(503).json({ error: 'DB required' });
+    const result = await getCached('cross:analytics', 1800, async () => {
+      const { getCrossAnalytics } = await import('./db/cross-queries');
+      return await getCrossAnalytics();
+    });
+    res.json(result);
+  } catch (e: any) { console.error('[API] /api/cross/analytics error:', e.message); res.status(500).json({ error: e.message }); }
+});
+
 // --- Enriched Episode Data ---
 
 app.get('/api/enriched/:id', async (req, res) => {

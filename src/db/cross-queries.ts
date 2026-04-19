@@ -1,0 +1,601 @@
+import { neon } from '@neondatabase/serverless';
+
+// ============================================================================
+// Cross-tenant queries — agrègent TOUS les podcasts de l'univers MS.
+// Contrairement à src/db/queries.ts, ces queries ne filtrent PAS par tenant_id
+// actuel. Elles listent les tenants explicitement pour garder le contrôle.
+//
+// Ajouter un nouveau podcast à l'univers = ajouter son tenant_id dans TENANTS
+// + son entrée dans TENANT_META. Aucune autre modif de code.
+// ============================================================================
+
+export const TENANTS = ['lamartingale', 'gdiy'] as const;
+export type TenantId = typeof TENANTS[number];
+
+export const TENANT_META: Record<TenantId, { name: string; url: string }> = {
+  lamartingale: {
+    name: 'La Martingale',
+    url: 'https://lamartingale-v2.vercel.app',
+  },
+  gdiy: {
+    name: 'Génération Do It Yourself',
+    url: 'https://gdiy-v2.vercel.app',
+  },
+};
+
+// Hosts exclus des profils guests (ils animent, ils ne sont pas invités)
+export const HOSTS_NORMALIZED = [
+  'matthieu stefani',
+  'amaury de tonquedec',
+  'amaury de tonquédec',
+];
+
+function sqlClient() {
+  const url = process.env.DATABASE_URL;
+  if (!url) throw new Error('[cross-queries] DATABASE_URL not set');
+  return neon(url);
+}
+
+function normalizeName(name: string): string {
+  return name
+    .toLowerCase()
+    .trim()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/\s+/g, ' ');
+}
+
+function isHost(name: string): boolean {
+  const n = normalizeName(name);
+  return HOSTS_NORMALIZED.some(h => n.includes(h));
+}
+
+// ============================================================================
+// /api/cross/stats
+// ============================================================================
+
+export async function getCrossStats() {
+  const sql = sqlClient();
+  const tenants = [...TENANTS];
+
+  const perPodcast = await Promise.all(tenants.map(async (t) => {
+    const [epsRow, guestsRow] = await Promise.all([
+      sql`
+        SELECT count(*)::int AS episodes,
+               COALESCE(SUM(duration_seconds), 0)::bigint AS total_seconds
+        FROM episodes
+        WHERE tenant_id = ${t}
+          AND (episode_type = 'full' OR episode_type IS NULL)
+      `,
+      sql`
+        SELECT count(DISTINCT lower(trim(COALESCE(NULLIF(guest, ''), guest_from_title))))::int AS c
+        FROM episodes
+        WHERE tenant_id = ${t}
+          AND COALESCE(NULLIF(guest, ''), guest_from_title) IS NOT NULL
+      `,
+    ]) as any[];
+    return {
+      id: t,
+      name: TENANT_META[t].name,
+      url: TENANT_META[t].url,
+      episodes: Number(epsRow[0]?.episodes || 0),
+      hours: Math.round(Number(epsRow[0]?.total_seconds || 0) / 3600),
+      guests: Number(guestsRow[0]?.c || 0),
+    };
+  }));
+
+  // Agrégats cross-tenant
+  const [linksRow, quizRow, crossRefRow, uniqueGuestsRow, sharedGuestsRow, sponsorsRow] = await Promise.all([
+    sql`SELECT count(*)::int AS c FROM episode_links WHERE tenant_id = ANY(${tenants})` as any,
+    sql`SELECT count(*)::int AS c FROM quiz_questions WHERE tenant_id = ANY(${tenants})` as any,
+    sql`
+      SELECT count(*)::int AS c FROM episodes e,
+        LATERAL jsonb_array_elements(e.cross_refs) AS elem
+      WHERE e.tenant_id = ANY(${tenants})
+        AND e.cross_refs IS NOT NULL
+        AND (
+          (e.tenant_id = 'lamartingale' AND lower(elem->>'podcast') LIKE '%gdiy%')
+          OR
+          (e.tenant_id = 'gdiy' AND lower(elem->>'podcast') LIKE '%martingale%')
+        )
+    ` as any,
+    sql`
+      SELECT count(*)::int AS c FROM (
+        SELECT lower(trim(COALESCE(NULLIF(guest, ''), guest_from_title))) AS g
+        FROM episodes
+        WHERE tenant_id = ANY(${tenants})
+          AND COALESCE(NULLIF(guest, ''), guest_from_title) IS NOT NULL
+        GROUP BY g
+      ) sub
+    ` as any,
+    sql`
+      WITH guests_per_tenant AS (
+        SELECT tenant_id,
+               lower(trim(COALESCE(NULLIF(guest, ''), guest_from_title))) AS g
+        FROM episodes
+        WHERE tenant_id = ANY(${tenants})
+          AND COALESCE(NULLIF(guest, ''), guest_from_title) IS NOT NULL
+        GROUP BY tenant_id, g
+      )
+      SELECT count(*)::int AS c FROM (
+        SELECT g FROM guests_per_tenant
+        WHERE g NOT LIKE '%matthieu stefani%'
+          AND g NOT LIKE '%amaury de tonqu%'
+        GROUP BY g HAVING count(DISTINCT tenant_id) >= 2
+      ) sub
+    ` as any,
+    sql`
+      SELECT count(*)::int AS c FROM (
+        SELECT lower(trim(label)) AS n
+        FROM episode_links
+        WHERE tenant_id = ANY(${tenants})
+          AND link_type IN ('company', 'tool')
+          AND label IS NOT NULL
+          AND length(trim(label)) BETWEEN 2 AND 40
+        GROUP BY lower(trim(label))
+        HAVING count(DISTINCT tenant_id) >= 2
+      ) shared
+    ` as any,
+  ]);
+
+  return {
+    podcasts: perPodcast,
+    combined: {
+      total_episodes: perPodcast.reduce((s, p) => s + p.episodes, 0),
+      total_hours: perPodcast.reduce((s, p) => s + p.hours, 0),
+      total_guests_unique: Number((uniqueGuestsRow as any[])[0]?.c || 0),
+      total_links: Number((linksRow as any[])[0]?.c || 0),
+      total_quiz: Number((quizRow as any[])[0]?.c || 0),
+      shared_guests_count: Number((sharedGuestsRow as any[])[0]?.c || 0),
+      cross_references_count: Number((crossRefRow as any[])[0]?.c || 0),
+      total_sponsors_unique: Number((sponsorsRow as any[])[0]?.c || 0),
+    },
+  };
+}
+
+// ============================================================================
+// /api/cross/guests  +  /api/cross/guests/shared
+// ============================================================================
+
+interface UnifiedGuest {
+  name: string;
+  bio: string | null;
+  linkedin_url: string | null;
+  appearances: {
+    podcast: string;
+    podcast_name: string;
+    episodes: {
+      number: number | null;
+      title: string;
+      date: string | null;
+      pillar: string | null;
+    }[];
+  }[];
+  total_episodes: number;
+  podcasts_count: number;
+  is_cross_podcast: boolean;
+  pillars_covered: string[];
+}
+
+export async function getCrossGuests(opts: { sharedOnly?: boolean; limit?: number } = {}): Promise<{ guests: UnifiedGuest[]; total: number }> {
+  const sql = sqlClient();
+  const tenants = [...TENANTS];
+
+  // Pull all episodes with their guest and metadata
+  const rows = await sql`
+    SELECT
+      e.tenant_id,
+      e.episode_number,
+      e.title,
+      e.date_created,
+      e.pillar,
+      COALESCE(NULLIF(e.guest, ''), e.guest_from_title) AS guest_raw,
+      g.bio,
+      g.linkedin_url
+    FROM episodes e
+    LEFT JOIN guests g ON g.tenant_id = e.tenant_id
+      AND lower(trim(g.name)) = lower(trim(COALESCE(NULLIF(e.guest, ''), e.guest_from_title)))
+    WHERE e.tenant_id = ANY(${tenants})
+      AND COALESCE(NULLIF(e.guest, ''), e.guest_from_title) IS NOT NULL
+      AND (e.episode_type = 'full' OR e.episode_type IS NULL)
+    ORDER BY e.episode_number DESC
+  ` as any[];
+
+  // Grouper par nom normalisé
+  const byNorm = new Map<string, {
+    displayName: string;
+    bios: string[];
+    linkedins: string[];
+    byTenant: Map<string, UnifiedGuest['appearances'][0]['episodes']>;
+    pillars: Set<string>;
+  }>();
+
+  for (const r of rows) {
+    const raw = (r.guest_raw || '').trim();
+    if (!raw) continue;
+    if (isHost(raw)) continue;
+    const norm = normalizeName(raw);
+    if (norm.length < 3) continue;
+
+    let entry = byNorm.get(norm);
+    if (!entry) {
+      entry = {
+        displayName: raw,
+        bios: [],
+        linkedins: [],
+        byTenant: new Map(),
+        pillars: new Set(),
+      };
+      byNorm.set(norm, entry);
+    }
+
+    if (r.bio && typeof r.bio === 'string' && r.bio.length > (entry.bios[0]?.length || 0)) {
+      entry.bios[0] = r.bio;
+    }
+    if (r.linkedin_url && !entry.linkedins.includes(r.linkedin_url)) {
+      entry.linkedins.push(r.linkedin_url);
+    }
+    if (r.pillar) entry.pillars.add(r.pillar);
+
+    const list = entry.byTenant.get(r.tenant_id) || [];
+    list.push({
+      number: r.episode_number,
+      title: r.title,
+      date: r.date_created ? new Date(r.date_created).toISOString().slice(0, 10) : null,
+      pillar: r.pillar || null,
+    });
+    entry.byTenant.set(r.tenant_id, list);
+  }
+
+  // Convertir en UnifiedGuest[]
+  let unified: UnifiedGuest[] = Array.from(byNorm.values()).map(v => {
+    const appearances = Array.from(v.byTenant.entries()).map(([tid, eps]) => ({
+      podcast: tid,
+      podcast_name: TENANT_META[tid as TenantId]?.name || tid,
+      episodes: eps,
+    }));
+    const totalEps = appearances.reduce((s, a) => s + a.episodes.length, 0);
+    return {
+      name: v.displayName,
+      bio: v.bios[0] || null,
+      linkedin_url: v.linkedins[0] || null,
+      appearances,
+      total_episodes: totalEps,
+      podcasts_count: appearances.length,
+      is_cross_podcast: appearances.length >= 2,
+      pillars_covered: Array.from(v.pillars),
+    };
+  });
+
+  if (opts.sharedOnly) {
+    unified = unified.filter(g => g.is_cross_podcast);
+  }
+
+  // Tri : cross-podcast d'abord, puis nb d'episodes décroissant
+  unified.sort((a, b) => {
+    if (a.is_cross_podcast !== b.is_cross_podcast) return a.is_cross_podcast ? -1 : 1;
+    return b.total_episodes - a.total_episodes;
+  });
+
+  const total = unified.length;
+  if (opts.limit && opts.limit > 0) unified = unified.slice(0, opts.limit);
+
+  return { guests: unified, total };
+}
+
+export async function getCrossGuestByName(name: string): Promise<UnifiedGuest | null> {
+  const { guests } = await getCrossGuests({});
+  const norm = normalizeName(name);
+  return guests.find(g => normalizeName(g.name) === norm) || null;
+}
+
+// ============================================================================
+// /api/cross/search — hybrid search sur TOUS les tenants
+// ============================================================================
+
+export async function crossSearch(query: string, limit: number = 20): Promise<{
+  query: string;
+  results: Array<{
+    podcast: string;
+    podcast_name: string;
+    episode_number: number;
+    title: string;
+    guest: string | null;
+    pillar: string | null;
+    score: number;
+    snippet: string;
+  }>;
+  timing_ms: number;
+}> {
+  const t0 = Date.now();
+  const sql = sqlClient();
+  const tenants = [...TENANTS];
+  const OpenAI = (await import('openai')).default;
+
+  let embedding: number[] | null = null;
+  if (process.env.OPENAI_API_KEY) {
+    try {
+      const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+      const resp = await openai.embeddings.create({
+        model: 'text-embedding-3-large',
+        input: query,
+        dimensions: 3072,
+      });
+      embedding = resp.data[0].embedding;
+    } catch {
+      embedding = null;
+    }
+  }
+
+  let rows: any[];
+  if (embedding) {
+    const embVec = `[${embedding.join(',')}]`;
+    rows = await sql`
+      SELECT e.tenant_id, e.episode_number, e.title, e.guest, e.pillar, e.abstract,
+             1 - (en.embedding <=> ${embVec}::vector) AS score
+      FROM episodes e
+      INNER JOIN episodes_enrichment en ON en.episode_id = e.id
+      WHERE en.embedding IS NOT NULL
+        AND e.tenant_id = ANY(${tenants})
+      ORDER BY en.embedding <=> ${embVec}::vector
+      LIMIT ${limit}
+    ` as any[];
+  } else {
+    // Fallback lexical (pg_trgm) si pas d'embedding
+    rows = await sql`
+      SELECT e.tenant_id, e.episode_number, e.title, e.guest, e.pillar, e.abstract,
+             greatest(
+               similarity(lower(e.title), lower(${query})),
+               similarity(lower(coalesce(e.abstract, '')), lower(${query})),
+               similarity(lower(coalesce(e.guest, '')), lower(${query}))
+             ) AS score
+      FROM episodes e
+      WHERE e.tenant_id = ANY(${tenants})
+      ORDER BY score DESC
+      LIMIT ${limit}
+    ` as any[];
+  }
+
+  return {
+    query,
+    results: rows.map((r: any) => ({
+      podcast: r.tenant_id,
+      podcast_name: TENANT_META[r.tenant_id as TenantId]?.name || r.tenant_id,
+      episode_number: r.episode_number,
+      title: r.title,
+      guest: r.guest || null,
+      pillar: r.pillar || null,
+      score: Number(r.score || 0),
+      snippet: (r.abstract || '').slice(0, 200),
+    })),
+    timing_ms: Date.now() - t0,
+  };
+}
+
+// ============================================================================
+// /api/cross/references
+// ============================================================================
+
+export async function getCrossReferences() {
+  const sql = sqlClient();
+
+  // Les refs cross-podcast vivent dans episodes.cross_refs (jsonb) : éléments
+  // avec {podcast: "gdiy"|"la martingale"}. On filtre "other podcast" selon le
+  // tenant source.
+  const rows = await sql`
+    SELECT e.tenant_id AS source_tenant,
+           e.episode_number AS source_episode,
+           e.title AS source_title,
+           elem->>'podcast' AS target_podcast_raw,
+           elem->>'episode_ref' AS episode_ref,
+           elem->>'url' AS url
+    FROM episodes e,
+         LATERAL jsonb_array_elements(e.cross_refs) AS elem
+    WHERE e.tenant_id = ANY(${[...TENANTS]})
+      AND e.cross_refs IS NOT NULL
+      AND (
+        (e.tenant_id = 'lamartingale' AND lower(elem->>'podcast') LIKE '%gdiy%')
+        OR
+        (e.tenant_id = 'gdiy' AND lower(elem->>'podcast') LIKE '%martingale%')
+      )
+    ORDER BY e.episode_number DESC
+    LIMIT 300
+  ` as any[];
+
+  const fromLmToGdiy: any[] = [];
+  const fromGdiyToLm: any[] = [];
+
+  for (const r of rows) {
+    const entry = {
+      source_tenant: r.source_tenant,
+      source_episode: r.source_episode,
+      source_title: r.source_title,
+      target_podcast: r.target_podcast_raw,
+      episode_ref: r.episode_ref,
+      url: r.url,
+    };
+    if (r.source_tenant === 'lamartingale') fromLmToGdiy.push(entry);
+    else if (r.source_tenant === 'gdiy') fromGdiyToLm.push(entry);
+  }
+
+  return {
+    from_lm_to_gdiy: fromLmToGdiy,
+    from_gdiy_to_lm: fromGdiyToLm,
+    stats: {
+      lm_to_gdiy: fromLmToGdiy.length,
+      gdiy_to_lm: fromGdiyToLm.length,
+      total: fromLmToGdiy.length + fromGdiyToLm.length,
+    },
+  };
+}
+
+// ============================================================================
+// /api/cross/sponsors
+// ============================================================================
+
+export async function getCrossSponsors() {
+  const sql = sqlClient();
+
+  const rows = await sql`
+    SELECT
+      lower(trim(label)) AS norm_label,
+      max(label) AS label,
+      tenant_id,
+      count(*)::int AS mentions,
+      count(DISTINCT episode_id)::int AS episodes_count
+    FROM episode_links
+    WHERE tenant_id = ANY(${[...TENANTS]})
+      AND link_type IN ('company', 'tool')
+      AND label IS NOT NULL
+      AND length(trim(label)) BETWEEN 2 AND 40
+      AND label ~ '[A-Za-z]'
+      AND label !~* '^(ce |c''est |cliquez|voir |écoutez|découvr|https?://|le podcast|tous|ici|lien|site)'
+      AND label !~* '(podcast|orso media|cosavostra|deezer|spotify|apple|youtube|apple podcasts|google podcasts|la martingale|génération do it)'
+    GROUP BY norm_label, tenant_id
+  ` as any[];
+
+  // Pivot par sponsor
+  const byLabel = new Map<string, { label: string; tenants: Map<string, number>; total: number }>();
+  for (const r of rows) {
+    const key = r.norm_label;
+    let entry = byLabel.get(key);
+    if (!entry) {
+      entry = { label: r.label, tenants: new Map(), total: 0 };
+      byLabel.set(key, entry);
+    }
+    entry.tenants.set(r.tenant_id, Number(r.mentions));
+    entry.total += Number(r.mentions);
+  }
+
+  // Ne garder que ceux mentionnés dans 2+ podcasts
+  const sponsors = Array.from(byLabel.values())
+    .filter(s => s.tenants.size >= 2)
+    .map(s => {
+      const perPodcast: Record<string, number> = {};
+      for (const [t, n] of s.tenants) perPodcast[t] = n;
+      return {
+        name: s.label,
+        podcasts: Array.from(s.tenants.keys()),
+        total_mentions: s.total,
+        per_podcast: perPodcast,
+      };
+    })
+    .sort((a, b) => b.total_mentions - a.total_mentions)
+    .slice(0, 50);
+
+  return { sponsors, total: sponsors.length };
+}
+
+// ============================================================================
+// /api/cross/timeline
+// ============================================================================
+
+export async function getCrossTimeline(opts: { limit?: number } = {}) {
+  const sql = sqlClient();
+  const limit = opts.limit || 500;
+  const rows = await sql`
+    SELECT tenant_id,
+           episode_number,
+           title,
+           COALESCE(NULLIF(guest, ''), guest_from_title) AS guest,
+           date_created
+    FROM episodes
+    WHERE tenant_id = ANY(${[...TENANTS]})
+      AND date_created IS NOT NULL
+      AND (episode_type = 'full' OR episode_type IS NULL)
+    ORDER BY date_created DESC
+    LIMIT ${limit}
+  ` as any[];
+
+  return {
+    timeline: rows.map((r: any) => ({
+      date: new Date(r.date_created).toISOString().slice(0, 10),
+      podcast: r.tenant_id,
+      podcast_name: TENANT_META[r.tenant_id as TenantId]?.name || r.tenant_id,
+      episode_number: r.episode_number,
+      title: r.title,
+      guest: r.guest || null,
+    })),
+    total: rows.length,
+  };
+}
+
+// ============================================================================
+// /api/cross/analytics — agrégats pour le dashboard hub
+// ============================================================================
+
+export async function getCrossAnalytics() {
+  const sql = sqlClient();
+  const tenants = [...TENANTS];
+
+  const [hoursByPodcast, epsByMonth, sharedGuestsTop, sponsorsTop] = await Promise.all([
+    sql`
+      SELECT tenant_id,
+             COALESCE(SUM(duration_seconds), 0)::bigint AS total_seconds,
+             count(*)::int AS episodes
+      FROM episodes
+      WHERE tenant_id = ANY(${tenants})
+        AND (episode_type = 'full' OR episode_type IS NULL)
+      GROUP BY tenant_id
+    ` as any,
+    sql`
+      SELECT to_char(date_trunc('month', date_created), 'YYYY-MM') AS month,
+             tenant_id,
+             count(*)::int AS c
+      FROM episodes
+      WHERE date_created IS NOT NULL
+        AND tenant_id = ANY(${tenants})
+      GROUP BY month, tenant_id
+      ORDER BY month
+    ` as any,
+    getCrossGuests({ sharedOnly: true, limit: 15 }),
+    getCrossSponsors(),
+  ]);
+
+  const hours_by_podcast = (hoursByPodcast as any[]).map((r: any) => ({
+    podcast: r.tenant_id,
+    podcast_name: TENANT_META[r.tenant_id as TenantId]?.name || r.tenant_id,
+    hours: Math.round(Number(r.total_seconds) / 3600),
+    episodes: Number(r.episodes),
+  }));
+
+  // Pivot episodes_by_month
+  const monthMap = new Map<string, Record<string, number>>();
+  for (const r of (epsByMonth as any[])) {
+    const m = r.month;
+    let entry = monthMap.get(m);
+    if (!entry) { entry = {}; monthMap.set(m, entry); }
+    entry[r.tenant_id] = Number(r.c);
+  }
+  const episodes_by_month = Array.from(monthMap.entries()).map(([month, vals]) => {
+    const total = Object.values(vals).reduce((s: number, v: number) => s + v, 0);
+    return { month, ...vals, total };
+  });
+
+  const totalHours = hours_by_podcast.reduce((s, p) => s + p.hours, 0);
+  const totalEpisodes = hours_by_podcast.reduce((s, p) => s + p.episodes, 0);
+  const daysNonStop = Math.round(totalHours / 24);
+
+  const insights: string[] = [];
+  if (totalHours) insights.push(`${totalHours} heures de contenu expert — l'équivalent de ${daysNonStop} jours non-stop`);
+  if ((sharedGuestsTop as any).total) insights.push(`${(sharedGuestsTop as any).total} invités apparaissent dans 2+ podcasts — le noyau dur du réseau MS`);
+  if ((sponsorsTop as any).total) insights.push(`${(sponsorsTop as any).total} sponsors présents dans plusieurs podcasts de l'univers`);
+  if (totalEpisodes) {
+    const weeks = 52 * 8; // ~8 ans d'histoire combinée
+    const perWeek = (totalEpisodes / weeks).toFixed(1);
+    insights.push(`L'univers MS produit ~${perWeek} épisodes/semaine en moyenne depuis le début`);
+  }
+
+  return {
+    hours_by_podcast,
+    episodes_by_month,
+    top_shared_guests: (sharedGuestsTop as any).guests.slice(0, 10),
+    sponsor_overlap: (sponsorsTop as any).sponsors.slice(0, 10),
+    insights,
+    combined: {
+      total_hours: totalHours,
+      total_episodes: totalEpisodes,
+      total_days_nonstop: daysNonStop,
+    },
+  };
+}
