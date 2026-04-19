@@ -61,6 +61,16 @@ export const episodes = pgTable('episodes', {
   rssLinks: jsonb('rss_links').$type<{ url: string; label?: string; link_type?: string }[]>().default([]),
   crossRefs: jsonb('cross_refs').$type<{ podcast?: string; episode_ref?: string; url?: string }[]>().default([]),
   publishFrequencyDays: real('publish_frequency_days'),
+  // === RSS parsed description blocks (M4) — structure extraite de rss_description ===
+  rssTopic: text('rss_topic'),
+  rssGuestIntro: text('rss_guest_intro'),
+  rssDiscover: jsonb('rss_discover').$type<string[]>().default([]),
+  rssReferences: jsonb('rss_references').$type<{ label: string; url?: string }[]>().default([]),
+  rssCrossEpisodes: jsonb('rss_cross_episodes').$type<{ number: number; title?: string }[]>().default([]),
+  rssPromo: jsonb('rss_promo').$type<{ code?: string; partner?: string; url?: string; description?: string } | null>(),
+  rssChaptersTs: jsonb('rss_chapters_ts').$type<{ title: string; timestamp_seconds: number; order: number }[]>().default([]),
+  youtubeUrl: text('youtube_url'),
+  crossPromo: text('cross_promo'),
   createdAt: timestamp('created_at').defaultNow(),
 }, (table) => [
   unique('uq_episodes_tenant_episode_number').on(table.tenantId, table.episodeNumber),

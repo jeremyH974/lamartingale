@@ -22,6 +22,7 @@ import { XMLParser } from 'fast-xml-parser';
 import { neon } from '@neondatabase/serverless';
 import { getConfig } from './config';
 import { extractItem, extractChannelMetadata, computePublishFrequencyDays } from './rss/extractors';
+import { parseRssDescription } from './rss/parse-description';
 
 const sql = neon(process.env.DATABASE_URL!);
 const cfg = getConfig();
@@ -175,6 +176,10 @@ async function main() {
     if (parsed.guestFromTitle.name) stats.withGuestFromTitle++;
     if (parsed.episodeImageUrl) stats.withImage++;
 
+    // Parse des blocs structurés (topic, discover, refs, promo, chapters timestamps, youtube…)
+    const descForParse = parsed.rssContentEncoded || parsed.description || '';
+    const blocks = parseRssDescription(descForParse, { tenantId: TENANT });
+
     await sql`
       UPDATE episodes SET
         duration_seconds       = COALESCE(${parsed.durationSeconds}, duration_seconds),
@@ -191,7 +196,16 @@ async function main() {
         sponsors               = ${JSON.stringify(parsed.sponsors)}::jsonb,
         rss_links              = ${JSON.stringify(parsed.links)}::jsonb,
         cross_refs             = ${JSON.stringify(parsed.crossRefs)}::jsonb,
-        publish_frequency_days = COALESCE(${freq}, publish_frequency_days)
+        publish_frequency_days = COALESCE(${freq}, publish_frequency_days),
+        rss_topic              = ${blocks.topic},
+        rss_guest_intro        = ${blocks.guestIntro},
+        rss_discover           = ${JSON.stringify(blocks.discover)}::jsonb,
+        rss_references         = ${JSON.stringify(blocks.references)}::jsonb,
+        rss_cross_episodes     = ${JSON.stringify(blocks.crossEpisodes)}::jsonb,
+        rss_promo              = ${blocks.promo ? JSON.stringify(blocks.promo) : null}::jsonb,
+        rss_chapters_ts        = ${JSON.stringify(blocks.chapters)}::jsonb,
+        youtube_url            = ${blocks.youtubeUrl},
+        cross_promo            = ${blocks.crossPromo}
       WHERE id = ${dbRow.id}
     `;
     updated++;
