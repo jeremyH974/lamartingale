@@ -1,12 +1,29 @@
-# Podcast Factory — Multi-tenant
+# Podcast Engine — Multi-tenant
 
 Plateforme data-driven générique (Couches 0-3 + deep content + multi-tenant).
 Instances actives :
 - **La Martingale** (tenant `lamartingale`, 313 eps, Matthieu Stefani / Orso Media, bleu #004cff)
-- **Génération Do It Yourself** (tenant `gdiy`, 533 eps, Matthieu Stefani / Cosa Vostra, noir + vert néon)
+- **Génération Do It Yourself** (tenant `gdiy`, 959 eps, Matthieu Stefani / Cosa Vostra, noir + vert néon)
+- **Hub Univers MS** (tenant `hub`, agregateur cross-podcast LM + GDIY)
 
 DB Neon unique, isolation par `tenant_id`. Un podcast = une config + un projet Vercel.
-Onboarding nouveau podcast : voir [`docs/NEW_PODCAST.md`](docs/NEW_PODCAST.md).
+Nouveau podcast en 3 commandes via `cli/index.ts` : `init` → `ingest` → `deploy`.
+Onboarding détaillé : voir [`docs/NEW_PODCAST.md`](docs/NEW_PODCAST.md).
+
+## Structure (post-M5 restructuration)
+
+```
+engine/       moteur générique (api, cache, ai, db, cross, scraping, config, __tests__)
+instances/    un fichier config par podcast + _template.config.ts
+frontend/     HTML statiques config-driven (v2, episode, hub, dashboard)
+cli/          CLI Factory (init, ingest, deploy, refresh, status)
+vercel-configs/ vercel-{id}.json par instance
+scripts/      outils one-shot (audits, debug, migrations ponctuelles)
+api/          entry Vercel (wrap engine/api.ts)
+src/          5 fichiers legacy (enrichment, scraper, scrape-media/bios, enrich-local)
+```
+
+Aliases TypeScript : `@engine/*` → `engine/*`, `@instances/*` → `instances/*`.
 
 ## Commandes
 
@@ -14,32 +31,42 @@ Toutes les commandes d'un tenant donné doivent être préfixées par `PODCAST_I
 Défaut = `lamartingale`.
 
 ```bash
+# CLI factory (workflow principal)
+npx tsx cli/index.ts status                           # état de tous les podcasts
+npx tsx cli/index.ts init --name "X" --rss "..." ...  # nouveau podcast
+npx tsx cli/index.ts ingest --podcast <id>            # pipeline ingestion
+npx tsx cli/index.ts deploy --podcast <id>            # deploy Vercel (re-link + prod)
+npx tsx cli/index.ts refresh --podcast <id>           # nouveaux eps uniquement
+
 # API locale (port 3001=LM, 3002=GDIY — voir .claude/launch.json)
-PODCAST_ID=gdiy PORT=3002 npx tsx src/api.ts
+PODCAST_ID=gdiy PORT=3002 npx tsx engine/api.ts
 
 # Ingestion (nouveau podcast / refresh)
-PODCAST_ID=<id> npx tsx src/ingest-rss.ts                     # --dry, --limit N, --feed-file <path>
-PODCAST_ID=<id> npx tsx src/ai/embeddings.ts                  # --force pour re-embed
-PODCAST_ID=<id> npx tsx src/ai/similarity.ts                  # ~10×N paires intra-tenant
-PODCAST_ID=<id> npx tsx src/ai/classify-predefined.ts --prune # mode='predefined'
-PODCAST_ID=<id> npx tsx src/ai/auto-taxonomy.ts               # mode='auto'
+PODCAST_ID=<id> npx tsx engine/scraping/ingest-rss.ts                     # --dry, --limit N, --feed-file <path>
+PODCAST_ID=<id> npx tsx engine/ai/embeddings.ts                  # --force pour re-embed
+PODCAST_ID=<id> npx tsx engine/ai/similarity.ts                  # ~10×N paires intra-tenant
+PODCAST_ID=<id> npx tsx engine/ai/classify-predefined.ts --prune # mode='predefined'
+PODCAST_ID=<id> npx tsx engine/ai/auto-taxonomy.ts               # mode='auto'
 
 # Migrations (one-shot, idempotent)
-npx tsx src/db/migrate-multi-tenant.ts          # M1 : ajoute tenant_id partout
-npx tsx src/db/migrate-rss-exhaustive.ts        # M3 : 13 colonnes + podcast_metadata
+npx tsx engine/db/migrate-multi-tenant.ts          # M1 : ajoute tenant_id partout
+npx tsx engine/db/migrate-rss-exhaustive.ts        # M3 : 13 colonnes + podcast_metadata
 
 # Scraping (LM uniquement — hasArticles=true)
-PODCAST_ID=lamartingale npx tsx src/scrape-media.ts
-PODCAST_ID=lamartingale npx tsx src/scrape-bios.ts
-PODCAST_ID=lamartingale npx tsx src/scrape-deep.ts
-PODCAST_ID=lamartingale npx tsx src/scrape-rss.ts
+PODCAST_ID=lamartingale npx tsx engine/scraping/scrape-media.ts
+PODCAST_ID=lamartingale npx tsx engine/scraping/scrape-bios.ts
+PODCAST_ID=lamartingale npx tsx engine/scraping/scrape-deep.ts
+PODCAST_ID=lamartingale npx tsx engine/scraping/scrape-rss.ts
 
 # Tests + build
 npx vitest run                     # 48 tests multi-tenant (tenant-isolation + rss-extractors)
 npm run build                      # tsc strict
 
 # Deploy Vercel (projet distinct par tenant, .vercel/project.json à re-linker)
-npm run deploy                     # = vercel --yes --prod, utilise vercel.json (config V2)
+# Prefere la CLI : npx tsx cli/index.ts deploy --podcast <id>
+npm run deploy:lm                  # LM -> vercel-configs/vercel-lamartingale.json
+npm run deploy:gdiy                # GDIY
+npm run deploy:hub                 # Hub
 ```
 
 ## Architecture
@@ -48,16 +75,16 @@ Arborescence détaillée : voir [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 
 ## God Nodes (ne pas casser)
 
-- `src/api.ts` — 30+ endpoints, charge DB via process.env.DATABASE_URL, expose `/api/config` (public tenant)
-- `src/db/schema.ts` — 10 tables scopées `tenant_id` + `podcast_metadata` (1 ligne / tenant)
-- `src/db/queries.ts` — Raw SQL pour Vercel, **toutes les queries filtrent `tenant()`**
-- `src/ai/search.ts` — hybridSearch() filtrée par tenant_id, support `{depth:'chapter'}`
-- `src/ai/dashboard.ts` — getDashboard() agrège 14 queries parallèles pour `/api/analytics/dashboard`
-- `src/cache.ts` — `getCached(key, ttl, fn)` + `clearCache(prefix?)`, tenant-namespaced, Vercel KV + LRU
-- `src/config/podcast.config.ts` — interface PodcastConfig (identité, branding, taxonomy, platforms, socials)
-- `src/config/index.ts` — REGISTRY + `getConfig()` résout depuis `PODCAST_ID`
-- `public/v2.html` — frontend unique config-driven (`/api/config` → DOM)
-- `public/v2-dashboard.html` — dashboard créateur (KPIs, insights, charts, D3 graph)
+- `engine/api.ts` — 30+ endpoints, charge DB via process.env.DATABASE_URL, expose `/api/config` (public tenant)
+- `engine/db/schema.ts` — 10 tables scopées `tenant_id` + `podcast_metadata` (1 ligne / tenant)
+- `engine/db/queries.ts` — Raw SQL pour Vercel, **toutes les queries filtrent `tenant()`**
+- `engine/ai/search.ts` — hybridSearch() filtrée par tenant_id, support `{depth:'chapter'}`
+- `engine/ai/dashboard.ts` — getDashboard() agrège 14 queries parallèles pour `/api/analytics/dashboard`
+- `engine/cache.ts` — `getCached(key, ttl, fn)` + `clearCache(prefix?)`, tenant-namespaced, Vercel KV + LRU
+- `engine/config/podcast.config.ts` — interface PodcastConfig (identité, branding, taxonomy, platforms, socials)
+- `engine/config/index.ts` — REGISTRY + `getConfig()` résout depuis `PODCAST_ID`
+- `frontend/v2.html` — frontend unique config-driven (`/api/config` → DOM)
+- `frontend/v2-dashboard.html` — dashboard créateur (KPIs, insights, charts, D3 graph)
 
 ## Endpoints deep content (ajoutés)
 - `GET /api/episodes/:id/chapters` — chapitres + extraits article
@@ -75,7 +102,7 @@ Arborescence détaillée : voir [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 - **Extraction / batch** : Anthropic Claude Haiku 4.5 (`claude-haiku-4-5-20251001`)
 - **Embeddings** : OpenAI `text-embedding-3-large` (pas d'alternative Anthropic — inchangé)
 - **Fallback auto** : `gpt-4o-mini` si `ANTHROPIC_API_KEY` absent
-- **Provider unique** : `src/ai/llm.ts` → `getLLM()` / `getLLMFast()` / `getModelId()`. **Ne jamais importer `@ai-sdk/anthropic` ou `@ai-sdk/openai` directement ailleurs** pour la génération texte.
+- **Provider unique** : `engine/ai/llm.ts` → `getLLM()` / `getLLMFast()` / `getModelId()`. **Ne jamais importer `@ai-sdk/anthropic` ou `@ai-sdk/openai` directement ailleurs** pour la génération texte.
 
 ## Décisions techniques clés
 
@@ -84,7 +111,7 @@ Arborescence détaillée : voir [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 3. **Embeddings enrichis** : title + abstract + article(2000c) + chapters + rss_description + takeaways + tags = ~4x plus de signal vs abstract seul
 4. **Deep scraping** : 312/313 épisodes ont article complet (avg 5000c), 290/313 chapitrage, 9901 liens classifiés (tool/company/linkedin/episode_ref/resource)
 5. **Multi-tenant** : 1 DB Neon partagée, isolation via `tenant_id` sur 10 tables + contraintes uniques composites `(tenant_id, X)`. 0 paire cross-tenant dans `episode_similarities`.
-6. **Frontend config-driven** : un seul `public/v2.html`, pilote tout (branding, tagline, platforms, socials, logo, CTA accent) via `/api/config`. Luminance WCAG pour choisir le texte hero/CTA.
+6. **Frontend config-driven** : un seul `frontend/v2.html`, pilote tout (branding, tagline, platforms, socials, logo, CTA accent) via `/api/config`. Luminance WCAG pour choisir le texte hero/CTA.
 7. **Vercel = 1 projet par tenant** : pas de subpath, pas de rewrites. `lamartingale-v2` et `gdiy-v2` partagent la même DB. V1 La Martingale archivée (public/archive/v1.html), une seule version maintenue.
 
 ## Dette technique ouverte (à investiguer)
@@ -111,13 +138,13 @@ Avant chaque tâche, auto-classifie dans HAIKU, SONNET ou OPUS.
 
 - **HAIKU (~5%)** — renommages, ajout console.log, fix lint/typo trivial, lookup d'un nom d'endpoint
 - **SONNET (~80%) — défaut** — nouvel endpoint, query SQL, composant HTML/D3, scraper, test de régression, enrichissement
-- **OPUS (~15%)** — modif `src/db/schema.ts` (god node), refactor cross-fichiers `api.ts ↔ queries.ts ↔ schema.ts`, debug divergence Vercel runtime vs local, décision archi dual-mode DB/JSON ou pgvector
+- **OPUS (~15%)** — modif `engine/db/schema.ts` (god node), refactor cross-fichiers `api.ts ↔ queries.ts ↔ schema.ts`, debug divergence Vercel runtime vs local, décision archi dual-mode DB/JSON ou pgvector
 
 ### Overrides projet
 - Toute modif d'un god node → OPUS minimum
 - Raw SQL vs Drizzle sur un endpoint existant → SONNET mais lire `queries.ts` d'abord
 - Migration schema (ajout colonne) → OPUS (impact migrate-json + migrate-enriched + regression)
-- Front (`public/v2.html`, `public/v2-dashboard.html`) → SONNET
+- Front (`frontend/v2.html`, `frontend/v2-dashboard.html`) → SONNET
 - Ajout script Python `scripts/` isolé → SONNET
 
 ### Protocole
