@@ -349,6 +349,14 @@ app.get('/api/analytics', async (_req, res) => {
   } catch (e: any) { console.error('[API] /api/analytics error:', e.message); res.status(500).json({ error: e.message }); }
 });
 
+app.get('/api/analytics/dashboard', async (_req, res) => {
+  try {
+    if (!process.env.DATABASE_URL) return res.status(503).json({ error: 'DB required' });
+    const { getDashboard } = await import('./ai/dashboard');
+    res.json(await getDashboard());
+  } catch (e: any) { console.error('[API] /api/analytics/dashboard error:', e.message); res.status(500).json({ error: e.message }); }
+});
+
 // --- Similar Episodes (Couche 2) ---
 
 app.get('/api/similar/:id', async (req, res) => {
