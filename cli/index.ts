@@ -245,7 +245,12 @@ async function cmdStatus(): Promise<void> {
       `) as any[];
       const hours = Math.round(Number(r.secs) / 3600);
       totEp += Number(r.eps); totHr += hours; totArt += Number(r.arts); totEmb += Number(r.embs);
-      const url = `${id}-v2.vercel.app`;
+      let url = `${id}-v2.vercel.app`;
+      try {
+        const cfg = require(path.join(INSTANCES_DIR, `${id}.config.ts`));
+        const c = cfg.default ?? cfg[`${id}Config`] ?? cfg.config;
+        if (c?.deploy?.domain) url = c.deploy.domain;
+      } catch { /* fallback au pattern par defaut */ }
       console.log(id.padEnd(22) + String(r.eps).padStart(10) + `${hours}h`.padStart(8) + String(r.arts).padStart(10) + `${r.embs}/${r.eps}`.padStart(10) + `  ${url}`);
     } catch (e: any) {
       console.log(id.padEnd(22) + 'ERR'.padStart(10) + ` — ${e.message}`);
