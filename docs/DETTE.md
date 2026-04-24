@@ -35,6 +35,47 @@ Fix tracé dans `fix(v2): make hero quiz stat clickable on tenants with qualityQ
 - **Résolu par Phase F** : Assistant et Quiz seront transformés en widgets inline sur la page épisode, "Pour vous" deviendra post-login. Graphe et Dashboard resteront URL-only (outils créateur/admin).
 - **Pas un bug** : état intentionnel pour que la nav publique soit cohérente avant la refonte UX complète.
 
+### Audit entry points post-c67f4bf
+
+Le commit `c67f4bf` a retiré 5 items nav (Assistant, Quiz, Graphe,
+Pour vous, Dashboard). **Quiz rétabli sur LM** via hero-stat cliquable
+(commit `7e5caa4`, pattern conditionnel `qualityQuizReady === true`).
+
+Reste à auditer pour chacun des 4 autres, **tenant par tenant** :
+
+- **Assistant** (`go('chat')`) : qualité prod ? Introduire flag `assistantReady` ?
+  Vérifs à faire : RAG fonctionne sur quel tenant (scope `/api/chat` + embeddings) ?
+  Qualité des réponses sur LM vs GDIY vs les 4 Orso ? Si prod sur LM seul,
+  même pattern que `qualityQuizReady` → tile hero cliquable conditionnelle
+  (ex. hero CTA "Poser une question à l'assistant →" déjà présent ligne 1335
+  de `v2.html`, peut-être suffisant — à vérifier).
+- **Graphe** (`go('graph')`) : qualité prod ? Introduire flag `graphReady` ?
+  Dépend directement de `pillarsReady` (le graphe colore par pillar). Sur
+  LP/PP/CCG (`pillarsReady=false`), le graphe afficherait le bucket
+  UNCLASSIFIED — à masquer ou à reskin neutre.
+- **Pour vous** (`go('reco')`) : déjà conditionné par `pillarsReady` (commit
+  `0a642ea` — placeholder "Thématiques en cours d'analyse" quand flag false).
+  Reste à rétablir un entry point UI sur tenants où `pillarsReady=true`
+  (LM, GDIY, Finscale). Sinon la route fonctionne mais personne n'y arrive.
+- **Dashboard** (`/v2-dashboard.html`) : Option Beta déjà planifiée
+  (absorption hub créateur, cf. section "Absorption dashboards créateur
+  dans hub"). Pas de réhabilitation nav publique prévue — reste URL-only
+  pour créateur.
+
+**Pattern commun** : introduire des flags `features.XReady` par feature
+secondaire + pattern hero-stat cliquable (ou hero CTA conditionnel) pour
+rétablir la découvrabilité. Propagation via `toPublicConfig()` +
+tests config + smoke test navigateur obligatoire (cf. "Règle smoke test
+pour flags UI").
+
+**Priorité** : **P2**, à faire avant démo Orso/Matthieu **si** la démo
+couvre ces features. Si scope démo limité à Accueil / Épisodes / Quiz /
+Hub agrégateur (top 4 livrables Rail 1 + Phase B), repousser à Phase F.
+
+**Autonomie** : lecture-seule + ajout DETTE. Aucun patch UI pour
+Assistant/Graphe/Reco sans GO explicite — arbitrage produit (qualité
+suffisante pour démo ?) dépend du retour Matthieu/Orso.
+
 ### Hub figé sur LM×GDIY (2/6 podcasts)
 - **État** : `frontend/hub.html` hardcode 2 cards + ternaires `'lamartingale' ? 'LM' : 'GDIY'` lignes 369/444/522. Les 4 autres tenants (LP, Finscale, PP, CCG) déployés mais absents du hub.
 - **Résolu par Phase C** : nouveau `/api/universe` + réécriture `hub.html` pour N tenants. Design doc dans `docs/design-api-universe.md`.
