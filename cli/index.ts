@@ -412,9 +412,9 @@ async function cmdStatus(): Promise<void> {
   const { neon } = require('@neondatabase/serverless') as typeof import('@neondatabase/serverless');
   const sql = neon(process.env.DATABASE_URL);
 
-  console.log('\n' + '-'.repeat(90));
-  console.log('Podcast'.padEnd(22) + 'Episodes'.padStart(10) + 'Hours'.padStart(8) + 'Articles'.padStart(10) + 'Embeds'.padStart(10) + '  URL');
-  console.log('-'.repeat(90));
+  console.log('\n' + '-'.repeat(108));
+  console.log('Podcast'.padEnd(22) + 'Episodes'.padStart(10) + 'Hours'.padStart(8) + 'Articles'.padStart(10) + 'Embeds'.padStart(10) + 'Flags'.padStart(12) + '  URL');
+  console.log('-'.repeat(108));
 
   let totEp = 0, totHr = 0, totArt = 0, totEmb = 0;
   for (const id of ids) {
@@ -429,19 +429,32 @@ async function cmdStatus(): Promise<void> {
       const hours = Math.round(Number(r.secs) / 3600);
       totEp += Number(r.eps); totHr += hours; totArt += Number(r.arts); totEmb += Number(r.embs);
       let url = `${id}-v2.vercel.app`;
+      let flags = '';
       try {
         const cfg = require(path.join(INSTANCES_DIR, `${id}.config.ts`));
         const c = cfg.default ?? cfg[`${id}Config`] ?? cfg.config;
         if (c?.deploy?.domain) url = c.deploy.domain;
+        // Résumé features : Q=qualityQuizReady, P=pillarsReady (maj=on, min=off)
+        const q = c?.features?.qualityQuizReady ? 'Q' : 'q';
+        const p = c?.features?.pillarsReady ? 'P' : 'p';
+        flags = `${q}${p}`;
       } catch { /* fallback au pattern par defaut */ }
-      console.log(id.padEnd(22) + String(r.eps).padStart(10) + `${hours}h`.padStart(8) + String(r.arts).padStart(10) + `${r.embs}/${r.eps}`.padStart(10) + `  ${url}`);
+      console.log(
+        id.padEnd(22) +
+        String(r.eps).padStart(10) +
+        `${hours}h`.padStart(8) +
+        String(r.arts).padStart(10) +
+        `${r.embs}/${r.eps}`.padStart(10) +
+        flags.padStart(12) +
+        `  ${url}`
+      );
     } catch (e: any) {
       console.log(id.padEnd(22) + 'ERR'.padStart(10) + ` — ${e.message}`);
     }
   }
-  console.log('-'.repeat(90));
+  console.log('-'.repeat(108));
   console.log('TOTAL'.padEnd(22) + String(totEp).padStart(10) + `${totHr}h`.padStart(8) + String(totArt).padStart(10) + `${totEmb}/${totEp}`.padStart(10));
-  console.log();
+  console.log('\n  Légende flags : Q=qualityQuizReady on / q=off · P=pillarsReady on / p=off\n');
 }
 
 // ============================================================================
