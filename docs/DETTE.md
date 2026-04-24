@@ -1,8 +1,23 @@
 # Dette technique — Podcast Engine
 
-État au **20 avril 2026**, après clôture session audit P0 univers MS (commit `c1a1d12`).
+État au **24 avril 2026**, après audit live univers MS (`docs/audit-univers-live.md`) + Phase B quick wins.
 
 Classement par priorité décroissante. **P0 = bloquant / P1 = forte valeur / P2 = améliorations / P3 = moyen terme**.
+
+---
+
+## État transitoire à tracer (post-B, pré-F)
+
+### Nav publique réduite à 5 items, routes Assistant/Quiz toujours actives
+- **Commit** : `refactor(nav): reduce public nav from 10 to 5 items`
+- **État** : `frontend/v2.html` nav = Accueil / Épisodes / Parcours / Experts / Recherche. Les 5 items retirés (Assistant, Quiz, Graphe, Pour vous, Dashboard) ne sont plus dans la nav publique.
+- **Mais** : les sections HTML correspondantes (`#v-chat`, `#v-quiz`, `#v-graph`, `#v-reco`) et leurs routes JS `go('chat')` / `go('quiz')` / `go('graph')` / `go('reco')` restent fonctionnelles. Accessibles par lien direct ou bouton interne.
+- **Résolu par Phase F** : Assistant et Quiz seront transformés en widgets inline sur la page épisode, "Pour vous" deviendra post-login. Graphe et Dashboard resteront URL-only (outils créateur/admin).
+- **Pas un bug** : état intentionnel pour que la nav publique soit cohérente avant la refonte UX complète.
+
+### Hub figé sur LM×GDIY (2/6 podcasts)
+- **État** : `frontend/hub.html` hardcode 2 cards + ternaires `'lamartingale' ? 'LM' : 'GDIY'` lignes 369/444/522. Les 4 autres tenants (LP, Finscale, PP, CCG) déployés mais absents du hub.
+- **Résolu par Phase C** : nouveau `/api/universe` + réécriture `hub.html` pour N tenants. Design doc dans `docs/design-api-universe.md`.
 
 ---
 
