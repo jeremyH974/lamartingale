@@ -236,6 +236,37 @@ export const crossPodcastGuests = pgTable('cross_podcast_guests', {
   updatedAt: timestamp('updated_at').defaultNow(),
 });
 
+// ============================================================================
+// Auth Phase E — magic-link passwordless + podcast_access scoping
+// ============================================================================
+
+// 1 ligne = 1 droit d'accès (email × tenant).
+// role='viewer' par défaut ; role='root' = bypass filtre (voit tous les tenants).
+// Pour un utilisateur root, on insère 1 ligne sentinel avec tenant_id='*'
+// (convention : tenant_id='*' signifie "tous les tenants").
+export const podcastAccess = pgTable('podcast_access', {
+  id: serial('id').primaryKey(),
+  email: text('email').notNull(),
+  tenantId: text('tenant_id').notNull(), // '*' pour root
+  role: text('role').notNull().default('viewer'), // 'viewer' | 'root'
+  createdAt: timestamp('created_at').defaultNow(),
+}, (table) => [
+  unique('uq_podcast_access_email_tenant').on(table.email, table.tenantId),
+  index('idx_podcast_access_email').on(table.email),
+]);
+
+// Magic-link one-shot : envoyé par email, consommé en GET /api/auth/consume.
+// TTL 15 min géré côté app (expires_at).
+export const magicLink = pgTable('magic_link', {
+  token: text('token').primaryKey(), // crypto.randomBytes(32).toString('hex')
+  email: text('email').notNull(),
+  expiresAt: timestamp('expires_at').notNull(),
+  consumed: boolean('consumed').notNull().default(false),
+  createdAt: timestamp('created_at').defaultNow(),
+}, (table) => [
+  index('idx_magic_link_email').on(table.email),
+]);
+
 export const episodeSimilarities = pgTable('episode_similarities', {
   id: serial('id').primaryKey(),
   tenantId: tenantId(),

@@ -9,6 +9,11 @@ import { getRecommendations } from './types';
 import * as dbQueries from './db/queries';
 import { getConfig, toPublicConfig } from './config';
 import { getCached, clearCache, cacheStats } from './cache';
+import { sendMagicLink } from './auth/resend';
+import { createMagicLink, consumeMagicLink } from './auth/magic-link';
+import { sign as signSession, cookieSetHeader, cookieClearHeader } from './auth/session';
+import { getAccessScope } from './auth/access';
+import { requireHubAuth, optionalHubAuth } from './auth/middleware';
 
 const app = express();
 app.use(cors());
@@ -893,19 +898,150 @@ app.get('/api/cross/analytics', async (_req, res) => {
   } catch (e: any) { console.error('[API] /api/cross/analytics error:', e.message); res.status(500).json({ error: e.message }); }
 });
 
-// --- Hub Univers MS ---------------------------------------------------------
-// Agrégat des 6 tenants actifs (hors `hub`) pour `frontend/hub.html`.
-// Cache 1h — invalidation via /api/cache/clear?prefix=universe (ADMIN_TOKEN requis).
-app.get('/api/universe', async (_req, res) => {
+// ============================================================================
+// Auth — Phase E (magic link passwordless + podcast_access scoping)
+// ============================================================================
+
+function isValidEmail(s: unknown): s is string {
+  if (typeof s !== 'string') return false;
+  const v = s.trim();
+  if (v.length < 5 || v.length > 320) return false;
+  // RFC 5322 light — suffisant pour une input de formulaire public.
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+}
+
+function baseUrl(req: express.Request): string {
+  const envBase = process.env.AUTH_BASE_URL;
+  if (envBase) return envBase.replace(/\/$/, '');
+  const proto = (req.headers['x-forwarded-proto'] as string) || req.protocol || 'https';
+  const host = (req.headers['x-forwarded-host'] as string) || req.headers.host || 'localhost';
+  return `${proto}://${host}`;
+}
+
+// POST /api/auth/request-link — body { email } → envoie le magic-link.
+// Réponse neutre (pas d'énumération : 200 même si l'email n'a pas d'accès,
+// l'autorisation est vérifiée au moment du consume).
+app.post('/api/auth/request-link', async (req, res) => {
   try {
     if (!process.env.DATABASE_URL) return res.status(503).json({ error: 'DB required' });
-    const result = await getCached('universe', 3600, async () => {
+    const email = (req.body?.email || '').toString();
+    if (!isValidEmail(email)) return res.status(400).json({ error: 'invalid_email' });
+    const normalizedEmail = email.toLowerCase().trim();
+    const { token } = await createMagicLink(normalizedEmail);
+    const result = await sendMagicLink({ email: normalizedEmail, token, baseUrl: baseUrl(req) });
+    // En mode noop (dev sans RESEND_API_KEY) on expose le lien pour debug.
+    const payload: any = { ok: true, sent: result.sent, provider: result.provider };
+    if (!result.sent && process.env.NODE_ENV !== 'production') payload.dev_link = result.link;
+    if (result.error) payload.error = result.error;
+    res.json(payload);
+  } catch (e: any) { console.error('[auth] request-link error:', e.message); res.status(500).json({ error: e.message }); }
+});
+
+// GET /api/auth/consume?token=... — consomme le token + set cookie + redirige
+// vers `next` (ou `/`). Si Accept: application/json → renvoie JSON à la place.
+app.get('/api/auth/consume', async (req, res) => {
+  try {
+    if (!process.env.DATABASE_URL) return res.status(503).json({ error: 'DB required' });
+    const token = (req.query.token as string) || '';
+    const wantsJson = (req.headers.accept || '').includes('application/json');
+    const consumed = await consumeMagicLink(token);
+    if (!consumed) {
+      if (wantsJson) return res.status(400).json({ error: 'invalid_or_expired_token' });
+      return res.redirect(302, '/login?error=invalid_or_expired_token');
+    }
+    // Vérifier que l'email a bien un accès (évite d'émettre une session inutile).
+    const scope = await getAccessScope(consumed.email);
+    if (!scope.isRoot && scope.tenantIds.length === 0) {
+      if (wantsJson) return res.status(403).json({ error: 'no_access' });
+      return res.redirect(302, '/login?error=no_access');
+    }
+    const { cookie, expiresAt } = signSession(consumed.email);
+    res.setHeader('Set-Cookie', cookieSetHeader(cookie, expiresAt));
+    if (wantsJson) return res.json({ ok: true, email: consumed.email, isRoot: scope.isRoot, tenantIds: scope.tenantIds });
+    const next = (req.query.next as string) || '/';
+    res.redirect(302, next);
+  } catch (e: any) { console.error('[auth] consume error:', e.message); res.status(500).json({ error: e.message }); }
+});
+
+app.post('/api/auth/logout', (_req, res) => {
+  res.setHeader('Set-Cookie', cookieClearHeader());
+  res.json({ ok: true });
+});
+
+// GET /api/auth/me — retourne la session active (null si déconnecté).
+app.get('/api/auth/me', optionalHubAuth, (req, res) => {
+  if (!req.session || !req.accessScope) return res.json({ authenticated: false });
+  res.json({
+    authenticated: true,
+    email: req.session.email,
+    expiresAt: req.session.expiresAt,
+    isRoot: req.accessScope.isRoot,
+    tenantIds: req.accessScope.tenantIds,
+  });
+});
+
+// --- Hub Univers MS ---------------------------------------------------------
+// Agrégat des 6 tenants actifs (hors `hub`) pour `frontend/hub.html`.
+// Protégé : requireHubAuth → 401 si pas de session, 403 si 0 accès.
+// Cache 1h (contenu universe brut partagé) puis filtré per-session à la sortie
+// — le scoping est dynamique, donc on ne cache pas la version filtrée.
+// Invalidation brute via /api/cache/clear?prefix=universe (ADMIN_TOKEN requis).
+app.get('/api/universe', requireHubAuth, async (req, res) => {
+  try {
+    if (!process.env.DATABASE_URL) return res.status(503).json({ error: 'DB required' });
+    const full = await getCached('universe', 3600, async () => {
       const { getUniverse } = await import('./universe');
       return await getUniverse();
     });
-    res.json(result);
+    const scope = req.accessScope!;
+    if (scope.isRoot) {
+      // Bypass filtre : root voit tout.
+      return res.json(full);
+    }
+    // Filtrage : garde uniquement les tenants autorisés. Re-calcule totals
+    // + cross refs/pairStats/guests restreints à cet ensemble.
+    const allowed = new Set(scope.tenantIds);
+    const filtered = filterUniverseByTenants(full as any, allowed);
+    res.json(filtered);
   } catch (e: any) { console.error('[API] /api/universe error:', e.message); res.status(500).json({ error: e.message }); }
 });
+
+// Helper pur (testable) — filtre la réponse /api/universe à un sous-ensemble de tenants.
+export function filterUniverseByTenants(full: any, allowed: Set<string>): any {
+  const podcasts = (full.podcasts || []).filter((p: any) => allowed.has(p.id));
+  const pairStats = (full.cross?.pairStats || []).filter((s: any) => allowed.has(s.from) && allowed.has(s.to));
+  const episodeRefs = (full.cross?.episodeRefs || []).filter((r: any) =>
+    allowed.has(r.from?.podcast) && allowed.has(r.to?.podcast),
+  );
+  const guests = (full.cross?.guests || []).filter((g: any) =>
+    (g.podcasts || []).some((p: string) => allowed.has(p)),
+  ).map((g: any) => ({
+    ...g,
+    appearances: (g.appearances || []).filter((a: any) => allowed.has(a.podcast)),
+  })).filter((g: any) => g.appearances.length > 0);
+
+  const totalEpisodes = podcasts.reduce((s: number, p: any) => s + (p.stats?.episodes || 0), 0);
+  const totalHours = podcasts.reduce((s: number, p: any) => s + (p.stats?.hours || 0), 0);
+  const totalGuests = podcasts.reduce((s: number, p: any) => s + (p.stats?.guests || 0), 0);
+  const crossEpisodeRefs = pairStats.reduce((s: number, p: any) => s + (p.count || 0), 0);
+
+  return {
+    ...full,
+    universe: {
+      ...full.universe,
+      totals: {
+        podcasts: podcasts.length,
+        episodes: totalEpisodes,
+        hours: totalHours,
+        guests: totalGuests,
+        crossGuests: guests.length,
+        crossEpisodeRefs,
+      },
+    },
+    podcasts,
+    cross: { guests, episodeRefs, pairStats },
+  };
+}
 
 // --- Enriched Episode Data ---
 
