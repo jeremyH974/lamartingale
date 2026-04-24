@@ -53,6 +53,15 @@ describe('isUtilityPath', () => {
     '/categories',
     '/author/matthieu-stefani',
     '/authors',
+    // Listings épisodes/podcasts (R3 extension Rail 2)
+    '/episodes',
+    '/episodes/',
+    '/episode',
+    '/episode/',
+    '/podcasts',
+    '/podcasts/',
+    '/podcast',
+    '/podcast/',
   ];
   for (const p of utilityPaths) {
     it(`"${p}" est utilitaire`, () => expect(isUtilityPath(p)).toBe(true));
@@ -64,6 +73,9 @@ describe('isUtilityPath', () => {
     '/contactless', // pas /contact strict
     '/tagalog', // pas /tag/*
     '/categoryst', // pas /category/*
+    // Slug non-vide derrière listing (≠ page index)
+    '/episodes/some-slug',
+    '/podcast/anton-osika-vf',
   ];
   for (const p of nonUtility) {
     it(`"${p}" n'est PAS utilitaire`, () => expect(isUtilityPath(p)).toBe(false));

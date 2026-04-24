@@ -42,6 +42,9 @@ const UTILITY_PATH_PATTERNS: RegExp[] = [
   /^\/search\/?$/i,
   // Listings taxonomiques (prefix match : /tag/foo, /category/bar, /author/john)
   /^\/(?:tag|tags|category|categories|author|authors)(?:\/|$)/i,
+  // Listings épisodes/podcasts (sans slug derrière : /episodes/, /podcast, etc.)
+  // — page index de l'archive, pas une fiche épisode. Extension R3 Rail 2.
+  /^\/(?:episodes?|podcasts?)\/?$/i,
 ];
 
 /**
