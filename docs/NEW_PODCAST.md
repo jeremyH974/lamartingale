@@ -61,8 +61,17 @@ Vérifier :
 
 ```bash
 npx tsx cli/index.ts refresh --podcast legratin   # nouveaux eps + re-embeddings + re-similarités
-npx tsx cli/index.ts status                       # état de tous les podcasts (count DB)
+npx tsx cli/index.ts status                       # état de tous les podcasts (count DB + Flags QP/qP/qp/--)
+npx tsx cli/index.ts deploy --all                 # redeploy TOUS les tenants (utile après modif frontend/v2.html commun)
+npx tsx cli/index.ts deploy --all --exclude hub   # redeploy tous sauf hub
 ```
+
+La colonne **Flags** de `status` indique l'état `features.qualityQuizReady` / `features.pillarsReady` :
+- `QP` — quiz ready + pillars ready
+- `qP` — pillars ready, quiz template (attend Rail 1-bis)
+- `Qp` — quiz ready, pillars non ready
+- `--` — ni l'un ni l'autre
+
 
 ## Adapter la config manuellement
 
@@ -73,6 +82,10 @@ Ouvrir `instances/legratin.config.ts` pour affiner :
 - `socials` (Instagram, LinkedIn, Twitter, TikTok)
 - `taxonomy.mode` : `'auto'` (clustering LLM) ou `'predefined'` (piliers fixes)
 - `branding.secondaryColor`, `logoUrl`
+- `coHosts` (optionnel) : liste de noms à exclure des stats invités (en plus du `host` principal). Ex. GDIY : `['Amaury de Tonquédec']`. Alimente `HOSTS_NORMALIZED` via `deriveHostFilters()` (`engine/db/cross-queries.ts`).
+- `features` (optionnel) : flags propagés vers `/api/config` puis `window.PODCAST_CFG.features` :
+  - `qualityQuizReady: true` — active la tile hero quiz cliquable (défaut `false`, à activer uniquement après régénération Rail 1 qualité sur ce tenant)
+  - `pillarsReady: true` — active section "Pour vous" + dots piliers sur carte épisode (défaut `false` si bucket UNCLASSIFIED > 10% après clustering)
 
 ## Troubleshooting
 
