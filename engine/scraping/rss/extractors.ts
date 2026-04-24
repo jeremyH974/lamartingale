@@ -11,6 +11,7 @@
  * object plat). Jamais d'I/O.
  */
 import { isEpisodeRefCandidate } from '../../classify/episode-ref-rules';
+import { isToolUrl } from '../../classify/tool-rules';
 
 // ============================================================================
 // Low-level helpers
@@ -303,7 +304,9 @@ const LINK_PATTERNS: { type: LinkType; rx: RegExp }[] = [
   { type: 'cross_podcast_ref',  rx: /(?:podcasts\.apple\.com|spotify\.com\/(?:episode|show)|deezer\.com\/(?:podcast|episode)|audiomeans\.fr|ausha\.co)\//i },
 ];
 
-const TOOL_DOMAINS = /(notion\.so|airtable\.com|figma\.com|github\.com|stripe\.com|typeform\.com|mailchimp\.com|hubspot\.com)/i;
+// TOOL_DOMAINS porté dans engine/classify/tool-rules.ts (D3 — classifieur
+// commun). Fusion avec la liste fintech de scrape-deep : GDIY/LP/PP/CCG
+// reçoivent désormais aussi `link_type='tool'` sur notion/airtable/stripe/etc.
 
 /**
  * Extrait le hostname canonique (sans www.) d'une URL ou null si parsing échoue.
@@ -322,7 +325,7 @@ export function websiteHostFromUrl(website: string | null | undefined): string |
 export function classifyUrl(url: string, websiteHost?: string): LinkType {
   if (!url) return 'other';
   for (const p of LINK_PATTERNS) if (p.rx.test(url)) return p.type;
-  if (TOOL_DOMAINS.test(url)) return 'tool';
+  if (isToolUrl(url)) return 'tool';
   // episode_ref dynamique : 3 règles cumulées (Option D, Rail 1).
   // Voir engine/classify/episode-ref-rules.ts — R1 host match, R2 non-racine,
   // R3 pas de path utilitaire universel (/contact, /about, /tag/*, etc.).

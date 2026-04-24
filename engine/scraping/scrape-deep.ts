@@ -42,15 +42,9 @@ const PAUSE_MS = 5 * 60_000;
 // ---------------------------------------------------------------------------
 // Tool / company domain classification
 // ---------------------------------------------------------------------------
-const TOOL_DOMAINS = [
-  'trade-republic.com', 'boursorama.com', 'degiro.com', 'saxoinvestor.fr', 'saxo.com',
-  'fortuneo.fr', 'interactivebrokers', 'revolut.com', 'n26.com',
-  'binance.com', 'coinbase.com', 'kraken.com', 'etoro.com', 'bitpanda.com',
-  'yomoni.fr', 'nalo.fr', 'goodvest.fr', 'ramify.fr', 'cashbee.fr',
-  'bourse-direct.fr', 'tradingview.com', 'morningstar.fr', 'quantalys.com',
-  'ledger.com', 'metamask.io', 'linxea.com', 'meilleurtaux.com',
-  'moneyvox.fr', 'amf-france.org', 'service-public.fr', 'impots.gouv.fr',
-];
+// TOOL_DOMAINS porté vers engine/classify/tool-rules.ts (D3 — classifieur
+// commun) : fusion fintech (ex-scrape-deep) + SaaS (ex-rss/extractors).
+import { isToolDomain } from '../classify/tool-rules';
 
 const SOCIAL_NON_LINKEDIN = ['twitter.com', 'x.com', 'facebook.com', 'instagram.com', 'youtube.com', 'tiktok.com'];
 
@@ -64,7 +58,7 @@ function classifyLink(url: string): LinkType {
     if (host.includes('linkedin.com') && u.pathname.startsWith('/in/')) return 'linkedin';
     // episode_ref = lien vers le site du podcast lui-même (issu de la config)
     if (host === WEBSITE_HOST) return 'episode_ref';
-    if (TOOL_DOMAINS.some((t) => host.includes(t))) return 'tool';
+    if (isToolDomain(host)) return 'tool';
     if (SOCIAL_NON_LINKEDIN.some((s) => host.includes(s))) return 'resource';
 
     // Heuristique "company" : domaine court (2 labels), pas social
