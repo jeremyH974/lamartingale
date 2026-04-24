@@ -1303,7 +1303,7 @@
       </div>
       <nav class="nav" id="main-nav">
         <button class="nav-link active" onclick="go('home',this)">Accueil</button>
-        <button class="nav-link" onclick="go('episodes',this)">Episodes</button>
+        <button class="nav-link" onclick="go('episodes',this)">Épisodes</button>
         <button class="nav-link" onclick="go('paths',this)">Parcours</button>
         <button class="nav-link" onclick="go('experts',this)">Experts</button>
         <button class="nav-link" onclick="go('search',this)">Recherche</button>
@@ -1323,15 +1323,15 @@
   <!-- HERO (home only) -->
   <section class="hero" id="hero-section">
     <div class="hero-inner">
-      <h1 id="hero-h1">Prenez le controle<br>de votre argent</h1>
-      <p id="hero-p">Le premier podcast francais sur les finances personnelles, transforme en plateforme educative interactive. Recherche semantique IA, assistant conversationnel, quiz adaptatif, 310 episodes analyses.</p>
+      <h1 id="hero-h1">Prenez le contrôle<br>de votre argent</h1>
+      <p id="hero-p">Le premier podcast français sur les finances personnelles, transformé en plateforme éducative interactive. Recherche sémantique IA, assistant conversationnel, quiz adaptatif, 310 épisodes analysés.</p>
       <div class="hero-stats">
-        <div><div class="hero-stat-value" id="hs-ep">307</div><div class="hero-stat-label">episodes</div></div>
+        <div><div class="hero-stat-value" id="hs-ep">307</div><div class="hero-stat-label">épisodes</div></div>
         <div><div class="hero-stat-value" id="hs-ex">28</div><div class="hero-stat-label">experts</div></div>
         <div><div class="hero-stat-value" id="hs-q">614</div><div class="hero-stat-label">quiz</div></div>
         <div><div class="hero-stat-value" id="hs-p">6</div><div class="hero-stat-label">parcours</div></div>
       </div>
-      <button class="hero-cta" onclick="go('chat')">Poser une question a l'assistant →</button>
+      <button class="hero-cta" onclick="go('chat')">Poser une question à l'assistant →</button>
     </div>
   </section>
 
@@ -1342,7 +1342,7 @@
     <div class="view active" id="v-home">
       <section class="section">
         <div class="section-header">
-          <div><div class="section-title">Parcours pedagogiques</div><div class="section-subtitle">Progressez etape par etape, de debutant a expert</div></div>
+          <div><div class="section-title">Parcours pédagogiques</div><div class="section-subtitle">Progressez étape par étape, de débutant à expert</div></div>
           <button class="section-action" onclick="go('paths')">Voir tous les parcours →</button>
         </div>
         <div class="paths-grid" id="home-paths"></div>
@@ -1351,7 +1351,7 @@
       <section class="section">
         <div class="section-header">
           <div><div class="section-title">Derniers episodes</div><div class="section-subtitle" id="home-ep-subtitle">Les plus recents</div></div>
-          <button class="section-action" onclick="go('episodes')">Tous les episodes →</button>
+          <button class="section-action" onclick="go('episodes')">Tous les épisodes →</button>
         </div>
         <div class="episodes-grid" id="home-episodes"></div>
       </section>
@@ -1368,10 +1368,10 @@
     <!-- EPISODES -->
     <div class="view" id="v-episodes">
       <section class="section">
-        <div class="section-title" style="margin-bottom:20px">Tous les episodes</div>
+        <div class="section-title" style="margin-bottom:20px">Tous les épisodes</div>
         <div class="search-wrap">
           <span class="search-icon">🔍</span>
-          <input class="search-input" type="text" placeholder="Rechercher un episode, expert ou theme..." oninput="searchEp(this.value)" id="search-in">
+          <input class="search-input" type="text" placeholder="Rechercher un épisode, expert ou thème..." oninput="searchEp(this.value)" id="search-in">
         </div>
         <div class="filters" id="ep-filters"></div>
         <div id="ep-count" style="font-size:13px;color:var(--text-muted);margin-bottom:14px"></div>
@@ -1383,8 +1383,8 @@
     <!-- PATHS -->
     <div class="view" id="v-paths">
       <section class="section">
-        <div class="section-title" style="margin-bottom:4px">Parcours pedagogiques</div>
-        <div class="section-subtitle" style="margin-bottom:28px">Chaque parcours vous guide a travers les meilleurs episodes, dans l'ordre optimal</div>
+        <div class="section-title" style="margin-bottom:4px">Parcours pédagogiques</div>
+        <div class="section-subtitle" style="margin-bottom:28px">Chaque parcours vous guide à travers les meilleurs épisodes, dans l'ordre optimal</div>
         <div class="paths-grid" id="paths-all" style="grid-template-columns:repeat(2,1fr)"></div>
       </section>
     </div>
@@ -1392,7 +1392,7 @@
     <!-- EXPERTS -->
     <div class="view" id="v-experts">
       <section class="section">
-        <div class="section-title" style="margin-bottom:28px">Experts recurrents</div>
+        <div class="section-title" style="margin-bottom:28px">Experts récurrents</div>
         <div class="experts-grid" id="experts-all"></div>
       </section>
     </div>
@@ -1400,11 +1400,11 @@
     <!-- SEARCH (hybrid) -->
     <div class="view" id="v-search">
       <section class="section">
-        <div class="section-title" style="margin-bottom:4px">Recherche semantique</div>
-        <div class="section-subtitle" style="margin-bottom:20px">Trouvez les episodes par sens, pas seulement par mots-cles</div>
+        <div class="section-title" style="margin-bottom:4px">Recherche sémantique</div>
+        <div class="section-subtitle" style="margin-bottom:20px">Trouvez les épisodes par sens, pas seulement par mots-clés</div>
         <div class="search-wrap">
           <span class="search-icon">🔍</span>
-          <input class="search-input" type="text" placeholder="Ex: comment investir en SCPI quand on debute..." id="hybrid-search-input" onkeydown="if(event.key==='Enter')doHybridSearch()">
+          <input class="search-input" type="text" placeholder="Ex: comment investir en SCPI quand on débute..." id="hybrid-search-input" onkeydown="if(event.key==='Enter')doHybridSearch()">
         </div>
         <div style="display:flex;gap:8px;margin-bottom:20px">
           <button class="reco-btn" style="width:auto;padding:10px 28px" onclick="doHybridSearch()">Rechercher</button>
@@ -1439,7 +1439,7 @@
           <div class="section-title">Quiz adaptatif</div>
           <span title="Les questions de ce quiz sont générées par intelligence artificielle à partir du contenu des épisodes. Corrigez-moi si vous repérez une erreur." style="display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:999px;background:var(--blue-50);color:var(--blue);font-size:10.5px;font-weight:600;letter-spacing:0.4px;text-transform:uppercase;border:1px solid var(--blue-100);cursor:help">⚡ Généré par IA</span>
         </div>
-        <div class="section-subtitle" style="margin-bottom:20px">L'IA adapte la difficulte et le theme a votre niveau. Plus vous repondez, plus les questions sont pertinentes.</div>
+        <div class="section-subtitle" style="margin-bottom:20px">L'IA adapte la difficulté et le thème à votre niveau. Plus vous répondez, plus les questions sont pertinentes.</div>
         <div class="quiz-wrap" id="quiz-area"></div>
       </section>
     </div>
@@ -1465,9 +1465,9 @@
             <div style="font-size:16px;font-weight:600;margin-bottom:20px">Votre profil investisseur</div>
             <label class="form-label">Niveau d'experience</label>
             <select class="form-select" id="r-exp">
-              <option value="DEBUTANT">Debutant</option>
-              <option value="INTERMEDIAIRE" selected>Intermediaire</option>
-              <option value="AVANCE">Avance</option>
+              <option value="DEBUTANT">Débutant</option>
+              <option value="INTERMEDIAIRE" selected>Intermédiaire</option>
+              <option value="AVANCE">Avancé</option>
             </select>
             <label class="form-label">Centres d'interet</label>
             <div class="chips-grid" id="r-pillars"></div>
@@ -1487,7 +1487,7 @@
     <div class="footer-inner">
       <div>
         <div class="footer-brand">La Martingale</div>
-        <div class="footer-desc">Le premier podcast natif francais sur les finances personnelles. Un episode chaque semaine pour apprendre a investir et gerer son argent.</div>
+        <div class="footer-desc">Le premier podcast natif français sur les finances personnelles. Un épisode chaque semaine pour apprendre à investir et gérer son argent.</div>
       </div>
       <div class="footer-links" id="footer-links"></div>
     </div>
@@ -1766,9 +1766,9 @@
     function buildEpFilters(stats) {
       document.getElementById('ep-filters').innerHTML = `
         <button class="filter-pill active" onclick="setF(null,null,this)">Tous</button>
-        <button class="filter-pill" onclick="setF('DEBUTANT',null,this)">Debutant</button>
-        <button class="filter-pill" onclick="setF('INTERMEDIAIRE',null,this)">Intermediaire</button>
-        <button class="filter-pill" onclick="setF('AVANCE',null,this)">Avance</button>
+        <button class="filter-pill" onclick="setF('DEBUTANT',null,this)">Débutant</button>
+        <button class="filter-pill" onclick="setF('INTERMEDIAIRE',null,this)">Intermédiaire</button>
+        <button class="filter-pill" onclick="setF('AVANCE',null,this)">Avancé</button>
         ${Object.entries(PN).map(([k,v])=>`<button class="filter-pill" onclick="setF(null,'${k}',this)" style="border-left:3px solid ${PC[k]}">${v}</button>`).join('')}
       `;
     }
@@ -1801,8 +1801,8 @@
     async function searchEp(q) {
       if(!q||q.length<2) { renderEpList(); return; }
       const d=await F(`${API}/search?q=${encodeURIComponent(q)}`);
-      document.getElementById('ep-list').innerHTML=(d.episodes||[]).slice(0,20).map(ep=>epCard(ep)).join('')||`<div style="color:var(--text-muted);padding:20px">Aucun resultat</div>`;
-      document.getElementById('ep-count').textContent=(d.episodes||[]).length+' resultats';
+      document.getElementById('ep-list').innerHTML=(d.episodes||[]).slice(0,20).map(ep=>epCard(ep)).join('')||`<div style="color:var(--text-muted);padding:20px">Aucun résultat</div>`;
+      document.getElementById('ep-count').textContent=(d.episodes||[]).length+' résultats';
     }
 
     // ===== PATHS VIEW =====
@@ -1863,12 +1863,12 @@
       const q = document.getElementById('hybrid-search-input').value.trim();
       if (!q || q.length < 2) return;
       const el = document.getElementById('hybrid-search-results');
-      el.innerHTML = '<div style="color:var(--text-muted);padding:20px">Recherche semantique en cours...</div>';
+      el.innerHTML = '<div style="color:var(--text-muted);padding:20px">Recherche sémantique en cours...</div>';
 
       try {
         const d = await F(`${API}/search/hybrid?q=${encodeURIComponent(q)}&limit=10&depth=chapter`);
         el.innerHTML = `
-          <div class="search-timing">${d.results.length} resultats en ${d.timing_ms}ms (recherche hybride semantique + lexicale)</div>
+          <div class="search-timing">${d.results.length} résultats en ${d.timing_ms}ms (recherche hybride sémantique + lexicale)</div>
           ${d.results.map(r => {
             const chapLine = r.best_chapter ? `
               <div style="margin-top:6px;padding:8px 10px;background:var(--blue-50);border-left:2px solid var(--blue);border-radius:4px;font-size:12px;color:var(--text-secondary)">
@@ -1892,7 +1892,7 @@
           }).join('')}
         `;
       } catch (e) {
-        el.innerHTML = `<div style="color:var(--danger);padding:20px">Erreur : ${e.message}. La recherche semantique necessite la base de donnees.</div>`;
+        el.innerHTML = `<div style="color:var(--danger);padding:20px">Erreur : ${e.message}. La recherche sémantique nécessite la base de données.</div>`;
       }
     }
 
