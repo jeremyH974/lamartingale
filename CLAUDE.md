@@ -146,7 +146,7 @@ Règles explicites pour toute exécution de `npx tsx scripts/*` ou `npx tsx engi
 Convention : tout nouveau script write doit accepter un flag `--dry` (default true) et `--write` (opt-in explicite). Un script qui écrit par défaut est un bug.
 
 ## Dette technique ouverte (à investiguer)
-- **22 épisodes (#126..#279) avec slug="" en BDD** → titres non-canoniques ("Crise SCPI", "5 regles or investissement"). Articles présumés exister sur lamartingale.io sous un autre slug. Script à écrire : re-crawler le listing pour retrouver les vrais slugs, puis scrape-deep --episode.
+- **16 épisodes LM avec slug="" en BDD** (post-Rail 2 backfill 24/04/26) → dette irrécupérable via listing actuel `lamartingale.io/listes-des-episodes/?category=tous` (331 eps listés, 16 absents). Eps concernés : #126, #173, #178, #192, #208, #209, #213, #218, #219, #224, #225, #228, #229, #230, #231, #232. Probablement archivés/refondus sur le site. Script `scripts/backfill-slugs-lm.ts` a matché 1/17 (#227 → `investir-dans-lart-contemporain...`). Remaining = validation humaine (numéro ep ↔ URL par date de pub).
 - **Divergence `episodes.guest_bio` (88/310) vs `guests.bio` (potentiellement ~288/310)** — probable duplication/dénormalisation obsolète. Audit à faire avant d'en supprimer une des deux colonnes.
 - **4 épisodes sans match RSS** (#307, #295, #291, #174) — désynchronisation titre site/RSS. Voir `docs/feedback-orso-media.md`.
 - **Feedback Orso Media** prêt dans `docs/feedback-orso-media.md` à envoyer à Matthieu Stefani quand l'occasion se présente.
