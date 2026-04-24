@@ -19,6 +19,11 @@ Classement par priorité décroissante. **P0 = bloquant / P1 = forte valeur / P2
 - **État** : `frontend/hub.html` hardcode 2 cards + ternaires `'lamartingale' ? 'LM' : 'GDIY'` lignes 369/444/522. Les 4 autres tenants (LP, Finscale, PP, CCG) déployés mais absents du hub.
 - **Résolu par Phase C** : nouveau `/api/universe` + réécriture `hub.html` pour N tenants. Design doc dans `docs/design-api-universe.md`.
 
+### Search multi-tenant hub retirée en Phase C
+- **Décision** : le hub V2 (Phase C) n'aura pas de search bar globale. Les créateurs (audience hub) ont rarement besoin de recherche cross-podcasts ; l'user qui arrive sur un card → va sur le site tenant → utilise la recherche par tenant existante.
+- **Pas de fan-out côté client** (6 fetches parallèles) pour un usage marginal.
+- **À reconsidérer** : après Phase E (auth + usage réel des créateurs), si un vrai besoin remonte côté Orso/MS, créer `/api/search/universe` dédié.
+
 ---
 
 ## P0 — Bloquant ou à fort ROI immédiat

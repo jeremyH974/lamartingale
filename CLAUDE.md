@@ -114,6 +114,16 @@ Arborescence détaillée : voir [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 6. **Frontend config-driven** : un seul `frontend/v2.html`, pilote tout (branding, tagline, platforms, socials, logo, CTA accent) via `/api/config`. Luminance WCAG pour choisir le texte hero/CTA.
 7. **Vercel = 1 projet par tenant** : pas de subpath, pas de rewrites. `lamartingale-v2` et `gdiy-v2` partagent la même DB. V1 La Martingale archivée (public/archive/v1.html), une seule version maintenue.
 
+## Sandbox policy (scripts DB & LLM)
+
+Règles explicites pour toute exécution de `npx tsx scripts/*` ou `npx tsx engine/**` :
+
+- **Read-only** (SELECT, reporting, diagnostics) : **exécution directe autorisée**. Ex. `scripts/check-*.ts`, reports, audits sans mutation.
+- **Write** (INSERT / UPDATE / DELETE, migrations, backfills, sync JSONB→tables) : **dry-run obligatoire** — log du SQL généré + volume impacté + sample 5-10 rows avant/après. **STOP validation humaine** dans le chat, puis GO exécution.
+- **LLM avec coût** (embeddings, quiz generation, auto-taxonomy, regenerate-quality-quiz) : **estimation coût obligatoire** avant exécution (nb appels × input/output tokens × prix modèle). **STOP humain si > $5**, GO si < $5.
+
+Convention : tout nouveau script write doit accepter un flag `--dry` (default true) et `--write` (opt-in explicite). Un script qui écrit par défaut est un bug.
+
 ## Dette technique ouverte (à investiguer)
 - **22 épisodes (#126..#279) avec slug="" en BDD** → titres non-canoniques ("Crise SCPI", "5 regles or investissement"). Articles présumés exister sur lamartingale.io sous un autre slug. Script à écrire : re-crawler le listing pour retrouver les vrais slugs, puis scrape-deep --episode.
 - **Divergence `episodes.guest_bio` (88/310) vs `guests.bio` (potentiellement ~288/310)** — probable duplication/dénormalisation obsolète. Audit à faire avant d'en supprimer une des deux colonnes.
