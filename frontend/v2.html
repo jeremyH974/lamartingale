@@ -66,6 +66,22 @@
       display: flex;
       align-items: center;
       gap: 12px;
+      cursor: pointer;
+      user-select: none;
+      padding: 4px 6px;
+      margin: -4px -6px;
+      border-radius: 6px;
+      transition: background .15s ease;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+    /* Hover réservé aux devices pointer fine (désactive sticky hover iOS). */
+    @media (hover: hover) and (pointer: fine) {
+      .brand:hover { background: rgba(0, 76, 255, 0.06); }
+    }
+    .brand:focus-visible {
+      outline: 2px solid var(--blue);
+      outline-offset: 2px;
     }
 
     .brand-logo {
@@ -184,6 +200,16 @@
       margin-bottom: 44px;
     }
 
+    /* Factorisation tactile préventive : toutes les hero-stat parents héritent
+       de touch-action manipulation et tap-highlight transparent. Aucun effet
+       visible sur les tiles non-cliquables (#hs-ep, #hs-ex, #hs-p), mais toute
+       future stat rendue cliquable (ex. #hs-reco post-audit) aura nativement
+       le bon comportement iOS (supprime 300ms delay + tap highlight bleu). */
+    .hero-stats > div {
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+
     .hero-stat-value {
       font-size: 38px;
       font-weight: 700;
@@ -192,7 +218,8 @@
       font-variant-numeric: tabular-nums;
     }
 
-    /* Stat hero cliquable (appliqué dynamiquement quand qualityQuizReady=true) */
+    /* Stat hero cliquable (appliqué dynamiquement quand qualityQuizReady=true).
+       touch-action et -webkit-tap-highlight-color héritent de .hero-stats > div. */
     .hero-stat-clickable {
       cursor: pointer;
       padding: 6px 10px;
@@ -200,9 +227,21 @@
       border-radius: 8px;
       transition: transform .18s ease, background .18s ease;
     }
-    .hero-stat-clickable:hover {
-      transform: translateY(-2px);
-      background: rgba(255, 255, 255, 0.08);
+    /* Hover transform réservé aux devices pointer fine — sur touch, le sticky
+       hover iOS déplacerait la tile sous le doigt entre touchstart et touchend
+       et casserait le click. Cf. docs/DETTE.md §"Règle smoke test pour flags UI". */
+    @media (hover: hover) and (pointer: fine) {
+      .hero-stat-clickable:hover {
+        transform: translateY(-2px);
+        background: rgba(255, 255, 255, 0.08);
+      }
+      .hero-stat-clickable:hover .hero-stat-label::after {
+        transform: translateX(3px);
+      }
+    }
+    /* Feedback tactile de remplacement (fires sur tap, pas de sticky). */
+    .hero-stat-clickable:active {
+      background: rgba(255, 255, 255, 0.12);
     }
     .hero-stat-clickable:focus-visible {
       outline: 2px solid rgba(255, 255, 255, 0.7);
@@ -219,9 +258,6 @@
       content: " →";
       transition: transform .18s ease;
       display: inline-block;
-    }
-    .hero-stat-clickable:hover .hero-stat-label::after {
-      transform: translateX(3px);
     }
 
     .hero-stat-label {
@@ -1334,7 +1370,7 @@
   <!-- HEADER -->
   <header class="header">
     <div class="header-inner">
-      <div class="brand">
+      <div class="brand" role="button" tabindex="0" aria-label="Retour à l'accueil" onclick="go('home')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();go('home');}">
         <img class="brand-logo-img" id="brand-logo-img" alt="" style="display:none;height:32px;width:auto" />
         <span class="brand-logo" id="brand-logo-text">La Martingale</span>
         <span class="brand-tag" id="brand-tag">Education</span>
