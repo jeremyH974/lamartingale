@@ -64,14 +64,64 @@ Métrique produit mesurée après `scripts/sync-rss-links-to-episode-links.ts --
 
 Le ratio LM (2 refs sur 840) vs GDIY (24 sur 992) vs LP (16 sur 845) suggère que les vraies refs éditoriales (mention d'un autre épisode du même univers dans le RSS description) sont rares et concentrées sur les 3 plus gros podcasts. À re-examiner en Phase D+ si Orso souhaite enrichir explicitement les refs cross dans les RSS descriptions.
 
-### Divergence classifieurs `scrape-deep.ts` vs `rss/extractors.ts`
+### ✅ Divergence classifieurs `scrape-deep.ts` vs `rss/extractors.ts` — **FERMÉE Rail 1 (24/04/26)**
 
-- **`scrape-deep.ts`** : per-tenant `WEBSITE_HOST`, détection fine `tool`/`company`/`episode_ref` avec contexte site.
-- **`rss/extractors.ts`** : regex hardcodé `/lamartingale\.io\/(?:episode|podcast)/` → bug sur les 5 autres tenants (détection `episode_ref` ratée pour lepanier.io, gdiy.fr, passionpatrimoine.com, combiencagagne.io, finscale).
+**Avant** : `rss/extractors.ts` hardcodait `/lamartingale\.io\/(?:episode|podcast)/` → `episode_ref` → biais sur 5 tenants non-LM. Le sync v3 protégeait contre ce biais via blacklist `episode_ref`.
 
-Conséquence : sync v3 introduit une **blacklist downgrade** (`episode_ref`, `tool`, `social`) dans le `ON CONFLICT DO UPDATE ... WHERE` pour ne jamais écraser un type fin (scrape-deep) par un type générique (extractors RSS). Label peut quand même être mis à jour — seul le type est protégé.
+**Résolution Rail 1 (Option D)** :
+1. `rss/extractors.ts` accepte `websiteHost?` en paramètre ; dérivé de `cfg.website` via `websiteHostFromUrl()`. Propagé à travers `extractItem(it, websiteHost)` → `extractLinks(html, websiteHost)` → `classifyUrl(url, websiteHost)`.
+2. Call sites : `ingest-rss.ts`, `scrape-rss.ts` (deux entry points d'ingestion) calculent `WEBSITE_HOST` au démarrage et le propagent.
+3. Nouveau module `engine/classify/episode-ref-rules.ts` avec `isEpisodeRefCandidate(url, websiteHost)` appliquant 3 règles cumulées :
+   - **R1** host match : hostname(url) === websiteHost
+   - **R2** non-racine : path != '' && path != '/' (évite `lamartingale.io/`, `http://lepanier.io`)
+   - **R3** pas de path utilitaire : exclusion universelle de `/contact`, `/about`, `/legal`, `/privacy`, `/newsletter`, `/press`, `/careers`, `/404`, `/search`, `/tag/*`, `/category/*`, `/author/*` (évite `orsomedia.io/contact`)
 
-**À résoudre en Phase D+** : refactor `rss/extractors.ts` pour prendre `WEBSITE_HOST` en paramètre depuis la config podcast, puis relancer le sync avec blacklist désactivée pour valider la convergence.
+Les 3 règles sont exprimées avec des patterns universels — **pas de mapping per-tenant**, donc l'ajout d'un nouveau podcast Orso/MS ne requiert aucune config. Un path utilitaire manquant = 1 ligne à ajouter dans `UTILITY_PATH_PATTERNS`.
+
+**Script de reclassif** : `scripts/reclassify-rss-links.ts` (syntaxe explicite --tenant/--tenants/--all/--write). Instrumentation R2/R3 + sample paths self-host.
+
+**Résultats reclassif (post-Option D)** :
+
+| Tenant | self-host URLs | match | exclu R2 racine | exclu R3 utilitaire | reclassifs (resource→episode_ref) |
+|---|---|---|---|---|---|
+| lamartingale | 897 | 623 | 274 | 0 | 623 |
+| gdiy | 2 733 | 2 688 | 45 | 0 | 2 688 |
+| lepanier | 787 | 711 | 76 | 0 | 711 |
+| combiencagagne | 104 | 0 | 0 | **104 (/contact)** | 0 |
+| finscale | — | — | — | — | 0 (idempotent) |
+| passionpatrimoine | — | — | — | — | 0 (idempotent) |
+
+Total : **4 022 liens reclassifiés** en JSONB, puis **2 670 UPDATE** relayés vers `episode_links` via re-sync avec `episode_ref` retiré de `BLACKLIST_DOWNGRADE` (gardé : `tool`, `social`).
+
+Tests : `engine/__tests__/episode-ref-rules.test.ts` (66 tests : R2/R3 par path + ≥2 vrais positifs par tenant + rejets) + `engine/__tests__/rss-extractors.test.ts` (classifyUrl per-tenant + websiteHostFromUrl). **171/171 green**.
+
+**Impact sync** : blacklist réduite à `['tool', 'social']`. Commit dans `scripts/sync-rss-links-to-episode-links.ts`.
+
+### D2-bis — Observation CCG : 0 episode_ref self-host éditorial
+
+Corollaire de la résolution D2 : CCG (combiencagagne) **n'a aucun lien interne vers ses propres épisodes dans les `rss_links`**. Les 104 URLs self-host (orsomedia.io) sont toutes `/contact` → exclues R3.
+
+Deux hypothèses à distinguer :
+1. **Comportement Audiomeans** : le feed CCG hébergé chez Audiomeans ne porte pas d'URLs éditoriales vers `orsomedia.io/podcast/combien-ca-gagne/<slug>` dans la description des items.
+2. **Vide éditorial** : Orso n'ajoute pas de cross-refs internes dans la description Audiomeans côté CCG.
+
+Cette dette est **bloquée tant que P0#1 n'est pas résolue** : sans scrape-deep actif sur CCG (`hasArticles:false`), impossible de vérifier si les liens internes sont dans le HTML des articles CCG. Quand scrape-deep tournera sur orsomedia.io/podcast/combien-ca-gagne/, on saura si le signal existe en HTML ou s'il est absent en amont.
+
+Impact immédiat : `episode_ref` côté CCG = 0 sur episode_links post-reclass (hors orphelins historiques mentionnés ci-dessous).
+
+### D2-ter — Orphelins `/contact` sur `episode_links` CCG (65 rows)
+
+Post-write sync, `episode_links` CCG contient 65 rows `url=orsomedia.io/contact, link_type=episode_ref` qui ne correspondent à **aucune entrée courante** dans `rss_links` JSONB. Ce sont des résidus d'un sync antérieur (avant Option D) : lors du run qui les a ajoutées, `/contact` était classé `resource` ou autre ; le passage par episode_ref vient d'un autre chemin (historique, merge JSONB différent, ou scrape-deep hypothétique).
+
+`sync-rss-links-to-episode-links.ts` est **INSERT/UPDATE only** (pas de DELETE) pour des raisons de sécurité (on ne veut pas perdre du signal en reclasif). Résultat : les orphelins persistent.
+
+**À résoudre en Phase D+** (nouveau script `scripts/prune-orphan-episode-links.ts`, syntaxe explicite, dry-run obligatoire, 2-pass : identifier orphelins = `episode_links WHERE (episode_id, url) NOT IN (JSONB source)` puis DELETE après validation humaine).
+
+### D3 — Classifieur commun (enabler Rail 1)
+
+Le module `engine/classify/episode-ref-rules.ts` est le **premier pas** vers un classifieur unifié entre `scrape-deep.ts` et `rss/extractors.ts`.
+
+**Prochaine étape** : porter aussi la logique `tool` (TOOL_DOMAINS regex, avec contextes UI-hint) et `company` dans ce module. Puis `scrape-deep.ts` importerait `classifyUrl()` plutôt que dupliquer sa propre logique. Bénéfice : test unitaire unique, évolution en parallèle plus besoin, fin de la "divergence classifieurs".
 
 ### Audio / other drop — surveillance volumes
 

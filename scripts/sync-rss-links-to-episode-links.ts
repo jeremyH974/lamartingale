@@ -46,7 +46,16 @@ const sql = neon(process.env.DATABASE_URL!);
 
 const PUSH_TYPES = ['resource', 'linkedin', 'social', 'episode_ref', 'company', 'tool', 'cross_podcast_ref'];
 const DROP_TYPES = ['audio', 'other'];
-const BLACKLIST_DOWNGRADE = ['episode_ref', 'tool', 'social'];
+// Post-Rail 1 (Option D, 24/04/26) : 'episode_ref' retiré de la blacklist
+// parce que rss/extractors.ts applique maintenant les mêmes règles (host match
+// + R2 non-racine + R3 pas de path utilitaire) que scrape-deep.ts, et même
+// plus strictes (scrape-deep n'a pas R2/R3). Laisser episode_ref mutable
+// permet au re-sync de propager les corrections de faux positifs identifiés
+// sur LM (racines lamartingale.io/, /tous/ déjà correctes) et de convergere
+// scrape-deep sur les futurs re-sync.
+// Reste blacklisté : 'tool' (scrape-deep raffine depuis domain+UI-hint) et
+// 'social' (extractContact + scrape-deep ont plus de contexte).
+const BLACKLIST_DOWNGRADE = ['tool', 'social'];
 const SAMPLE_THRESHOLD = 50;
 
 // Cibles cross_podcast_ref attendues post-sync (basées extraction JSONB actuelle)
