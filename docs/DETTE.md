@@ -40,6 +40,36 @@ Classement par priorité décroissante. **P0 = bloquant / P1 = forte valeur / P2
 
 ---
 
+## Phase E — Auth créateur (post-Rail 4a, pré-seed externe)
+
+### Scope produit à trancher avant onboarding externe
+
+Rail 4a a shippé le back-end auth (magic-link + session cookie HMAC + scope `podcast_access`) avec **seulement `jeremyhenry974@gmail.com × '*' × root` seedé**. Avant de seeder des accès externes, trancher :
+
+- **Matthieu Stefani** : accès `root` (visibilité univers complet y compris futurs podcasts MS) ou scope restreint `[lamartingale, gdiy]` (les 2 podcasts qu'il anime) ? Si root, alignement avec la vision "propriétaire/créateur principal de l'univers MS". Si scope restreint, plus granulaire mais bloque la visibilité sur LP/Finscale/PP/CCG (produits Orso dont il n'est pas host).
+- **Orso Media / Cosa Vostra / Gokyo** : email d'équipe générique (`team@orsomedia.fr`) avec scope multi-tenant, ou individus distincts par label ? L'email d'équipe simplifie l'onboarding (1 accès partagé) mais perd le tracking par personne. Décision à prendre avec Matthieu.
+- **Invités VIP** : aucun besoin modélisé en Phase E. À re-évaluer Phase G+ si un besoin d'accès guest émerge (ex: guest veut voir ses stats d'écoute sur ses passages). Trop tôt pour modéliser — laisser `podcast_access` porter uniquement créateurs/producteurs pour l'instant.
+
+**Action** : recueillir la décision de Matthieu lors du seed externe (post-validation prod hub 4b). Le seeding actuel est 100% réversible (`DELETE FROM podcast_access WHERE email = ?`), pas de risque à itérer.
+
+### Absorption dashboards créateur dans hub — Option Beta (P2)
+
+**Constat** : les dashboards `frontend/v2-dashboard.html` sont actuellement **par tenant** (un dashboard par sous-site, accessible via `/dashboard` de chaque instance). Un créateur multi-podcasts (Matthieu : LM + GDIY) doit naviguer entre sites pour voir ses KPIs.
+
+**Option retenue — Beta (post-4b, pré-Phase F)** :
+- Le hub créateur (`ms-hub.vercel.app`, auth-protégé après 4b) devient le point d'entrée unique.
+- Une future route `/hub/dashboard` agrégerait les KPIs de tous les tenants auxquels le créateur a accès (ou tous si root).
+- Les dashboards per-tenant restent disponibles via les sous-sites (pas de breaking change).
+
+**Volontairement hors scope de Phase 4b** : 4b se concentre sur `login + header session + logout` côté hub. L'absorption dashboard est une feature distincte qui :
+- dépend du scope "KPIs hub" (Phase E-bis ou Phase G selon priorités)
+- nécessite un design produit (quels KPIs agréger, comment afficher N tenants)
+- réutilisera l'infrastructure auth de 4a (déjà prête)
+
+**Priorité** : P2, à trancher après retours Matthieu sur le flow 4b en prod.
+
+---
+
 ## Bruit cross_podcast_ref — patterns à filtrer en lecture hub
 
 Les URLs suivantes sont classées `cross_podcast_ref` par `engine/scraping/rss/extractors.ts` mais n'ont pas de valeur éditoriale pour le hub `/api/universe` :
