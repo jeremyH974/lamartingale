@@ -204,6 +204,58 @@ async function cmdIngest(opts: { podcast: string; force?: boolean }): Promise<vo
 // deploy
 // ============================================================================
 
+function listPodcastIds(): string[] {
+  const files = fs.readdirSync(INSTANCES_DIR).filter(f => f.endsWith('.config.ts') && !f.startsWith('_'));
+  return files.map(f => f.replace(/\.config\.ts$/, ''));
+}
+
+async function cmdDeployAll(opts: { exclude?: string }): Promise<void> {
+  const excluded = new Set((opts.exclude || '').split(',').map(s => s.trim()).filter(Boolean));
+  const ids = listPodcastIds().filter(id => !excluded.has(id));
+
+  if (!ids.length) {
+    console.log('\nAucun podcast à déployer (tous exclus ou aucun config trouvé).\n');
+    return;
+  }
+
+  console.log(`\n${'='.repeat(64)}`);
+  console.log(`  DEPLOY ALL — ${ids.length} tenant(s)`);
+  console.log(`  Séquentiel : ${ids.join(', ')}`);
+  if (excluded.size) console.log(`  Exclus     : ${[...excluded].join(', ')}`);
+  console.log('='.repeat(64));
+
+  const t0 = Date.now();
+  const results: Array<{ id: string; ok: boolean; ms: number; err?: string }> = [];
+  for (const id of ids) {
+    const tStart = Date.now();
+    try {
+      await cmdDeploy({ podcast: id });
+      results.push({ id, ok: true, ms: Date.now() - tStart });
+    } catch (e: any) {
+      results.push({ id, ok: false, ms: Date.now() - tStart, err: e.message });
+      console.log(`\n✗ ${id} — ÉCHEC : ${e.message}\n`);
+    }
+  }
+
+  const totalMins = ((Date.now() - t0) / 60000).toFixed(1);
+  const ok = results.filter(r => r.ok).length;
+  const failed = results.length - ok;
+
+  console.log(`\n${'='.repeat(64)}`);
+  console.log(`  DEPLOY ALL — TERMINÉ en ${totalMins} min`);
+  console.log(`  ✓ ${ok}  ✗ ${failed}`);
+  console.log('='.repeat(64));
+  for (const r of results) {
+    const icon = r.ok ? '✓' : '✗';
+    const dur = `${(r.ms / 1000).toFixed(1)}s`.padStart(8);
+    const suffix = r.err ? ` — ${r.err}` : '';
+    console.log(`  ${icon} ${dur}  ${r.id}${suffix}`);
+  }
+  console.log();
+
+  if (failed > 0) process.exit(1);
+}
+
 async function cmdDeploy(opts: { podcast: string }): Promise<void> {
   const id = opts.podcast;
   const cfgPath = path.join(INSTANCES_DIR, `${id}.config.ts`);
@@ -416,9 +468,19 @@ program.command('ingest')
   .action(cmdIngest);
 
 program.command('deploy')
-  .description('Deploy Vercel (re-link + deploy en prod)')
-  .requiredOption('--podcast <id>', 'PODCAST_ID cible')
-  .action(cmdDeploy);
+  .description('Deploy Vercel (re-link + deploy en prod) — 1 tenant ou tous')
+  .option('--podcast <id>', 'PODCAST_ID cible (mutuellement exclusif avec --all)')
+  .option('--all', 'Déploie tous les podcasts listés dans instances/ (séquentiel)')
+  .option('--exclude <ids>', 'Liste séparée par virgules à exclure (valide uniquement avec --all)')
+  .action(async (opts: { podcast?: string; all?: boolean; exclude?: string }) => {
+    const hasPodcast = !!opts.podcast;
+    const hasAll = !!opts.all;
+    if (hasPodcast && hasAll) { console.error('\nERREUR: --podcast et --all sont mutuellement exclusifs.\n'); process.exit(2); }
+    if (!hasPodcast && !hasAll) { console.error('\nERREUR: précise --podcast <id> OU --all.\n'); process.exit(2); }
+    if (opts.exclude && !hasAll) { console.error('\nERREUR: --exclude requiert --all.\n'); process.exit(2); }
+    if (hasAll) return cmdDeployAll({ exclude: opts.exclude });
+    return cmdDeploy({ podcast: opts.podcast! });
+  });
 
 program.command('refresh')
   .description('Refresh incremental (nouveaux episodes uniquement)')
