@@ -240,7 +240,9 @@ Post-write sync, `episode_links` CCG contient 65 rows `url=orsomedia.io/contact,
 
 Le module `engine/classify/episode-ref-rules.ts` est le **premier pas** vers un classifieur unifié entre `scrape-deep.ts` et `rss/extractors.ts`.
 
-**Prochaine étape** : porter aussi la logique `tool` (TOOL_DOMAINS regex, avec contextes UI-hint) et `company` dans ce module. Puis `scrape-deep.ts` importerait `classifyUrl()` plutôt que dupliquer sa propre logique. Bénéfice : test unitaire unique, évolution en parallèle plus besoin, fin de la "divergence classifieurs".
+**✅ Step 1 (c157bde, 25/04/26)** : extraction de la logique `tool` dans `engine/classify/tool-rules.ts` (fusion fintech + SaaS, `isToolDomain` + `isToolUrl`, 11 tests). Les 2 call sites (`scrape-deep.ts`, `rss/extractors.ts`) importent désormais du module commun → fin de la divergence pour `link_type='tool'`.
+
+**Prochaine étape** : porter aussi la logique `company` dans un `classify/company-rules.ts`, puis exposer un `classifyUrl()` unifié (`tool | company | episode_ref | linkedin | resource`). Bénéfice : test unitaire unique, évolution en parallèle plus besoin, fin complète de la "divergence classifieurs".
 
 ### D4 — Richesse `episode_ref` conditionnée par scrape-deep
 
