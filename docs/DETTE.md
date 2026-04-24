@@ -6,6 +6,26 @@ Classement par priorité décroissante. **P0 = bloquant / P1 = forte valeur / P2
 
 ---
 
+## Règle smoke test pour flags UI
+
+Un flag qui affecte l'UI doit être smoke-testé avec une vérification
+navigateur (rendu JS exécuté), pas seulement par `curl /api/config` ou
+grep HTML. La propagation back-end n'est qu'une moitié du test.
+
+**Format smoke test correct** :
+- Vérif API : champ présent + valeur attendue.
+- Vérif navigateur : élément présent/masqué visuellement + fonctionnel
+  au clic/hover.
+- Screenshot si possible pour trace.
+
+**Faux positif connu** : 24/04/2026, commit `0daff6a` — smoke test du flag
+`qualityQuizReady` validé par `curl /api/config` seul, bouton Quiz
+déclaré *"affiché sur LM"* alors qu'il avait été retiré de la nav 7h
+plus tôt par `c67f4bf`. Régression non détectée avant Jérémy en prod.
+Fix tracé dans `fix(v2): make hero quiz stat clickable on tenants with qualityQuizReady`.
+
+---
+
 ## État transitoire à tracer (post-B, pré-F)
 
 ### Nav publique réduite à 5 items, routes Assistant/Quiz toujours actives
