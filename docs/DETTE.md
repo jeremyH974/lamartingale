@@ -123,6 +123,25 @@ Le module `engine/classify/episode-ref-rules.ts` est le **premier pas** vers un 
 
 **Prochaine étape** : porter aussi la logique `tool` (TOOL_DOMAINS regex, avec contextes UI-hint) et `company` dans ce module. Puis `scrape-deep.ts` importerait `classifyUrl()` plutôt que dupliquer sa propre logique. Bénéfice : test unitaire unique, évolution en parallèle plus besoin, fin de la "divergence classifieurs".
 
+### D4 — Richesse `episode_ref` conditionnée par scrape-deep
+
+Le nombre de `episode_ref` auto-détectés par tenant est **proportionnel au volume de contenu scrappé en profondeur** (articles, chapitres). Les podcasts dont `scraping.hasArticles: false` (LP, PP, CCG, parfois Finscale) n'ont que les liens du RSS description, qui sont plus rares et moins riches en cross-refs éditoriales.
+
+État post-sync 24/04/26 après Rail 1 (Option D, reclassify + sync JSONB → episode_links) :
+
+| Tenant | episode_ref self-host | hasArticles | Source principale |
+|---|---|---|---|
+| lamartingale | 4 426 | ✓ | RSS desc + article scrape-deep (chapitres + media_links) |
+| gdiy | 2 707 | ✓ | RSS desc + article scrape-deep |
+| lepanier | 787 | ✗ | RSS desc uniquement |
+| finscale | 0 | ✓ | Ni RSS desc ni article (article-ingest bug open) |
+| passionpatrimoine | 1 | ✗ | RSS desc uniquement |
+| combiencagagne | 65 | ✗ | RSS desc uniquement (65 proviennent de `/contact` = R3 faux-positif historique, cf. D2-ter) |
+
+**Implication produit** : tant que P0#1 "Deep scrape Orso" n'est pas résolu pour LP/PP/CCG/Finscale, le hub verra **un déséquilibre** entre LM/GDIY (riches en refs cross-podcast) et les 4 autres tenants. La Phase C (`/api/universe`) affiche déjà un fallback propre ("Agrégation en cours" + "Indexation en cours") pour les tenants sans contenu cross exploitable, mais la vraie résolution passe par scrape-deep généralisé (P0#1).
+
+**Corollaire** : ajouter un nouveau tenant Orso/MS sans article scrape-deep donnera **systématiquement** un signal cross faible côté hub, indépendamment de la qualité du podcast. C'est un signal architectural, pas un bug.
+
 ### Audio / other drop — surveillance volumes
 
 `sync-rss-links-to-episode-links.ts` drop :

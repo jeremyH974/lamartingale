@@ -105,4 +105,6 @@ export const gdiyConfig: PodcastConfig = {
     vercelProject: 'gdiy-v2',
     vercelScope: 'jeremyh974s-projects',
   },
+
+  hub_order: 2,
 };

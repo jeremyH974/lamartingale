@@ -65,6 +65,8 @@ const config: PodcastConfig = {
     vercelProject: 'passionpatrimoine-v2',
     vercelScope: 'jeremyh974s-projects',
   },
+
+  hub_order: 5,
 };
 
 export const passionpatrimoineConfig = config;

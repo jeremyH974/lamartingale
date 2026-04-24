@@ -65,6 +65,8 @@ const config: PodcastConfig = {
     vercelProject: 'lepanier-v2',
     vercelScope: 'jeremyh974s-projects',
   },
+
+  hub_order: 3,
 };
 
 export const lepanierConfig = config;

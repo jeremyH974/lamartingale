@@ -81,4 +81,6 @@ export const lamartingaleConfig: PodcastConfig = {
     vercelProject: 'lamartingale-v2',
     vercelScope: 'jeremyh974s-projects',
   },
+
+  hub_order: 1,
 };

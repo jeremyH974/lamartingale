@@ -91,6 +91,10 @@ export interface PodcastConfig {
     vercelScope: string;           // 'jeremyh974s-projects'
     domain?: string;
   };
+
+  // Ordre d'affichage dans le Hub Univers MS (1 = en tête).
+  // Absent sur 'hub' (lui-même), optionnel sinon.
+  hub_order?: number;
 }
 
 // Sous-ensemble public exposé au frontend via /api/config.
@@ -108,6 +112,7 @@ export interface PublicPodcastConfig {
   socials?: PodcastConfig['socials'];
   branding: PodcastConfig['branding'];
   taxonomy: { mode: 'predefined' | 'auto'; pillars?: TaxonomyPillar[] };
+  hub_order?: number;
 }
 
 export function toPublicConfig(c: PodcastConfig): PublicPodcastConfig {
@@ -127,5 +132,6 @@ export function toPublicConfig(c: PodcastConfig): PublicPodcastConfig {
       mode: c.taxonomy.mode,
       pillars: c.taxonomy.pillars,
     },
+    hub_order: c.hub_order,
   };
 }

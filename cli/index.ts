@@ -234,7 +234,20 @@ async function cmdDeploy(opts: { podcast: string }): Promise<void> {
   const deployR = spawnSync('vercel', deployArgs, { cwd: ROOT, stdio: 'inherit', shell: true });
   if (deployR.status !== 0) { console.log(`\nvercel deploy echoue.\n`); process.exit(1); }
 
-  console.log(`\nDeploy ${id} OK\n  URL https://${project}.vercel.app\n`);
+  console.log(`\nDeploy ${id} OK\n  URL https://${project}.vercel.app`);
+
+  // Post-deploy hook : invalide le cache du tenant déployé + le cache 'universe'
+  // du hub (qui agrège ce tenant). Best-effort — un échec d'invalidation
+  // n'annule pas le deploy.
+  try {
+    await cmdCacheClear({ podcast: id });
+  } catch (e: any) { console.log(`  (cache-clear ${id} skipped : ${e.message})`); }
+  if (id !== 'hub') {
+    try {
+      await cmdCacheClear({ podcast: 'hub', prefix: 'universe' });
+    } catch (e: any) { console.log(`  (cache-clear hub:universe skipped : ${e.message})`); }
+  }
+  console.log();
 }
 
 // ============================================================================
@@ -280,6 +293,53 @@ async function cmdRefresh(opts: { podcast: string }): Promise<void> {
     console.log(`  ${icon} ${dur.padStart(8)}  ${r.label}`);
   }
   console.log(`\nPour pousser : npx tsx cli/index.ts deploy --podcast ${id}\n`);
+}
+
+// ============================================================================
+// cache-clear
+// ============================================================================
+// Invalide le cache Vercel KV + mémoire pour un tenant donné, ou l'univers
+// agrégé (hub). Utilise le endpoint /api/cache/clear (ADMIN_TOKEN requis).
+//
+// Exemples :
+//   npx tsx cli/index.ts cache-clear --podcast lamartingale
+//   npx tsx cli/index.ts cache-clear --podcast hub --prefix universe
+//   npx tsx cli/index.ts cache-clear --podcast hub   # clear tout le hub
+
+async function cmdCacheClear(opts: { podcast: string; prefix?: string; url?: string }): Promise<void> {
+  const id = opts.podcast;
+  const cfgPath = path.join(INSTANCES_DIR, `${id}.config.ts`);
+  if (!fs.existsSync(cfgPath)) throw new Error(`instances/${id}.config.ts introuvable.`);
+
+  const pc = loadPodcastConfig(id);
+  const project = pc?.deploy?.vercelProject || `${id}-v2`;
+  const baseUrl = opts.url || `https://${project}.vercel.app`;
+  const token = process.env.ADMIN_TOKEN;
+  if (!token) {
+    console.warn('⚠ ADMIN_TOKEN absent — le endpoint /api/cache/clear renverra 401 si une env var est configurée côté Vercel.');
+  }
+
+  const qs = opts.prefix ? `?prefix=${encodeURIComponent(opts.prefix)}` : '';
+  const url = `${baseUrl}/api/cache/clear${qs}`;
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+  if (token) headers['x-admin-token'] = token;
+
+  console.log(`\n▶ Cache clear ${id} — POST ${url}${opts.prefix ? ` (prefix=${opts.prefix})` : ' (all)'}`);
+  const t0 = Date.now();
+  try {
+    const resp = await fetch(url, { method: 'POST', headers });
+    const ms = Date.now() - t0;
+    const body = await resp.text();
+    if (resp.ok) {
+      console.log(`✓ ${resp.status} en ${ms}ms — ${body}`);
+    } else {
+      console.log(`✗ ${resp.status} en ${ms}ms — ${body}`);
+      process.exit(1);
+    }
+  } catch (e: any) {
+    console.log(`✗ fetch échoué : ${e.message}`);
+    process.exit(1);
+  }
 }
 
 // ============================================================================
@@ -369,5 +429,12 @@ program.command('refresh')
 program.command('status')
   .description('Etat de tous les podcasts (depuis la DB)')
   .action(cmdStatus);
+
+program.command('cache-clear')
+  .description('Invalide le cache d\'un tenant (MEM + Vercel KV)')
+  .requiredOption('--podcast <id>', 'PODCAST_ID cible (ex: hub)')
+  .option('--prefix <p>', 'Prefix clé à invalider (ex: universe, cross:stats)')
+  .option('--url <url>', 'Override URL de base (default: https://{vercelProject}.vercel.app)')
+  .action(cmdCacheClear);
 
 program.parseAsync(process.argv).catch(e => { console.error('\nERREUR:', e.message, '\n'); process.exit(1); });

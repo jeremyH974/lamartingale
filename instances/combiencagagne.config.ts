@@ -65,6 +65,8 @@ const config: PodcastConfig = {
     vercelProject: 'combiencagagne-v2',
     vercelScope: 'jeremyh974s-projects',
   },
+
+  hub_order: 6,
 };
 
 export const combiencagagneConfig = config;

@@ -893,6 +893,20 @@ app.get('/api/cross/analytics', async (_req, res) => {
   } catch (e: any) { console.error('[API] /api/cross/analytics error:', e.message); res.status(500).json({ error: e.message }); }
 });
 
+// --- Hub Univers MS ---------------------------------------------------------
+// Agrégat des 6 tenants actifs (hors `hub`) pour `frontend/hub.html`.
+// Cache 1h — invalidation via /api/cache/clear?prefix=universe (ADMIN_TOKEN requis).
+app.get('/api/universe', async (_req, res) => {
+  try {
+    if (!process.env.DATABASE_URL) return res.status(503).json({ error: 'DB required' });
+    const result = await getCached('universe', 3600, async () => {
+      const { getUniverse } = await import('./universe');
+      return await getUniverse();
+    });
+    res.json(result);
+  } catch (e: any) { console.error('[API] /api/universe error:', e.message); res.status(500).json({ error: e.message }); }
+});
+
 // --- Enriched Episode Data ---
 
 app.get('/api/enriched/:id', async (req, res) => {

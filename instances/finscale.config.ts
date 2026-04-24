@@ -65,6 +65,8 @@ const config: PodcastConfig = {
     vercelProject: 'finscale-v2',
     vercelScope: 'jeremyh974s-projects',
   },
+
+  hub_order: 4,
 };
 
 export const finscaleConfig = config;
