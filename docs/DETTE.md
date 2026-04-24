@@ -26,6 +26,106 @@ Classement par priorité décroissante. **P0 = bloquant / P1 = forte valeur / P2
 
 ---
 
+## Bruit cross_podcast_ref — patterns à filtrer en lecture hub
+
+Les URLs suivantes sont classées `cross_podcast_ref` par `engine/scraping/rss/extractors.ts` mais n'ont pas de valeur éditoriale pour le hub `/api/universe` :
+
+- **`audiomeans.fr/politique-de-confidentialite`** — footer RSS injecté automatiquement par Audiomeans dans tous les flux de ses clients (pas une référence cross-podcast éditoriale).
+  Volumes observés post-sync v3 : **LP 505, GDIY 537, PP 156, CCG 65** (LM exempt car non-Audiomeans).
+
+- **Spotify show root** (`open.spotify.com/show/<id>` sans épisode spécifique) et **Apple Podcasts show root** (`apple.com/*/podcast/<slug>/id<id>` sans `?i=<episode>`) : auto-promo du podcast courant (lien vers la page show), pas une ref cross.
+  Volume observé Spotify show LP : **339 rows**.
+
+### Filtre SQL à appliquer dans `/api/universe` (Phase C)
+
+```sql
+WHERE link_type = 'cross_podcast_ref'
+  AND url NOT LIKE '%audiomeans.fr/politique%'
+  AND url !~ '(spotify\.com/show/[^/]+|apple\.com/.*/podcast/[^/]+/id[0-9]+)$'
+```
+
+Ce filtre est la spec canonique pour les lectures hub. Pas de blackbox : tout lien classé `cross_podcast_ref` doit être testable contre ces 2 patterns avant affichage côté hub.
+
+### Signal hub-utile [3b] par tenant (post-sync 24/04/26)
+
+Métrique produit mesurée après `scripts/sync-rss-links-to-episode-links.ts --write` + filtre Phase C complet :
+
+| Tenant | cross total | audiomeans | sans audiomeans | hub-utile [3b] |
+|---|---|---|---|---|
+| lamartingale | 840 | 309 | 531 | **2** |
+| gdiy | 992 | 959 | 33 | **24** |
+| lepanier | 845 | 506 | 339 | **16** |
+| finscale | 4 | 0 | 4 | **3** |
+| combiencagagne | 104 | 104 | 0 | **0** |
+| passionpatrimoine | 195 | 195 | 0 | **0** |
+| **Total** | **2 980** | **2 073** | **907** | **45** |
+
+**Lecture** : sur 2 980 rows classées `cross_podcast_ref` globalement, seules **45 (1.5%)** sont éditorialement utiles pour le hub cross-podcast. Les 2 935 autres sont du bruit (Audiomeans footer 2 073 + Spotify/Apple show root ~862). Implication Phase C : le hub ne peut pas se contenter de `WHERE link_type='cross_podcast_ref'` — le filtre SQL documenté ci-dessus est impératif.
+
+Le ratio LM (2 refs sur 840) vs GDIY (24 sur 992) vs LP (16 sur 845) suggère que les vraies refs éditoriales (mention d'un autre épisode du même univers dans le RSS description) sont rares et concentrées sur les 3 plus gros podcasts. À re-examiner en Phase D+ si Orso souhaite enrichir explicitement les refs cross dans les RSS descriptions.
+
+### Divergence classifieurs `scrape-deep.ts` vs `rss/extractors.ts`
+
+- **`scrape-deep.ts`** : per-tenant `WEBSITE_HOST`, détection fine `tool`/`company`/`episode_ref` avec contexte site.
+- **`rss/extractors.ts`** : regex hardcodé `/lamartingale\.io\/(?:episode|podcast)/` → bug sur les 5 autres tenants (détection `episode_ref` ratée pour lepanier.io, gdiy.fr, passionpatrimoine.com, combiencagagne.io, finscale).
+
+Conséquence : sync v3 introduit une **blacklist downgrade** (`episode_ref`, `tool`, `social`) dans le `ON CONFLICT DO UPDATE ... WHERE` pour ne jamais écraser un type fin (scrape-deep) par un type générique (extractors RSS). Label peut quand même être mis à jour — seul le type est protégé.
+
+**À résoudre en Phase D+** : refactor `rss/extractors.ts` pour prendre `WEBSITE_HOST` en paramètre depuis la config podcast, puis relancer le sync avec blacklist désactivée pour valider la convergence.
+
+### Audio / other drop — surveillance volumes
+
+`sync-rss-links-to-episode-links.ts` drop :
+- `link_type = 'audio'` (doublon avec `episodes.audio_url`)
+- `link_type = 'other'` (non classifié = bruit résiduel)
+- types inconnus (fallback défensif)
+
+Volume dry-run v3 : **0 row** sur les 6 tenants. Si ce compteur monte >100 sur un tenant, suspecter un nouveau pattern URL non géré par `classifyUrl()` → investiguer.
+
+### Flags qualité `tool` — scrape-deep non appliqué (post-sync 24/04/26)
+
+Le `link_type = 'tool'` est une classification fine qui nécessite scrape-deep.ts (analyse contexte article). Tenants avec `hasArticles: false` ne reçoivent **pas** cette analyse → comptage `tool` très bas, révélateur de la dette P0#1.
+
+| Tenant | tool count | hasArticles | Commentaire |
+|---|---|---|---|
+| lamartingale | 228 | true | ✓ scrape-deep actif |
+| finscale | 337 | true | ✓ scrape-deep actif (meilleur score, thématique outils financiers) |
+| gdiy | 28 | true | ⚠ bas — à investiguer (scrape-deep peut-être incomplet sur GDIY) |
+| lepanier | 7 | false | ⚠ scrape-deep skipped |
+| passionpatrimoine | 2 | false | ⚠ scrape-deep skipped |
+| combiencagagne | 1 | false | ⚠ scrape-deep skipped |
+
+Dette P0#1 "Deep scrape Orso — 0 articles sur 4 podcasts" (lepanier/passionpatrimoine/combiencagagne/finscale) a maintenant un **impact quantifié côté produit** : la classification fine `tool` n'émerge pas sans scrape-deep, privant le hub d'un signal outil/produit clé.
+
+Finscale est une exception intéressante : `hasArticles: true` (scrape-deep actif) + thématique fintech → 337 tool (plus que LM). Montre que quand scrape-deep tourne, les résultats sont au rendez-vous.
+
+À prioriser en Phase D+ : résoudre P0#1 pour LP/PP/CCG ; investiguer GDIY (hasArticles:true mais tool seulement 28).
+
+### Règle ops : scripts qui modifient la BDD = syntaxe explicite obligatoire
+
+**Principe** : tout script `scripts/*.ts` ou `engine/*.ts` qui fait INSERT/UPDATE/DELETE sur Postgres **doit imposer une syntaxe de scope explicite**. Appel nu = **exit 2** avec usage printé. Pas de mode implicite "tout ce qui reste" ou "défaut = tous les tenants".
+
+Modes canoniques à supporter (copier `scripts/sync-rss-links-to-episode-links.ts` comme référence) :
+
+```bash
+--tenant <id>                              # un seul tenant
+--tenants id1,id2,id3                      # liste explicite
+--all [--exclude id1,id2]                  # tous, exclusions explicites
+--write                                    # opt-in explicite pour muter
+```
+
+Validations obligatoires :
+- **flags mutuellement exclusifs** : `--tenant`, `--tenants`, `--all` → exit 2 si 2+ combinés
+- **`--exclude` sans `--all`** → exit 2 (pas de sens seul)
+- **aucun flag scope** → exit 2 avec message listant les 3 modes
+- **dry-run = défaut**, `--write` doit être opt-in explicite
+
+Motivation : fuite V1 (deploy parasite 14× en 4j via `.vercel/project.json` implicite) + risque systémique sync-rss-links (v1 buggé skip-if-exists) montrent que les "modes implicites" transforment une petite erreur de commande en migration destructive. Cette règle ferme cette classe de bug.
+
+Applicable aux futurs scripts : migrations schema (`engine/db/migrate-*.ts`), backfills (`scripts/denormalize-*.ts`, `scripts/fix-*.ts`), sync JSONB→tables, batches LLM coûteux.
+
+---
+
 ## P0 — Bloquant ou à fort ROI immédiat
 
 ### 1. Deep scrape Orso — 0 articles sur 4 podcasts

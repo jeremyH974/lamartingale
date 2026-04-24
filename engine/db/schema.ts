@@ -124,7 +124,7 @@ export const episodeLinks = pgTable('episode_links', {
   episodeId: integer('episode_id').references(() => episodes.id, { onDelete: 'cascade' }),
   url: text('url').notNull(),
   label: text('label'),
-  linkType: text('link_type').notNull(),   // 'resource' | 'linkedin' | 'episode_ref' | 'company' | 'tool' | 'cross_podcast_ref'
+  linkType: text('link_type').notNull(),   // 7 types PUSH : 'resource' | 'linkedin' | 'social' | 'episode_ref' | 'company' | 'tool' | 'cross_podcast_ref'  (voir scripts/sync-rss-links-to-episode-links.ts ; 'audio' et 'other' sont DROP)
   createdAt: timestamp('created_at').defaultNow(),
 }, (table) => [
   unique('uq_episode_link').on(table.episodeId, table.url),
