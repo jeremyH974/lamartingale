@@ -19,3 +19,4 @@ scripts/check-*.ts
 scripts/find-gdiy-sponsor-patterns.ts
 
 .vercel
+.env*.local

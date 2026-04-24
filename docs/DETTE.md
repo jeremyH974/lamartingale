@@ -38,6 +38,20 @@ Classement par priorité décroissante. **P0 = bloquant / P1 = forte valeur / P2
 - **Action Phase F** : si ce widget est spec'é, ajouter au plan de release "redeploy 6 sous-sites post-merge" (boucle `npm run deploy:<id>` ou `cli deploy --all` si #19 shipped).
 - **Si décision inverse** (pas de widget cross-podcast sur les sous-sites) : skip redeploy, laisser `hub_order` comme métadonnée hub-only.
 
+### Calibration quiz Rail 1 — factoïdes numériques intrinsèques
+
+Décision Rail 1 : le prompt Haiku autorise les questions numériques
+quand elles portent sur un chiffre-clé de l'épisode (règle 50/20/30,
+plafond PER, taux fiscaux). Ces factoïdes ne sont pas un bug mais
+une fidélité au contenu source.
+
+À ne pas "corriger" par un prompt plus strict anti-numérique : ça
+dégraderait les eps dont le fond EST numérique (listes de conseils,
+fiscalité, ratios d'investissement).
+
+Validation : 3 samples dry-run (#16, #141, #313) — 12/15 conceptuels
+ou applicatifs, 3 factoïdes traçables et utiles. Calibration retenue.
+
 ---
 
 ## Phase E — Auth créateur (post-Rail 4a, pré-seed externe)
