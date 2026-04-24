@@ -77,4 +77,26 @@ describe('M1 — Config Factory', () => {
     expect(resolved).not.toContain('{slug}');
     expect(resolved).toMatch(/^https?:\/\//);
   });
+
+  it('9. features.qualityQuizReady flag is propagated to public config (LM = true)', () => {
+    const cfg = getConfig();
+    expect(cfg.features?.qualityQuizReady).toBe(true);
+    const pub = toPublicConfig(cfg);
+    expect(pub.features?.qualityQuizReady).toBe(true);
+  });
+
+  it('10. features.qualityQuizReady flag is false for non-LM tenants (masque Quiz sur GDIY etc.)', async () => {
+    const { gdiyConfig } = await import('@instances/gdiy.config');
+    const { lepanierConfig } = await import('@instances/lepanier.config');
+    const { finscaleConfig } = await import('@instances/finscale.config');
+    const { passionpatrimoineConfig } = await import('@instances/passionpatrimoine.config');
+    const { combiencagagneConfig } = await import('@instances/combiencagagne.config');
+    const { hubConfig } = await import('@instances/hub.config');
+
+    for (const c of [gdiyConfig, lepanierConfig, finscaleConfig, passionpatrimoineConfig, combiencagagneConfig, hubConfig]) {
+      expect(c.features?.qualityQuizReady).toBe(false);
+      const pub = toPublicConfig(c);
+      expect(pub.features?.qualityQuizReady).toBe(false);
+    }
+  });
 });

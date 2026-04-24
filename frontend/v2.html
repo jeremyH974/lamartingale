@@ -1678,6 +1678,20 @@
         if (fcopy && cfg.producer && cfg.host) {
           fcopy.innerHTML = `Produit par ${cfg.producer} · ${cfg.host} · &copy; ${new Date().getFullYear()}`;
         }
+
+        // Feature flags — masque le quiz tant que non régénéré par Rail N.
+        // LM = true (Rail 1 shipped). GDIY / LP / FS / PP / CCG / hub = false.
+        const quizReady = cfg.features?.qualityQuizReady === true;
+        if (!quizReady) {
+          // 1. Hide the hero-stat "X quiz" tile
+          const hsQ = document.getElementById('hs-q');
+          if (hsQ && hsQ.parentElement) hsQ.parentElement.style.display = 'none';
+          // 2. Scrub "quiz adaptatif" mention from hero description
+          const heroP = document.getElementById('hero-p');
+          if (heroP && heroP.textContent && /quiz adaptatif/i.test(heroP.textContent)) {
+            heroP.textContent = heroP.textContent.replace(/,?\s*quiz adaptatif/i, '');
+          }
+        }
       } catch (e) {
         console.warn('[config] fallback to defaults:', e);
       }
@@ -2398,7 +2412,16 @@
       if(view==='episodes') renderEpList();
       if(view==='paths') renderPathsAll();
       if(view==='experts') renderExpertsAll();
-      if(view==='quiz'&&!qLoaded) loadAdaptiveQuiz();
+      if(view==='quiz') {
+        // Feature flag : si quiz non régénéré (template bidon), affiche un placeholder.
+        const quizReady = window.PODCAST_CFG?.features?.qualityQuizReady === true;
+        if (!quizReady) {
+          const el = document.getElementById('quiz-area');
+          if (el) el.innerHTML = `<div class="quiz-q-card" style="text-align:center;padding:48px"><div style="font-size:18px;font-weight:600;color:var(--text-secondary);margin-bottom:12px">Quiz en cours de préparation</div><div style="color:var(--text-muted);font-size:14px;max-width:420px;margin:0 auto">Les questions de qualité pour ce podcast seront disponibles très prochainement.</div></div>`;
+        } else if (!qLoaded) {
+          loadAdaptiveQuiz();
+        }
+      }
       if(view==='graph') renderGraph();
       if(view==='search') document.getElementById('hybrid-search-input')?.focus();
       if(view==='chat') document.getElementById('chat-input')?.focus();

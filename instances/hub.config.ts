@@ -55,4 +55,8 @@ export const hubConfig: PodcastConfig = {
     vercelScope: 'jeremyh974s-projects',
     domain: 'ms-hub.vercel.app',
   },
+
+  features: {
+    qualityQuizReady: false, // hub n'a pas de quiz propre, expose juste l'info
+  },
 };

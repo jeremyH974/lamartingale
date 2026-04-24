@@ -67,6 +67,10 @@ const config: PodcastConfig = {
   },
 
   hub_order: 3,
+
+  features: {
+    qualityQuizReady: false, // template bidon — régen qualité à planifier
+  },
 };
 
 export const lepanierConfig = config;

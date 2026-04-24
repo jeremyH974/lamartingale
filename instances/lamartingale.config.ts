@@ -83,4 +83,8 @@ export const lamartingaleConfig: PodcastConfig = {
   },
 
   hub_order: 1,
+
+  features: {
+    qualityQuizReady: true, // Rail 1 shipped 24/04/26 — 1586 questions Haiku 4.5
+  },
 };

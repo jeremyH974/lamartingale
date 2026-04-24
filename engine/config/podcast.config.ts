@@ -95,6 +95,16 @@ export interface PodcastConfig {
   // Ordre d'affichage dans le Hub Univers MS (1 = en tête).
   // Absent sur 'hub' (lui-même), optionnel sinon.
   hub_order?: number;
+
+  // Feature flags — permettent de masquer / activer des features frontend
+  // tenant par tenant. Défaut (absent) = false. Propagés en PublicPodcastConfig.
+  //
+  // - qualityQuizReady : true = quiz régénéré par Haiku (LM post-Rail 1).
+  //   false = quiz template bidon à masquer côté front (pas encore régénéré).
+  //   Rail 1-bis régénère GDIY et flippera GDIY à true.
+  features?: {
+    qualityQuizReady?: boolean;
+  };
 }
 
 // Sous-ensemble public exposé au frontend via /api/config.
@@ -113,6 +123,7 @@ export interface PublicPodcastConfig {
   branding: PodcastConfig['branding'];
   taxonomy: { mode: 'predefined' | 'auto'; pillars?: TaxonomyPillar[] };
   hub_order?: number;
+  features?: PodcastConfig['features'];
 }
 
 export function toPublicConfig(c: PodcastConfig): PublicPodcastConfig {
@@ -133,5 +144,6 @@ export function toPublicConfig(c: PodcastConfig): PublicPodcastConfig {
       pillars: c.taxonomy.pillars,
     },
     hub_order: c.hub_order,
+    features: c.features,
   };
 }

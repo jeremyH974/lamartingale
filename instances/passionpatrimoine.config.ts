@@ -67,6 +67,10 @@ const config: PodcastConfig = {
   },
 
   hub_order: 5,
+
+  features: {
+    qualityQuizReady: false, // template bidon — régen qualité à planifier
+  },
 };
 
 export const passionpatrimoineConfig = config;

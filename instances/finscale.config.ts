@@ -67,6 +67,10 @@ const config: PodcastConfig = {
   },
 
   hub_order: 4,
+
+  features: {
+    qualityQuizReady: false, // template bidon — régen qualité à planifier
+  },
 };
 
 export const finscaleConfig = config;

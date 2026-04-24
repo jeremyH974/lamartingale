@@ -53,6 +53,11 @@ const config: PodcastConfig = {
     vercelProject: '{{ID}}-v2',
     vercelScope: 'jeremyh974s-projects',
   },
+
+  features: {
+    // qualityQuizReady: false par défaut — flippe à true après régen quiz qualité Haiku
+    qualityQuizReady: false,
+  },
 };
 
 export default config;

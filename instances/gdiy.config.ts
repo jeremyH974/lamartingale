@@ -107,4 +107,8 @@ export const gdiyConfig: PodcastConfig = {
   },
 
   hub_order: 2,
+
+  features: {
+    qualityQuizReady: false, // template bidon — attend Rail 1-bis (régen Haiku)
+  },
 };
