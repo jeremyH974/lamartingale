@@ -24,6 +24,20 @@ Classement par priorité décroissante. **P0 = bloquant / P1 = forte valeur / P2
 - **Pas de fan-out côté client** (6 fetches parallèles) pour un usage marginal.
 - **À reconsidérer** : après Phase E (auth + usage réel des créateurs), si un vrai besoin remonte côté Orso/MS, créer `/api/search/universe` dédié.
 
+### Perf `/api/universe` cold hit 2.15s (acceptable, sous surveillance)
+- **Mesure** (24/04/26, pré-deploy Phase C) : cold hit ~2.15s (4 queries parallèles sur 6 tenants + URL-matching runtime sur ~28 500 rows `episode_links`). Warm hit ~71ms (cache `getCached('universe', 3600, …)` MEM + Vercel KV).
+- **Acceptable maintenant** : la page `hub.html` est low-traffic (créateurs + partage) et le cache 1h amortit. Cold hit uniquement au premier load post-deploy ou post-TTL.
+- **Seuils de surveillance** :
+  - **P3** si cold > 3s sustained (dégradation modérée, à investiguer)
+  - **P2** si cold > 5s (dégradation bloquante UX, refactor requis)
+- **Leviers d'optimisation si nécessaire** : index partiels sur `episode_links(tenant_id, url)`, matérialisation d'une `cross_refs_mv` rafraîchie au post-ingest, ou pré-calcul runtime dans une table `universe_snapshot` (refresh via hook CLI). À considérer si GDIY complet (passage 959 → ~1 200 eps à terme) fait monter cold hit au-delà des seuils.
+
+### Redeploy sous-sites conditionnel — widget "Autres podcasts de l'univers"
+- **État** : `hub_order` est exposé dans `PublicPodcastConfig` (via `/api/config`) mais **non consommé** par les sous-sites (LM, GDIY, LP, FS, PP, CCG). Les déploiements sous-sites courants (24/04/26) n'ont donc pas besoin d'être refaits pour Phase C.
+- **À activer en Phase F (probable)** : si un widget "Autres podcasts de l'univers" est ajouté dans le footer ou sidebar de `frontend/v2.html`, il consommera `hub_order` pour ordonner les cards et nécessitera un redeploy des 6 sous-sites pour récupérer les nouveaux champs dans `/api/config`.
+- **Action Phase F** : si ce widget est spec'é, ajouter au plan de release "redeploy 6 sous-sites post-merge" (boucle `npm run deploy:<id>` ou `cli deploy --all` si #19 shipped).
+- **Si décision inverse** (pas de widget cross-podcast sur les sous-sites) : skip redeploy, laisser `hub_order` comme métadonnée hub-only.
+
 ---
 
 ## Bruit cross_podcast_ref — patterns à filtrer en lecture hub
@@ -290,6 +304,19 @@ Applicable aux futurs scripts : migrations schema (`engine/db/migrate-*.ts`), ba
 ### 18. Similarité cross-tenant
 - **État** : 0 paires dans `episode_similarities` cross-tenant (par design multi-tenant).
 - **Décision à prendre** : est-ce pertinent d'avoir "épisodes similaires" qui traversent les podcasts ? Risque de bruit, mais valeur découverte cross-univers. Orthogonal à cross_podcast_refs (#5).
+
+### 19b. Résolution cross-ref URL → épisode cible (Phase F ou post-F)
+
+Les 213 refs cross-tenant Phase C sont affichées comme URLs brutes dans le hub. Pour un enrichissement visuel (titre épisode, cover art, date) côté hub ou côté sous-sites, il faudra résoudre chaque URL vers l'ID d'épisode du tenant cible.
+
+Complexité identifiée dans le sample Rail 2 :
+- GDIY a au moins 4 patterns URL historiques : `/podcast/<slug>/`, `/<slug>/`, `/<YYYY>/<MM>/<DD>/<N>-<slug>-...`, `/<cat>/<slug>/`.
+- URLs legacy contenant des scories d'encoding (ex: `%E2%80%8A` hair space).
+- Normalisation nécessaire avant lookup DB.
+
+**Approche recommandée** : ajouter une table `cross_ref_resolution(url_normalized, tenant_dst, episode_id)` peuplée par un job batch, consultée par `/api/universe`. Évite un lookup per-request.
+
+**Priorité** : P3, attendre que le hub enrichi affiche plus que l'URL brute (Phase F ou démo Orso).
 
 ### 19. CLI Factory `deploy --all` absent
 - **État** : `cli/index.ts` n'a que `deploy --podcast <id>` (requiredOption). Pas de `--all` pour déployer les 7 tenants en une commande.
