@@ -149,6 +149,25 @@ describe('classifyUrl', () => {
     // Après Rail 1 : classification dynamique via websiteHost uniquement.
     expect(classifyUrl('https://lamartingale.io/episode/123')).toBe('resource');
   });
+
+  // Lock du contrat "company" actuel — toute refacto D3 step 2 doit
+  // explicitement revalider ces cas (heuristique URL racine sans path).
+  // Cf. docs/DETTE.md § D3 step 2 — heuristiques divergentes.
+  describe('company (heuristique URL racine)', () => {
+    it('URL racine sans path → company', () => {
+      expect(classifyUrl('https://acme.com')).toBe('company');
+      expect(classifyUrl('https://acme.com/')).toBe('company');
+      expect(classifyUrl('https://www.startup.fr/')).toBe('company');
+    });
+    it('URL avec path → resource (pas company)', () => {
+      expect(classifyUrl('https://acme.com/about')).toBe('resource');
+      expect(classifyUrl('https://acme.com/team/ceo')).toBe('resource');
+    });
+    it('tool prend le pas sur company racine', () => {
+      expect(classifyUrl('https://notion.so')).toBe('tool');
+      expect(classifyUrl('https://stripe.com/')).toBe('tool');
+    });
+  });
 });
 
 describe('websiteHostFromUrl', () => {
