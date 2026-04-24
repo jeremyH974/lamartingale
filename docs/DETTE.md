@@ -242,7 +242,13 @@ Le module `engine/classify/episode-ref-rules.ts` est le **premier pas** vers un 
 
 **✅ Step 1 (c157bde, 25/04/26)** : extraction de la logique `tool` dans `engine/classify/tool-rules.ts` (fusion fintech + SaaS, `isToolDomain` + `isToolUrl`, 11 tests). Les 2 call sites (`scrape-deep.ts`, `rss/extractors.ts`) importent désormais du module commun → fin de la divergence pour `link_type='tool'`.
 
-**Prochaine étape** : porter aussi la logique `company` dans un `classify/company-rules.ts`, puis exposer un `classifyUrl()` unifié (`tool | company | episode_ref | linkedin | resource`). Bénéfice : test unitaire unique, évolution en parallèle plus besoin, fin complète de la "divergence classifieurs".
+**Prochaine étape — non triviale** : porter aussi la logique `company` dans un `classify/company-rules.ts`. **Attention** : les 2 heuristiques actuelles sont fondamentalement divergentes :
+- `scrape-deep.ts` : `host.split('.').length === 2 && TLD ∈ {fr,com,io}` (domaine court)
+- `rss/extractors.ts` : `/^https?:\/\/[^/]+\/?$/` (URL racine sans path)
+
+Ces heuristiques classent des ensembles **différents** de liens en `company`. Unifier nécessite audit d'impact sur `episode_links` (17k+ rows classifiés, risque de reclasification massive). À faire hors stand-by démo, avec dry-run + diff avant/après sur DB.
+
+Ensuite exposer un `classifyUrl()` unifié (`tool | company | episode_ref | linkedin | resource`) consommé par les 2 call sites. Bénéfice final : test unitaire unique, fin complète de la "divergence classifieurs".
 
 ### D4 — Richesse `episode_ref` conditionnée par scrape-deep
 
