@@ -314,10 +314,9 @@ async function cmdCacheClear(opts: { podcast: string; prefix?: string; url?: str
   const pc = loadPodcastConfig(id);
   const project = pc?.deploy?.vercelProject || `${id}-v2`;
   const baseUrl = opts.url || `https://${project}.vercel.app`;
+  // ADMIN_TOKEN absent = silencieux (cache clear marche sans si ADMIN_TOKEN
+  // n'est pas configuré côté Vercel, et le warning générait du bruit inutile).
   const token = process.env.ADMIN_TOKEN;
-  if (!token) {
-    console.warn('⚠ ADMIN_TOKEN absent — le endpoint /api/cache/clear renverra 401 si une env var est configurée côté Vercel.');
-  }
 
   const qs = opts.prefix ? `?prefix=${encodeURIComponent(opts.prefix)}` : '';
   const url = `${baseUrl}/api/cache/clear${qs}`;
