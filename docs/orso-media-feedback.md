@@ -120,7 +120,7 @@ Je serais ravi de partager :
 
 C'est un projet 100 % non-commercial, purement par goût du podcast et des données. Si ça peut nourrir une réflexion produit chez Orso — ou juste vous amuser 2 minutes — n'hésitez pas.
 
-**Contact :** jeremyhenry974@gmail.com — projet : https://lamartingale.vercel.app
+**Contact :** jeremyhenry974@gmail.com — projet : https://lamartingale-v2.vercel.app
 
 ---
 

@@ -1,6 +1,6 @@
 # API Reference — La Martingale
 
-Référence exhaustive des **27 endpoints** Express (`src/api.ts`). Base URL prod : `https://lamartingale.vercel.app` (V1) ou `https://lamartingale-v2.vercel.app` (V2) — les deux pointent sur la même API.
+Référence exhaustive des **27 endpoints** Express (`engine/api.ts`). Base URL prod : `https://lamartingale-v2.vercel.app` (La Martingale — un projet Vercel par tenant, même API multi-tenant via `PODCAST_ID`).
 
 ## Comportement dual-mode
 
@@ -48,7 +48,7 @@ Liste paginée des épisodes, avec filtres.
 
 **Exemple** :
 ```bash
-curl "https://lamartingale.vercel.app/api/episodes?pillar=IMMOBILIER&limit=5"
+curl "https://lamartingale-v2.vercel.app/api/episodes?pillar=IMMOBILIER&limit=5"
 ```
 
 ### `GET /api/episodes/:id`
@@ -63,7 +63,7 @@ Détail d'un épisode par `episode_number`.
 
 **Exemple** :
 ```bash
-curl https://lamartingale.vercel.app/api/episodes/312
+curl https://lamartingale-v2.vercel.app/api/episodes/312
 ```
 
 ### `GET /api/enriched/:id`
@@ -92,7 +92,7 @@ Détail d'un expert par slug (`name` en kebab-case).
 **Réponse 404** : `{ "error": "Expert not found" }`.
 
 ```bash
-curl https://lamartingale.vercel.app/api/experts/matthieu-stefani
+curl https://lamartingale-v2.vercel.app/api/experts/matthieu-stefani
 ```
 
 ---

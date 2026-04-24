@@ -112,7 +112,28 @@ Arborescence détaillée : voir [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 4. **Deep scraping** : 312/313 épisodes ont article complet (avg 5000c), 290/313 chapitrage, 9901 liens classifiés (tool/company/linkedin/episode_ref/resource)
 5. **Multi-tenant** : 1 DB Neon partagée, isolation via `tenant_id` sur 10 tables + contraintes uniques composites `(tenant_id, X)`. 0 paire cross-tenant dans `episode_similarities`.
 6. **Frontend config-driven** : un seul `frontend/v2.html`, pilote tout (branding, tagline, platforms, socials, logo, CTA accent) via `/api/config`. Luminance WCAG pour choisir le texte hero/CTA.
-7. **Vercel = 1 projet par tenant** : pas de subpath, pas de rewrites. `lamartingale-v2` et `gdiy-v2` partagent la même DB. V1 La Martingale archivée (public/archive/v1.html), une seule version maintenue.
+7. **Vercel = 1 projet par tenant** : pas de subpath, pas de rewrites cross-project. `lamartingale-v2`, `gdiy-v2`, `lepanier-v2`, `finscale-v2`, `passionpatrimoine-v2`, `combiencagagne-v2`, `ms-hub` partagent la même DB Neon.
+
+## Frontend — règle unique version
+
+Seuls les fichiers suivants sont actifs et modifiables :
+- `frontend/v2.html` (page d'accueil config-driven)
+- `frontend/episode.html` (page détail épisode)
+- `frontend/hub.html` (agrégateur cross-podcast)
+- `frontend/v2-dashboard.html` (dashboard créateur)
+
+V1 (dark mode, accent orange `#f59e0b`) a été supprimée le 24 avril 2026.
+Ne pas recréer, ne pas référencer, ne pas restaurer depuis l'historique git.
+Le domaine `https://lamartingale.vercel.app` (ancien V1) n'est plus servi publiquement.
+
+## Historique V1
+
+V1 supprimée du repo le 24 avril 2026 (commit de clôture + refonte package.json).
+Derniers deploys fonctionnels V1 avant figeage (consultables via Vercel Dashboard sur `lamartingale-v1-archived`, SSO protégé) :
+- `lamartingale-bi06fvue2` (5d avant la suppression, Ready)
+- `lamartingale-lq5xu0f1c` (5d avant la suppression, Ready)
+
+Ne pas réactiver. Le projet Vercel est figé, aucun auto-deploy, aucun trafic public.
 
 ## Sandbox policy (scripts DB & LLM)
 
@@ -134,8 +155,12 @@ Convention : tout nouveau script write doit accepter un flag `--dry` (default tr
 
 - La Martingale : https://lamartingale-v2.vercel.app (unique version)
 - GDIY : https://gdiy-v2.vercel.app
+- Le Panier : https://lepanier-v2.vercel.app
+- Finscale : https://finscale-v2.vercel.app
+- Passion Patrimoine : https://passionpatrimoine-v2.vercel.app
+- Combien ça gagne : https://combiencagagne-v2.vercel.app
+- Hub Univers MS : https://ms-hub.vercel.app
 - GitHub : https://github.com/jeremyH974/lamartingale
-- V1 archivée : `public/archive/v1.html` (plus déployée, domaine `lamartingale.vercel.app` non maintenu)
 
 ## Chartes graphiques
 

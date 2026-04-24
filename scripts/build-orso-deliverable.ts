@@ -327,7 +327,7 @@ function buildDoc() {
     spacing: { before: 0, after: 60 },
     children: [
       new TextRun({ text: 'Projet : ', bold: true }),
-      new TextRun('https://lamartingale.vercel.app'),
+      new TextRun('https://lamartingale-v2.vercel.app'),
     ],
   }));
 

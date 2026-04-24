@@ -35,12 +35,13 @@ Audience : Jeremy après une pause, ou un dev qui rejoint le projet.
    api/index.ts handler       (dev local: port 3001)
           │
           ▼
-   ┌──────────────────────────┐  ┌───────────────────────────┐
-   │ Vercel V1                │  │ Vercel V2                 │
-   │ lamartingale.vercel.app  │  │ lamartingale-v2.vercel.app│
-   │ public/index.html        │  │ public/v2.html (via       │
-   │   (D3.js graph, 7 vues)  │  │    vercel-v2.json rewrite)│
-   └──────────────────────────┘  └───────────────────────────┘
+   ┌─────────────────────────────────────────────────────────┐
+   │ 7 projets Vercel (1 par tenant)                         │
+   │ lamartingale-v2, gdiy-v2, lepanier-v2, finscale-v2,     │
+   │ passionpatrimoine-v2, combiencagagne-v2, ms-hub         │
+   │ Servent frontend/v2.html (config-driven via /api/config)│
+   │ + frontend/episode.html + frontend/hub.html (hub-only)  │
+   └─────────────────────────────────────────────────────────┘
 ```
 
 ## Les 4 couches
