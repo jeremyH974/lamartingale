@@ -99,4 +99,31 @@ describe('M1 — Config Factory', () => {
       expect(pub.features?.qualityQuizReady).toBe(false);
     }
   });
+
+  it('11. features.pillarsReady flag is propagated to public config (LM = true, piliers predefined)', () => {
+    const cfg = getConfig();
+    expect(cfg.features?.pillarsReady).toBe(true);
+    const pub = toPublicConfig(cfg);
+    expect(pub.features?.pillarsReady).toBe(true);
+  });
+
+  it('12. features.pillarsReady matches audit (GDIY/FS = true, LP/PP/CCG/hub = false)', async () => {
+    const { gdiyConfig } = await import('@instances/gdiy.config');
+    const { finscaleConfig } = await import('@instances/finscale.config');
+    const { lepanierConfig } = await import('@instances/lepanier.config');
+    const { passionpatrimoineConfig } = await import('@instances/passionpatrimoine.config');
+    const { combiencagagneConfig } = await import('@instances/combiencagagne.config');
+    const { hubConfig } = await import('@instances/hub.config');
+
+    // Auto-cluster propre
+    for (const c of [gdiyConfig, finscaleConfig]) {
+      expect(c.features?.pillarsReady).toBe(true);
+      expect(toPublicConfig(c).features?.pillarsReady).toBe(true);
+    }
+    // Bucket UNCLASSIFIED significatif ou pas de piliers propres
+    for (const c of [lepanierConfig, passionpatrimoineConfig, combiencagagneConfig, hubConfig]) {
+      expect(c.features?.pillarsReady).toBe(false);
+      expect(toPublicConfig(c).features?.pillarsReady).toBe(false);
+    }
+  });
 });

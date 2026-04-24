@@ -102,8 +102,13 @@ export interface PodcastConfig {
   // - qualityQuizReady : true = quiz régénéré par Haiku (LM post-Rail 1).
   //   false = quiz template bidon à masquer côté front (pas encore régénéré).
   //   Rail 1-bis régénère GDIY et flippera GDIY à true.
+  // - pillarsReady : true = piliers éditoriaux solides (LM predefined, GDIY/Finscale
+  //   auto-cluster propre). false = auto-clustering produit un bucket UNCLASSIFIED
+  //   significatif (>10% du catalogue). Masque la section piliers + les étiquettes
+  //   sur les cards ep tant que pas calibré.
   features?: {
     qualityQuizReady?: boolean;
+    pillarsReady?: boolean;
   };
 }
 

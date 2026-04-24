@@ -436,6 +436,12 @@
       color: var(--text-muted);
     }
 
+    /* pillarsReady=false → masque les étiquettes piliers (auto-cluster non calibré) */
+    body.no-pillars .ep-pillar-name,
+    body.no-pillars .ep-pillar-dot {
+      display: none;
+    }
+
     .ep-check {
       color: var(--success);
       font-size: 16px;
@@ -1692,6 +1698,16 @@
             heroP.textContent = heroP.textContent.replace(/,?\s*quiz adaptatif/i, '');
           }
         }
+
+        // pillarsReady — masque les étiquettes piliers sur les cards ep quand
+        // l'auto-cluster n'est pas calibré (bucket UNCLASSIFIED significatif).
+        // LM = true (predefined). GDIY / Finscale = true (auto-cluster propre).
+        // LP / PP / CCG / hub = false — on ajoute une classe body qui cache
+        // .ep-pillar-name via CSS et conditionne le rendu de la section reco.
+        const pillarsReady = cfg.features?.pillarsReady === true;
+        if (!pillarsReady) {
+          document.body.classList.add('no-pillars');
+        }
       } catch (e) {
         console.warn('[config] fallback to defaults:', e);
       }
@@ -2178,6 +2194,25 @@
     // ===== RECOMMANDATIONS =====
     const selP=new Set(), selG=new Set();
     function buildRecoForm() {
+      const pillarsReady = window.PODCAST_CFG?.features?.pillarsReady === true;
+      if (!pillarsReady) {
+        // Auto-cluster non calibré — on remplace le form par un placeholder
+        const recoView = document.getElementById('v-reco');
+        if (recoView) {
+          const section = recoView.querySelector('.section');
+          if (section) {
+            section.innerHTML = `
+              <div class="section-title" style="margin-bottom:4px">Pour vous</div>
+              <div class="section-subtitle" style="margin-bottom:24px">Recommandations personnalisées — en cours de calibration</div>
+              <div style="text-align:center;padding:48px 24px;background:var(--surface);border-radius:12px;max-width:560px;margin:0 auto">
+                <div style="font-size:17px;font-weight:600;color:var(--text-secondary);margin-bottom:12px">Thématiques en cours d'analyse</div>
+                <div style="color:var(--text-muted);font-size:14px;line-height:1.6">Les piliers éditoriaux de ce podcast sont en cours de construction. Les recommandations personnalisées seront disponibles très prochainement.</div>
+              </div>
+            `;
+          }
+        }
+        return;
+      }
       document.getElementById('r-pillars').innerHTML = Object.entries(PN).map(([k,v])=>`<div class="chip" onclick="togC(selP,'${k}',this)"><span style="color:${PC[k]}">●</span> ${v}</div>`).join('');
       document.getElementById('r-goals').innerHTML = [
         ['BUILD_SAVINGS','Constituer une epargne'],['BUY_HOME','Acheter ma RP'],['INVEST_REAL_ESTATE','Immobilier locatif'],

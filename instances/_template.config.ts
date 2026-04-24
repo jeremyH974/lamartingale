@@ -57,6 +57,9 @@ const config: PodcastConfig = {
   features: {
     // qualityQuizReady: false par défaut — flippe à true après régen quiz qualité Haiku
     qualityQuizReady: false,
+    // pillarsReady: false par défaut — flippe à true quand l'auto-cluster est propre
+    // (bucket UNCLASSIFIED < 10% du catalogue) ou quand taxonomy.mode = 'predefined'
+    pillarsReady: false,
   },
 };
 

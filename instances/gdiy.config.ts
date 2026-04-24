@@ -110,5 +110,6 @@ export const gdiyConfig: PodcastConfig = {
 
   features: {
     qualityQuizReady: false, // template bidon — attend Rail 1-bis (régen Haiku)
+    pillarsReady: true, // 19 clusters auto propres, pas de bucket UNCLASSIFIED significatif
   },
 };

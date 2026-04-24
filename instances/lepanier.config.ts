@@ -70,6 +70,7 @@ const config: PodcastConfig = {
 
   features: {
     qualityQuizReady: false, // template bidon — régen qualité à planifier
+    pillarsReady: false, // bucket UNCLASSIFIED ~32% (164 eps) — auto-cluster à recalibrer
   },
 };
 

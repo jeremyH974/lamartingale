@@ -58,5 +58,6 @@ export const hubConfig: PodcastConfig = {
 
   features: {
     qualityQuizReady: false, // hub n'a pas de quiz propre, expose juste l'info
+    pillarsReady: false, // hub n'a pas de piliers propres (agrégateur cross-podcast)
   },
 };
