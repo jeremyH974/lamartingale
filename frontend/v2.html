@@ -192,6 +192,38 @@
       font-variant-numeric: tabular-nums;
     }
 
+    /* Stat hero cliquable (appliqué dynamiquement quand qualityQuizReady=true) */
+    .hero-stat-clickable {
+      cursor: pointer;
+      padding: 6px 10px;
+      margin: -6px -10px;
+      border-radius: 8px;
+      transition: transform .18s ease, background .18s ease;
+    }
+    .hero-stat-clickable:hover {
+      transform: translateY(-2px);
+      background: rgba(255, 255, 255, 0.08);
+    }
+    .hero-stat-clickable:focus-visible {
+      outline: 2px solid rgba(255, 255, 255, 0.7);
+      outline-offset: 2px;
+    }
+    /* Label clickable : opacity 1 (vs 0.65 des 3 tiles décoratives)
+       crée l'asymétrie visuelle "active asset". Évite aussi le piège du
+       stacking context opacity où ::after multiplierait avec parent 0.65. */
+    .hero-stat-clickable .hero-stat-label {
+      opacity: 1;
+      font-weight: 600;
+    }
+    .hero-stat-clickable .hero-stat-label::after {
+      content: " →";
+      transition: transform .18s ease;
+      display: inline-block;
+    }
+    .hero-stat-clickable:hover .hero-stat-label::after {
+      transform: translateX(3px);
+    }
+
     .hero-stat-label {
       font-size: 12px;
       opacity: 0.65;
@@ -1688,15 +1720,34 @@
         // Feature flags — masque le quiz tant que non régénéré par Rail N.
         // LM = true (Rail 1 shipped). GDIY / LP / FS / PP / CCG / hub = false.
         const quizReady = cfg.features?.qualityQuizReady === true;
+        const hsQ = document.getElementById('hs-q');
+        const hsQTile = hsQ?.parentElement;
         if (!quizReady) {
           // 1. Hide the hero-stat "X quiz" tile
-          const hsQ = document.getElementById('hs-q');
-          if (hsQ && hsQ.parentElement) hsQ.parentElement.style.display = 'none';
+          if (hsQTile) hsQTile.style.display = 'none';
           // 2. Scrub "quiz adaptatif" mention from hero description
           const heroP = document.getElementById('hero-p');
           if (heroP && heroP.textContent && /quiz adaptatif/i.test(heroP.textContent)) {
             heroP.textContent = heroP.textContent.replace(/,?\s*quiz adaptatif/i, '');
           }
+        } else if (hsQTile) {
+          // Quiz prêt (LM post-Rail 1) : rend la tile #hs-q cliquable → go('quiz').
+          // La nav publique ne contient plus de bouton Quiz depuis c67f4bf (refactor
+          // 10→5 items). Cette tile devient le point d'entrée vers les 1586 quiz
+          // Haiku 4.5. Affordance : classe hero-stat-clickable (cursor, hover
+          // lift, flèche en fin de label).
+          hsQTile.classList.add('hero-stat-clickable');
+          hsQTile.setAttribute('role', 'button');
+          hsQTile.setAttribute('tabindex', '0');
+          hsQTile.setAttribute('aria-label', 'Tester le quiz adaptatif');
+          hsQTile.setAttribute('title', 'Tester le quiz adaptatif');
+          hsQTile.addEventListener('click', () => go('quiz'));
+          hsQTile.addEventListener('keydown', (ev) => {
+            if (ev.key === 'Enter' || ev.key === ' ') {
+              ev.preventDefault();
+              go('quiz');
+            }
+          });
         }
 
         // pillarsReady — masque les étiquettes piliers sur les cards ep quand
