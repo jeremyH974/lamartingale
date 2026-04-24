@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Univers MS — La Martingale × GDIY</title>
+<meta name="description" content="L'écosystème Matthieu Stefani : La Martingale + Génération Do It Yourself. 850+ épisodes, 1200+ invités, 1300+ heures de contenu expert francophone.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --bg-2: #121212;
+    --bg-3: #1a1a1a;
+    --fg: #f5f5f5;
+    --fg-2: #b5b5b5;
+    --fg-3: #7a7a7a;
+    --accent: #00F5A0;
+    --lm: #004cff;
+    --gdiy: #00F5A0;
+    --border: #262626;
+    --card: #141414;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    line-height: 1.5;
+    overflow-x: hidden;
+  }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+
+  /* ============ NAV ============ */
+  nav.topbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(10,10,10,0.85); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 32px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .logo { font-size: 18px; font-weight: 800; letter-spacing: -0.02em; display: flex; align-items: center; gap: 10px; }
+  .logo-mark { width: 28px; height: 28px; background: linear-gradient(135deg, var(--lm), var(--gdiy)); border-radius: 6px; }
+  .nav-links { display: flex; gap: 28px; font-size: 14px; }
+  .nav-links a { color: var(--fg-2); font-weight: 500; transition: color 0.15s; }
+  .nav-links a:hover { color: var(--fg); }
+
+  /* ============ HERO ============ */
+  .hero {
+    min-height: 100vh;
+    padding: 120px 32px 60px;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    text-align: center;
+    position: relative;
+    background:
+      radial-gradient(ellipse at 20% 30%, rgba(0,76,255,0.18), transparent 50%),
+      radial-gradient(ellipse at 80% 70%, rgba(0,245,160,0.12), transparent 50%),
+      var(--bg);
+  }
+  .hero .eyebrow {
+    font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--accent); font-weight: 600; margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-size: clamp(44px, 6vw, 88px);
+    line-height: 0.98;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: 28px;
+    max-width: 900px;
+  }
+  .hero h1 .gradient {
+    background: linear-gradient(135deg, var(--lm), var(--gdiy));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .hero .tagline {
+    font-size: 19px; color: var(--fg-2); max-width: 640px;
+    margin-bottom: 48px;
+  }
+  .hero-stats {
+    display: flex; gap: 56px; flex-wrap: wrap; justify-content: center;
+    margin-bottom: 48px;
+  }
+  .hero-stat .n { font-size: 44px; font-weight: 800; letter-spacing: -0.02em; }
+  .hero-stat .n.lm { color: #6a8eff; }
+  .hero-stat .n.gdiy { color: var(--accent); }
+  .hero-stat .l { font-size: 13px; color: var(--fg-3); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 4px; }
+  .hero-cta { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+  .btn {
+    padding: 14px 28px; border-radius: 99px; font-weight: 600; font-size: 15px;
+    transition: transform 0.15s, box-shadow 0.15s;
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn-lm { background: var(--lm); color: white; }
+  .btn-lm:hover { box-shadow: 0 8px 24px rgba(0,76,255,0.4); }
+  .btn-gdiy { background: var(--accent); color: #000; }
+  .btn-gdiy:hover { box-shadow: 0 8px 24px rgba(0,245,160,0.4); }
+  .btn-ghost { border: 1px solid var(--border); color: var(--fg); }
+  .btn-ghost:hover { border-color: var(--fg); }
+
+  /* ============ SECTIONS ============ */
+  section { padding: 100px 32px; max-width: 1280px; margin: 0 auto; }
+  .section-title { font-size: 38px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 16px; }
+  .section-sub { font-size: 17px; color: var(--fg-2); margin-bottom: 48px; max-width: 640px; }
+
+  /* ============ PODCAST CARDS ============ */
+  .podcasts { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 24px; }
+  .podcast-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 20px;
+    padding: 32px; transition: transform 0.2s, border-color 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .podcast-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  }
+  .podcast-card.lm::before { background: var(--lm); }
+  .podcast-card.gdiy::before { background: var(--accent); }
+  .podcast-card:hover { transform: translateY(-4px); border-color: #3a3a3a; }
+  .podcast-card h3 { font-size: 28px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 8px; }
+  .podcast-card .pc-tag { font-size: 13px; color: var(--fg-3); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 0.1em; }
+  .podcast-card .pc-desc { color: var(--fg-2); font-size: 15px; margin-bottom: 28px; }
+  .podcast-card .pc-stats { display: flex; gap: 32px; margin-bottom: 28px; }
+  .podcast-card .pc-stat .n { font-size: 28px; font-weight: 800; }
+  .podcast-card .pc-stat .l { font-size: 11px; color: var(--fg-3); text-transform: uppercase; letter-spacing: 0.1em; }
+  .podcast-card .pc-cta { display: flex; gap: 10px; }
+
+  /* ============ CROSS GUESTS ============ */
+  .guest-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+  .guest-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+    padding: 20px; cursor: pointer; transition: border-color 0.15s, transform 0.15s;
+  }
+  .guest-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .guest-card h4 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+  .guest-card .badges { display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
+  .badge {
+    padding: 3px 10px; border-radius: 99px; font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .badge.lm { background: rgba(0,76,255,0.15); color: #7aa0ff; }
+  .badge.gdiy { background: rgba(0,245,160,0.15); color: var(--accent); }
+  .badge.eps { background: var(--bg-3); color: var(--fg-2); }
+  .guest-card .bio { font-size: 13px; color: var(--fg-3); line-height: 1.5; }
+
+  /* ============ SEARCH ============ */
+  .search-wrap { max-width: 720px; margin: 0 auto 32px; }
+  .search-input {
+    width: 100%; padding: 18px 24px; font-size: 17px; font-family: inherit;
+    background: var(--card); border: 1px solid var(--border); border-radius: 99px;
+    color: var(--fg); transition: border-color 0.15s;
+  }
+  .search-input:focus { outline: none; border-color: var(--accent); }
+  .search-results { display: flex; flex-direction: column; gap: 10px; max-width: 720px; margin: 0 auto; }
+  .search-result {
+    display: flex; justify-content: space-between; align-items: center; gap: 16px;
+    padding: 16px 20px; background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+  }
+  .search-result .sr-title { font-weight: 600; margin-bottom: 4px; }
+  .search-result .sr-meta { font-size: 12px; color: var(--fg-3); }
+  .search-result a.sr-open {
+    padding: 8px 14px; border-radius: 99px; font-size: 12px; font-weight: 600;
+    background: var(--bg-3); border: 1px solid var(--border);
+  }
+
+  /* ============ REFERENCES / TIMELINE ============ */
+  .refs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .refs-col h4 { font-size: 15px; font-weight: 700; margin-bottom: 16px; color: var(--fg-2); }
+  .ref-item {
+    padding: 14px 16px; background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; margin-bottom: 8px; font-size: 14px;
+  }
+  .ref-item .arrow { color: var(--accent); margin: 0 8px; }
+  .ref-item .ep { font-size: 12px; color: var(--fg-3); }
+
+  /* ============ INSIGHTS ============ */
+  .insights { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+  .insight-card {
+    background: linear-gradient(135deg, var(--card), var(--bg-2));
+    border: 1px solid var(--border); border-radius: 14px;
+    padding: 24px; font-size: 15px; color: var(--fg);
+  }
+  .insight-card .icon { font-size: 24px; margin-bottom: 12px; }
+
+  /* ============ FOOTER ============ */
+  footer { text-align: center; padding: 60px 32px 40px; color: var(--fg-3); font-size: 13px; border-top: 1px solid var(--border); margin-top: 80px; }
+  footer a { color: var(--fg-2); }
+
+  /* ============ MODAL ============ */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 200; display: none; align-items: center; justify-content: center; padding: 24px; }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--bg-2); border: 1px solid var(--border); border-radius: 16px;
+    max-width: 640px; width: 100%; max-height: 80vh; overflow-y: auto; padding: 32px;
+  }
+  .modal h3 { font-size: 24px; margin-bottom: 8px; }
+  .modal .close { position: absolute; top: 16px; right: 16px; font-size: 24px; color: var(--fg-3); cursor: pointer; background: none; border: none; }
+  .modal-section { margin-top: 24px; }
+  .modal-section h5 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--fg-3); margin-bottom: 10px; }
+  .modal-ep { padding: 10px 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 14px; }
+  .modal-ep:last-child { border-bottom: none; }
+
+  .loading { color: var(--fg-3); font-size: 14px; text-align: center; padding: 40px; }
+
+  @media (max-width: 640px) {
+    nav.topbar { padding: 12px 16px; }
+    .nav-links { gap: 14px; font-size: 12px; }
+    section { padding: 60px 20px; }
+    .section-title { font-size: 28px; }
+    .refs-grid { grid-template-columns: 1fr; }
+    .hero { padding: 100px 20px 40px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="#" class="logo"><span class="logo-mark"></span>Univers MS</a>
+  <div class="nav-links">
+    <a href="#podcasts">Podcasts</a>
+    <a href="#search">Recherche</a>
+    <a href="#chat">Chat</a>
+    <a href="#guests">Invités</a>
+    <a href="#references">Références croisées</a>
+    <a href="#insights">Insights</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="eyebrow">L'écosystème Matthieu Stefani</div>
+  <h1>Deux podcasts, <span class="gradient">un univers</span>.<br>850+ heures d'expertise.</h1>
+  <p class="tagline">La Martingale et Génération Do It Yourself réunis. La plus grande bibliothèque francophone sur le business et l'investissement — explorable dans sa totalité.</p>
+
+  <div class="hero-stats" id="hero-stats">
+    <div class="hero-stat"><div class="n">—</div><div class="l">Épisodes</div></div>
+    <div class="hero-stat"><div class="n">—</div><div class="l">Heures</div></div>
+    <div class="hero-stat"><div class="n">—</div><div class="l">Invités uniques</div></div>
+    <div class="hero-stat"><div class="n">—</div><div class="l">Invités partagés</div></div>
+  </div>
+
+  <div class="hero-cta">
+    <a class="btn btn-lm" href="https://lamartingale-v2.vercel.app" target="_blank">La Martingale →</a>
+    <a class="btn btn-gdiy" href="https://gdiy-v2.vercel.app" target="_blank">GDIY →</a>
+    <a class="btn btn-ghost" href="#search">Explorer l'univers</a>
+  </div>
+</div>
+
+<section id="podcasts">
+  <h2 class="section-title">Les podcasts de l'univers</h2>
+  <p class="section-sub">Deux angles, un même fil conducteur : comprendre comment se construire, investir, entreprendre.</p>
+  <div class="podcasts" id="podcasts-cards"></div>
+</section>
+
+<section id="search">
+  <h2 class="section-title">Recherche unifiée</h2>
+  <p class="section-sub">Une seule requête sémantique sur les deux podcasts. Trouvez le bon épisode, peu importe lequel.</p>
+  <div class="search-wrap">
+    <input id="search-input" class="search-input" type="text" placeholder="Ex : IA générative, scaling SaaS, SCPI, crypto, levée de fonds…">
+  </div>
+  <div class="search-results" id="search-results"></div>
+</section>
+
+<section id="chat">
+  <h2 class="section-title">Demandez à l'univers</h2>
+  <p class="section-sub">Une question, une réponse qui croise les deux podcasts. L'assistant cite toujours le podcast source et termine par deux recommandations.</p>
+  <div class="search-wrap">
+    <form id="chat-form" onsubmit="runChat(event)">
+      <input id="chat-input" class="search-input" type="text" placeholder="Ex : Comment lever des fonds tout en protégeant son patrimoine perso ?">
+    </form>
+  </div>
+  <div id="chat-out" style="max-width: 720px; margin: 0 auto;"></div>
+</section>
+
+<section id="guests">
+  <h2 class="section-title">Les ponts entre les deux mondes</h2>
+  <p class="section-sub">Des invités qui apparaissent dans les deux podcasts — le noyau dur qui connecte finance et entrepreneuriat.</p>
+  <div class="guest-list" id="guests-list"><div class="loading">Chargement…</div></div>
+</section>
+
+<section id="references">
+  <h2 class="section-title">Références croisées</h2>
+  <p class="section-sub">Quand un podcast cite l'autre — les passerelles narratives entre les épisodes.</p>
+  <div class="refs-grid">
+    <div class="refs-col">
+      <h4 style="color:#7aa0ff;">La Martingale → GDIY</h4>
+      <div id="refs-lm-gdiy"><div class="loading">Chargement…</div></div>
+    </div>
+    <div class="refs-col">
+      <h4 style="color: var(--accent);">GDIY → La Martingale</h4>
+      <div id="refs-gdiy-lm"><div class="loading">Chargement…</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="insights">
+  <h2 class="section-title">Insights de l'univers</h2>
+  <p class="section-sub">Ce que les données révèlent sur l'écosystème Matthieu Stefani.</p>
+  <div class="insights" id="insights-grid"></div>
+</section>
+
+<footer>
+  <p>Univers MS — agrégé depuis <a href="https://lamartingale-v2.vercel.app" target="_blank">La Martingale</a> (Orso Media) et <a href="https://gdiy-v2.vercel.app" target="_blank">GDIY</a> (Cosa Vostra).</p>
+  <p style="margin-top: 8px;">Projet de data-visualisation — Matthieu Stefani, hôte.</p>
+</footer>
+
+<div class="modal-overlay" id="guest-modal">
+  <div class="modal">
+    <button class="close" onclick="closeGuestModal()">×</button>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+  const API = ''; // même origine
+
+  async function loadStats() {
+    try {
+      const r = await fetch(API + '/api/cross/stats');
+      const d = await r.json();
+      const c = d.combined;
+      document.getElementById('hero-stats').innerHTML = `
+        <div class="hero-stat"><div class="n">${c.total_episodes.toLocaleString('fr-FR')}</div><div class="l">Épisodes</div></div>
+        <div class="hero-stat"><div class="n">${c.total_hours.toLocaleString('fr-FR')}</div><div class="l">Heures</div></div>
+        <div class="hero-stat"><div class="n">${c.total_guests_unique.toLocaleString('fr-FR')}</div><div class="l">Invités uniques</div></div>
+        <div class="hero-stat"><div class="n gdiy">${c.shared_guests_count}</div><div class="l">Ponts croisés</div></div>
+      `;
+
+      const cards = d.podcasts.map(p => {
+        const id = p.id;
+        const cls = id === 'lamartingale' ? 'lm' : 'gdiy';
+        const href = p.url;
+        const desc = id === 'lamartingale'
+          ? 'Le podcast qui parle d\'argent sans tabou. Investissement, finance perso, immobilier, crypto : comprendre et agir.'
+          : 'À la rencontre de celles et ceux qui se sont construits par eux-mêmes. Portraits de fondateurs et d\'entrepreneurs.';
+        const tag = id === 'lamartingale' ? 'Orso Media · Finance' : 'Cosa Vostra · Entrepreneuriat';
+        return `
+          <div class="podcast-card ${cls}">
+            <div class="pc-tag">${tag}</div>
+            <h3>${p.name}</h3>
+            <p class="pc-desc">${desc}</p>
+            <div class="pc-stats">
+              <div class="pc-stat"><div class="n">${p.episodes}</div><div class="l">Épisodes</div></div>
+              <div class="pc-stat"><div class="n">${p.hours}</div><div class="l">Heures</div></div>
+              <div class="pc-stat"><div class="n">${p.guests}</div><div class="l">Invités</div></div>
+            </div>
+            <div class="pc-cta"><a class="btn btn-${cls}" href="${href}" target="_blank">Découvrir →</a></div>
+          </div>`;
+      }).join('');
+      document.getElementById('podcasts-cards').innerHTML = cards;
+    } catch (e) {
+      console.error('[stats]', e);
+    }
+  }
+
+  async function loadSharedGuests() {
+    try {
+      const r = await fetch(API + '/api/cross/guests/shared');
+      const d = await r.json();
+      if (!d.guests || !d.guests.length) {
+        document.getElementById('guests-list').innerHTML = '<div class="loading">Aucun invité partagé pour l\'instant.</div>';
+        return;
+      }
+      const html = d.guests.slice(0, 12).map(g => {
+        const badges = g.appearances.map(a => {
+          const cls = a.podcast === 'lamartingale' ? 'lm' : 'gdiy';
+          const label = a.podcast === 'lamartingale' ? 'LM' : 'GDIY';
+          return `<span class="badge ${cls}">${label} · ${a.episodes.length}ep</span>`;
+        }).join('');
+        const bioShort = g.bio ? g.bio.slice(0, 140) + (g.bio.length > 140 ? '…' : '') : '';
+        return `
+          <div class="guest-card" onclick="openGuestModal('${encodeURIComponent(g.name)}')">
+            <h4>${g.name}</h4>
+            <div class="badges">${badges}<span class="badge eps">${g.total_episodes} eps</span></div>
+            <div class="bio">${bioShort}</div>
+          </div>`;
+      }).join('');
+      document.getElementById('guests-list').innerHTML = html;
+    } catch (e) {
+      console.error('[shared]', e);
+      document.getElementById('guests-list').innerHTML = '<div class="loading">Erreur de chargement.</div>';
+    }
+  }
+
+  async function loadReferences() {
+    try {
+      const r = await fetch(API + '/api/cross/references');
+      const d = await r.json();
+      const renderCol = (items) => items.slice(0, 10).map(ref => `
+        <div class="ref-item">
+          <div><strong>#${ref.source_episode}</strong> ${ref.source_title}</div>
+          <div class="ep">cite <span class="arrow">→</span> ${ref.target_podcast}${ref.episode_ref ? ' · ' + ref.episode_ref : ''}</div>
+        </div>`).join('') || '<div class="loading">Aucune référence.</div>';
+      document.getElementById('refs-lm-gdiy').innerHTML = renderCol(d.from_lm_to_gdiy);
+      document.getElementById('refs-gdiy-lm').innerHTML = renderCol(d.from_gdiy_to_lm);
+    } catch (e) {
+      console.error('[refs]', e);
+    }
+  }
+
+  async function loadAnalytics() {
+    try {
+      const r = await fetch(API + '/api/cross/analytics');
+      const d = await r.json();
+      const icons = ['◆', '▲', '●', '★'];
+      const html = (d.insights || []).map((t, i) => `
+        <div class="insight-card">
+          <div class="icon" style="color: var(--accent);">${icons[i % icons.length]}</div>
+          ${t}
+        </div>`).join('');
+      document.getElementById('insights-grid').innerHTML = html || '<div class="loading">Pas d\'insights pour l\'instant.</div>';
+    } catch (e) {
+      console.error('[analytics]', e);
+    }
+  }
+
+  // ---- SEARCH ----
+  let searchTimer;
+  document.getElementById('search-input').addEventListener('input', (e) => {
+    clearTimeout(searchTimer);
+    const q = e.target.value.trim();
+    if (q.length < 2) {
+      document.getElementById('search-results').innerHTML = '';
+      return;
+    }
+    searchTimer = setTimeout(() => runSearch(q), 300);
+  });
+
+  async function runSearch(q) {
+    const el = document.getElementById('search-results');
+    el.innerHTML = '<div class="loading">Recherche…</div>';
+    try {
+      const r = await fetch(API + '/api/cross/search?q=' + encodeURIComponent(q) + '&limit=12');
+      const d = await r.json();
+      if (!d.results || !d.results.length) {
+        el.innerHTML = '<div class="loading">Aucun résultat.</div>';
+        return;
+      }
+      el.innerHTML = d.results.map(hit => {
+        const base = hit.podcast === 'lamartingale' ? 'https://lamartingale-v2.vercel.app' : 'https://gdiy-v2.vercel.app';
+        const badgeCls = hit.podcast === 'lamartingale' ? 'lm' : 'gdiy';
+        const badgeLabel = hit.podcast === 'lamartingale' ? 'LM' : 'GDIY';
+        return `
+          <div class="search-result">
+            <div>
+              <div class="sr-title">#${hit.episode_number} · ${hit.title}</div>
+              <div class="sr-meta"><span class="badge ${badgeCls}">${badgeLabel}</span> ${hit.guest ? '· ' + hit.guest : ''}${hit.pillar ? ' · ' + hit.pillar : ''} · score ${(hit.score * 100).toFixed(0)}%</div>
+            </div>
+            <a class="sr-open" href="${base}" target="_blank">Ouvrir →</a>
+          </div>`;
+      }).join('');
+    } catch (e) {
+      console.error('[search]', e);
+      el.innerHTML = '<div class="loading">Erreur.</div>';
+    }
+  }
+
+  // ---- MODAL ----
+  async function openGuestModal(encodedName) {
+    const name = decodeURIComponent(encodedName);
+    const modal = document.getElementById('guest-modal');
+    const body = document.getElementById('modal-body');
+    body.innerHTML = '<div class="loading">Chargement…</div>';
+    modal.classList.add('open');
+    try {
+      const r = await fetch(API + '/api/cross/guests/' + encodeURIComponent(name));
+      const g = await r.json();
+      if (!g || g.error) {
+        body.innerHTML = '<p>Profil introuvable.</p>';
+        return;
+      }
+      const appearances = g.appearances.map(a => {
+        const base = a.podcast === 'lamartingale' ? 'https://lamartingale-v2.vercel.app' : 'https://gdiy-v2.vercel.app';
+        const badgeCls = a.podcast === 'lamartingale' ? 'lm' : 'gdiy';
+        const eps = a.episodes.map(e => `
+          <div class="modal-ep">
+            <div>#${e.number} · ${e.title}<div style="font-size:11px;color:var(--fg-3);margin-top:2px;">${e.date || ''}${e.pillar ? ' · ' + e.pillar : ''}</div></div>
+            <a class="sr-open" href="${base}" target="_blank">Ouvrir →</a>
+          </div>`).join('');
+        return `<div class="modal-section">
+          <h5><span class="badge ${badgeCls}">${a.podcast_name}</span> — ${a.episodes.length} épisode${a.episodes.length > 1 ? 's' : ''}</h5>
+          ${eps}
+        </div>`;
+      }).join('');
+      body.innerHTML = `
+        <h3>${g.name}</h3>
+        <div style="color: var(--fg-3); font-size: 13px; margin-bottom: 12px;">${g.total_episodes} épisodes · ${g.podcasts_count} podcasts${g.pillars_covered.length ? ' · ' + g.pillars_covered.join(' · ') : ''}</div>
+        ${g.bio ? `<p style="color: var(--fg-2); font-size: 14px; line-height: 1.6;">${g.bio}</p>` : ''}
+        ${g.linkedin_url ? `<p style="margin-top: 12px;"><a href="${g.linkedin_url}" target="_blank" style="color: var(--accent);">LinkedIn →</a></p>` : ''}
+        ${appearances}
+      `;
+    } catch (e) {
+      console.error('[guest]', e);
+      body.innerHTML = '<p>Erreur de chargement.</p>';
+    }
+  }
+  function closeGuestModal() { document.getElementById('guest-modal').classList.remove('open'); }
+  document.getElementById('guest-modal').addEventListener('click', (e) => {
+    if (e.target.id === 'guest-modal') closeGuestModal();
+  });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeGuestModal(); });
+
+  // ---- UNIVERSE CHAT ----
+  async function runChat(e) {
+    e.preventDefault();
+    const q = document.getElementById('chat-input').value.trim();
+    if (q.length < 3) return;
+    const out = document.getElementById('chat-out');
+    out.innerHTML = '<div class="loading">L\'univers réfléchit…</div>';
+    try {
+      const r = await fetch(API + '/api/cross/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: q }),
+      });
+      const d = await r.json();
+      if (d.error) { out.innerHTML = `<div class="loading">${d.error}</div>`; return; }
+      const sources = (d.sources || []).map(s => {
+        const cls = s.podcast === 'lamartingale' ? 'lm' : 'gdiy';
+        const label = s.podcast === 'lamartingale' ? 'LM' : 'GDIY';
+        return `<span class="badge ${cls}" style="margin-right: 6px;">${label} #${s.episode_number} · ${s.title.slice(0, 50)}${s.title.length > 50 ? '…' : ''}</span>`;
+      }).join('');
+      out.innerHTML = `
+        <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 24px; line-height: 1.7; white-space: pre-wrap; font-size: 15px;">${d.response}</div>
+        <div style="margin-top: 14px;">
+          <div style="font-size: 12px; color: var(--fg-3); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px;">Sources (${d.sources.length})</div>
+          <div style="display: flex; flex-wrap: wrap; gap: 6px;">${sources}</div>
+          <div style="margin-top: 10px; font-size: 11px; color: var(--fg-3);">${d.model} · ${d.timing_ms}ms</div>
+        </div>`;
+    } catch (e) {
+      console.error('[chat]', e);
+      out.innerHTML = '<div class="loading">Erreur — réessayez.</div>';
+    }
+  }
+
+  // Boot
+  loadStats();
+  loadSharedGuests();
+  loadReferences();
+  loadAnalytics();
+</script>
+
+</body>
+</html>
