@@ -9,6 +9,7 @@ const config: PodcastConfig = {
   name: '{{NAME}}',
   tagline: '',
   host: '{{HOST}}',
+  // coHosts?: [] — co-animateurs à exclure des stats invités (ex. GDIY: ['Amaury de Tonquédec'])
   producer: '',
   description: '',
 
