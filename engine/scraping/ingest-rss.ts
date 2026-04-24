@@ -21,11 +21,12 @@ import * as fs from 'fs';
 import { XMLParser } from 'fast-xml-parser';
 import { neon } from '@neondatabase/serverless';
 import { getConfig } from '@engine/config';
-import { extractItem, extractChannelMetadata, computePublishFrequencyDays } from './rss/extractors';
+import { extractItem, extractChannelMetadata, computePublishFrequencyDays, websiteHostFromUrl } from './rss/extractors';
 
 const sql = neon(process.env.DATABASE_URL!);
 const cfg = getConfig();
 const TENANT = cfg.database.tenantId;
+const WEBSITE_HOST = websiteHostFromUrl(cfg.website);
 
 const argv = process.argv.slice(2);
 const DRY_RUN = argv.includes('--dry');
@@ -129,7 +130,7 @@ async function main() {
       const { channel, items, rawXml } = await fetchAndParse(feed.url);
       console.log(`  [feed] ${feed.name}: ${items.length} items`);
       if (!channelForMeta) { channelForMeta = channel; rawXmlForMeta = rawXml; }
-      for (const it of items) all.push({ source: feed.name, parsed: extractItem(it) });
+      for (const it of items) all.push({ source: feed.name, parsed: extractItem(it, WEBSITE_HOST) });
     } catch (e: any) {
       console.warn(`  [feed] ${feed.name}: FAIL ${e?.message}`);
     }

@@ -6,6 +6,7 @@ import {
   extractCrossRefs, extractContact,
   computePublishFrequencyDays,
   extractChannelMetadata, extractItem,
+  websiteHostFromUrl,
 } from '@engine/scraping/rss/extractors';
 
 describe('firstString', () => {
@@ -143,6 +144,87 @@ describe('classifyUrl', () => {
   it('cross podcast spotify', () => expect(classifyUrl('https://open.spotify.com/episode/abc')).toBe('cross_podcast_ref'));
   it('audio mp3', () => expect(classifyUrl('https://cdn/audio.mp3')).toBe('audio'));
   it('tool notion', () => expect(classifyUrl('https://www.notion.so/foo')).toBe('tool'));
+  it('sans websiteHost : lamartingale.io n\'est PAS episode_ref (fix Rail 1)', () => {
+    // Avant Rail 1 : hardcode lamartingale.io/(episode|podcast) forçait episode_ref.
+    // Après Rail 1 : classification dynamique via websiteHost uniquement.
+    expect(classifyUrl('https://lamartingale.io/episode/123')).toBe('resource');
+  });
+});
+
+describe('websiteHostFromUrl', () => {
+  it('extrait hostname sans www', () => {
+    expect(websiteHostFromUrl('https://www.gdiy.fr')).toBe('gdiy.fr');
+    expect(websiteHostFromUrl('https://lamartingale.io')).toBe('lamartingale.io');
+  });
+  it('retourne undefined si parsing échoue / null / vide', () => {
+    expect(websiteHostFromUrl(null)).toBeUndefined();
+    expect(websiteHostFromUrl('')).toBeUndefined();
+    expect(websiteHostFromUrl('not-a-url')).toBeUndefined();
+  });
+  it('extrait host depuis une URL avec path (CCG: orsomedia.io/podcast/...)', () => {
+    expect(websiteHostFromUrl('https://orsomedia.io/podcast/combien-ca-gagne/')).toBe('orsomedia.io');
+  });
+});
+
+describe('classifyUrl per-tenant episode_ref (Rail 1)', () => {
+  const cases: { tenant: string; host: string; episodeUrls: string[]; nonEpisodeUrls: string[] }[] = [
+    {
+      tenant: 'lamartingale',
+      host: 'lamartingale.io',
+      episodeUrls: [
+        'https://lamartingale.io/episode/123',
+        'https://lamartingale.io/podcast/abc-slug',
+        'https://www.lamartingale.io/episode/foo',
+      ],
+      nonEpisodeUrls: ['https://gdiy.fr/episode/1'],
+    },
+    {
+      tenant: 'gdiy',
+      host: 'gdiy.fr',
+      episodeUrls: ['https://gdiy.fr/episode/500', 'https://www.gdiy.fr/episode/abc'],
+      nonEpisodeUrls: ['https://lamartingale.io/episode/123'],
+    },
+    {
+      tenant: 'lepanier',
+      host: 'lepanier.io',
+      episodeUrls: ['https://lepanier.io/episode/42', 'https://www.lepanier.io/episode/slug'],
+      nonEpisodeUrls: ['https://lamartingale.io/episode/123', 'https://gdiy.fr/episode/1'],
+    },
+    {
+      tenant: 'finscale',
+      host: 'finscale.com',
+      episodeUrls: ['https://finscale.com/episode/3', 'https://www.finscale.com/podcast/foo'],
+      nonEpisodeUrls: ['https://gdiy.fr/episode/1'],
+    },
+    {
+      tenant: 'passionpatrimoine',
+      host: 'passionpatrimoine.com',
+      episodeUrls: ['https://passionpatrimoine.com/episode/12'],
+      nonEpisodeUrls: ['https://lamartingale.io/episode/123'],
+    },
+    {
+      tenant: 'combiencagagne',
+      host: 'orsomedia.io',
+      episodeUrls: ['https://orsomedia.io/podcast/combien-ca-gagne/ep-3', 'https://orsomedia.io/anything'],
+      nonEpisodeUrls: ['https://gdiy.fr/episode/1', 'https://lamartingale.io/episode/123'],
+    },
+  ];
+  for (const c of cases) {
+    describe(c.tenant, () => {
+      for (const u of c.episodeUrls) {
+        it(`${u} → episode_ref`, () => expect(classifyUrl(u, c.host)).toBe('episode_ref'));
+      }
+      for (const u of c.nonEpisodeUrls) {
+        it(`${u} → pas episode_ref`, () => expect(classifyUrl(u, c.host)).not.toBe('episode_ref'));
+      }
+    });
+  }
+  it('patterns statiques (linkedin/social/audio/tool) prennent toujours le pas sur websiteHost', () => {
+    expect(classifyUrl('https://www.linkedin.com/in/foo', 'lamartingale.io')).toBe('linkedin');
+    expect(classifyUrl('https://twitter.com/foo', 'lamartingale.io')).toBe('social');
+    expect(classifyUrl('https://cdn/audio.mp3', 'lamartingale.io')).toBe('audio');
+    expect(classifyUrl('https://www.notion.so/foo', 'lamartingale.io')).toBe('tool');
+  });
 });
 
 describe('extractLinks', () => {

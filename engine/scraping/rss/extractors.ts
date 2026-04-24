@@ -10,6 +10,7 @@
  * texte/HTML) et renvoie des valeurs JSON-safe (string, number, null, array,
  * object plat). Jamais d'I/O.
  */
+import { isEpisodeRefCandidate } from '../../classify/episode-ref-rules';
 
 // ============================================================================
 // Low-level helpers
@@ -290,26 +291,48 @@ export interface RssLink {
   link_type: LinkType;
 }
 
+// Patterns statiques (indépendants du tenant). episode_ref n'est PAS dans
+// cette liste : il est classifié dynamiquement via websiteHost (voir
+// classifyUrl + websiteHostFromUrl). Historique : avant Rail 1, un hardcode
+// `lamartingale\.io\/(?:episode|podcast)` biaisait la classification
+// episode_ref sur les 5 autres tenants (docs/DETTE.md "Divergence classifieurs").
 const LINK_PATTERNS: { type: LinkType; rx: RegExp }[] = [
   { type: 'linkedin',           rx: /linkedin\.com\/(?:in|company)\//i },
   { type: 'social',             rx: /(?:twitter\.com|x\.com|instagram\.com|facebook\.com|tiktok\.com|youtube\.com|youtu\.be)\//i },
   { type: 'audio',              rx: /\.(?:mp3|m4a|wav|ogg)(?:\?|$)/i },
   { type: 'cross_podcast_ref',  rx: /(?:podcasts\.apple\.com|spotify\.com\/(?:episode|show)|deezer\.com\/(?:podcast|episode)|audiomeans\.fr|ausha\.co)\//i },
-  { type: 'episode_ref',        rx: /lamartingale\.io\/(?:episode|podcast)/i },
 ];
 
 const TOOL_DOMAINS = /(notion\.so|airtable\.com|figma\.com|github\.com|stripe\.com|typeform\.com|mailchimp\.com|hubspot\.com)/i;
 
-export function classifyUrl(url: string): LinkType {
+/**
+ * Extrait le hostname canonique (sans www.) d'une URL ou null si parsing échoue.
+ * À utiliser pour dériver `websiteHost` depuis `cfg.website` avant d'appeler
+ * extractItem / extractLinks / classifyUrl per-tenant.
+ */
+export function websiteHostFromUrl(website: string | null | undefined): string | undefined {
+  if (!website) return undefined;
+  try {
+    return new URL(website).hostname.replace(/^www\./, '').toLowerCase();
+  } catch {
+    return undefined;
+  }
+}
+
+export function classifyUrl(url: string, websiteHost?: string): LinkType {
   if (!url) return 'other';
   for (const p of LINK_PATTERNS) if (p.rx.test(url)) return p.type;
   if (TOOL_DOMAINS.test(url)) return 'tool';
+  // episode_ref dynamique : 3 règles cumulées (Option D, Rail 1).
+  // Voir engine/classify/episode-ref-rules.ts — R1 host match, R2 non-racine,
+  // R3 pas de path utilitaire universel (/contact, /about, /tag/*, etc.).
+  if (websiteHost && isEpisodeRefCandidate(url, websiteHost)) return 'episode_ref';
   // Domaines company probables : .com/.fr racine + pas de path de ressource
   if (/^https?:\/\/[^/]+\/?$/.test(url)) return 'company';
   return 'resource';
 }
 
-export function extractLinks(html: string): RssLink[] {
+export function extractLinks(html: string, websiteHost?: string): RssLink[] {
   if (!html) return [];
   const results: RssLink[] = [];
   const seen = new Set<string>();
@@ -324,7 +347,7 @@ export function extractLinks(html: string): RssLink[] {
     if (seen.has(key)) continue;
     seen.add(key);
     const label = htmlToText(m[2]).slice(0, 200) || undefined;
-    results.push({ url, label, link_type: classifyUrl(url) });
+    results.push({ url, label, link_type: classifyUrl(url, websiteHost) });
   }
 
   // 2. URLs nues (texte plein / after stripping)
@@ -335,7 +358,7 @@ export function extractLinks(html: string): RssLink[] {
     const key = url.toLowerCase();
     if (seen.has(key)) continue;
     seen.add(key);
-    results.push({ url, link_type: classifyUrl(url) });
+    results.push({ url, link_type: classifyUrl(url, websiteHost) });
   }
 
   return results;
@@ -609,7 +632,7 @@ export interface ExhaustiveItem {
   crossRefs: CrossRef[];
 }
 
-export function extractItem(it: any): ExhaustiveItem {
+export function extractItem(it: any, websiteHost?: string): ExhaustiveItem {
   const title = firstString(it.title) || '';
   const guid = firstString(it.guid);
   const pubDate = firstString(it.pubDate);
@@ -640,7 +663,7 @@ export function extractItem(it: any): ExhaustiveItem {
 
   const textForExtraction = rawDescription || '';
 
-  const links = extractLinks(textForExtraction);
+  const links = extractLinks(textForExtraction, websiteHost);
   const sponsors = extractSponsors(textForExtraction);
   const crossRefs = extractCrossRefs(textForExtraction, links);
   const guestFromTitle = extractGuestFromTitle(title);
