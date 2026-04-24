@@ -13,6 +13,7 @@ export const gdiyConfig: PodcastConfig = {
   name: 'Génération Do It Yourself',
   tagline: 'Les histoires de celles et ceux qui se sont construits par eux-mêmes',
   host: 'Matthieu Stefani',
+  coHosts: ['Amaury de Tonquédec'],
   producer: 'Cosa Vostra',
   description:
     'Le podcast qui part à la rencontre de celles et ceux qui se sont construits par eux-mêmes. Portraits de fondateurs, créateurs et dirigeants qui racontent leurs parcours, leurs doutes et leurs apprentissages.',

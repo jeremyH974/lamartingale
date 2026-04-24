@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import { neon } from '@neondatabase/serverless';
-import { HOSTS_NORMALIZED, ensureUniverseInit } from '../db/cross-queries';
+import { HOSTS_NORMALIZED, HOST_LINKEDIN_SLUGS, ensureUniverseInit } from '../db/cross-queries';
 import { getConfig } from '../config/index';
 
 // ============================================================================
@@ -208,6 +208,9 @@ async function main() {
   // 5. Enrich linkedin_url + bio
   // --------------------------------------------------------------------------
   console.log('[5/6] Enriching linkedin_url + bio…');
+  // Exclut les URLs linkedin des hosts/co-hosts (derivées de HOST_LINKEDIN_SLUGS
+  // via ensureUniverseInit — config-driven, pas de hardcode).
+  const hostLinkedinPatterns = HOST_LINKEDIN_SLUGS.map(s => `%${s}%`);
   const liRes: any = await sql`
     WITH candidates AS (
       SELECT DISTINCT ON (g.id)
@@ -220,9 +223,7 @@ async function main() {
         AND g.linkedin_url IS NULL
         AND el.link_type = 'linkedin'
         AND el.url ILIKE '%linkedin.com%'
-        AND el.url NOT ILIKE '%matthieustefani%'
-        AND el.url NOT ILIKE '%matthieu-stefani%'
-        AND el.url NOT ILIKE '%amaurydetonquedec%'
+        AND el.url NOT ILIKE ALL(${hostLinkedinPatterns}::text[])
       ORDER BY g.id, el.id
     )
     UPDATE guests SET linkedin_url = c.linkedin_url

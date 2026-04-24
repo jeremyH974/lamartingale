@@ -554,14 +554,17 @@ app.post('/api/cache/warm', async (_req, res) => {
 });
 
 // --- Demo summary (cheat sheet pitch) ---
-// EXCEPTION d'isolation : endpoint spécifique à l'univers MS (LM + GDIY).
-// Codé en dur volontairement — utilisé uniquement pour le pitch, pas par le
-// frontend des podcasts standalone. Cf. engine/db/cross-queries.ts.
+// Endpoint pitch (non consommé par les frontends standalone).
+// Filtre hosts via HOST_NAME_PATTERNS (dérivé de config, cf. cross-queries.ts)
+// → ajouter un host à gdiy.config.coHosts ou à la config d'un nouveau podcast
+// suffit à propager le filtre sans toucher au SQL.
 app.get('/api/demo/summary', async (_req, res) => {
   try {
     if (!process.env.DATABASE_URL) return res.status(503).json({ error: 'DB required' });
     const result = await getCached('demo:summary', 21600, async () => {
       const { neon } = await import('@neondatabase/serverless');
+      const { ensureUniverseInit, HOST_NAME_PATTERNS } = await import('./db/cross-queries');
+      await ensureUniverseInit();
       const sql = neon(process.env.DATABASE_URL!);
 
       async function statsFor(tenant: string) {
@@ -585,7 +588,7 @@ app.get('/api/demo/summary', async (_req, res) => {
               FROM episodes WHERE tenant_id = ${tenant}
                 AND COALESCE(NULLIF(guest,''), guest_from_title) IS NOT NULL
                 AND (episode_type='full' OR episode_type IS NULL)
-                AND lower(COALESCE(NULLIF(guest,''), guest_from_title)) NOT LIKE '%matthieu stefani%'
+                AND lower(COALESCE(NULLIF(guest,''), guest_from_title)) NOT LIKE ALL(${HOST_NAME_PATTERNS}::text[])
               GROUP BY g ORDER BY eps DESC LIMIT 1`,
           sql`SELECT count(*)::int AS c FROM quiz_questions WHERE tenant_id = ${tenant}`,
           sql`SELECT count(*)::int AS c FROM episodes

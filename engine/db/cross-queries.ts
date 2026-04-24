@@ -18,6 +18,13 @@ export type TenantId = string;
 export const TENANTS: string[] = [];
 export const TENANT_META: Record<string, { name: string; url: string }> = {};
 export const HOSTS_NORMALIZED: string[] = [];
+// Slugs LinkedIn dérivés des hosts (ex: "Matthieu Stefani" → ["matthieustefani", "matthieu-stefani"]).
+// Utilisés pour filtrer les URLs linkedin.com/in/<slug> qui appartiennent aux hosts
+// (pas des invités) dans populate-guests et cross-queries.
+export const HOST_LINKEDIN_SLUGS: string[] = [];
+// Patterns SQL LIKE dérivés de HOSTS_NORMALIZED (ex: "%matthieu stefani%").
+// Prêts à être injectés dans `NOT (col LIKE ANY(${HOST_NAME_PATTERNS}))`.
+export const HOST_NAME_PATTERNS: string[] = [];
 
 let _initPromise: Promise<void> | null = null;
 
@@ -28,6 +35,39 @@ function normalizeHost(raw: string): string {
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
     .replace(/\s+/g, ' ');
+}
+
+/**
+ * Dérive les trois tableaux de filtres hosts depuis une liste brute de noms
+ * (host + co-hosts de toutes les configs). Pure — testable sans DB.
+ *
+ * Retourne :
+ *   - normalized     : hosts normalisés (sans accents + lower) + raw lower si différent
+ *   - linkedinSlugs  : variantes LinkedIn (joined "matthieustefani" + kebab "matthieu-stefani")
+ *   - namePatterns   : `%host%` prêts pour SQL `LIKE ALL/ANY(…)`
+ */
+export function deriveHostFilters(rawHosts: string[]): {
+  normalized: string[];
+  linkedinSlugs: string[];
+  namePatterns: string[];
+} {
+  const normalized: string[] = [];
+  const linkedinSlugs: string[] = [];
+  for (const raw of rawHosts) {
+    if (typeof raw !== 'string' || !raw.trim()) continue;
+    const norm = normalizeHost(raw);
+    if (norm && !normalized.includes(norm)) normalized.push(norm);
+    const rawLower = raw.toLowerCase().trim();
+    if (rawLower !== norm && !normalized.includes(rawLower)) normalized.push(rawLower);
+    if (norm) {
+      const joined = norm.replace(/\s+/g, '');
+      const kebab = norm.replace(/\s+/g, '-');
+      if (joined && !linkedinSlugs.includes(joined)) linkedinSlugs.push(joined);
+      if (kebab !== joined && !linkedinSlugs.includes(kebab)) linkedinSlugs.push(kebab);
+    }
+  }
+  const namePatterns = normalized.map(h => `%${h}%`);
+  return { normalized, linkedinSlugs, namePatterns };
 }
 
 /**
@@ -67,6 +107,8 @@ export async function ensureUniverseInit(): Promise<void> {
     TENANTS.length = 0;
     for (const k of Object.keys(TENANT_META)) delete TENANT_META[k];
     HOSTS_NORMALIZED.length = 0;
+    HOST_LINKEDIN_SLUGS.length = 0;
+    HOST_NAME_PATTERNS.length = 0;
 
     // Indexe les configs par id pour enrichir TENANT_META / HOSTS_NORMALIZED
     const configsById = new Map<string, any>();
@@ -74,21 +116,22 @@ export async function ensureUniverseInit(): Promise<void> {
       for (const c of getAllConfigs()) configsById.set(c.id, c);
     } catch (_e) { /* configs non chargeables = ignore */ }
 
+    // Collecte tous les hosts (host + coHosts) depuis les configs chargées.
+    const rawHosts: string[] = [];
     for (const id of tenantIds) {
       TENANTS.push(id);
       const cfg = configsById.get(id);
       const name = cfg?.name || id;
       const domain = cfg?.deploy?.domain || `${id}-v2.vercel.app`;
       TENANT_META[id] = { name, url: `https://${domain}` };
-      if (cfg?.host) {
-        const norm = normalizeHost(cfg.host);
-        if (norm && !HOSTS_NORMALIZED.includes(norm)) HOSTS_NORMALIZED.push(norm);
-        // Ajoute aussi la version avec accents si différente (pour matcher
-        // guest_from_title qui peut les préserver).
-        const rawLower = cfg.host.toLowerCase().trim();
-        if (rawLower !== norm && !HOSTS_NORMALIZED.includes(rawLower)) HOSTS_NORMALIZED.push(rawLower);
-      }
+      if (cfg?.host) rawHosts.push(cfg.host);
+      if (Array.isArray(cfg?.coHosts)) rawHosts.push(...cfg.coHosts);
     }
+
+    const filters = deriveHostFilters(rawHosts);
+    HOSTS_NORMALIZED.push(...filters.normalized);
+    HOST_LINKEDIN_SLUGS.push(...filters.linkedinSlugs);
+    HOST_NAME_PATTERNS.push(...filters.namePatterns);
   })();
   return _initPromise;
 }
@@ -99,6 +142,8 @@ export function _resetUniverseForTest(): void {
   TENANTS.length = 0;
   for (const k of Object.keys(TENANT_META)) delete TENANT_META[k];
   HOSTS_NORMALIZED.length = 0;
+  HOST_LINKEDIN_SLUGS.length = 0;
+  HOST_NAME_PATTERNS.length = 0;
 }
 
 function sqlClient() {
@@ -191,8 +236,7 @@ export async function getCrossStats() {
       )
       SELECT count(*)::int AS c FROM (
         SELECT g FROM guests_per_tenant
-        WHERE g NOT LIKE '%matthieu stefani%'
-          AND g NOT LIKE '%amaury de tonqu%'
+        WHERE g NOT LIKE ALL(${HOST_NAME_PATTERNS}::text[])
         GROUP BY g HAVING count(DISTINCT tenant_id) >= 2
       ) sub
     ` as any,

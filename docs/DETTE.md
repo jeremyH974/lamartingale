@@ -372,9 +372,15 @@ Applicable aux futurs scripts : migrations schema (`engine/db/migrate-*.ts`), ba
 - **État** : inchangé depuis M4.
 - **Action** : re-crawler listing canonique `lamartingale.io?current_page=N` pour retrouver les slugs. `scripts/fix-empty-slugs-v2-lm.ts` existe mais partiel.
 
-### 11. Filtres SQL noise hardcodés
-- **État** : `engine/api.ts` + `engine/ai/dashboard.ts` blacklisent les noms MS en dur.
-- **Action** : externaliser en `cfg.analytics.noiseFilters[]` dans la config podcast.
+### ✅ 11. Filtres SQL noise hardcodés — **FERMÉE 2026-04-24**
+- **Avant** : `engine/api.ts` (`/api/demo/summary`), `engine/db/cross-queries.ts` (getCrossStats) et `engine/cross/populate-guests.ts` hardcodaient `%matthieu stefani%`, `%amaury de tonqu%`, `%matthieustefani%`, `%matthieu-stefani%`, `%amaurydetonquedec%` dans leurs filtres SQL → bloquait l'ajout d'un nouveau podcast avec un autre host (le filtre ne suivait pas).
+- **Résolution** : `deriveHostFilters(rawHosts)` exporté par `engine/db/cross-queries.ts` dérive 3 tableaux depuis `cfg.host` + `cfg.coHosts` de **toutes les configs chargées** :
+  - `HOST_NAME_PATTERNS` (`['%matthieu stefani%', ...]`) → `NOT LIKE ALL(${HOST_NAME_PATTERNS}::text[])`
+  - `HOST_LINKEDIN_SLUGS` (`['matthieustefani', 'matthieu-stefani', 'amaurydetonquedec', 'amaury-de-tonquedec']`) → `NOT ILIKE ALL(${...::text[]})`
+  - `HOSTS_NORMALIZED` (existant) → `isHost()` helper
+- **Ajout config** : `gdiy.config.ts` gagne `coHosts: ['Amaury de Tonquédec']` (préserve le comportement existant du filtre LinkedIn).
+- **Tests** : `engine/__tests__/host-filters.test.ts` (6 cas) — dédup, accents, invalides, univers MS complet. **224/224 green**.
+- **Impact opérationnel** : ajouter un nouveau podcast avec `host: "X Y"` + `coHosts: [...]` propage automatiquement les filtres — plus de modif SQL à prévoir.
 
 ---
 
