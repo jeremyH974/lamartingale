@@ -1,9 +1,17 @@
 import 'dotenv/config';
+import crypto from 'crypto';
 import { generateText } from 'ai';
 import { hybridSearch } from './search';
 import { neon } from '@neondatabase/serverless';
 import { getConfig } from '../config';
 import { getLLM, getModelId } from './llm';
+import { getCached } from '../cache';
+
+// Cache TTL pour les réponses RAG : 24h.
+// La clé est dérivée d'un sha256 de la question normalisée (lowercase+trim) pour
+// éviter qu'un simple changement de casse créé un miss inutile. Le namespace
+// tenant est ajouté automatiquement par engine/cache.ts (cache:<tenant>:<key>).
+const RAG_CACHE_TTL_SEC = 86400; // 24h
 
 // ============================================================================
 // Couche 3.2 — Pipeline RAG (retrieve + augment + generate) — multi-podcast
@@ -36,7 +44,20 @@ export interface RagResponse {
   timing_ms: number;
 }
 
+function ragCacheKey(message: string): string {
+  const normalized = message.toLowerCase().trim();
+  const hash = crypto.createHash('sha256').update(normalized).digest('hex').substring(0, 32);
+  return `rag:query:${hash}`;
+}
+
 export async function ragQuery(message: string): Promise<RagResponse> {
+  // Cache wrapper — évite de re-rerun pgvector + LLM sur questions répétées.
+  // Cache namespacé par tenant via engine/cache.ts (KV en prod, LRU local).
+  // TTL 24h aligné sur la cadence d'enrichissement (1 ingest/jour max).
+  return getCached(ragCacheKey(message), RAG_CACHE_TTL_SEC, () => ragQueryUncached(message));
+}
+
+async function ragQueryUncached(message: string): Promise<RagResponse> {
   const start = Date.now();
   const cfg = getConfig();
   const TENANT = cfg.database.tenantId;
