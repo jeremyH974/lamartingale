@@ -13,7 +13,7 @@ import { sendMagicLink } from './auth/resend';
 import { createMagicLink, consumeMagicLink } from './auth/magic-link';
 import { sign as signSession, cookieSetHeader, cookieClearHeader } from './auth/session';
 import { getAccessScope } from './auth/access';
-import { requireHubAuth, optionalHubAuth } from './auth/middleware';
+import { requireHubAuth, optionalHubAuth, requireRoot } from './auth/middleware';
 
 const app = express();
 app.use(cors());
@@ -25,6 +25,11 @@ app.use(express.static(path.join(__dirname, '..', 'frontend')));
 // V2 brand-aligned route
 app.get('/v2', (_req, res) => {
   res.sendFile(path.join(__dirname, '..', 'frontend', 'v2.html'));
+});
+
+// Brief invité (MEDIUM-3) — SPA, le slug est lu côté JS depuis window.location.
+app.get('/guest-brief/:slug', (_req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'frontend', 'guest-brief.html'));
 });
 
 // Public config endpoint — exposé au frontend pour branding dynamique.
@@ -55,6 +60,32 @@ app.post('/api/cache/clear', async (req, res) => {
     const cleared = await clearCache(prefix);
     res.json({ cleared, prefix: prefix || 'all' });
   } catch (e: any) { res.status(500).json({ error: e.message }); }
+});
+
+// --- Admin : régénération de brief invité (MEDIUM-3) ---
+// Réservé root (cf engine/auth/middleware.ts:requireRoot). Invalide le cache
+// public correspondant après UPDATE pour que le GET suivant relise la DB.
+app.post('/api/admin/guest-briefs/regenerate', requireRoot, async (req, res) => {
+  try {
+    if (!process.env.DATABASE_URL) return res.status(503).json({ error: 'DB required' });
+    const guestId = Number(req.body?.guestId);
+    if (!Number.isInteger(guestId) || guestId <= 0) {
+      return res.status(400).json({ error: 'guestId required (positive integer)' });
+    }
+    const llmModel = req.body?.llmModel === 'haiku' ? 'haiku' : 'sonnet';
+    const maxEpisodes = Number.isInteger(req.body?.maxEpisodes) ? req.body.maxEpisodes : undefined;
+    const dryRun = req.body?.dryRun === true;
+    const { persistGuestBrief } = await import('./agents/wrappers/persistGuestBrief');
+    const result = await persistGuestBrief({ guestId, llmModel, maxEpisodes, dryRun });
+    if (!dryRun) await clearCache('guest-brief:');
+    res.json(result);
+  } catch (e: any) {
+    console.error('[API] /api/admin/guest-briefs/regenerate error:', e.message);
+    const msg = e?.message ?? 'unknown error';
+    if (/not found/.test(msg)) return res.status(404).json({ error: msg });
+    if (/no tenant_appearances|no usable source/.test(msg)) return res.status(422).json({ error: msg });
+    res.status(500).json({ error: msg });
+  }
 });
 
 // ============================================================================
@@ -829,6 +860,46 @@ app.get('/api/cross/guests/:name', async (req, res) => {
     if (!result) return res.status(404).json({ error: 'Guest not found in universe' });
     res.json(result);
   } catch (e: any) { console.error('[API] /api/cross/guests/:name error:', e.message); res.status(500).json({ error: e.message }); }
+});
+
+// GET brief invité par slug (MEDIUM-3, vitrine guest-brief.html).
+// Slug = lower(canonical_name) avec [^a-z0-9]+ → '-'. 24h TTL via getCached.
+app.get('/api/cross/guests/:slug/brief', async (req, res) => {
+  try {
+    if (!process.env.DATABASE_URL) return res.status(503).json({ error: 'DB required' });
+    const slug = decodeURIComponent(req.params.slug).toLowerCase();
+    if (!/^[a-z0-9-]+$/.test(slug)) {
+      return res.status(400).json({ error: 'invalid slug' });
+    }
+    const result = await getCached(`guest-brief:${slug}`, 86400, async () => {
+      const { neon } = await import('@neondatabase/serverless');
+      const sql = neon(process.env.DATABASE_URL!);
+      const rows = (await sql`
+        SELECT
+          id,
+          canonical_name,
+          display_name,
+          linkedin_url,
+          tenant_appearances,
+          brief_md,
+          key_positions,
+          quotes,
+          original_questions,
+          brief_generated_at,
+          brief_model
+        FROM cross_podcast_guests
+        WHERE lower(regexp_replace(canonical_name, '[^a-zA-Z0-9]+', '-', 'g')) = ${slug}
+        LIMIT 1
+      `) as any[];
+      return rows[0] ?? null;
+    });
+    if (!result) return res.status(404).json({ error: 'Guest not found' });
+    if (!result.brief_md) return res.status(404).json({ error: 'No brief generated for this guest' });
+    res.json(result);
+  } catch (e: any) {
+    console.error('[API] /api/cross/guests/:slug/brief error:', e.message);
+    res.status(500).json({ error: e.message });
+  }
 });
 
 app.get('/api/cross/search', async (req, res) => {

@@ -1,0 +1,137 @@
+/**
+ * Tests endpoints MEDIUM-3 :
+ *   - POST /api/admin/guest-briefs/regenerate (requireRoot)
+ *       1. no cookie → 401
+ *       2. valid session non-root → 403
+ *   - GET /api/cross/guests/:slug/brief (public, cached)
+ *       3. existing slug avec brief_md → 200 + payload conforme
+ *       4. unknown slug → 404
+ *
+ * Stratégie : on bind un serveur Express éphémère et on hit les routes via
+ * fetch. La couche DB (`@neondatabase/serverless`) est mockée pour répondre
+ * uniquement aux requêtes attendues — pas de hit Neon réel.
+ */
+
+import { describe, it, expect, beforeAll, afterAll, vi } from 'vitest';
+import http from 'http';
+
+// Hoisted mocks ---------------------------------------------------------------
+
+vi.mock('../auth/access', () => ({
+  getAccessScope: vi.fn(async (email: string) => {
+    if (email === 'root@example.test') return { email, isRoot: true, tenantIds: [] };
+    return { email, isRoot: false, tenantIds: ['lamartingale'] };
+  }),
+}));
+
+const FAKE_BRIEF_ROW = {
+  id: 434,
+  canonical_name: 'eric larcheveque',
+  display_name: 'Eric Larchevêque',
+  linkedin_url: 'https://www.linkedin.com/in/ericlarch/',
+  tenant_appearances: [{ tenant_id: 'gdiy', episode_numbers: [243] }],
+  brief_md: '# Eric Larchevêque\n\nMock brief content.',
+  key_positions: [{ position: 'p', context: 'c', source_episode_id: 1, source_podcast: 'gdiy', confidence: 0.9 }],
+  quotes: [{ text: 'q', source_episode_id: 1, source_podcast: 'gdiy', context: 'c' }],
+  original_questions: [{ question: 'q?', rationale: 'r', depth_score: 'high' }],
+  brief_generated_at: new Date('2026-04-25T12:47:42Z').toISOString(),
+  brief_model: 'claude-sonnet-4-6',
+};
+
+vi.mock('@neondatabase/serverless', () => {
+  // Tagged-template handler : matche le slug demandé.
+  const sql = (strings: TemplateStringsArray, ...values: unknown[]) => {
+    const query = strings.join('?');
+    if (query.includes('cross_podcast_guests') && query.includes('regexp_replace')) {
+      const slug = values[0] as string;
+      if (slug === 'eric-larcheveque') return Promise.resolve([FAKE_BRIEF_ROW]);
+      return Promise.resolve([]);
+    }
+    return Promise.resolve([]);
+  };
+  return { neon: () => sql };
+});
+
+// Cache mock — bypass complet pour que chaque test relise la fixture.
+vi.mock('../cache', () => ({
+  getCached: async (_key: string, _ttl: number, fn: () => Promise<unknown>) => fn(),
+  clearCache: async () => 0,
+  cacheStats: () => ({ size: 0 }),
+}));
+
+// Imports tardifs (post-mocks) -------------------------------------------------
+
+import app from '../api';
+import { sign, AUTH_COOKIE_NAME } from '../auth/session';
+
+// Server lifecycle ------------------------------------------------------------
+
+let server: http.Server;
+let baseUrl: string;
+
+beforeAll(async () => {
+  process.env.SESSION_SECRET = 'test-secret-at-least-16-chars-long';
+  process.env.DATABASE_URL = 'postgres://mock';
+  await new Promise<void>((resolve) => {
+    server = app.listen(0, () => resolve());
+  });
+  const addr = server.address();
+  if (!addr || typeof addr === 'string') throw new Error('server not bound');
+  baseUrl = `http://127.0.0.1:${addr.port}`;
+});
+
+afterAll(async () => {
+  await new Promise<void>((resolve) => server.close(() => resolve()));
+});
+
+// Tests -----------------------------------------------------------------------
+
+describe('POST /api/admin/guest-briefs/regenerate', () => {
+  it('1. no cookie → 401 auth_required', async () => {
+    const res = await fetch(`${baseUrl}/api/admin/guest-briefs/regenerate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ guestId: 434 }),
+    });
+    expect(res.status).toBe(401);
+    const body = (await res.json()) as any;
+    expect(body.error).toBe('auth_required');
+  });
+
+  it('2. valid session non-root → 403 root_required', async () => {
+    const { cookie } = sign('viewer@example.test', 1);
+    const res = await fetch(`${baseUrl}/api/admin/guest-briefs/regenerate`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: `${AUTH_COOKIE_NAME}=${cookie}`,
+      },
+      body: JSON.stringify({ guestId: 434 }),
+    });
+    expect(res.status).toBe(403);
+    const body = (await res.json()) as any;
+    expect(body.error).toBe('root_required');
+  });
+});
+
+describe('GET /api/cross/guests/:slug/brief', () => {
+  it('3. existing guest with brief → 200 + payload', async () => {
+    const res = await fetch(`${baseUrl}/api/cross/guests/eric-larcheveque/brief`);
+    expect(res.status).toBe(200);
+    const body = (await res.json()) as any;
+    expect(body.id).toBe(434);
+    expect(body.display_name).toBe('Eric Larchevêque');
+    expect(body.brief_md).toContain('Eric Larchevêque');
+    expect(Array.isArray(body.key_positions)).toBe(true);
+    expect(Array.isArray(body.quotes)).toBe(true);
+    expect(Array.isArray(body.original_questions)).toBe(true);
+    expect(body.brief_model).toBe('claude-sonnet-4-6');
+  });
+
+  it('4. unknown slug → 404', async () => {
+    const res = await fetch(`${baseUrl}/api/cross/guests/inconnu-personne/brief`);
+    expect(res.status).toBe(404);
+    const body = (await res.json()) as any;
+    expect(body.error).toMatch(/not found/i);
+  });
+});

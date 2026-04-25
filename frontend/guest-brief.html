@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brief invité — Univers MS</title>
+<meta name="description" content="Kit de préparation cross-podcast pour interviewer un invité de l'Univers MS : positions, citations, questions originales.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --bg-2: #121212;
+    --fg: #f5f5f5;
+    --fg-2: #b5b5b5;
+    --fg-3: #7a7a7a;
+    --accent: #00F5A0;
+    --accent-soft: rgba(0, 245, 160, 0.12);
+    --border: #262626;
+    --border-soft: #1f1f1f;
+    --card: #141414;
+    --card-2: #1a1a1a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+
+  /* ============ NAV ============ */
+  nav.topbar {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,10,10,0.85); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .nav-back {
+    color: var(--fg-2); font-size: 14px; font-weight: 500;
+    transition: color 0.15s;
+  }
+  .nav-back:hover { color: var(--accent); text-decoration: none; }
+  .logo {
+    font-size: 14px; font-weight: 800; letter-spacing: -0.02em;
+    display: flex; align-items: center; gap: 8px; color: var(--fg);
+  }
+  .logo-mark {
+    width: 22px; height: 22px;
+    background: conic-gradient(from 0deg, #004cff, #00F5A0, #f59e0b, #ef476f, #06d6a0, #004cff);
+    border-radius: 5px;
+  }
+
+  /* ============ LAYOUT ============ */
+  main {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+  }
+  section { margin-bottom: 40px; }
+
+  /* ============ HERO ============ */
+  .hero {
+    text-align: center;
+    padding: 24px 0 32px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 40px;
+  }
+  .avatar {
+    width: 96px; height: 96px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), #004cff);
+    color: #000;
+    font-size: 32px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    letter-spacing: -0.02em;
+  }
+  .hero h1 {
+    font-size: 32px; font-weight: 800; letter-spacing: -0.02em;
+    line-height: 1.15; margin-bottom: 8px;
+  }
+  .hero .subtitle {
+    color: var(--fg-2); font-size: 15px;
+    margin-bottom: 18px;
+  }
+  .hero .meta-row {
+    display: flex; flex-wrap: wrap; gap: 14px;
+    justify-content: center;
+    margin-bottom: 16px;
+    color: var(--fg-2); font-size: 13px;
+  }
+  .hero .tags {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    justify-content: center;
+  }
+  .tag {
+    padding: 4px 10px; border-radius: 99px;
+    background: var(--accent-soft); color: var(--accent);
+    font-size: 12px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  .hero-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--accent); font-size: 13px; font-weight: 500;
+  }
+
+  /* ============ SECTION HEADERS ============ */
+  h2 {
+    font-size: 22px; font-weight: 700; letter-spacing: -0.01em;
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  h2::before {
+    content: ''; display: inline-block;
+    width: 4px; height: 22px;
+    background: var(--accent); border-radius: 2px;
+  }
+
+  /* ============ BRIEF MD ============ */
+  .brief-md {
+    background: var(--card);
+    border: 1px solid var(--border-soft);
+    border-radius: 12px;
+    padding: 24px 22px;
+    color: var(--fg);
+    font-size: 15px;
+  }
+  .brief-md h3 {
+    font-size: 17px; font-weight: 700;
+    margin: 18px 0 10px; color: var(--accent);
+  }
+  .brief-md h3:first-child { margin-top: 0; }
+  .brief-md p { margin-bottom: 12px; color: var(--fg); }
+  .brief-md ol, .brief-md ul { padding-left: 22px; margin-bottom: 12px; }
+  .brief-md li { margin-bottom: 6px; color: var(--fg); }
+  .brief-md strong { color: #fff; font-weight: 700; }
+  .brief-md em { color: var(--fg-2); }
+
+  /* ============ POSITION CARDS ============ */
+  .position-card, .quote-card, .question-card {
+    background: var(--card-2);
+    border: 1px solid var(--border-soft);
+    border-left: 3px solid var(--accent);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+  }
+  .position-card .position-text {
+    font-size: 16px; font-weight: 600; color: var(--fg);
+    margin-bottom: 10px; line-height: 1.45;
+  }
+  .position-card .position-context {
+    color: var(--fg-2); font-size: 14px; margin-bottom: 12px;
+  }
+  .meta-line {
+    display: flex; flex-wrap: wrap; gap: 12px;
+    color: var(--fg-3); font-size: 12px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border-soft);
+  }
+  .meta-line .source { color: var(--fg-2); font-weight: 500; }
+  .confidence {
+    display: inline-flex; align-items: center; gap: 4px;
+  }
+  .confidence-bar {
+    display: inline-block;
+    width: 40px; height: 4px;
+    background: var(--border); border-radius: 2px;
+    overflow: hidden;
+  }
+  .confidence-fill {
+    display: block; height: 100%;
+    background: var(--accent);
+  }
+
+  /* ============ QUOTES ============ */
+  .quote-card {
+    border-left-color: #f59e0b;
+  }
+  .quote-card blockquote {
+    font-size: 17px; font-weight: 500;
+    color: var(--fg); font-style: italic;
+    margin: 0 0 12px;
+    line-height: 1.5;
+  }
+  .quote-card blockquote::before { content: '« '; color: #f59e0b; }
+  .quote-card blockquote::after { content: ' »'; color: #f59e0b; }
+  .quote-card .quote-attribution {
+    color: var(--fg-2); font-size: 13px; margin-bottom: 6px;
+  }
+  .quote-card .quote-context {
+    color: var(--fg-3); font-size: 12px;
+  }
+
+  /* ============ QUESTIONS ============ */
+  .question-card {
+    border-left-color: #ef476f;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 14px;
+    align-items: start;
+  }
+  .question-card.high { border-left-color: var(--accent); }
+  .question-icon {
+    font-size: 22px;
+    line-height: 1;
+    padding-top: 2px;
+  }
+  .question-card .question-body { min-width: 0; }
+  .question-card .depth-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.05em; text-transform: uppercase;
+    border-radius: 99px;
+    margin-bottom: 8px;
+  }
+  .question-card.high .depth-badge {
+    background: var(--accent-soft); color: var(--accent);
+  }
+  .question-card.medium .depth-badge {
+    background: rgba(239, 71, 105, 0.15); color: #ff7a95;
+  }
+  .question-card.low .depth-badge {
+    background: var(--border); color: var(--fg-2);
+  }
+  .question-card .question-text {
+    font-size: 16px; font-weight: 600; color: var(--fg);
+    margin-bottom: 8px; line-height: 1.45;
+  }
+  .question-card .question-rationale {
+    color: var(--fg-2); font-size: 13px;
+  }
+
+  /* ============ FOOTER META ============ */
+  footer.meta {
+    margin-top: 48px; padding-top: 24px;
+    border-top: 1px solid var(--border);
+    color: var(--fg-3); font-size: 12px;
+    text-align: center;
+  }
+  footer.meta .line { margin-bottom: 6px; }
+  .regen-btn {
+    display: inline-block;
+    margin-top: 16px;
+    padding: 10px 18px;
+    border: 1px solid var(--accent);
+    border-radius: 99px;
+    color: var(--accent); font-size: 13px; font-weight: 600;
+    background: transparent;
+    transition: background 0.15s, color 0.15s;
+  }
+  .regen-btn:hover { background: var(--accent); color: #000; }
+  .regen-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* ============ STATES ============ */
+  .state {
+    text-align: center;
+    padding: 80px 24px;
+    color: var(--fg-2);
+  }
+  .state h2 {
+    justify-content: center;
+    font-size: 22px; margin-bottom: 12px;
+    color: var(--fg);
+  }
+  .state h2::before { display: none; }
+  .state p { font-size: 15px; max-width: 480px; margin: 0 auto; }
+  .state .icon { font-size: 48px; margin-bottom: 16px; opacity: 0.6; }
+  .skeleton {
+    background: var(--card);
+    border-radius: 10px;
+    margin-bottom: 14px;
+  }
+  .skeleton.line { height: 18px; margin-bottom: 10px; }
+  .skeleton.line.short { width: 60%; }
+  .skeleton.block { height: 140px; }
+  @keyframes pulse { 0%,100% { opacity: 0.5; } 50% { opacity: 0.9; } }
+  .skeleton { animation: pulse 1.4s ease-in-out infinite; }
+
+  /* ============ MOBILE ============ */
+  @media (max-width: 600px) {
+    main { padding: 24px 16px 60px; }
+    .hero h1 { font-size: 26px; }
+    .avatar { width: 80px; height: 80px; font-size: 26px; }
+    h2 { font-size: 20px; }
+    .position-card, .quote-card, .question-card { padding: 16px; }
+    .question-card { grid-template-columns: 1fr; }
+    .question-icon { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <a href="/hub.html" class="nav-back">← Univers MS</a>
+  <span class="logo"><span class="logo-mark"></span> Brief invité</span>
+</nav>
+
+<main id="main">
+  <div id="loading" class="state">
+    <div class="icon">⏳</div>
+    <div class="skeleton line"></div>
+    <div class="skeleton line short"></div>
+    <div class="skeleton block"></div>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+<script>
+(async function () {
+  const main = document.getElementById('main');
+
+  // URLs prod par tenant — déclarée en haut de l'IIFE (avant tout call à
+  // render*) pour éviter le TDZ sur const : les renderXxx référencent
+  // TENANT_URL via renderSourceLink dès le premier render().
+  // Patterns /episode/<id> validés via curl 200 sur les 3 cas Larchevêque
+  // (gdiy, lamartingale, passionpatrimoine). Cf CLAUDE.md "URLs prod".
+  const TENANT_URL = {
+    gdiy: 'https://gdiy-v2.vercel.app',
+    lamartingale: 'https://lamartingale-v2.vercel.app',
+    lepanier: 'https://lepanier-v2.vercel.app',
+    finscale: 'https://finscale-v2.vercel.app',
+    passionpatrimoine: 'https://passionpatrimoine-v2.vercel.app',
+    combiencagagne: 'https://combiencagagne-v2.vercel.app',
+  };
+
+  // 1. Slug depuis le path : /guest-brief/<slug>
+  const parts = window.location.pathname.split('/').filter(Boolean);
+  const slug = parts[parts.length - 1] || '';
+  if (!slug || slug === 'guest-brief') {
+    return renderState('🔍', 'Slug manquant', 'Format attendu : /guest-brief/eric-larcheveque');
+  }
+
+  // 2. Fetch brief
+  let brief;
+  try {
+    const res = await fetch(`/api/cross/guests/${encodeURIComponent(slug)}/brief`);
+    if (res.status === 404) {
+      return renderState('📭', 'Brief non disponible', 'Aucun brief n\'a encore été généré pour cet invité.');
+    }
+    if (!res.ok) {
+      return renderState('⚠️', 'Erreur API', `Statut ${res.status}. Réessaie plus tard.`);
+    }
+    brief = await res.json();
+  } catch (e) {
+    return renderState('⚠️', 'Erreur réseau', 'Impossible de récupérer le brief.');
+  }
+
+  // 3. Auth check (pour bouton régénérer)
+  let isRoot = false;
+  try {
+    const me = await fetch('/api/auth/me');
+    if (me.ok) {
+      const data = await me.json();
+      isRoot = !!data.isRoot;
+    }
+  } catch { /* silent */ }
+
+  // 4. Render
+  render(brief, isRoot);
+
+  // ─────────────────────────────────────────────────────────────────────────
+  function render(b, isRoot) {
+    document.title = `${b.display_name || b.canonical_name} — Brief invité`;
+    const initials = (b.display_name || b.canonical_name)
+      .split(/\s+/).filter(Boolean).slice(0, 2)
+      .map(s => s[0]?.toUpperCase()).join('') || '?';
+    const tenants = (b.tenant_appearances || []).map(a => a.tenant_id);
+    const totalEps = (b.tenant_appearances || []).reduce((acc, a) => acc + (a.episode_numbers?.length || 0), 0);
+    const positions = b.key_positions || [];
+    const quotes = b.quotes || [];
+    const questions = b.original_questions || [];
+
+    main.innerHTML = `
+      <header class="hero">
+        <div class="avatar">${escapeHtml(initials)}</div>
+        <h1>${escapeHtml(b.display_name || b.canonical_name)}</h1>
+        <div class="subtitle">${tenants.length} podcast${tenants.length > 1 ? 's' : ''} · ${totalEps} épisode${totalEps > 1 ? 's' : ''}</div>
+        <div class="meta-row">
+          ${b.linkedin_url ? `<a class="hero-link" href="${escapeAttr(b.linkedin_url)}" target="_blank" rel="noopener">🔗 LinkedIn</a>` : ''}
+        </div>
+        <div class="tags">
+          ${tenants.map(t => `<span class="tag">${escapeHtml(prettyTenant(t))}</span>`).join('')}
+        </div>
+      </header>
+
+      <section>
+        <h2>À propos</h2>
+        <div class="brief-md">${marked.parse(b.brief_md || '')}</div>
+      </section>
+
+      <section>
+        <h2>Positions tranchées <span style="font-size:13px;color:var(--fg-3);font-weight:500;">· ${positions.length}</span></h2>
+        ${positions.map(renderPosition).join('') || '<p style="color:var(--fg-3)">Aucune position extraite.</p>'}
+      </section>
+
+      <section>
+        <h2>Verbatims <span style="font-size:13px;color:var(--fg-3);font-weight:500;">· ${quotes.length}</span></h2>
+        ${quotes.map(renderQuote).join('') || '<p style="color:var(--fg-3)">Aucun verbatim extrait.</p>'}
+      </section>
+
+      <section>
+        <h2>Questions à explorer <span style="font-size:13px;color:var(--fg-3);font-weight:500;">· ${questions.length}</span></h2>
+        ${questions.map(renderQuestion).join('') || '<p style="color:var(--fg-3)">Aucune question proposée.</p>'}
+      </section>
+
+      <footer class="meta">
+        <div class="line">Brief généré le ${formatDate(b.brief_generated_at)} · Modèle : ${escapeHtml(b.brief_model || '?')}</div>
+        ${isRoot ? `<button class="regen-btn" id="regen-btn" data-guest-id="${b.id}">↻ Régénérer (admin)</button>` : ''}
+      </footer>
+    `;
+
+    if (isRoot) {
+      const btn = document.getElementById('regen-btn');
+      btn?.addEventListener('click', () => regenerate(b.id, btn));
+    }
+  }
+
+  function renderPosition(p) {
+    const pct = Math.round((p.confidence || 0) * 100);
+    return `
+      <div class="position-card">
+        <div class="position-text">${escapeHtml(p.position || '')}</div>
+        ${p.context ? `<div class="position-context">${escapeHtml(p.context)}</div>` : ''}
+        <div class="meta-line">
+          <span class="source">📍 ${renderSourceLink(p.source_podcast, p.source_episode_id)}</span>
+          <span class="confidence">
+            Confiance ${pct}%
+            <span class="confidence-bar"><span class="confidence-fill" style="width:${pct}%"></span></span>
+          </span>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderQuote(q) {
+    return `
+      <div class="quote-card">
+        <blockquote>${escapeHtml(q.text || '')}</blockquote>
+        <div class="quote-attribution">— ${renderSourceLink(q.source_podcast, q.source_episode_id)}</div>
+        ${q.context ? `<div class="quote-context">${escapeHtml(q.context)}</div>` : ''}
+      </div>
+    `;
+  }
+
+  function renderSourceLink(tenantId, episodeId) {
+    const label = `${escapeHtml(prettyTenant(tenantId))} · ép. ${escapeHtml(String(episodeId))}`;
+    const baseUrl = TENANT_URL[tenantId];
+    if (!baseUrl || !episodeId) return label;
+    return `<a href="${escapeAttr(baseUrl)}/episode/${encodeURIComponent(String(episodeId))}" target="_blank" rel="noopener">${label} ↗</a>`;
+  }
+
+  function renderQuestion(q) {
+    const depth = (q.depth_score || 'medium').toLowerCase();
+    const icon = depth === 'high' ? '🔥' : depth === 'low' ? '○' : '◐';
+    return `
+      <div class="question-card ${escapeAttr(depth)}">
+        <span class="question-icon">${icon}</span>
+        <div class="question-body">
+          <span class="depth-badge">${escapeHtml(depth)}</span>
+          <div class="question-text">${escapeHtml(q.question || '')}</div>
+          ${q.rationale ? `<div class="question-rationale">${escapeHtml(q.rationale)}</div>` : ''}
+        </div>
+      </div>
+    `;
+  }
+
+  async function regenerate(guestId, btn) {
+    if (!confirm('Régénérer le brief ?\n\nCoût estimé : ~3-5 cents (Sonnet 4.6).\n\nLes données actuelles seront remplacées.')) return;
+    btn.disabled = true;
+    btn.textContent = '⏳ Régénération…';
+    try {
+      const res = await fetch('/api/admin/guest-briefs/regenerate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ guestId }),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        alert(`Erreur : ${err.error || res.status}`);
+        btn.disabled = false;
+        btn.textContent = '↻ Régénérer (admin)';
+        return;
+      }
+      window.location.reload();
+    } catch (e) {
+      alert(`Erreur réseau : ${e.message}`);
+      btn.disabled = false;
+      btn.textContent = '↻ Régénérer (admin)';
+    }
+  }
+
+  function renderState(icon, title, msg) {
+    main.innerHTML = `
+      <div class="state">
+        <div class="icon">${icon}</div>
+        <h2>${escapeHtml(title)}</h2>
+        <p>${escapeHtml(msg)}</p>
+      </div>
+    `;
+  }
+
+  function prettyTenant(id) {
+    const map = {
+      gdiy: 'GDIY',
+      lamartingale: 'La Martingale',
+      lepanier: 'Le Panier',
+      finscale: 'Finscale',
+      passionpatrimoine: 'Passion Patrimoine',
+      combiencagagne: 'Combien ça gagne',
+    };
+    return map[id] || id || '?';
+  }
+
+  function formatDate(iso) {
+    if (!iso) return '?';
+    try {
+      return new Date(iso).toLocaleDateString('fr-FR', {
+        day: '2-digit', month: 'long', year: 'numeric',
+      });
+    } catch { return iso; }
+  }
+
+  function escapeHtml(s) {
+    return String(s ?? '').replace(/[&<>"']/g, c => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+    }[c]));
+  }
+  function escapeAttr(s) { return escapeHtml(s); }
+})();
+</script>
+</body>
+</html>
