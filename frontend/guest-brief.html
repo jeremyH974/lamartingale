@@ -167,6 +167,13 @@
     border-top: 1px dashed var(--border-soft);
   }
   .meta-line .source { color: var(--fg-2); font-weight: 500; }
+  .source-link a, .quote-attribution a {
+    color: var(--accent); text-decoration: none; border-bottom: 1px dashed var(--accent);
+  }
+  .source-link a:hover, .quote-attribution a:hover {
+    color: #00F5A0; border-bottom-color: #00F5A0;
+  }
+  .source-plain { color: var(--fg-3); }
   .confidence {
     display: inline-flex; align-items: center; gap: 4px;
   }
@@ -319,20 +326,6 @@
 (async function () {
   const main = document.getElementById('main');
 
-  // URLs prod par tenant — déclarée en haut de l'IIFE (avant tout call à
-  // render*) pour éviter le TDZ sur const : les renderXxx référencent
-  // TENANT_URL via renderSourceLink dès le premier render().
-  // Patterns /episode/<id> validés via curl 200 sur les 3 cas Larchevêque
-  // (gdiy, lamartingale, passionpatrimoine). Cf CLAUDE.md "URLs prod".
-  const TENANT_URL = {
-    gdiy: 'https://gdiy-v2.vercel.app',
-    lamartingale: 'https://lamartingale-v2.vercel.app',
-    lepanier: 'https://lepanier-v2.vercel.app',
-    finscale: 'https://finscale-v2.vercel.app',
-    passionpatrimoine: 'https://passionpatrimoine-v2.vercel.app',
-    combiencagagne: 'https://combiencagagne-v2.vercel.app',
-  };
-
   // 1. Slug depuis le path : /guest-brief/<slug>
   const parts = window.location.pathname.split('/').filter(Boolean);
   const slug = parts[parts.length - 1] || '';
@@ -432,7 +425,7 @@
         <div class="position-text">${escapeHtml(p.position || '')}</div>
         ${p.context ? `<div class="position-context">${escapeHtml(p.context)}</div>` : ''}
         <div class="meta-line">
-          <span class="source">📍 ${renderSourceLink(p.source_podcast, p.source_episode_number, p.source_episode_id)}</span>
+          <span class="source">📍 ${renderSourceLink(p)}</span>
           <span class="confidence">
             Confiance ${pct}%
             <span class="confidence-bar"><span class="confidence-fill" style="width:${pct}%"></span></span>
@@ -446,21 +439,24 @@
     return `
       <div class="quote-card">
         <blockquote>${escapeHtml(q.text || '')}</blockquote>
-        <div class="quote-attribution">— ${renderSourceLink(q.source_podcast, q.source_episode_number, q.source_episode_id)}</div>
+        <div class="quote-attribution">— ${renderSourceLink(q)}</div>
         ${q.context ? `<div class="quote-context">${escapeHtml(q.context)}</div>` : ''}
       </div>
     `;
   }
 
-  function renderSourceLink(tenantId, episodeNumber, episodeId) {
-    // Sous-sites routent /episode/:n sur episode_number. episode_id (DB) en
-    // fallback uniquement si number manquant — produira probablement un 404
-    // mais évite un lien cassé silencieux.
-    const ep = episodeNumber ?? episodeId;
-    const label = `${escapeHtml(prettyTenant(tenantId))} · ép. ${escapeHtml(String(ep))}`;
-    const baseUrl = TENANT_URL[tenantId];
-    if (!baseUrl || ep == null) return label;
-    return `<a href="${escapeAttr(baseUrl)}/episode/${encodeURIComponent(String(ep))}" target="_blank" rel="noopener">${label} ↗</a>`;
+  function renderSourceLink(source) {
+    // canonical_url pointe vers le site officiel (ex. lamartingale.io/tous/<slug>/,
+    // gdiy.fr/podcast/<slug>/). Si null en DB → plain text. On n'utilise plus les
+    // clones Vercel internes : (1) seul le site officiel a une URL stable lisible,
+    // (2) les clones routent sur episode_number qui n'a pas toujours de mapping fiable
+    // côté JSONB sources.
+    const display = source?.source_podcast_display || prettyTenant(source?.source_podcast);
+    const ep = source?.source_episode_number ?? source?.source_episode_id;
+    const label = `${escapeHtml(display)}${ep != null ? ' · ép. ' + escapeHtml(String(ep)) : ''}`;
+    const url = source?.source_canonical_url;
+    if (!url) return `<span class="source-plain">${label}</span>`;
+    return `<span class="source-link"><a href="${escapeAttr(url)}" target="_blank" rel="noopener">${label} ↗</a></span>`;
   }
 
   function renderQuestion(q) {

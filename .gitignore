@@ -27,3 +27,5 @@ scripts/_*.ts
 
 # Logs ne sont jamais committés (orphelins post-batch)
 *.log
+
+.vercel

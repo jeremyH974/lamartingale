@@ -894,8 +894,9 @@ app.get('/api/cross/guests/:slug/brief', async (req, res) => {
       const guest = rows[0];
       if (!guest) return null;
 
-      // Enrichissement source_episode_number — les sous-sites routent /episode/:n
-      // sur episode_number (clé éditoriale), pas sur id (clé technique DB).
+      // Enrichissement source_* — sous-sites routent /episode/:n sur episode_number
+      // (clé éditoriale, pas id DB). canonical_url pointe vers le site officiel
+      // du podcast quand l'URL existe en DB ; sinon null → frontend fallback plain text.
       const positions = Array.isArray(guest.key_positions) ? guest.key_positions : [];
       const quotes = Array.isArray(guest.quotes) ? guest.quotes : [];
       const refs = new Map<string, { tenant: string; id: number }>();
@@ -904,24 +905,42 @@ app.get('/api/cross/guests/:slug/brief', async (req, res) => {
         const id = Number(p?.source_episode_id);
         if (tenant && Number.isInteger(id) && id > 0) refs.set(`${tenant}:${id}`, { tenant, id });
       }
-      const epMap = new Map<string, number>();
+      const epMap = new Map<string, { episode_number: number | null; canonical_url: string | null }>();
       if (refs.size > 0) {
         const tenants = [...new Set([...refs.values()].map((r) => r.tenant))];
         const ids = [...new Set([...refs.values()].map((r) => r.id))];
         const epRows = (await sql`
-          SELECT tenant_id, id, episode_number
+          SELECT tenant_id, id, episode_number, url, article_url
           FROM episodes
           WHERE tenant_id = ANY(${tenants}::text[])
             AND id = ANY(${ids}::int[])
         `) as any[];
         for (const r of epRows) {
-          if (r.episode_number != null) epMap.set(`${r.tenant_id}:${r.id}`, Number(r.episode_number));
+          const canonical = (r.url && String(r.url).trim()) || (r.article_url && String(r.article_url).trim()) || null;
+          epMap.set(`${r.tenant_id}:${r.id}`, {
+            episode_number: r.episode_number != null ? Number(r.episode_number) : null,
+            canonical_url: canonical,
+          });
         }
       }
+      const PODCAST_DISPLAY_NAMES: Record<string, string> = {
+        lamartingale: 'La Martingale',
+        gdiy: 'Génération Do It Yourself',
+        lepanier: 'Le Panier',
+        finscale: 'Finscale',
+        passionpatrimoine: 'Passion Patrimoine',
+        combiencagagne: 'Combien ça gagne',
+      };
       const enrich = (arr: any[]) =>
         arr.map((p) => {
           const key = `${p?.source_podcast}:${Number(p?.source_episode_id)}`;
-          return { ...p, source_episode_number: epMap.get(key) ?? null };
+          const meta = epMap.get(key);
+          return {
+            ...p,
+            source_episode_number: meta?.episode_number ?? null,
+            source_canonical_url: meta?.canonical_url ?? null,
+            source_podcast_display: PODCAST_DISPLAY_NAMES[p?.source_podcast] ?? p?.source_podcast ?? null,
+          };
         });
       return { ...guest, key_positions: enrich(positions), quotes: enrich(quotes) };
     });

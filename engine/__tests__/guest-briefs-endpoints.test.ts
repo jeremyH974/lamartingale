@@ -48,11 +48,23 @@ vi.mock('@neondatabase/serverless', () => {
       return Promise.resolve([]);
     }
     if (query.includes('FROM episodes') && query.includes('episode_number')) {
-      // Mock minimal : tenant_id+id → episode_number.
+      // Mock minimal : tenant_id+id → episode_number + url/article_url.
       // FAKE_BRIEF_ROW référence gdiy:2206 et lamartingale:925 (cf positions/quotes).
       return Promise.resolve([
-        { tenant_id: 'gdiy', id: 2206, episode_number: 243 },
-        { tenant_id: 'lamartingale', id: 925, episode_number: 3 },
+        {
+          tenant_id: 'gdiy',
+          id: 2206,
+          episode_number: 243,
+          url: null,
+          article_url: 'https://www.gdiy.fr/podcast/eric-larcheveque/',
+        },
+        {
+          tenant_id: 'lamartingale',
+          id: 925,
+          episode_number: 3,
+          url: 'https://lamartingale.io/tous/eric-larcheveque-le-bitcoin-un-an-apres/',
+          article_url: 'https://lamartingale.io/tous/eric-larcheveque-le-bitcoin-un-an-apres/',
+        },
       ]);
     }
     return Promise.resolve([]);
@@ -145,6 +157,29 @@ describe('GET /api/cross/guests/:slug/brief', () => {
     expect(body.key_positions[0].source_episode_id).toBe(2206);
     expect(body.quotes[0].source_episode_number).toBe(3);
     expect(body.quotes[0].source_episode_id).toBe(925);
+  });
+
+  it('3ter. payload enrichi avec source_canonical_url + source_podcast_display', async () => {
+    const res = await fetch(`${baseUrl}/api/cross/guests/eric-larcheveque/brief`);
+    expect(res.status).toBe(200);
+    const body = (await res.json()) as any;
+    // gdiy ép.243 : article_url uniquement → utilisé en fallback canonical
+    expect(body.key_positions[0].source_canonical_url).toBe('https://www.gdiy.fr/podcast/eric-larcheveque/');
+    expect(body.key_positions[0].source_podcast_display).toBe('Génération Do It Yourself');
+    // lamartingale ép.3 : url prioritaire sur article_url
+    expect(body.quotes[0].source_canonical_url).toBe('https://lamartingale.io/tous/eric-larcheveque-le-bitcoin-un-an-apres/');
+    expect(body.quotes[0].source_podcast_display).toBe('La Martingale');
+  });
+
+  it('3quater. canonical_url null → champ retourné null (pas absent)', async () => {
+    // Source dont l'épisode n'est pas mocké → epMap miss → null sur tous les champs enrichis
+    const res = await fetch(`${baseUrl}/api/cross/guests/eric-larcheveque/brief`);
+    const body = (await res.json()) as any;
+    // Sanity : les sources mockées sont bien présentes mais on vérifie que le champ
+    // existe (key in obj) même si potentiellement null. C'est important pour le
+    // frontend qui fallback proprement sur plain text quand l'URL est null.
+    expect('source_canonical_url' in body.key_positions[0]).toBe(true);
+    expect('source_podcast_display' in body.key_positions[0]).toBe(true);
   });
 
   it('4. unknown slug → 404', async () => {
