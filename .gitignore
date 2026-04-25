@@ -18,5 +18,11 @@ scripts/sample-*.ts
 scripts/check-*.ts
 scripts/find-gdiy-sponsor-patterns.ts
 
+# Working files locaux (audits ad-hoc, dry-runs, drafts)
+# Convention : prefix `_` = local, never committed
+docs/_*.md
+docs/_*.csv
+scripts/_*.ts
+
 .vercel
 .env*.local
