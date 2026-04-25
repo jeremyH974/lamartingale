@@ -12,8 +12,11 @@ export const hubConfig: PodcastConfig = {
   tagline: 'Six podcasts, un écosystème. La plus grande bibliothèque francophone sur le business, la finance et l\'investissement.',
   host: 'Matthieu Stefani',
   producer: 'Orso Media × Cosa Vostra × Gokyo',
+  // Counts = épisodes "full" (hors bonus/trailers), filtre `episode_type='full' OR NULL`.
+  // Last updated 2026-04-25, regenerate periodically (query : SELECT tenant_id, COUNT(*)
+  // FILTER (WHERE episode_type IS NULL OR episode_type = 'full') FROM episodes GROUP BY 1).
   description:
-    'L\'univers Matthieu Stefani × Orso Media réunit six podcasts : La Martingale (313 eps — argent & investissement), Génération Do It Yourself (959 eps — entrepreneuriat), Le Panier (506 eps — e-commerce), Finscale (332 eps — fintech), Passion Patrimoine (195 eps — gestion de patrimoine) et Combien ça gagne (104 eps — business models). 2400+ épisodes, 1200+ invités, 2500+ heures d\'expertise francophone.',
+    'L\'univers Matthieu Stefani × Orso Media réunit six podcasts : La Martingale (313 eps — argent & investissement), Génération Do It Yourself (537 eps — entrepreneuriat), Le Panier (505 eps — e-commerce), Finscale (332 eps — fintech), Passion Patrimoine (156 eps — gestion de patrimoine) et Combien ça gagne (65 eps — business models). 1908 épisodes, 1200+ invités, 2500+ heures d\'expertise francophone.',
 
   website: 'https://ms-hub.vercel.app',
   episodeUrlPattern: '',
