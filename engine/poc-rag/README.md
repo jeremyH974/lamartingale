@@ -19,7 +19,7 @@ Out  : {
 - LM uniquement (tenant figé via `PODCAST_ID=lamartingale`).
 - Pas de cache, pas d'auth, pas de rate limit, pas de log persisté.
 - Pas de schéma DB modifié, réutilise embeddings + chapters + episodes existants.
-- Pas de UI, test via `scripts/_chantier6-test-rag.sh`.
+- Pas de UI, test via `scripts/test-rag-poc.sh`.
 
 ## Code
 - `handler.ts` : wrapper de `ragQuery()` + enrichissement DB (episode_id, url, excerpt) + format adapter.
@@ -29,5 +29,5 @@ Out  : {
 ```bash
 PODCAST_ID=lamartingale PORT=3001 npx tsx engine/api.ts
 # autre terminal :
-bash scripts/_chantier6-test-rag.sh
+bash scripts/test-rag-poc.sh
 ```
