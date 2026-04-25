@@ -322,6 +322,45 @@ Applicable aux futurs scripts : migrations schema (`engine/db/migrate-*.ts`), ba
 
 ---
 
+## LinkedIn pollution résiduelle post-Phase 2 (25/04/26)
+
+**Contexte** : Phase 2 LinkedIn write a appliqué **255 UPDATE** confiance haute (B1=168 label-match + B2-ok=86 slug-match avec token ≥4 + B3=1 host-as-guest Stefani LM) sur les 6 tenants Orso/MS, en transaction atomique COMMIT. Stefani LM corrigé `/in/gautier-delabrousse-mayoux/` → `/in/stefani/`. Re-audit 255/255 persistés. Idempotence vérifiée (ré-exécution = 0 nouveau UPDATE).
+
+**Stratégie SAFE UPDATE-only** : 216 NULLIFY préservés (linkedin_url existant maintenu, jamais effacé) + 139 CONFLICT basculés en arbitrage humain. Voir CSV source : `docs/_linkedin-changes-affined.csv`.
+
+4 catégories de pollution résiduelle restent à régler **post-démo** :
+
+### A. CONFLICT à arbitrer humainement — 139 guests (P2)
+- **Volume** : GDIY 77 + LP 62, tous en `rule=order-fallback` (aucun label-match ni slug-match confiant trouvé sur l'épisode source).
+- **Source** : `docs/_linkedin-changes-affined.csv` ligne par ligne `category=CONFLICT-B4`.
+- **Workflow** : review humain ligne par ligne :
+  - soit UPDATE manuel via SQL si match évident à la lecture (titre + LinkedIn host),
+  - soit NULLIFY si aucun match clair,
+  - soit re-scraping ciblé si la victime dépasse 3-4 guests sur un même host parasite.
+
+### B. LP pollution résiduelle laurentkretz — ~62 guests (P2)
+- **Volume initial** : 73 victimes pré-Phase 2 portant `/in/laurentkretz/` (host Le Panier) faute d'alternative.
+- **Status post-Phase 2** : 2 corrigés via UPDATE-B2 (slug-match), 9 préservés en NULLIFY (UPDATE-only safe), **62 restent en CONFLICT-B4** avec un order-fallback douteux.
+- **Solution** : re-scraping LP avec extracteur amélioré qui priorise label-match au scrape (avant denorm), ou nullification massive et acceptation perte temporaire.
+
+### C. GDIY pollution résiduelle morganprudhomme — ~20 guests (P2)
+- **Volume initial** : 47 victimes pré-Phase 2 portant `/in/morganprudhomme/`.
+- **Status post-Phase 2** : 27 corrigés via UPDATE-B1/B2, **20 restent en CONFLICT-B4**.
+- **Solution** : idem LP — re-scraping ou nullification.
+
+### D. Gap structurel `guest_episodes` LM — 195/222 guests orphelins (P1)
+- **Volume** : sur 222 guests LM avec `linkedin_url IS NOT NULL`, **195 (88%) ont ZÉRO entrée dans `guest_episodes`**. Confirmé par stat directe post-Phase 2.
+- **Symptôme** : `guests.linkedin_url` valide (slugs matchent les noms) mais `guest_episodes` orphelin → guests invisibles côté matching cross-tenant, dashboard, et search.
+- **Hypothèse cause** : pipeline historique scrape-deep ou seed initial qui écrivait `guests.linkedin_url` directement **sans** passer par `populate-guests` (seul script qui insère `guest_episodes` aujourd'hui).
+- **Investigation post-démo** :
+  1. Origine exacte (`migrate-json` / `migrate-enriched` / autre script disparu ?)
+  2. Re-population `guest_episodes` LM via re-run `populate-guests` après vérif que l'INSERT respecte les FK composites (cf. Phase 1.5)
+  3. Garantir que toute prochaine ré-ingestion ne wipe pas ces 195 `linkedin_url` valides
+
+**Priorité globale** : tous P2 sauf gap structurel #D qui est P1 (dette structurelle qui bloque le matching cross-tenant). Aucun n'est bloquant pour la démo (Stefani LM corrigé, top guests B1/B2 enrichis sur les 6 tenants).
+
+---
+
 ## P0 — Bloquant ou à fort ROI immédiat
 
 ### 1. Deep scrape Orso — 0 articles sur 4 podcasts

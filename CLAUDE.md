@@ -150,6 +150,19 @@ Convention : tout nouveau script write doit accepter un flag `--dry` (default tr
 - **Divergence `episodes.guest_bio` (88/310) vs `guests.bio` (potentiellement ~288/310)** — probable duplication/dénormalisation obsolète. Audit à faire avant d'en supprimer une des deux colonnes.
 - **4 épisodes sans match RSS** (#307, #295, #291, #174) — désynchronisation titre site/RSS. Voir `docs/feedback-orso-media.md`.
 - **Feedback Orso Media** prêt dans `docs/feedback-orso-media.md` à envoyer à Matthieu Stefani quand l'occasion se présente.
+- **Yvan Boutier sur PP — guest récurrent légitime** (5.8% des eps, ~4 épisodes). Audité Q1bis Phase 1 : ce n'est PAS un parasite, c'est un invité officiel et récurrent. Aujourd'hui, les épisodes où il intervient avec Carine Dany peuvent voir son LinkedIn correctement attribué via `pickGuestLinkedin`, mais il n'a pas de statut spécial. Fix structurel post-démo : ajouter un champ `recurringGuests: { name: string; linkedin: string }[]` dans `PodcastConfig` qui force la création d'un guest entity dédié quel que soit le titre de l'épisode (whitelist multi-eps), géré dans `engine/cross/match-guests.ts`. Décision D2 (Phase 1.5) : status quo Option A maintenant, fix structurel après démo Orso Media.
+
+## LinkedIn pollution résiduelle post-Phase 2 (à résoudre post-démo)
+
+Phase 2 LinkedIn (dry-run B-affiné) a identifié **255 UPDATE applied** (B1=168 label-match + B2=86 slug-match + B3=1 host-as-guest Stefani) et 4 catégories de pollution résiduelle qui restent à régler post-démo :
+
+1. **CONFLICT à arbitrer humainement : 139 guests** (GDIY 77 + LP 62) — tous en `rule=order-fallback`. Source : `docs/_linkedin-changes-affined.csv` catégorie `CONFLICT-B4`. Workflow proposé : review humain ligne par ligne, soit UPDATE manuel via SQL, soit NULLIFY si aucun match clair, soit re-scraping ciblé.
+
+2. **LP pollution résiduelle laurentkretz : ~62 guests** (sur 73 victimes initiales, 2 corrigés via UPDATE-B2, 9 restent NULLIFY préservés, 62 en CONFLICT-B4) gardent `/in/laurentkretz/` faute d'alternative confiante dans `episode_links`. Solution : re-scraping LP avec extracteur amélioré qui priorise label-match au scrape (avant denorm), ou nullification massive et acceptation perte temporaire.
+
+3. **GDIY pollution résiduelle morganprudhomme : ~20 guests** (sur 47 victimes initiales, 27 corrigés via UPDATE-B1/B2, 20 restent en CONFLICT-B4 avec un order-fallback douteux). Idem que LP — re-scraping ou nullification.
+
+4. **Gap structurel `guest_episodes` LM : 195/222 guests LM** ont `linkedin_url` non-null mais ZÉRO entrée dans `guest_episodes`. Confirmé par query stat (88% des guests LM avec linkedin sont orphelins). Source probable : pipeline historique scrape-deep ou un seed initial qui écrivait `guests.linkedin_url` directement sans passer par `populate-guests` (qui est le seul à insérer `guest_episodes`). Ces guests sont aussi invisibles côté matching cross-tenant, dashboard et search. À investiguer post-démo : (a) origine exacte (script `migrate-json` / `migrate-enriched` / autre ?), (b) re-population `guest_episodes` LM via re-run `populate-guests` après vérif que l'INSERT respecte les FK composites (Phase 1.5), (c) garantir que toute prochaine ré-ingestion ne wipe pas ces 195 linkedin_url valides.
 
 ## URLs prod
 
