@@ -23,10 +23,25 @@ import 'dotenv/config';
 import * as cheerio from 'cheerio';
 import { neon } from '@neondatabase/serverless';
 import { getConfig } from '@engine/config';
+import {
+  pickGuestLinkedin,
+  buildExclusions,
+  type LinkedinExclusions,
+  type PickResult,
+} from './linkedin-filter';
 
 const sql = neon(process.env.DATABASE_URL!);
 const cfg = getConfig();
 const TENANT = cfg.database.tenantId;
+
+// Exclusions LinkedIn pour ce tenant : hosts (exclus sauf host-as-guest) + parasites
+// (toujours exclus). Source : cfg.scraping.linkedinExclusions + fallback dérivés du host.
+const LINKEDIN_EXCLUSIONS: LinkedinExclusions = buildExclusions({
+  hostName: cfg.host,
+  coHosts: Array.isArray(cfg.coHosts) ? cfg.coHosts : [],
+  configHosts: cfg.scraping?.linkedinExclusions?.hosts,
+  configParasites: cfg.scraping?.linkedinExclusions?.parasites,
+});
 
 // BASE : racine du site du podcast — pour résoudre les URLs relatives
 // et classifier les liens internes comme episode_ref.
@@ -116,6 +131,8 @@ interface Extracted {
   chapters: { title: string; order: number }[];
   links: { url: string; label: string; link_type: LinkType }[];
   guestLinkedin: string | null;
+  /** Diagnostic : règle déclenchée + URLs rejetées (hosts/parasites). */
+  linkedinPick?: PickResult;
 }
 
 const ARTICLE_SELECTORS = cfg.scraping.articleSelectors;
@@ -147,7 +164,7 @@ function normalize(text: string): string {
   return text.replace(/\s+/g, ' ').trim();
 }
 
-function extract($: cheerio.CheerioAPI): Extracted | null {
+function extract($: cheerio.CheerioAPI, guestName: string | null): Extracted | null {
   const root = pickArticleRoot($);
   if (!root) return null;
 
@@ -168,7 +185,7 @@ function extract($: cheerio.CheerioAPI): Extracted | null {
     if (t) chapters.push({ title: t, order: i + 1 });
   });
 
-  // Liens : dédupliqué par URL
+  // Liens : dédupliqué par URL, on conserve l'ordre DOM (priorité 3 du picker).
   const linksMap = new Map<string, { url: string; label: string; link_type: LinkType }>();
   root.find('a[href]').each((_, el) => {
     const href = ($(el).attr('href') || '').trim();
@@ -187,13 +204,20 @@ function extract($: cheerio.CheerioAPI): Extracted | null {
   });
   const links = Array.from(linksMap.values());
 
-  // LinkedIn invité : premier /in/ qui n'est pas Stefani
-  const guestLinkedin = links
+  // LinkedIn invité : pickGuestLinkedin avec exclusions hosts + parasites + host-as-guest.
+  const linkedinCandidates = links
     .filter((l) => l.link_type === 'linkedin')
-    .map((l) => l.url)
-    .find((u) => !/\/in\/stefani/i.test(u)) || null;
+    .map((l) => ({ url: l.url, label: l.label }));
+  const linkedinPick = pickGuestLinkedin(linkedinCandidates, guestName, LINKEDIN_EXCLUSIONS);
 
-  return { articleText, articleHtml, chapters, links, guestLinkedin };
+  return {
+    articleText,
+    articleHtml,
+    chapters,
+    links,
+    guestLinkedin: linkedinPick.url,
+    linkedinPick,
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -230,7 +254,9 @@ async function persist(
     await sql`
       UPDATE guests
       SET linkedin_url = ${ex.guestLinkedin}
-      WHERE name = ${guestName} AND (linkedin_url IS NULL OR linkedin_url = '')
+      WHERE tenant_id = ${TENANT}
+        AND name = ${guestName}
+        AND (linkedin_url IS NULL OR linkedin_url = '')
     `;
   }
 }
@@ -337,7 +363,7 @@ async function main() {
     } else {
       try {
         const $ = cheerio.load(html);
-        const ex = extract($);
+        const ex = extract($, ep.guest);
         if (!ex) {
           console.log('⚠️ no article zone');
           stats.stubs++;
@@ -353,7 +379,22 @@ async function main() {
           stats.totalChapters += ex.chapters.length;
           stats.totalLinks += ex.links.length;
           if (ex.guestLinkedin) stats.linkedin++;
-          console.log(`✅ ${ex.articleText.length}c, ${ex.chapters.length} chap, ${ex.links.length} links${ex.guestLinkedin ? ', linkedin' : ''}`);
+          // Diagnostic LinkedIn picker — visible quand parasites/hosts rejetés.
+          const pick = ex.linkedinPick;
+          let linkedinTag = '';
+          if (ex.guestLinkedin) {
+            linkedinTag = `, linkedin[${pick?.rule ?? 'unknown'}]`;
+          } else if (pick && pick.rejected.length > 0) {
+            linkedinTag = `, linkedin=null(rejected:${pick.rejected.length})`;
+          }
+          if (pick && pick.rejected.length > 0) {
+            const rejSummary = pick.rejected
+              .map((r) => `${r.reason}:${r.url.replace(/.*\/in\//, '').replace(/[/?#].*/, '')}`)
+              .join(',');
+            console.log(`✅ ${ex.articleText.length}c, ${ex.chapters.length} chap, ${ex.links.length} links${linkedinTag} {${rejSummary}}`);
+          } else {
+            console.log(`✅ ${ex.articleText.length}c, ${ex.chapters.length} chap, ${ex.links.length} links${linkedinTag}`);
+          }
           consecutiveErrors = 0;
         }
       } catch (e: any) {

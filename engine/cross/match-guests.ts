@@ -1,6 +1,13 @@
 import 'dotenv/config';
 import { neon } from '@neondatabase/serverless';
-import { TENANTS, TENANT_META, HOSTS_NORMALIZED, ensureUniverseInit } from '../db/cross-queries';
+import {
+  TENANTS,
+  TENANT_META,
+  HOSTS_NORMALIZED,
+  LINKEDIN_EXCLUSIONS_PER_TENANT,
+  ensureUniverseInit,
+} from '../db/cross-queries';
+import { pickGuestLinkedin, buildExclusions } from '../scraping/linkedin-filter';
 
 // ============================================================================
 // Match & merge guests cross-tenant.
@@ -73,31 +80,108 @@ async function main() {
   }
 
   // --------------------------------------------------------------------------
-  // Étape 0 : denorm GDIY linkedin_url (episode_links → guests) si manquant
+  // Étape 0 : denorm linkedin_url (episode_links → guests) si manquant
+  //   - filtre hosts/parasites par tenant via pickGuestLinkedin
+  //   - gère le cas host-as-guest (Stefani guest sur ep #297 par ex)
+  //   - log diagnostic des candidats rejetés
   // --------------------------------------------------------------------------
-  console.log('[0/4] Denormalizing linkedin_url from episode_links → guests…');
-  const denormStats = await sql`
-    WITH candidates AS (
-      SELECT DISTINCT ON (g.id)
-        g.id AS guest_id,
-        el.url AS linkedin_url
-      FROM guests g
-      JOIN guest_episodes ge ON ge.guest_id = g.id
-      JOIN episode_links el ON el.episode_id = ge.episode_id
-        AND el.tenant_id = g.tenant_id
-      WHERE g.linkedin_url IS NULL
-        AND el.link_type = 'linkedin'
-        AND el.url IS NOT NULL
-        AND el.url ILIKE '%linkedin.com%'
-      ORDER BY g.id, el.id
-    )
-    UPDATE guests SET linkedin_url = c.linkedin_url
-    FROM candidates c
-    WHERE guests.id = c.guest_id
-      ${DRY ? sql`AND false` : sql``}
-    RETURNING guests.id
-  ` as any[];
-  console.log(`  denorm: ${denormStats.length} guests rows updated${DRY ? ' (DRY)' : ''}`);
+  console.log('[0/4] Denormalizing linkedin_url from episode_links → guests (tenant-aware)…');
+  const candidatesRows = await sql`
+    SELECT
+      g.id AS guest_id,
+      g.name AS guest_name,
+      g.tenant_id,
+      el.url,
+      el.label,
+      el.id AS link_id
+    FROM guests g
+    JOIN guest_episodes ge ON ge.guest_id = g.id
+    JOIN episode_links el ON el.episode_id = ge.episode_id
+      AND el.tenant_id = g.tenant_id
+    WHERE g.linkedin_url IS NULL
+      AND el.link_type = 'linkedin'
+      AND el.url IS NOT NULL
+      AND el.url ILIKE '%linkedin.com%'
+    ORDER BY g.id, el.id
+  ` as Array<{
+    guest_id: number;
+    guest_name: string;
+    tenant_id: string;
+    url: string;
+    label: string | null;
+    link_id: number;
+  }>;
+
+  // Group candidats par guest_id en respectant l'ordre el.id (priorité 3 du picker).
+  type GuestCands = {
+    guest_id: number;
+    guest_name: string;
+    tenant_id: string;
+    candidates: { url: string; label: string | null }[];
+  };
+  const byGuest = new Map<number, GuestCands>();
+  for (const c of candidatesRows) {
+    let entry = byGuest.get(c.guest_id);
+    if (!entry) {
+      entry = { guest_id: c.guest_id, guest_name: c.guest_name, tenant_id: c.tenant_id, candidates: [] };
+      byGuest.set(c.guest_id, entry);
+    }
+    entry.candidates.push({ url: c.url, label: c.label });
+  }
+
+  // Résolution per-guest avec pickGuestLinkedin.
+  const resolved: Array<{ guest_id: number; url: string; rule: string }> = [];
+  const diagnostics = {
+    picked: 0,
+    null_no_candidates: 0,
+    null_all_rejected: 0,
+    rejected_parasite: 0,
+    rejected_host: 0,
+    host_as_guest: 0,
+    by_rule: { 'label-match': 0, 'slug-match': 0, 'order-fallback': 0, 'host-as-guest': 0, none: 0 } as Record<string, number>,
+  };
+
+  for (const g of byGuest.values()) {
+    const exclusions = LINKEDIN_EXCLUSIONS_PER_TENANT[g.tenant_id]
+      // Fallback défensif si tenant absent du registry — buildExclusions vide.
+      || buildExclusions({ hostName: '', coHosts: [], configHosts: [], configParasites: [] });
+    const pick = pickGuestLinkedin(g.candidates, g.guest_name, exclusions);
+    diagnostics.by_rule[pick.rule] = (diagnostics.by_rule[pick.rule] || 0) + 1;
+    diagnostics.rejected_parasite += pick.rejected.filter(r => r.reason === 'parasite').length;
+    diagnostics.rejected_host += pick.rejected.filter(r => r.reason === 'host').length;
+    if (pick.rule === 'host-as-guest') diagnostics.host_as_guest++;
+    if (pick.url) {
+      resolved.push({ guest_id: g.guest_id, url: pick.url, rule: pick.rule });
+      diagnostics.picked++;
+    } else {
+      if (g.candidates.length === 0) diagnostics.null_no_candidates++;
+      else diagnostics.null_all_rejected++;
+    }
+  }
+
+  console.log(`  candidates: ${candidatesRows.length} rows over ${byGuest.size} guests`);
+  console.log(`  picked: ${diagnostics.picked} | null: ${diagnostics.null_all_rejected + diagnostics.null_no_candidates} (all_rejected=${diagnostics.null_all_rejected})`);
+  console.log(`  rejected: parasite=${diagnostics.rejected_parasite} host=${diagnostics.rejected_host}${diagnostics.host_as_guest ? ` | host-as-guest=${diagnostics.host_as_guest}` : ''}`);
+  console.log(`  by rule: ${Object.entries(diagnostics.by_rule).filter(([, n]) => n > 0).map(([r, n]) => `${r}=${n}`).join(' ')}`);
+
+  if (DRY) {
+    console.log(`  DRY — pas d'UPDATE (${resolved.length} guests seraient mis à jour)`);
+  } else if (resolved.length > 0) {
+    // Batch UPDATE via unnest pour éviter N round-trips.
+    const ids = resolved.map(r => r.guest_id);
+    const urls = resolved.map(r => r.url);
+    const updated = await sql`
+      UPDATE guests g
+      SET linkedin_url = x.url
+      FROM unnest(${ids}::int[], ${urls}::text[]) AS x(gid, url)
+      WHERE g.id = x.gid
+        AND g.linkedin_url IS NULL
+      RETURNING g.id
+    ` as any[];
+    console.log(`  denorm: ${updated.length} guests rows updated`);
+  } else {
+    console.log('  denorm: 0 guests rows updated');
+  }
 
   // --------------------------------------------------------------------------
   // Étape 1 : pull toutes les apparitions

@@ -1,7 +1,12 @@
 import 'dotenv/config';
 import { neon } from '@neondatabase/serverless';
-import { HOSTS_NORMALIZED, HOST_LINKEDIN_SLUGS, ensureUniverseInit } from '../db/cross-queries';
+import {
+  HOSTS_NORMALIZED,
+  LINKEDIN_EXCLUSIONS_PER_TENANT,
+  ensureUniverseInit,
+} from '../db/cross-queries';
 import { getConfig } from '../config/index';
+import { pickGuestLinkedin, buildExclusions } from '../scraping/linkedin-filter';
 
 // ============================================================================
 // Populate guests table pour N'IMPORTE QUEL tenant.
@@ -208,30 +213,78 @@ async function main() {
   // 5. Enrich linkedin_url + bio
   // --------------------------------------------------------------------------
   console.log('[5/6] Enriching linkedin_url + bio…');
-  // Exclut les URLs linkedin des hosts/co-hosts (derivées de HOST_LINKEDIN_SLUGS
-  // via ensureUniverseInit — config-driven, pas de hardcode).
-  const hostLinkedinPatterns = HOST_LINKEDIN_SLUGS.map(s => `%${s}%`);
-  const liRes: any = await sql`
-    WITH candidates AS (
-      SELECT DISTINCT ON (g.id)
-        g.id AS guest_id,
-        el.url AS linkedin_url
-      FROM guests g
-      JOIN guest_episodes ge ON ge.guest_id = g.id AND ge.tenant_id = g.tenant_id
-      JOIN episode_links el ON el.episode_id = ge.episode_id AND el.tenant_id = g.tenant_id
-      WHERE g.tenant_id = ${TENANT}
-        AND g.linkedin_url IS NULL
-        AND el.link_type = 'linkedin'
-        AND el.url ILIKE '%linkedin.com%'
-        AND el.url NOT ILIKE ALL(${hostLinkedinPatterns}::text[])
-      ORDER BY g.id, el.id
-    )
-    UPDATE guests SET linkedin_url = c.linkedin_url
-    FROM candidates c
-    WHERE guests.id = c.guest_id
-    RETURNING guests.id
+  // Pull tous les candidats linkedin (URL + label) par guest, ordonnés el.id.
+  // Filtrage hosts/parasites + label-match + host-as-guest fait en TS via
+  // pickGuestLinkedin (cf. engine/scraping/linkedin-filter.ts).
+  const liCandidates: any = await sql`
+    SELECT
+      g.id AS guest_id,
+      g.name AS guest_name,
+      el.url,
+      el.label,
+      el.id AS link_id
+    FROM guests g
+    JOIN guest_episodes ge ON ge.guest_id = g.id AND ge.tenant_id = g.tenant_id
+    JOIN episode_links el ON el.episode_id = ge.episode_id AND el.tenant_id = g.tenant_id
+    WHERE g.tenant_id = ${TENANT}
+      AND g.linkedin_url IS NULL
+      AND el.link_type = 'linkedin'
+      AND el.url ILIKE '%linkedin.com%'
+    ORDER BY g.id, el.id
   `;
-  const withLinkedin = liRes.length;
+
+  type Cand = { guest_id: number; guest_name: string; url: string; label: string | null };
+  const candByGuest = new Map<number, { name: string; cands: { url: string; label: string | null }[] }>();
+  for (const c of liCandidates as Cand[]) {
+    let entry = candByGuest.get(c.guest_id);
+    if (!entry) {
+      entry = { name: c.guest_name, cands: [] };
+      candByGuest.set(c.guest_id, entry);
+    }
+    entry.cands.push({ url: c.url, label: c.label });
+  }
+
+  const exclusions = LINKEDIN_EXCLUSIONS_PER_TENANT[TENANT]
+    || buildExclusions({
+      hostName: cfg.host,
+      coHosts: Array.isArray(cfg.coHosts) ? cfg.coHosts : [],
+      configHosts: cfg.scraping?.linkedinExclusions?.hosts,
+      configParasites: cfg.scraping?.linkedinExclusions?.parasites,
+    });
+
+  const resolved: { gid: number; url: string }[] = [];
+  const liDiag = { picked: 0, rejected_parasite: 0, rejected_host: 0, host_as_guest: 0, by_rule: {} as Record<string, number> };
+  for (const [gid, e] of candByGuest.entries()) {
+    const pick = pickGuestLinkedin(e.cands, e.name, exclusions);
+    liDiag.by_rule[pick.rule] = (liDiag.by_rule[pick.rule] || 0) + 1;
+    liDiag.rejected_parasite += pick.rejected.filter(r => r.reason === 'parasite').length;
+    liDiag.rejected_host += pick.rejected.filter(r => r.reason === 'host').length;
+    if (pick.rule === 'host-as-guest') liDiag.host_as_guest++;
+    if (pick.url) {
+      resolved.push({ gid, url: pick.url });
+      liDiag.picked++;
+    }
+  }
+
+  let withLinkedin = 0;
+  if (resolved.length > 0) {
+    const ids = resolved.map(r => r.gid);
+    const urls = resolved.map(r => r.url);
+    const r: any = await sql`
+      UPDATE guests
+      SET linkedin_url = x.url
+      FROM unnest(${ids}::int[], ${urls}::text[]) AS x(gid, url)
+      WHERE guests.id = x.gid
+        AND guests.tenant_id = ${TENANT}
+        AND guests.linkedin_url IS NULL
+      RETURNING guests.id
+    `;
+    withLinkedin = r.length;
+  }
+  console.log(`  linkedin candidates: ${liCandidates.length} rows / ${candByGuest.size} guests | picked=${liDiag.picked} rejected(parasite=${liDiag.rejected_parasite},host=${liDiag.rejected_host}) host-as-guest=${liDiag.host_as_guest}`);
+  if (Object.keys(liDiag.by_rule).length) {
+    console.log(`  rule split: ${Object.entries(liDiag.by_rule).map(([k, v]) => `${k}=${v}`).join(' ')}`);
+  }
 
   // Bio : article_content si dispo, sinon fallback rss_guest_intro
   let withBio = 0;

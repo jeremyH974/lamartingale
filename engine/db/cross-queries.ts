@@ -1,5 +1,6 @@
 import { neon } from '@neondatabase/serverless';
 import { getAllConfigs } from '../config/index';
+import { buildExclusions, type LinkedinExclusions } from '../scraping/linkedin-filter';
 
 // ============================================================================
 // Cross-tenant queries — agrègent TOUS les podcasts présents en DB.
@@ -21,10 +22,18 @@ export const HOSTS_NORMALIZED: string[] = [];
 // Slugs LinkedIn dérivés des hosts (ex: "Matthieu Stefani" → ["matthieustefani", "matthieu-stefani"]).
 // Utilisés pour filtrer les URLs linkedin.com/in/<slug> qui appartiennent aux hosts
 // (pas des invités) dans populate-guests et cross-queries.
+// DEPRECATED depuis 2026-04-25 (LinkedIn pollution fix) : ce tableau est l'union
+// PLATE de tous les host slugs cross-tenant — il ne distingue pas hosts vs
+// parasites, et ne supporte pas le cas host-as-guest. Préférer
+// `LINKEDIN_EXCLUSIONS_PER_TENANT[tenant]` + `pickGuestLinkedin()`.
 export const HOST_LINKEDIN_SLUGS: string[] = [];
 // Patterns SQL LIKE dérivés de HOSTS_NORMALIZED (ex: "%matthieu stefani%").
 // Prêts à être injectés dans `NOT (col LIKE ANY(${HOST_NAME_PATTERNS}))`.
 export const HOST_NAME_PATTERNS: string[] = [];
+// Exclusions LinkedIn complètes par tenant — populé depuis cfg.scraping.linkedinExclusions
+// et fallback `deriveSlugsFromName(host + coHosts)` quand non configuré.
+// Inclut hostNames (pour test host-as-guest dans pickGuestLinkedin).
+export const LINKEDIN_EXCLUSIONS_PER_TENANT: Record<string, LinkedinExclusions> = {};
 
 let _initPromise: Promise<void> | null = null;
 
@@ -109,6 +118,7 @@ export async function ensureUniverseInit(): Promise<void> {
     HOSTS_NORMALIZED.length = 0;
     HOST_LINKEDIN_SLUGS.length = 0;
     HOST_NAME_PATTERNS.length = 0;
+    for (const k of Object.keys(LINKEDIN_EXCLUSIONS_PER_TENANT)) delete LINKEDIN_EXCLUSIONS_PER_TENANT[k];
 
     // Indexe les configs par id pour enrichir TENANT_META / HOSTS_NORMALIZED
     const configsById = new Map<string, any>();
@@ -126,6 +136,16 @@ export async function ensureUniverseInit(): Promise<void> {
       TENANT_META[id] = { name, url: `https://${domain}` };
       if (cfg?.host) rawHosts.push(cfg.host);
       if (Array.isArray(cfg?.coHosts)) rawHosts.push(...cfg.coHosts);
+
+      // Per-tenant LinkedIn exclusions (config explicite + fallback dérivés du host).
+      if (cfg?.host) {
+        LINKEDIN_EXCLUSIONS_PER_TENANT[id] = buildExclusions({
+          hostName: cfg.host,
+          coHosts: Array.isArray(cfg.coHosts) ? cfg.coHosts : [],
+          configHosts: cfg.scraping?.linkedinExclusions?.hosts,
+          configParasites: cfg.scraping?.linkedinExclusions?.parasites,
+        });
+      }
     }
 
     const filters = deriveHostFilters(rawHosts);
@@ -144,6 +164,7 @@ export function _resetUniverseForTest(): void {
   HOSTS_NORMALIZED.length = 0;
   HOST_LINKEDIN_SLUGS.length = 0;
   HOST_NAME_PATTERNS.length = 0;
+  for (const k of Object.keys(LINKEDIN_EXCLUSIONS_PER_TENANT)) delete LINKEDIN_EXCLUSIONS_PER_TENANT[k];
 }
 
 function sqlClient() {
