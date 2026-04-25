@@ -62,6 +62,16 @@ export interface PodcastConfig {
     hasArticles: boolean;          // true → lance deep-scrape ; false → RSS only
     timelineInRss: boolean;        // true → parse TIMELINE dans description RSS (GDIY)
     requiresArticleUrl?: boolean;  // true → deep-scrape ignore episodes sans article_url (GDIY)
+
+    // Slugs LinkedIn à exclure lors de l'extraction guest.linkedin_url.
+    // hosts     : exclus SAUF si guest_name matche le host (cas Stefani sur ep #297).
+    // parasites : toujours exclus (CM, montage, crédits production récurrents).
+    // Si absent, fallback runtime via deriveSlugsFromName(host + coHosts).
+    // Voir engine/scraping/linkedin-filter.ts.
+    linkedinExclusions?: {
+      hosts: string[];
+      parasites: string[];
+    };
   };
 
   // Branding
