@@ -59,6 +59,37 @@ export async function requireHubAuth(req: Request, res: Response, next: NextFunc
 }
 
 /**
+ * Endpoint admin-only : exige une session valide ET role=root (tenant_id='*').
+ *
+ * Pattern de composition : on ré-applique la logique de `requireHubAuth` plutôt
+ * que de l'invoquer (Express ne permet pas de chaîner deux middlewares en un seul
+ * sans router intermédiaire), puis on filtre sur `accessScope.isRoot`.
+ *
+ * 401 si pas de session, 403 si session valide mais pas root.
+ * Réservé aux endpoints sensibles : POST /api/cache/clear, futur /api/admin/*.
+ */
+export async function requireRoot(req: Request, res: Response, next: NextFunction): Promise<void> {
+  const sess = extractSession(req);
+  if (!sess) {
+    res.status(401).json({ error: 'auth_required', message: 'Connexion requise' });
+    return;
+  }
+  req.session = sess;
+  try {
+    req.accessScope = await getAccessScope(sess.email);
+  } catch (e: any) {
+    console.error('[auth] getAccessScope (requireRoot) failed:', e.message);
+    res.status(500).json({ error: 'auth_backend_error' });
+    return;
+  }
+  if (!req.accessScope?.isRoot) {
+    res.status(403).json({ error: 'root_required', message: 'Accès admin requis' });
+    return;
+  }
+  next();
+}
+
+/**
  * Endpoint optionnellement authentifié : req.session=null si pas de cookie
  * (utilisé par /api/auth/me qui doit fonctionner même déconnecté).
  */
