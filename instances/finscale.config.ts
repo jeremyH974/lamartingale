@@ -33,6 +33,16 @@ const config: PodcastConfig = {
     userAgent: 'finscale-DataBot/1.0',
     hasArticles: false,
     timelineInRss: false,
+    // Solenne Niedercorn-Desouches : slug confirmé via DB (3 guests pollués).
+    // Aucun parasite identifié.
+    linkedinExclusions: {
+      hosts: [
+        'solenne-niedercorn-desouches',
+        'solenneniedercorn',
+        'solenne-niedercorn',
+      ],
+      parasites: [],
+    },
   },
 
   branding: {

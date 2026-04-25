@@ -33,6 +33,12 @@ const config: PodcastConfig = {
     userAgent: 'lepanier-DataBot/1.0',
     hasArticles: false,
     timelineInRss: false,
+    // laurentkretz présent dans 79% des articles LP (signature host).
+    // Aucun parasite identifié (>=5% des eps non-host).
+    linkedinExclusions: {
+      hosts: ['laurentkretz', 'laurent-kretz'],
+      parasites: [],
+    },
   },
 
   branding: {

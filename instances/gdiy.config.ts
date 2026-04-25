@@ -56,6 +56,14 @@ export const gdiyConfig: PodcastConfig = {
     hasArticles: true,
     timelineInRss: true,
     requiresArticleUrl: true,
+    // morganprudhomme présent dans 56.4% des articles GDIY (parasite éditorial
+    // Cosa Vostra, monteur/CM en pied d'article). Stefani host (peu pollué par
+    // filtre actuel mais conservé pour exhaustivité). Amaury de Tonquédec n'a
+    // pas été identifié comme pollueur.
+    linkedinExclusions: {
+      hosts: ['stefani', 'matthieustefani', 'matthieu-stefani'],
+      parasites: ['morganprudhomme'],
+    },
   },
 
   // Charte gdiy.fr : noir (fond principal) + vert néon signature en accent

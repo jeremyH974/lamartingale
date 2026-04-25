@@ -33,6 +33,16 @@ const config: PodcastConfig = {
     userAgent: 'passionpatrimoine-DataBot/1.0',
     hasArticles: false,
     timelineInRss: false,
+    // Carine Dany — 4 slugs hardcodés (vérifiés via audit Q1bis Phase 1) :
+    // canonique 'carinedany' + 3 variantes /in/carine-dany* observées en prod.
+    // Décision D3 (Phase 1.5) : hardcode explicite des 4 slugs > deriveSlugsFromName
+    // pour bloquer tous les /in/carine-dany-XXX vus dans episode_links.
+    // Yvan Boutier 5.8% → DETTE D2 : guest récurrent légitime, pas un parasite.
+    //   Fix structurel via recurringGuests[] post-démo (whitelist multi-eps).
+    linkedinExclusions: {
+      hosts: ['carinedany', 'carine-dany', 'carine-dany-014a2232', 'carine-dany-526594198'],
+      parasites: [],
+    },
   },
 
   branding: {

@@ -47,6 +47,12 @@ export const lamartingaleConfig: PodcastConfig = {
     userAgent: 'LaMartingale-DataBot/1.0',
     hasArticles: true,
     timelineInRss: false,
+    // Stefani présent dans 88.5% des articles LM (signature host) — à exclure.
+    // morganprudhomme apparaît dans ~6% (parasite éditorial Cosa Vostra cross-promo).
+    linkedinExclusions: {
+      hosts: ['stefani', 'matthieustefani', 'matthieu-stefani'],
+      parasites: ['morganprudhomme'],
+    },
   },
 
   branding: {

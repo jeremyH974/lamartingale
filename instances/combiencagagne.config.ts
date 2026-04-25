@@ -33,6 +33,14 @@ const config: PodcastConfig = {
     userAgent: 'combiencagagne-DataBot/1.0',
     hasArticles: false,
     timelineInRss: false,
+    // Clémence Lepic — slugs hardcodés (vérifiés via web search + audit Q1bis Phase 1).
+    // 'clemence-lepic' = slug officiel LinkedIn, 'clemencelepic' = variante sans tiret.
+    // Décision D4 (Phase 1.5) : hardcode explicite > deriveSlugsFromName pour
+    // garantir le filtrage host quel que soit le tag observé en prod.
+    linkedinExclusions: {
+      hosts: ['clemence-lepic', 'clemencelepic'],
+      parasites: [],
+    },
   },
 
   branding: {
