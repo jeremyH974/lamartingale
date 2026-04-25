@@ -432,7 +432,7 @@
         <div class="position-text">${escapeHtml(p.position || '')}</div>
         ${p.context ? `<div class="position-context">${escapeHtml(p.context)}</div>` : ''}
         <div class="meta-line">
-          <span class="source">📍 ${renderSourceLink(p.source_podcast, p.source_episode_id)}</span>
+          <span class="source">📍 ${renderSourceLink(p.source_podcast, p.source_episode_number, p.source_episode_id)}</span>
           <span class="confidence">
             Confiance ${pct}%
             <span class="confidence-bar"><span class="confidence-fill" style="width:${pct}%"></span></span>
@@ -446,17 +446,21 @@
     return `
       <div class="quote-card">
         <blockquote>${escapeHtml(q.text || '')}</blockquote>
-        <div class="quote-attribution">— ${renderSourceLink(q.source_podcast, q.source_episode_id)}</div>
+        <div class="quote-attribution">— ${renderSourceLink(q.source_podcast, q.source_episode_number, q.source_episode_id)}</div>
         ${q.context ? `<div class="quote-context">${escapeHtml(q.context)}</div>` : ''}
       </div>
     `;
   }
 
-  function renderSourceLink(tenantId, episodeId) {
-    const label = `${escapeHtml(prettyTenant(tenantId))} · ép. ${escapeHtml(String(episodeId))}`;
+  function renderSourceLink(tenantId, episodeNumber, episodeId) {
+    // Sous-sites routent /episode/:n sur episode_number. episode_id (DB) en
+    // fallback uniquement si number manquant — produira probablement un 404
+    // mais évite un lien cassé silencieux.
+    const ep = episodeNumber ?? episodeId;
+    const label = `${escapeHtml(prettyTenant(tenantId))} · ép. ${escapeHtml(String(ep))}`;
     const baseUrl = TENANT_URL[tenantId];
-    if (!baseUrl || !episodeId) return label;
-    return `<a href="${escapeAttr(baseUrl)}/episode/${encodeURIComponent(String(episodeId))}" target="_blank" rel="noopener">${label} ↗</a>`;
+    if (!baseUrl || ep == null) return label;
+    return `<a href="${escapeAttr(baseUrl)}/episode/${encodeURIComponent(String(ep))}" target="_blank" rel="noopener">${label} ↗</a>`;
   }
 
   function renderQuestion(q) {

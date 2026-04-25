@@ -891,7 +891,39 @@ app.get('/api/cross/guests/:slug/brief', async (req, res) => {
         WHERE lower(regexp_replace(canonical_name, '[^a-zA-Z0-9]+', '-', 'g')) = ${slug}
         LIMIT 1
       `) as any[];
-      return rows[0] ?? null;
+      const guest = rows[0];
+      if (!guest) return null;
+
+      // Enrichissement source_episode_number — les sous-sites routent /episode/:n
+      // sur episode_number (clé éditoriale), pas sur id (clé technique DB).
+      const positions = Array.isArray(guest.key_positions) ? guest.key_positions : [];
+      const quotes = Array.isArray(guest.quotes) ? guest.quotes : [];
+      const refs = new Map<string, { tenant: string; id: number }>();
+      for (const p of [...positions, ...quotes]) {
+        const tenant = p?.source_podcast;
+        const id = Number(p?.source_episode_id);
+        if (tenant && Number.isInteger(id) && id > 0) refs.set(`${tenant}:${id}`, { tenant, id });
+      }
+      const epMap = new Map<string, number>();
+      if (refs.size > 0) {
+        const tenants = [...new Set([...refs.values()].map((r) => r.tenant))];
+        const ids = [...new Set([...refs.values()].map((r) => r.id))];
+        const epRows = (await sql`
+          SELECT tenant_id, id, episode_number
+          FROM episodes
+          WHERE tenant_id = ANY(${tenants}::text[])
+            AND id = ANY(${ids}::int[])
+        `) as any[];
+        for (const r of epRows) {
+          if (r.episode_number != null) epMap.set(`${r.tenant_id}:${r.id}`, Number(r.episode_number));
+        }
+      }
+      const enrich = (arr: any[]) =>
+        arr.map((p) => {
+          const key = `${p?.source_podcast}:${Number(p?.source_episode_id)}`;
+          return { ...p, source_episode_number: epMap.get(key) ?? null };
+        });
+      return { ...guest, key_positions: enrich(positions), quotes: enrich(quotes) };
     });
     if (!result) return res.status(404).json({ error: 'Guest not found' });
     if (!result.brief_md) return res.status(404).json({ error: 'No brief generated for this guest' });

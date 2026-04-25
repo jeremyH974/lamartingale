@@ -31,21 +31,29 @@ const FAKE_BRIEF_ROW = {
   linkedin_url: 'https://www.linkedin.com/in/ericlarch/',
   tenant_appearances: [{ tenant_id: 'gdiy', episode_numbers: [243] }],
   brief_md: '# Eric Larchevêque\n\nMock brief content.',
-  key_positions: [{ position: 'p', context: 'c', source_episode_id: 1, source_podcast: 'gdiy', confidence: 0.9 }],
-  quotes: [{ text: 'q', source_episode_id: 1, source_podcast: 'gdiy', context: 'c' }],
+  key_positions: [{ position: 'p', context: 'c', source_episode_id: 2206, source_podcast: 'gdiy', confidence: 0.9 }],
+  quotes: [{ text: 'q', source_episode_id: 925, source_podcast: 'lamartingale', context: 'c' }],
   original_questions: [{ question: 'q?', rationale: 'r', depth_score: 'high' }],
   brief_generated_at: new Date('2026-04-25T12:47:42Z').toISOString(),
   brief_model: 'claude-sonnet-4-6',
 };
 
 vi.mock('@neondatabase/serverless', () => {
-  // Tagged-template handler : matche le slug demandé.
+  // Tagged-template handler : matche le slug demandé + lookup episodes.
   const sql = (strings: TemplateStringsArray, ...values: unknown[]) => {
     const query = strings.join('?');
     if (query.includes('cross_podcast_guests') && query.includes('regexp_replace')) {
       const slug = values[0] as string;
       if (slug === 'eric-larcheveque') return Promise.resolve([FAKE_BRIEF_ROW]);
       return Promise.resolve([]);
+    }
+    if (query.includes('FROM episodes') && query.includes('episode_number')) {
+      // Mock minimal : tenant_id+id → episode_number.
+      // FAKE_BRIEF_ROW référence gdiy:2206 et lamartingale:925 (cf positions/quotes).
+      return Promise.resolve([
+        { tenant_id: 'gdiy', id: 2206, episode_number: 243 },
+        { tenant_id: 'lamartingale', id: 925, episode_number: 3 },
+      ]);
     }
     return Promise.resolve([]);
   };
@@ -126,6 +134,17 @@ describe('GET /api/cross/guests/:slug/brief', () => {
     expect(Array.isArray(body.quotes)).toBe(true);
     expect(Array.isArray(body.original_questions)).toBe(true);
     expect(body.brief_model).toBe('claude-sonnet-4-6');
+  });
+
+  it('3bis. payload enrichi avec source_episode_number (positions + quotes)', async () => {
+    const res = await fetch(`${baseUrl}/api/cross/guests/eric-larcheveque/brief`);
+    expect(res.status).toBe(200);
+    const body = (await res.json()) as any;
+    // gdiy:2206 → ep#243, lamartingale:925 → ep#3 (cf mock episodes).
+    expect(body.key_positions[0].source_episode_number).toBe(243);
+    expect(body.key_positions[0].source_episode_id).toBe(2206);
+    expect(body.quotes[0].source_episode_number).toBe(3);
+    expect(body.quotes[0].source_episode_id).toBe(925);
   });
 
   it('4. unknown slug → 404', async () => {
