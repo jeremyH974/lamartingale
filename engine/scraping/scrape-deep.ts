@@ -6,7 +6,8 @@
  *   - Extrait l'article complet (HTML + texte nettoyé)
  *   - Extrait les chapitres (H2)
  *   - Extrait les liens classifiés (LinkedIn, episode_ref, tool, company, resource)
- *   - Détecte le LinkedIn de l'invité (premier /in/ hors Stefani)
+ *   - Détecte le LinkedIn de l'invité via pickGuestLinkedin (filtre les hosts
+ *     du tenant + parasites configurés, préfère label/slug match au guest name)
  *
  * Met à jour :
  *   - episodes.article_content, article_html, chapters

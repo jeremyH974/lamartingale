@@ -44,7 +44,9 @@ export interface RagResponse {
   timing_ms: number;
 }
 
-function ragCacheKey(message: string): string {
+// Exporté pour test unitaire (engine/__tests__/rag-cache-key.test.ts) — pure fn,
+// pas d'usage prévu hors `ragQuery()` ni hors tests.
+export function ragCacheKey(message: string): string {
   const normalized = message.toLowerCase().trim();
   const hash = crypto.createHash('sha256').update(normalized).digest('hex').substring(0, 32);
   return `rag:query:${hash}`;
