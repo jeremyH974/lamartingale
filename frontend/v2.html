@@ -1395,10 +1395,12 @@
       <h1 id="hero-h1">Prenez le contrôle<br>de votre argent</h1>
       <p id="hero-p">Le premier podcast français sur les finances personnelles, transformé en plateforme éducative interactive. Recherche sémantique IA, assistant conversationnel, quiz adaptatif, 310 épisodes analysés.</p>
       <div class="hero-stats">
-        <div><div class="hero-stat-value" id="hs-ep">307</div><div class="hero-stat-label">épisodes</div></div>
-        <div><div class="hero-stat-value" id="hs-ex">28</div><div class="hero-stat-label">experts</div></div>
-        <div><div class="hero-stat-value" id="hs-q">614</div><div class="hero-stat-label">quiz</div></div>
-        <div><div class="hero-stat-value" id="hs-p">6</div><div class="hero-stat-label">parcours</div></div>
+        <!-- Placeholder em dash : countUp() anime de 0→target depuis /api/stats,
+             ignore le DOM initial. Évite FOUC trompeur (ex: 307→65 sur CCG). -->
+        <div><div class="hero-stat-value" id="hs-ep">—</div><div class="hero-stat-label">épisodes</div></div>
+        <div><div class="hero-stat-value" id="hs-ex">—</div><div class="hero-stat-label">experts</div></div>
+        <div><div class="hero-stat-value" id="hs-q">—</div><div class="hero-stat-label">quiz</div></div>
+        <div><div class="hero-stat-value" id="hs-p">—</div><div class="hero-stat-label">parcours</div></div>
       </div>
       <button class="hero-cta" onclick="go('chat')">Poser une question à l'assistant →</button>
     </div>
