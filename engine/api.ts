@@ -553,6 +553,26 @@ app.post('/api/cache/warm', async (_req, res) => {
   } catch (e: any) { console.error('[API] /api/cache/warm error:', e.message); res.status(500).json({ error: e.message }); }
 });
 
+// --- POC Chantier 6 weekend 2026-04-25 — knowledge query (LM only) ---
+// Endpoint isolé, code dans engine/poc-rag/. À supprimer ou industrialiser.
+app.post('/api/knowledge/query', async (req, res) => {
+  try {
+    if (!process.env.DATABASE_URL || !process.env.OPENAI_API_KEY) {
+      return res.status(503).json({ error: 'POC requires DATABASE_URL + OPENAI_API_KEY' });
+    }
+    const { question } = req.body || {};
+    if (!question || typeof question !== 'string') {
+      return res.status(400).json({ error: 'Body must contain { "question": "string" }' });
+    }
+    const { knowledgeQuery } = await import('./poc-rag/handler');
+    const result = await knowledgeQuery(question);
+    res.json(result);
+  } catch (e: any) {
+    console.error('[API] /api/knowledge/query error:', e.message);
+    res.status(500).json({ error: e.message });
+  }
+});
+
 // --- Demo summary (cheat sheet pitch) ---
 // Endpoint pitch (non consommé par les frontends standalone).
 // Filtre hosts via HOST_NAME_PATTERNS (dérivé de config, cf. cross-queries.ts)
