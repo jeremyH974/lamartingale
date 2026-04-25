@@ -152,6 +152,18 @@ Convention : tout nouveau script write doit accepter un flag `--dry` (default tr
 - **Feedback Orso Media** prêt dans `docs/feedback-orso-media.md` à envoyer à Matthieu Stefani quand l'occasion se présente.
 - **Yvan Boutier sur PP — guest récurrent légitime** (5.8% des eps, ~4 épisodes). Audité Q1bis Phase 1 : ce n'est PAS un parasite, c'est un invité officiel et récurrent. Aujourd'hui, les épisodes où il intervient avec Carine Dany peuvent voir son LinkedIn correctement attribué via `pickGuestLinkedin`, mais il n'a pas de statut spécial. Fix structurel post-démo : ajouter un champ `recurringGuests: { name: string; linkedin: string }[]` dans `PodcastConfig` qui force la création d'un guest entity dédié quel que soit le titre de l'épisode (whitelist multi-eps), géré dans `engine/cross/match-guests.ts`. Décision D2 (Phase 1.5) : status quo Option A maintenant, fix structurel après démo Orso Media.
 
+## Dette structurelle slug/affichage cross_podcast_guests (P1 post-démo)
+
+Découvert pendant MEDIUM-3 livraison 2026-04-26 :
+
+1. `regexp_replace` Postgres ne fait pas d'unaccent → `canonical_name` doit rester ASCII pour permettre le slug match côté API (`/api/cross/guests/:slug/brief`).
+2. Solution court terme appliquée pour Larchevêque : colonne `display_name` pour affichage avec accents (canonical reste lowercase ASCII pour le slug match).
+3. Solution long terme à choisir post-démo :
+   (a) Extension Postgres `unaccent` + slug match via `lower(regexp_replace(unaccent(canonical_name), '[^a-z0-9]+', '-', 'g'))`.
+   (b) Colonne dédiée `slug` calculée à l'INSERT côté app via `String.normalize('NFD').replace(/\p{Diacritic}/gu, '')`.
+4. Cohérence à étendre sur les ~1162 guests de `cross_podcast_guests` : audit `display_name` vs `canonical_name` pour mettre les accents corrects partout (1 seul row mis à jour ce soir).
+5. **Bouton régénérer brief** (`POST /api/admin/guest-briefs/regenerate`) non testé visuellement en session root — à valider sur prod post-démo.
+
 ## LinkedIn pollution résiduelle post-Phase 2 (à résoudre post-démo)
 
 Phase 2 LinkedIn (dry-run B-affiné) a identifié **255 UPDATE applied** (B1=168 label-match + B2=86 slug-match + B3=1 host-as-guest Stefani) et 4 catégories de pollution résiduelle qui restent à régler post-démo :

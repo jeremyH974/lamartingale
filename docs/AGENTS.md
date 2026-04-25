@@ -126,8 +126,30 @@ C'est le seul module **6/6** identifié à l'audit. À utiliser comme template.
 ## Wrapping persistence (responsabilité non-agent)
 
 Les wrappers DB qui appellent un agent vivent dans `engine/agents/wrappers/`.
+Voir `engine/agents/wrappers/README.md` pour le pattern d'orchestration détaillé.
 
-Exemple : `engine/agents/wrappers/persistClaims.ts` prend la sortie de
+### Source selection strategy (depuis MEDIUM-3)
+
+`engine/agents/wrappers/sourceSelector.ts` gère la cascade de sources
+disponibles pour un épisode :
+
+| Type                  | Priority | Min length | Source DB                              |
+| --------------------- | -------- | ---------- | -------------------------------------- |
+| `transcript`          | 100      | 5000       | _(pas encore en BDD — préparé)_        |
+| `article_content`     | 80       | 500        | `episodes.article_content`             |
+| `chapters_takeaways`  | 50       | 200        | `chapters[].title` + `key_takeaways[]` |
+| `rss_description`     | 10       | 100        | `episodes.rss_description`             |
+
+Conçu extensible : l'ajout futur du transcript audio = 2 lignes décommentées
+dans `SOURCE_PRIORITIES` + 1 champ ajouté à `SourceEpisode`. Aucune
+modification d'agent ou de wrapper.
+
+Quality score (`priority / 100`, range 0..1) remonté à l'agent via
+`source_quality` pour traçabilité dans `metadata.sourceQualityAvg`.
+
+### Exemple wrapper
+
+`engine/agents/wrappers/persistClaims.ts` prend la sortie de
 `themeAnalysisAgent.run()` et fait l'INSERT batch idempotent dans la table `claims`.
 
 ```ts
@@ -170,14 +192,15 @@ Le wrapper :
 - **Source données** : `episodes.article_content`, `episodes.chapters`, `episodes.key_takeaways`.
 - **Réutilisabilité requise** : 2 tests minimum (happy + alternative), README 3 exemples.
 
-### 3. guestBriefAgent
+### 3. guestBriefAgent ✅ implémenté (MEDIUM-3, 2026-04-25)
 
-- **Input** : `{ guestName: string, guestLinkedin?: string, scope: 'univers_ms' | 'global' }`
-- **Config** : `{ llmFn, model: 'sonnet' }`
-- **Output** : `{ brief: GuestBrief, sourceEpisodes: number[], keyPositions, quotes, originalQuestions }`
-- **Wrapper** : `engine/agents/wrappers/persistGuestBrief.ts` (UPDATE colonnes brief sur `cross_podcast_guests`).
-- **Source données** : `cross_podcast_guests`, `claims`, `episode_links(link_type='linkedin')`.
-- **Réutilisabilité requise** : 2 tests minimum (happy + alternative), README 3 exemples.
+- **Input** : `{ guestName, guestLinkedin?, episodes: [{ episode_id, podcast_id, title, date_created, source_content, source_type, source_quality? }] }`
+- **Config** : `{ llmFn, llmModel: 'sonnet' | 'haiku', maxKeyPositions?, maxQuotes?, maxOriginalQuestions? }`
+- **Output** : `{ briefMd, keyPositions[], quotes[], originalQuestions[], metadata: { sourcesUsed, sourceQualityAvg, llmModel, generationTimeMs } }`
+- **Wrapper** : `engine/agents/wrappers/persistGuestBrief.ts` (UPDATE colonnes `brief_*` sur `cross_podcast_guests`).
+- **Source extraction** : déléguée au wrapper via `engine/agents/wrappers/sourceSelector.ts` (cascade `article_content` > `chapters_takeaways` > `rss_description`).
+- **Tests** : 8 cas dans `engine/__tests__/guest-brief-agent.test.ts` (happy / alt path / robustesse parsing).
+- **README** : `engine/agents/README.md` — 3 exemples (vitrine, Haiku alternatif, composition future).
 
 ## Pipelines existants — verdict de référence
 
@@ -220,28 +243,66 @@ Refacto optionnel ~3 h par pipeline. Ne pas faire avant validation MEDIUM en pro
 - `engine/db/cross-queries.ts` → décomposer en agents spécialisés selon usage MEDIUM (graphBuilder, statsAggregator).
 - `engine/poc-rag/handler.ts` → absorbé par `ragAgent` (suppression du POC).
 
-## Tests d'agents — pattern recommandé
+## Tests d'agents — pattern Mock LLM (figé MEDIUM-3, 2026-04-25)
 
-Pas de mock LLM existant à date dans `engine/__tests__/`. Pattern à inventer dans
-le premier agent MEDIUM puis rétro-documenter ici. Ébauche :
+Pattern inventé dans `guestBriefAgent` puis rétro-documenté ici. À respecter
+pour tous les agents MEDIUM-1, MEDIUM-2, et au-delà.
+
+### Type LLMFn
+
+`config.llmFn` accepte une string (prompt) et renvoie soit une string
+brute (cas Anthropic + Vercel AI SDK `generateText`), soit un objet JSON
+déjà parsé (utile pour les mocks de test) :
 
 ```ts
-// engine/__tests__/themeAnalysisAgent.test.ts
-import { run } from '../agents/themeAnalysisAgent';
+export type LLMFn = (
+  prompt: string,
+  options?: { maxTokens?: number; temperature?: number },
+) => Promise<string | unknown>;
+```
 
-const mockLLM = async (prompt: string) => ({
-  claims: [{ claim_text: 'mock', claim_type: 'fact', confidence: 0.9 }],
-});
+L'agent applique ensuite un parsing défensif : si c'est une string, on
+strip d'éventuels fences ` ```json ... ``` ` (Claude les ajoute parfois
+malgré l'instruction stricte) puis `JSON.parse`. Si c'est déjà un objet,
+on l'utilise tel quel.
 
-it('extrait des claims structurés depuis 1 épisode', async () => {
-  const out = await run(
-    { theme: 'PER', episodeIds: [42] },
-    { llmFn: mockLLM, model: 'haiku', maxClaimsPerEpisode: 5 },
-  );
-  expect(out.claims).toHaveLength(1);
+### Pattern test
+
+```ts
+// engine/__tests__/guest-brief-agent.test.ts
+import { guestBriefAgent, type LLMFn } from '@engine/agents/guestBriefAgent';
+
+const FIXED_OUTPUT = {
+  briefMd: '# Mock\n...',
+  keyPositions: [/* ... */],
+  quotes: [/* ... */],
+  originalQuestions: [/* ... */],
+};
+
+// Variante A : llmFn renvoie un JSON stringifié
+const mockLLMString: LLMFn = async () => JSON.stringify(FIXED_OUTPUT);
+
+// Variante B : llmFn renvoie directement l'objet (court-circuit du parsing)
+const mockLLMObject: LLMFn = async () => FIXED_OUTPUT;
+
+it('happy path', async () => {
+  const out = await guestBriefAgent.run(input, {
+    llmFn: mockLLMString,
+    llmModel: 'sonnet',
+  });
+  expect(out.metadata.sourcesUsed).toBe(input.episodes.length);
 });
 ```
 
-L'agent doit pouvoir s'exécuter sans `ANTHROPIC_API_KEY` ni `OPENAI_API_KEY` ni
-`DATABASE_URL` quand `config.llmFn` est mocké et que les données d'input sont fournies
-explicitement (pas chargées depuis DB par l'agent).
+### Cas à couvrir minimum (en plus des 2 critères réutilisabilité)
+
+- **Robustesse parsing** : LLM renvoie du JSON wrappé dans ` ```json ... ``` ` → l'agent doit parser sans throw.
+- **Robustesse échec** : LLM renvoie du texte non-JSON → l'agent doit throw avec un message clair (snippet inclus).
+- **Validation schema** : LLM renvoie un objet incomplet (champ manquant) → l'agent doit throw en pointant le champ.
+- **Garde-fous input** : `guestName` vide ou `episodes` vide → throw avant l'appel LLM.
+
+### Garantie d'isolation
+
+L'agent doit pouvoir s'exécuter sans `ANTHROPIC_API_KEY` ni `OPENAI_API_KEY`
+ni `DATABASE_URL` quand `config.llmFn` est mocké et que les données d'input
+sont fournies explicitement (pas chargées depuis DB par l'agent).
