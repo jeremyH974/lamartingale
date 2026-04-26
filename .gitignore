@@ -38,7 +38,13 @@ scripts/_*.ts
 # sandboxes that need tracking (typically those linked to
 # specific feature branches or simulations).
 # ────────────────────────────────────────────────────────────
-experiments/
+experiments/*
 !experiments/inoxtag-simulation/
+!experiments/inoxtag-simulation/**
 !experiments/persona-validation/
+!experiments/persona-validation/**
 !experiments/notebooklm-baseline/
+!experiments/notebooklm-baseline/**
+
+# Verbose execution logs from sandboxes (kept locally, not archived)
+experiments/**/*.log

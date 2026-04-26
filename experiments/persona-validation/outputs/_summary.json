@@ -1,0 +1,62 @@
+{
+  "summary": [
+    {
+      "angle_id": "1",
+      "persona_slug": "stefani",
+      "score": 2,
+      "parseError": null
+    },
+    {
+      "angle_id": "1",
+      "persona_slug": "christofer",
+      "score": 3,
+      "parseError": null
+    },
+    {
+      "angle_id": "1",
+      "persona_slug": "esther",
+      "score": 3,
+      "parseError": null
+    },
+    {
+      "angle_id": "2",
+      "persona_slug": "stefani",
+      "score": 4,
+      "parseError": null
+    },
+    {
+      "angle_id": "2",
+      "persona_slug": "christofer",
+      "score": 4,
+      "parseError": null
+    },
+    {
+      "angle_id": "2",
+      "persona_slug": "esther",
+      "score": 5,
+      "parseError": null
+    },
+    {
+      "angle_id": "3",
+      "persona_slug": "stefani",
+      "score": "?",
+      "parseError": "Expected ',' or '}' after property value in JSON at position 4126 (line 27 column 4)"
+    },
+    {
+      "angle_id": "3",
+      "persona_slug": "christofer",
+      "score": 4,
+      "parseError": null
+    },
+    {
+      "angle_id": "3",
+      "persona_slug": "esther",
+      "score": 4,
+      "parseError": null
+    }
+  ],
+  "total_input_tokens": 22830,
+  "total_output_tokens": 12116,
+  "cost_usd": 0.25023,
+  "timestamp": "2026-04-26T12:30:11.544Z"
+}
