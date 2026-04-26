@@ -1,0 +1,242 @@
+[
+  {
+    "id": 1901,
+    "tenant_id": "gdiy",
+    "episode_number": 522,
+    "title": "#522 - Amixem - YouTubeur - Les nouveaux maîtres du divertissement",
+    "date_created": "2026-02-11T04:00:00.000Z",
+    "distance": 0.1925113475032766
+  },
+  {
+    "id": 1188,
+    "tenant_id": "gdiy",
+    "episode_number": null,
+    "title": "[EXTRAIT] De sa chambre d’ado au Grand Rex (à 22 ans) - Inoxtag",
+    "date_created": "2024-10-06T02:55:00.000Z",
+    "distance": 0.1973201216320687
+  },
+  {
+    "id": 1944,
+    "tenant_id": "gdiy",
+    "episode_number": 485,
+    "title": "#485 - Tibo InShape - YouTubeur - Le syndrome du personnage principal",
+    "date_created": "2025-08-03T03:00:00.000Z",
+    "distance": 0.21527478983420034
+  },
+  {
+    "id": 2209,
+    "tenant_id": "gdiy",
+    "episode_number": 240,
+    "title": "#240 - Hugo Travers - HugoDécrypte - Journaliste + Youtuber = comment cartonner sur les réseaux sociaux.",
+    "date_created": "2022-02-06T04:00:00.000Z",
+    "distance": 0.26891012906198275
+  },
+  {
+    "id": 2149,
+    "tenant_id": "gdiy",
+    "episode_number": 297,
+    "title": "#297 - Adrien Labastire - Kessel -  Faire 7 années d’études supérieures, puis percer sur YouTube",
+    "date_created": "2022-12-21T04:00:00.000Z",
+    "distance": 0.2912081532442745
+  },
+  {
+    "id": 1817,
+    "tenant_id": "gdiy",
+    "episode_number": 67,
+    "title": "#67 Pierre-Alexis Bizot - “Domingo” :  qui a dit que jouer à des jeux vidéos ne vous mènerait nulle part?",
+    "date_created": "2019-02-24T06:00:00.000Z",
+    "distance": 0.29411483716161735
+  },
+  {
+    "id": 1046,
+    "tenant_id": "gdiy",
+    "episode_number": null,
+    "title": "[EXTRAIT] Tibo InShape - La meilleure stratégie pour percer sur YouTube",
+    "date_created": "2025-08-03T02:55:00.000Z",
+    "distance": 0.3066157772249637
+  },
+  {
+    "id": 2075,
+    "tenant_id": "gdiy",
+    "episode_number": 367,
+    "title": "#367 - Guillaume Lacroix - Brut - “Start-up de vieux”, et premier média des jeunes",
+    "date_created": "2024-01-07T04:00:00.000Z",
+    "distance": 0.3204102892010029
+  },
+  {
+    "id": 2115,
+    "tenant_id": "gdiy",
+    "episode_number": 330,
+    "title": "#330 - Camille Callen - Noholita - De caissière à influenceuse de plus d'1M d'abonnés",
+    "date_created": "2023-06-18T03:00:00.000Z",
+    "distance": 0.3245230838426755
+  },
+  {
+    "id": 2060,
+    "tenant_id": "gdiy",
+    "episode_number": 382,
+    "title": "#382 - Nicolas Steegmann - Stupeflix - La destinée des plateformes est-elle de devenir merdiques ?",
+    "date_created": "2024-03-24T04:00:00.000Z",
+    "distance": 0.32860385992670327
+  },
+  {
+    "id": 2198,
+    "tenant_id": "gdiy",
+    "episode_number": 251,
+    "title": "#251 - Amadou Ba - Booska-P - Le média qui fait kiffer la moitié des français (mais que vous ne connaissez pas)",
+    "date_created": "2022-04-03T03:00:00.000Z",
+    "distance": 0.3329134708369129
+  },
+  {
+    "id": 1731,
+    "tenant_id": "gdiy",
+    "episode_number": 133,
+    "title": "#133 Taïg Khris - Onoff - “Celui qui peut” - Du roller à la startup qui lève 20 millions",
+    "date_created": "2020-05-31T03:00:00.000Z",
+    "distance": 0.3342153077720338
+  },
+  {
+    "id": 2881,
+    "tenant_id": "combiencagagne",
+    "episode_number": 58,
+    "title": "#58 - Combien ça gagne un influenceur cinéma - Regelegorila",
+    "date_created": "2026-02-11T05:04:00.000Z",
+    "distance": 0.33610452920191336
+  },
+  {
+    "id": 1453,
+    "tenant_id": "gdiy",
+    "episode_number": null,
+    "title": "[EXTRAIT] Adrien Labastire à propos de la creators economy et de la nouvelle ère des médias",
+    "date_created": "2022-12-21T03:55:00.000Z",
+    "distance": 0.3396910796906071
+  },
+  {
+    "id": 2181,
+    "tenant_id": "gdiy",
+    "episode_number": 267,
+    "title": "#267 - Andréa Bensaïd - Eskimoz - Refuser 30 millions pour viser le milliard",
+    "date_created": "2022-06-26T03:00:00.000Z",
+    "distance": 0.340295889945077
+  },
+  {
+    "id": 2074,
+    "tenant_id": "gdiy",
+    "episode_number": 368,
+    "title": "#368 - Pierre Garonnaire - MYM - Porno, Yoga, Astro : que se cache-t-il vraiment derrière MYM ?",
+    "date_created": "2024-01-14T04:00:00.000Z",
+    "distance": 0.3463832458266949
+  },
+  {
+    "id": 2216,
+    "tenant_id": "gdiy",
+    "episode_number": 233,
+    "title": "#233 - Pierre-Antoine Capton - Mediawan - Culot, audace et ambition pour mettre l’audiovisuel à ses pieds",
+    "date_created": "2021-12-26T04:00:00.000Z",
+    "distance": 0.34798451011059917
+  },
+  {
+    "id": 961,
+    "tenant_id": "gdiy",
+    "episode_number": null,
+    "title": "[EXTRAIT] Amixem - Le secret d’Amixem pour ne pas dépendre de Paris",
+    "date_created": "2026-02-11T03:55:00.000Z",
+    "distance": 0.3512502358288777
+  },
+  {
+    "id": 2196,
+    "tenant_id": "gdiy",
+    "episode_number": 253,
+    "title": "#253 - David Laroche - Paradox - Bousculer l'industrie du coaching",
+    "date_created": "2022-04-10T03:00:00.000Z",
+    "distance": 0.35781742927981297
+  },
+  {
+    "id": 1972,
+    "tenant_id": "gdiy",
+    "episode_number": 463,
+    "title": "#463 - Nicolas Spiess (Running Addict) - Campus - L’expert du running : transformer sa communauté en business rentable",
+    "date_created": "2025-04-13T03:00:00.000Z",
+    "distance": 0.3597157488974715
+  },
+  {
+    "id": 2070,
+    "tenant_id": "gdiy",
+    "episode_number": 372,
+    "title": "#372 - Alexandre Jenny - Pixfield - L’incroyable histoire du geek de Chambéry derrière la GoPro 360",
+    "date_created": "2024-02-04T04:00:00.000Z",
+    "distance": 0.3623991125100806
+  },
+  {
+    "id": 1988,
+    "tenant_id": "gdiy",
+    "episode_number": 448,
+    "title": "#448 - Owen Simonin (Hasheur) - Flirter avec les interdits puis devenir l'homme de confiance de la crypto en France",
+    "date_created": "2025-02-09T04:00:00.000Z",
+    "distance": 0.3636310974062138
+  },
+  {
+    "id": 2142,
+    "tenant_id": "gdiy",
+    "episode_number": 304,
+    "title": "#304 - Franck Annese - SO PRESS - Les secrets de la presse qui cartonne (SO FOOT, Society, So Film)",
+    "date_created": "2023-02-01T04:00:00.000Z",
+    "distance": 0.3650114315652607
+  },
+  {
+    "id": 2111,
+    "tenant_id": "gdiy",
+    "episode_number": 334,
+    "title": "#334 - Nicolas de Tavernost - M6 - Bataille des ondes, fusion avortée et comment créer un programme qui marche : les secrets d’une institution française",
+    "date_created": "2023-07-09T03:00:00.000Z",
+    "distance": 0.36584151607146986
+  },
+  {
+    "id": 1790,
+    "tenant_id": "gdiy",
+    "episode_number": 93,
+    "title": "#93 Loïc Soubeyrand - Teads et Lunchr - vendre sa boîte 300 millions et en monter une autre un mois plus tard avec 2,5 millions de financement et seulement un powerpoint ?",
+    "date_created": "2019-08-25T03:00:00.000Z",
+    "distance": 0.3661001146219758
+  },
+  {
+    "id": 1989,
+    "tenant_id": "gdiy",
+    "episode_number": 447,
+    "title": "#447 - Hugo Philip - Cruel Pancake - Faire 1,2 million en 2h : la puissance du personal branding",
+    "date_created": "2025-02-02T04:00:00.000Z",
+    "distance": 0.3675503713393816
+  },
+  {
+    "id": 2188,
+    "tenant_id": "gdiy",
+    "episode_number": 260,
+    "title": "#260 - Jean-David Blanc - Molotov - Le surdoué de l’informatique qui a fondé AlloCiné et Molotov en anticipant les grandes évolutions des médias",
+    "date_created": "2022-05-22T03:00:00.000Z",
+    "distance": 0.36815097014001363
+  },
+  {
+    "id": 2171,
+    "tenant_id": "gdiy",
+    "episode_number": 275,
+    "title": "#275 - Inès Leonarduzzi -  Digital For the Planet - Réparer le futur, vendre des œuvres à 5 millions et diriger une ONG",
+    "date_created": "2022-08-21T03:00:00.000Z",
+    "distance": 0.36962640222332177
+  },
+  {
+    "id": 1700,
+    "tenant_id": "gdiy",
+    "episode_number": 161,
+    "title": "#161 Grégoire Gambatto - Germinal - La victoire ou la mort",
+    "date_created": "2020-12-06T04:00:00.000Z",
+    "distance": 0.3714266040292602
+  },
+  {
+    "id": 2014,
+    "tenant_id": "gdiy",
+    "episode_number": 425,
+    "title": "#425 - Matthias Dandois - Champion de BMX - La vie freestyle d’un enfant Red Bull",
+    "date_created": "2024-10-20T03:00:00.000Z",
+    "distance": 0.37274296838927634
+  }
+]

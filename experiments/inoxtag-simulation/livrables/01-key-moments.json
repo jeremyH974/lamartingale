@@ -1,0 +1,83 @@
+{
+  "moments": [
+    {
+      "rank": 1,
+      "start_seconds": 2820,
+      "end_seconds": 2880,
+      "title": "La discipline bat la motivation : ma méthode pour tenir 1 an",
+      "topic": "Discipline vs motivation",
+      "verbatim_excerpt": "On a tous une flamme en nous. Il y en a qui ont des grandes flammes, ultra motivés. Il y en a d'autres, une petite flamme. Mais ce n'est pas ceux qui sont ultra motivés qui vont réussir. C'est ceux qui ont cette petite flamme, tous les jours. Le mec ultra motivé va à la salle en septembre, il se tue tout le mois. Il arrête, il reprend en décembre. Le mec qui a la petite flamme, il fait trois reps. Il revient le lendemain, quatre reps. Au bout d'un an, celui qui aura le plus progressé, c'est celui qui a eu la discipline d'y aller tous les jours.",
+      "why_clip": "Insight puissant sur la discipline vs motivation, avec métaphore concrète de la salle. Universel, applicable immédiatement, sans contexte Everest nécessaire.",
+      "platform_fit": [
+        "LinkedIn",
+        "X",
+        "Instagram",
+        "TikTok"
+      ],
+      "saliency_score": 10
+    },
+    {
+      "rank": 2,
+      "start_seconds": 2640,
+      "end_seconds": 2715,
+      "title": "Comment je choisis mon équipe : le cas Mathieu et Thomas",
+      "topic": "Recrutement et management",
+      "verbatim_excerpt": "Mathieu, au début, il était pas ouf du tout. Il connaissait pas. Mais il avait la déter, il avait envie de s'élever. Il a appris, il achetait des bouquins pour cadrer. Je lui ai donné de plus en plus de responsabilités. Thomas, je l'ai viré pendant trois mois. Et je me suis levé un matin, je me suis dit non, Thomas il a un truc. C'est pas parce que c'est pas le meilleur qu'il est pas important. Faut aller chercher le meilleur potentiel de chacun.",
+      "why_clip": "Position tranchée sur le recrutement : pas chercher le meilleur CV, mais le meilleur potentiel. Récit incarné avec noms, échec assumé (viré puis repris). Applicable B2B.",
+      "platform_fit": [
+        "LinkedIn",
+        "X"
+      ],
+      "saliency_score": 9
+    },
+    {
+      "rank": 3,
+      "start_seconds": 5700,
+      "end_seconds": 5775,
+      "title": "Pourquoi j'ai donné ma dernière bouteille d'oxygène à 8000m",
+      "topic": "Solidarité en montagne",
+      "verbatim_excerpt": "Il me restait un peu d'oxygène dans ma bouteille, c'était ma dernière. J'avais fait le sommet, je me sentais bien. Je me suis dit bon, je peux lui dépanner ma bouteille. Si ça se trouve, ça lui permettra d'aller au camp 2 en sécurité. Dès ce moment-là, j'ai senti toute la fatigue de toute l'année, de toute l'ascension. Je n'ai jamais été aussi fatigué de ma vie. Mathis me tenait pour m'empêcher de tomber.",
+      "why_clip": "Moment iconique du docu, tension dramatique, décision morale incarnée. Comprend sans contexte : il donne son oxygène = conséquences immédiates. Fort émotionnellement.",
+      "platform_fit": [
+        "LinkedIn",
+        "Instagram",
+        "TikTok"
+      ],
+      "saliency_score": 9
+    },
+    {
+      "rank": 4,
+      "start_seconds": 6360,
+      "end_seconds": 6435,
+      "title": "Les 4 étapes pour réaliser n'importe quel rêve",
+      "topic": "Méthodologie Kaizen",
+      "verbatim_excerpt": "Kaizen, c'est quatre pas. Le premier : avoir envie de faire quelque chose. Un rêve, quel que soit ta condition, ton âge. Le deuxième : le dire. À tes proches, ta famille. Un rêve qui reste chez toi, tu te dis je suis fidèle à mon serment. Le troisième : se planifier, s'entourer, instaurer une discipline. Et le quatrième : embarquer des personnes avec toi. Un rêve, ça se vit à plusieurs. Tout seul, c'est nul.",
+      "why_clip": "Framework actionnable, clair, en 4 points. Auto-portant, pas besoin du docu. Applicable tout de suite. Aligne storytelling Inox avec méthode concrète.",
+      "platform_fit": [
+        "LinkedIn",
+        "X",
+        "Instagram"
+      ],
+      "saliancy_score": 8
+    },
+    {
+      "rank": 5,
+      "start_seconds": 1800,
+      "end_seconds": 1860,
+      "title": "J'ai investi 20 000€ dans une vidéo : voici ce que j'ai appris",
+      "topic": "Prise de risque créative",
+      "verbatim_excerpt": "Un jour, je dis bon, je vais prendre 20 000 euros que j'ai gagnés ces deux derniers mois sur YouTube. Je vais faire 7 jours seul sur une île déserte. Personne ne voulait le faire chez Webedia. J'ai dit bon, au pire, si je les perds, j'aurais vécu un truc de dingue. Sans m'en rendre compte, c'était la première vidéo qui a pété. 20 millions de vues, j'ai gagné 60 000 euros. Je me suis dit OK, je peux vivre d'autres aventures encore plus folles.",
+      "why_clip": "Retournement narratif : prise de risque → jackpot × 3. Chiffres concrets (20k → 60k), décision audacieuse, leçon business. Inspirant entrepreneurs/créateurs.",
+      "platform_fit": [
+        "LinkedIn",
+        "X",
+        "TikTok"
+      ],
+      "saliency_score": 8
+    }
+  ],
+  "_meta": {
+    "model": "claude-sonnet-4-5",
+    "elapsed_seconds": 39.835
+  }
+}

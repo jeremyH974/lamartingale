@@ -1,0 +1,274 @@
+{
+  "creators": [
+    {
+      "tenant_id": "gdiy",
+      "episode_number": 522,
+      "title": "#522 - Amixem - YouTubeur - Les nouveaux maîtres du divertissement",
+      "date_created": "2026-02-11T04:00:00.000Z"
+    },
+    {
+      "tenant_id": "gdiy",
+      "episode_number": 485,
+      "title": "#485 - Tibo InShape - YouTubeur - Le syndrome du personnage principal",
+      "date_created": "2025-08-03T03:00:00.000Z"
+    },
+    {
+      "tenant_id": "gdiy",
+      "episode_number": null,
+      "title": "[EXTRAIT] Tibo InShape - La meilleure stratégie pour percer sur YouTube",
+      "date_created": "2025-08-03T02:55:00.000Z"
+    },
+    {
+      "tenant_id": "gdiy",
+      "episode_number": 297,
+      "title": "#297 - Adrien Labastire - Kessel -  Faire 7 années d’études supérieures, puis percer sur YouTube",
+      "date_created": "2022-12-21T04:00:00.000Z"
+    },
+    {
+      "tenant_id": "gdiy",
+      "episode_number": 240,
+      "title": "#240 - Hugo Travers - HugoDécrypte - Journaliste + Youtuber = comment cartonner sur les réseaux sociaux.",
+      "date_created": "2022-02-06T04:00:00.000Z"
+    },
+    {
+      "tenant_id": "combiencagagne",
+      "episode_number": 46,
+      "title": "#46 - Combien ça gagne un vidéaste - Gregoire Boille",
+      "date_created": "2025-11-05T10:00:00.000Z"
+    },
+    {
+      "tenant_id": "combiencagagne",
+      "episode_number": null,
+      "title": "[ZOOM]  Les chiffres de Gregoire Boelle , vidéaste",
+      "date_created": "2025-11-05T09:40:00.000Z"
+    },
+    {
+      "tenant_id": "combiencagagne",
+      "episode_number": 58,
+      "title": "#58 - Combien ça gagne un influenceur cinéma - Regelegorila",
+      "date_created": "2026-02-11T05:04:00.000Z"
+    },
+    {
+      "tenant_id": "combiencagagne",
+      "episode_number": null,
+      "title": "[ZOOM]  Les chiffres de Regelegorila - influenceur cinéma",
+      "date_created": "2026-02-11T05:00:00.000Z"
+    },
+    {
+      "tenant_id": "lepanier",
+      "episode_number": null,
+      "title": "#HS - One to One Biarritz 2025 - Engager des communautés ultra-ciblées sans influenceurs, avec Reddit",
+      "date_created": "2025-10-10T03:00:00.000Z"
+    },
+    {
+      "tenant_id": "gdiy",
+      "episode_number": null,
+      "title": "[EXTRAIT] Camille Callen (Noholita), sur le modèle d’affaires des influenceurs",
+      "date_created": "2023-06-18T02:55:00.000Z"
+    },
+    {
+      "tenant_id": "combiencagagne",
+      "episode_number": 7,
+      "title": "#7 - Combien ça gagne un artisan couvreur (et créateur de contenu) — Laurent Aubel",
+      "date_created": "2024-12-18T03:00:00.000Z"
+    },
+    {
+      "tenant_id": "gdiy",
+      "episode_number": null,
+      "title": "[EXTRAIT] - Hugo Travers sur les différentes manières de monétisation quand on est créateur de contenu.",
+      "date_created": "2022-02-06T03:58:00.000Z"
+    },
+    {
+      "tenant_id": "finscale",
+      "episode_number": 305,
+      "title": "[EXTRAIT] Cyprien Delmeule (Wealthcome) - Repenser le stack CGP : utopie ou réalité ?",
+      "date_created": "2025-08-28T11:06:38.000Z"
+    },
+    {
+      "tenant_id": "gdiy",
+      "episode_number": null,
+      "title": "[EXTRAIT] Amixem - Le secret d’Amixem pour ne pas dépendre de Paris",
+      "date_created": "2026-02-11T03:55:00.000Z"
+    }
+  ],
+  "expedition_outdoor": [
+    {
+      "tenant_id": "gdiy",
+      "episode_number": 519,
+      "title": "#519 - Benjamin Védrines - Alpiniste - Flirter avec la mort : l’alpinisme à l’état brut",
+      "date_created": "2026-01-28T04:00:00.000Z"
+    },
+    {
+      "tenant_id": "gdiy",
+      "episode_number": 178,
+      "title": "#178 - Kilian Jornet - Alpinisme & Ultra-trail - Ne pense pas au résultat, l’objectif c’est de progresser",
+      "date_created": "2021-03-07T04:00:00.000Z"
+    },
+    {
+      "tenant_id": "lepanier",
+      "episode_number": null,
+      "title": "[REDIFF] - AllTricks : d'un garage au board de Décathlon - l’incroyable aventure à 220M de CA",
+      "date_created": "2025-08-15T03:00:00.000Z"
+    },
+    {
+      "tenant_id": "lepanier",
+      "episode_number": 320,
+      "title": "#320 - AllTricks : d'un garage au board de Décathlon - l’incroyable aventure à 220M de CA",
+      "date_created": "2024-11-29T04:00:00.000Z"
+    },
+    {
+      "tenant_id": "gdiy",
+      "episode_number": 300,
+      "title": "#300 - Mathieu Blanchard - Ultratrail et Aventure - Commencer le running à 26 ans et devenir une légende de l’ultratrail",
+      "date_created": "2023-01-08T04:00:00.000Z"
+    },
+    {
+      "tenant_id": "gdiy",
+      "episode_number": null,
+      "title": "[EXTRAIT] Les secrets de l’entraînement de Mathieu Blanchard (Ultratrail et Aventure)",
+      "date_created": "2023-01-08T03:55:00.000Z"
+    },
+    {
+      "tenant_id": "finscale",
+      "episode_number": 84,
+      "title": "#84 - Owen Simonin alias \"Hasheur\" (Just Mining) - Les prémisses d’une belle aventure en DeFi",
+      "date_created": "2022-01-15T23:00:00.000Z"
+    },
+    {
+      "tenant_id": "lamartingale",
+      "episode_number": 54,
+      "title": "Montagnes russes des cryptos : comment s’y retrouver ?",
+      "date_created": "2021-03-03T23:00:00.000Z"
+    },
+    {
+      "tenant_id": "gdiy",
+      "episode_number": 73,
+      "title": "#73  Marc Simoncini - De Meetic à Jaina - Les montagnes russes de l'entrepreneuriat",
+      "date_created": "2019-04-07T06:00:00.000Z"
+    },
+    {
+      "tenant_id": "gdiy",
+      "episode_number": 366,
+      "title": "#366 - Nicolas Hennion - Libérez la bête - Le retour de l’explorateur perché du développement personnel radical",
+      "date_created": "2023-12-31T04:00:00.000Z"
+    },
+    {
+      "tenant_id": "gdiy",
+      "episode_number": 272,
+      "title": "#272 - Mike Horn - Aventurier-Explorateur - Poser un cadre pour vivre libre",
+      "date_created": "2022-07-31T03:00:00.000Z"
+    },
+    {
+      "tenant_id": "gdiy",
+      "episode_number": null,
+      "title": "[EXTRAIT] - Mike Horn sur la prise de risque",
+      "date_created": "2022-07-31T02:55:00.000Z"
+    }
+  ],
+  "discipline_methode": [
+    {
+      "tenant_id": "gdiy",
+      "episode_number": 410,
+      "title": "#410 - Dorothée Gilbert - Danseuse Étoile - La discipline pour arriver au sommet de son art",
+      "date_created": "2024-08-11T03:00:00.000Z"
+    },
+    {
+      "tenant_id": "gdiy",
+      "episode_number": 164,
+      "title": "#164 Lucie Beudet - Konbini - Casser la routine, impulser les changements, bastonner",
+      "date_created": "2020-12-17T04:00:00.000Z"
+    },
+    {
+      "tenant_id": "gdiy",
+      "episode_number": null,
+      "title": "#111 - Mettre la barre plus haut en 2020 - revoyez vos ambitions et changez vos routines avec GDIY",
+      "date_created": "2019-12-29T04:30:00.000Z"
+    },
+    {
+      "tenant_id": "gdiy",
+      "episode_number": null,
+      "title": "[EXTRAIT] - Augustin Paluel-Marmont différencie les différents paramètres du succès et partage quelques bonnes habitudes de gouvernance d’entreprise.",
+      "date_created": "2022-07-17T02:55:00.000Z"
+    }
+  ],
+  "creator_economy_money": [
+    {
+      "tenant_id": "gdiy",
+      "episode_number": null,
+      "title": "[EXTRAIT] - Hugo Travers sur les différentes manières de monétisation quand on est créateur de contenu.",
+      "date_created": "2022-02-06T03:58:00.000Z"
+    },
+    {
+      "tenant_id": "gdiy",
+      "episode_number": 490,
+      "title": "#490 - Serge Vatine - Bold - L’avocat punk qui propose des abonnements illimités",
+      "date_created": "2025-09-07T03:00:00.000Z"
+    },
+    {
+      "tenant_id": "lepanier",
+      "episode_number": 323,
+      "title": "#323 - AJY : 45% de repeat en lançant une offre d’abonnement sur sa marque de compléments alimentaires",
+      "date_created": "2024-12-20T04:00:00.000Z"
+    },
+    {
+      "tenant_id": "lamartingale",
+      "episode_number": 148,
+      "title": "Gérer ses abonnements : le meilleur moyen d'économiser de l'argent ?",
+      "date_created": "2023-02-01T23:00:00.000Z"
+    },
+    {
+      "tenant_id": "lepanier",
+      "episode_number": 48,
+      "title": "#48 - Spliiit : Évangéliser le partage d’abonnements auprès de 100 000 utilisateurs en 9 mois",
+      "date_created": "2020-07-24T05:00:00.000Z"
+    },
+    {
+      "tenant_id": "lepanier",
+      "episode_number": 10,
+      "title": "#10 – La Yoga Box & La Bougie Box : L’Automatisation à l’extrême : Monter des business d’abonnement qui tournent (presque) tout seuls",
+      "date_created": "2019-09-12T07:00:00.000Z"
+    },
+    {
+      "tenant_id": "gdiy",
+      "episode_number": null,
+      "title": "[EXTRAIT] Adrien Labastire à propos de la creators economy et de la nouvelle ère des médias",
+      "date_created": "2022-12-21T03:55:00.000Z"
+    },
+    {
+      "tenant_id": "lepanier",
+      "episode_number": null,
+      "title": "[Extrait] Comment transformer l'audience de vos colis en CA ?- getinside",
+      "date_created": "2023-09-21T04:00:00.000Z"
+    },
+    {
+      "tenant_id": "gdiy",
+      "episode_number": null,
+      "title": "#HORS-SÉRIE 6 — Les recos de l’été : Les épisodes sur les médias",
+      "date_created": "2024-08-14T03:00:00.000Z"
+    },
+    {
+      "tenant_id": "lepanier",
+      "episode_number": 293,
+      "title": "#293 - Catch up Mathieu Ceccarelli : Optimiser ses budgets d’achat média en ouvrant la blackbox des plateformes",
+      "date_created": "2024-06-18T04:00:00.000Z"
+    },
+    {
+      "tenant_id": "lepanier",
+      "episode_number": 281,
+      "title": "#281 - [Acquiz] Google Ads et e-commerce, le B.A.-BA de l’achat média, avec Céos",
+      "date_created": "2024-04-05T04:00:00.000Z"
+    },
+    {
+      "tenant_id": "gdiy",
+      "episode_number": 367,
+      "title": "#367 - Guillaume Lacroix - Brut - “Start-up de vieux”, et premier média des jeunes",
+      "date_created": "2024-01-07T04:00:00.000Z"
+    },
+    {
+      "tenant_id": "lepanier",
+      "episode_number": null,
+      "title": "[Extrait] Comment bien répartir son budget média ? - Pharmazon",
+      "date_created": "2023-11-23T05:00:00.000Z"
+    }
+  ]
+}

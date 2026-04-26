@@ -1,0 +1,8 @@
+# Audio files (heavy, regenerable from audio_url)
+*.mp3
+inoxtag.mp3
+chunk_*.mp3
+
+# Node modules + lockfile (local-only sandbox)
+node_modules/
+package-lock.json

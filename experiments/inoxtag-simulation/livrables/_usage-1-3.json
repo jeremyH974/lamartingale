@@ -1,0 +1,6 @@
+{
+  "input_tokens": 168803,
+  "output_tokens": 3561,
+  "cost_usd": 0.5598,
+  "model_pricing": "sonnet 4 family $3/M in $15/M out"
+}

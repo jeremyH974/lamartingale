@@ -1,0 +1,75 @@
+{
+  "quotes": [
+    {
+      "rank": 1,
+      "anchor_seconds": 2820,
+      "quote": "Là où j'ai le plus appris dans ma vie, c'est quand j'étais baigné dans l'expérience. Oh non, je suis dans la merde ! J'ai annoncé l'Everest, j'avais pas mis un pied à la montagne.",
+      "context_one_line": "Réponse à la question sur l'apprentissage par la pratique versus la théorie",
+      "platform_fit": [
+        "LinkedIn",
+        "X",
+        "Threads"
+      ],
+      "tag_theme": "apprendre par l'action",
+      "saliency_score": 9
+    },
+    {
+      "rank": 2,
+      "anchor_seconds": 4440,
+      "quote": "Toi, tout seul, t'es naze ! C'est grâce aux autres que tu peux faire plein de choses.",
+      "context_one_line": "Sur l'importance de l'entourage dans la réalisation de ses projets",
+      "platform_fit": [
+        "LinkedIn",
+        "X",
+        "Instagram",
+        "Threads"
+      ],
+      "tag_theme": "force collective",
+      "saliency_score": 8
+    },
+    {
+      "rank": 3,
+      "anchor_seconds": 6240,
+      "quote": "Faut donner envie à la chance de nous tomber dessus. Plus on va faire des choses et on va se mettre en mouvement, plus on crée des sortes de possibilités dans notre vie.",
+      "context_one_line": "Explication de sa philosophie sur la chance et l'action",
+      "platform_fit": [
+        "LinkedIn",
+        "X",
+        "Threads"
+      ],
+      "tag_theme": "créer sa chance",
+      "saliency_score": 9
+    },
+    {
+      "rank": 4,
+      "anchor_seconds": 2850,
+      "quote": "La parole elle nous engage. J'aime bien dire haut et fort mon rêve à tout le monde, que tout le monde l'entende et que je fasse un peu une promesse aux gens qui me suivent.",
+      "context_one_line": "Sur l'importance d'annoncer publiquement ses objectifs pour se tenir responsable",
+      "platform_fit": [
+        "LinkedIn",
+        "X",
+        "Threads"
+      ],
+      "tag_theme": "engagement public",
+      "saliency_score": 8
+    },
+    {
+      "rank": 5,
+      "anchor_seconds": 6060,
+      "quote": "C'est quand tu t'ennuies que t'as pas ton téléphone que tu deviens créatif. Ton cerveau, il se rappelle que t'as des rêves.",
+      "context_one_line": "Après un mois sans téléphone au camp de base de l'Everest",
+      "platform_fit": [
+        "LinkedIn",
+        "X",
+        "Instagram",
+        "Threads"
+      ],
+      "tag_theme": "détox numérique",
+      "saliency_score": 7
+    }
+  ],
+  "_meta": {
+    "model": "claude-sonnet-4-5",
+    "elapsed_seconds": 80.303
+  }
+}

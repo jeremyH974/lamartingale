@@ -1,0 +1,39 @@
+{
+  "cross_refs": [
+    {
+      "rank": 1,
+      "podcast_id": "gdiy",
+      "episode_number": 425,
+      "episode_title": "#425 - Matthias Dandois - Champion de BMX - La vie freestyle d'un enfant Red Bull",
+      "lens": "discipline-sommet / sponsoring-authentique",
+      "why_relevant": "Dandois incarne exactement le \"à chacun son Everest\" qu'Inoxtag répète : champion BMX qui construit sa discipline quotidienne dans un sport extrême, avec une relation sponsors Red Bull qui préserve son autonomie créative — même tension qu'Inoxtag avec Webedia. Les deux parlent de \"petite flamme tous les jours\" dans des univers où le risque physique et la cohérence éditoriale sont non-négociables.",
+      "why_mono_podcast_rag_cant_find_this": "Un RAG mono-podcast sur le transcript Inoxtag isolé ne peut pas identifier l'homologie structurelle entre l'expedition Everest et la carrière freestyle BMX : les deux construisent une méthode Kaizen dans des environnements à haute friction (montagne / street), et Dandois a résolu le même dilemme sponsors-authenticité qu'Inoxtag explicite (\"je retire tes placements si tu coupes mes gros mots\"). Cette ref connecte deux méthodologies de discipline extrême que seule une vue cross-corpus permet.",
+      "differentiability_pass": true
+    },
+    {
+      "rank": 2,
+      "podcast_id": "lepanier",
+      "episode_number": 258,
+      "episode_title": "#258 - Kikikickz : De 30K à 25 millions en un an avec la bonne stratégie d'acquisition",
+      "lens": "prise-de-risque-monétisation",
+      "why_relevant": "Kikikickz a fait exactement ce qu'Inoxtag décrit avec \"7 jours île déserte\" : investir 20k€ sans garantie puis débloquer 60k€ de revenus. Ici c'est 30K→25M en 1 an via stratégie acquisition e-commerce. L'auditeur d'Inoxtag qui retient \"miser gros sur son intuition créative\" trouvera dans Kikikickz la version business/produit de cette prise de risque calculée — même principe de levier financier appliqué à un autre secteur.",
+      "why_mono_podcast_rag_cant_find_this": "Le transcript Inoxtag parle de risque créatif (contenu YouTube), pas de stratégie acquisition e-commerce. Un Q&A mono-podcast ne peut pas faire le pont entre \"investir 20k dans une vidéo\" et \"investir 30k dans une stack marketing Shopify\" — pourtant c'est la même logique d'entrepreneur qui mise sur son potentiel. Cette ref élargit le concept de \"prise de risque créative\" au commerce digital.",
+      "differentiability_pass": true
+    },
+    {
+      "rank": 3,
+      "podcast_id": "gdiy",
+      "episode_number": 367,
+      "episode_title": "#367 - Guillaume Lacroix - Brut - \"Start-up de vieux\", et premier média des jeunes",
+      "lens": "casser-codes-distribution-médias",
+      "why_relevant": "Lacroix a bâti Brut en cassant les codes de la distribution média traditionnelle pour toucher les jeunes, exactement comme Inoxtag sort Kaizen simultanément sur cinéma + YouTube + TF1 le même weekend. Les deux refusent le diktat des canaux historiques et créent leur propre circuit de diffusion. L'auditeur qui retient \"casser les codes audiovisuel\" verra dans Brut la version média-entreprise de cette stratégie de contournement.",
+      "why_mono_podcast_rag_cant_find_this": "Le transcript Inoxtag décrit la sortie multi-canal de Kaizen comme un fait accompli, sans détailler la mécanique entrepreneuriale de construire une infrastructure de distribution indépendante. Un RAG mono-podcast ne peut pas connecter cette sortie film à la stratégie de plateforme de Brut, qui a construit toute une stack tech/édito pour contourner la TV traditionnelle — c'est la même ambition à échelle industrielle.",
+      "differentiability_pass": true
+    }
+  ],
+  "cross_corpus_finding": "Le catalogue 6 podcasts contient de la matière défendable hors GDIY (Kikikickz sur LP), mais la zone \"creator economy YouTube\" reste structurellement dominée par GDIY. Lepanier couvre l'e-commerce/stratégie acquisition, pas le personal branding créateur. Passion Patrimoine / Finscale / Combien Ça Gagne sont trop éloignés du noyau discipline-créative-expedition. Le meilleur match hors-GDIY (Kikikickz) repose sur une analogie entrepreneuriale (risque financier), pas sur le métier de créateur — ce qui reste cohérent avec la force GDIY sur ce segment.",
+  "_meta": {
+    "model": "claude-sonnet-4-5",
+    "elapsed_seconds": 27.961
+  }
+}

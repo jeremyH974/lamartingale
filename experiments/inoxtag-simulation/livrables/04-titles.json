@@ -1,0 +1,32 @@
+{
+  "titles": [
+    {
+      "rank": 1,
+      "title": "#422 - Inoxtag - Du collège à l'Everest : comment un ado a cassé les codes du cinéma",
+      "axis": "curiosity",
+      "exploits_cross_corpus": true,
+      "rationale": "Ouvre une boucle narrative forte (collège→Everest→cinéma) + ancre la jeunesse (relatabilité 13-25 ans) + pose implicitement la question 'comment un YouTubeur peut casser le cinéma ?'. Supérieur à l'original en curiosité car il raconte une trajectoire, pas juste un statut.",
+      "if_cross_corpus": "Exploite la singularité cross-catalogue : premier invité GDIY à avoir poussé un documentaire YouTube (2h40) en salles de cinéma (500 salles, TF1 le 8 oct). Parallèle indirect avec Mike Horn #272 ou Mathieu Blanchard #404 (exploits physiques extrêmes) mais Inoxtag unique sur l'axe 'YouTubeur → disruption cinéma classique'."
+    },
+    {
+      "rank": 2,
+      "title": "#422 - Inoxtag - Vidéaste - De 0 expérience montagne à 8848m : la méthode du mouvement",
+      "axis": "clarity",
+      "exploits_cross_corpus": false,
+      "rationale": "Clarté maximale du défi (0→8848m) + ancre la méthode ('mouvement') mentionnée 6× dans le transcript. Le lecteur sait immédiatement : exploit physique impossible + framework réplicable. Supérieur à l'original qui reste flou ('casser YouTube').",
+      "if_cross_corpus": ""
+    },
+    {
+      "rank": 3,
+      "title": "#422 - Inoxtag - Comment tenir 2h40 l'attention d'une génération TikTok (et remplir 500 salles)",
+      "axis": "seo",
+      "exploits_cross_corpus": true,
+      "rationale": "SEO fort : 'génération TikTok' + 'attention' (problème universel créateurs/parents/éducs) + chiffre viral '500 salles'. Recherchable par non-fans intéressés par l'économie de l'attention ou le storytelling long-format. L'original 'rebattre les cartes audiovisuel' est trop abstrait pour la recherche.",
+      "if_cross_corpus": "Cross-corpus : seul invité GDIY digital-native (YouTube) ayant réussi une œuvre 2h40 tout-public (vs formats courts dominants). Contraste avec invités sportifs purs (Kilian Jornet #380, Benjamin Védrines #404) ou artistes (Dorothée Gilbert #410) : Inoxtag hybride contenu/exploit physique/disruption média."
+    }
+  ],
+  "_meta": {
+    "model": "claude-sonnet-4-5",
+    "elapsed_seconds": 57.04
+  }
+}
