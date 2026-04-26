@@ -29,3 +29,16 @@ scripts/_*.ts
 *.log
 
 .vercel
+
+# ────────────────────────────────────────────────────────────
+# Sandbox experiments — ignored by default
+#
+# Anti-pollution: experiments/ contains exploratory work that
+# should NOT be committed to master. Whitelist explicitly the
+# sandboxes that need tracking (typically those linked to
+# specific feature branches or simulations).
+# ────────────────────────────────────────────────────────────
+experiments/
+!experiments/inoxtag-simulation/
+!experiments/persona-validation/
+!experiments/notebooklm-baseline/
