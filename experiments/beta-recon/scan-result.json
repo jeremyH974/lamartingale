@@ -1,0 +1,3724 @@
+{
+  "tenants": {
+    "lamartingale": {
+      "feed": "lamartingale.xml",
+      "totalItemsInFeed": 353,
+      "scanned": 30,
+      "items": [
+        {
+          "title": "#314 - Bordeaux, Bourgogne ou vins nature : dans quelle bouteille investir ? - Angélique de Lencquesaing",
+          "pubDate": "Thu, 23 Apr 2026 03:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "beta.lamartingale",
+              "snippets": [
+                "beta.lamartingale.io"
+              ]
+            },
+            {
+              "key": "beta-keyword",
+              "snippets": [
+                "beta"
+              ]
+            },
+            {
+              "key": "lamartingale.io",
+              "snippets": [
+                "lamartingale.io"
+              ]
+            },
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            },
+            {
+              "key": "assistant ia",
+              "snippets": [
+                "assistant ia"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#313 - Comment payer moins d’impôts sur le revenu en 2026 ?- Nahima Zobri",
+          "pubDate": "Thu, 16 Apr 2026 03:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "beta.lamartingale",
+              "snippets": [
+                "beta.lamartingale.io"
+              ]
+            },
+            {
+              "key": "beta-keyword",
+              "snippets": [
+                "beta"
+              ]
+            },
+            {
+              "key": "lamartingale.io",
+              "snippets": [
+                "lamartingale.io"
+              ]
+            },
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            },
+            {
+              "key": "assistant ia",
+              "snippets": [
+                "assistant ia"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#312 - Fonds “verts” : comment éviter les pièges du greenwashing ? - Arthur Aubœuf et Joseph Choueifaty",
+          "pubDate": "Thu, 09 Apr 2026 03:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "beta.lamartingale",
+              "snippets": [
+                "beta.lamartingale.io"
+              ]
+            },
+            {
+              "key": "beta-keyword",
+              "snippets": [
+                "beta"
+              ]
+            },
+            {
+              "key": "lamartingale.io",
+              "snippets": [
+                "lamartingale.io"
+              ]
+            },
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            },
+            {
+              "key": "assistant ia",
+              "snippets": [
+                "assistant ia"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#311 - Investir dans l’hôtellerie à partir de 1000€ - Steve Lepine",
+          "pubDate": "Thu, 02 Apr 2026 03:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "beta.lamartingale",
+              "snippets": [
+                "beta.lamartingale.io"
+              ]
+            },
+            {
+              "key": "beta-keyword",
+              "snippets": [
+                "beta"
+              ]
+            },
+            {
+              "key": "lamartingale.io",
+              "snippets": [
+                "lamartingale.io"
+              ]
+            },
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            },
+            {
+              "key": "assistant ia",
+              "snippets": [
+                "assistant ia"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#310 - Bulle ou rotation ? Ce que les marchés nous préparent vraiment - Anne-Laure Frischlander-Jacobson",
+          "pubDate": "Thu, 26 Mar 2026 03:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "beta.lamartingale",
+              "snippets": [
+                "beta.lamartingale.io"
+              ]
+            },
+            {
+              "key": "beta-keyword",
+              "snippets": [
+                "beta"
+              ]
+            },
+            {
+              "key": "lamartingale.io",
+              "snippets": [
+                "lamartingale.io"
+              ]
+            },
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            },
+            {
+              "key": "assistant ia",
+              "snippets": [
+                "assistant ia"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#309 - Investir dans des voitures de collection : ça vaut le coup ? - Gonzague Ruchaud",
+          "pubDate": "Thu, 19 Mar 2026 03:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "beta.lamartingale",
+              "snippets": [
+                "beta.lamartingale.io"
+              ]
+            },
+            {
+              "key": "beta-keyword",
+              "snippets": [
+                "beta"
+              ]
+            },
+            {
+              "key": "lamartingale.io",
+              "snippets": [
+                "lamartingale.io"
+              ]
+            },
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            },
+            {
+              "key": "assistant ia",
+              "snippets": [
+                "assistant ia"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#308 - Ne vous faites plus avoir par votre conseiller financier - Pierre Marin",
+          "pubDate": "Thu, 12 Mar 2026 03:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "beta.lamartingale",
+              "snippets": [
+                "beta.lamartingale.io"
+              ]
+            },
+            {
+              "key": "beta-keyword",
+              "snippets": [
+                "beta"
+              ]
+            },
+            {
+              "key": "lamartingale.io",
+              "snippets": [
+                "lamartingale.io"
+              ]
+            },
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            },
+            {
+              "key": "assistant ia",
+              "snippets": [
+                "assistant ia"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#307 - La décennie qui va tout changer - Alain Madelin",
+          "pubDate": "Thu, 05 Mar 2026 03:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "beta.lamartingale",
+              "snippets": [
+                "beta.lamartingale.io"
+              ]
+            },
+            {
+              "key": "beta-keyword",
+              "snippets": [
+                "beta"
+              ]
+            },
+            {
+              "key": "lamartingale.io",
+              "snippets": [
+                "lamartingale.io"
+              ]
+            },
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            },
+            {
+              "key": "assistant ia",
+              "snippets": [
+                "assistant ia"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Comment intégrer des actifs non cotés dans mon portefeuille ? - Back to Basics, avec Amundi",
+          "pubDate": "Mon, 02 Mar 2026 03:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "beta.lamartingale",
+              "snippets": [
+                "beta.lamartingale.io"
+              ]
+            },
+            {
+              "key": "beta-keyword",
+              "snippets": [
+                "beta"
+              ]
+            },
+            {
+              "key": "lamartingale.io",
+              "snippets": [
+                "lamartingale.io"
+              ]
+            },
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            },
+            {
+              "key": "assistant ia",
+              "snippets": [
+                "assistant ia"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#306 - Objectif rentier : la méthode et les chiffres - Guillaume Angot",
+          "pubDate": "Thu, 26 Feb 2026 03:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "beta.lamartingale",
+              "snippets": [
+                "beta.lamartingale.io"
+              ]
+            },
+            {
+              "key": "beta-keyword",
+              "snippets": [
+                "beta"
+              ]
+            },
+            {
+              "key": "lamartingale.io",
+              "snippets": [
+                "lamartingale.io"
+              ]
+            },
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            },
+            {
+              "key": "assistant ia",
+              "snippets": [
+                "assistant ia"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#305 - Les options : gagner même quand le marché baisse - Romain Daubry",
+          "pubDate": "Thu, 19 Feb 2026 03:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "beta.lamartingale",
+              "snippets": [
+                "beta.lamartingale.io"
+              ]
+            },
+            {
+              "key": "beta-keyword",
+              "snippets": [
+                "beta"
+              ]
+            },
+            {
+              "key": "lamartingale.io",
+              "snippets": [
+                "lamartingale.io"
+              ]
+            },
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            },
+            {
+              "key": "assistant ia",
+              "snippets": [
+                "assistant ia"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#304 - Bitcoin : le zéro ou le million - Alexandre Stachtchenko",
+          "pubDate": "Thu, 12 Feb 2026 03:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "beta.lamartingale",
+              "snippets": [
+                "beta.lamartingale.io"
+              ]
+            },
+            {
+              "key": "beta-keyword",
+              "snippets": [
+                "beta"
+              ]
+            },
+            {
+              "key": "lamartingale.io",
+              "snippets": [
+                "lamartingale.io"
+              ]
+            },
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            },
+            {
+              "key": "assistant ia",
+              "snippets": [
+                "assistant ia"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#303 - Perdez-vous de l’argent avec votre CGP ? - Yann Le Her",
+          "pubDate": "Thu, 05 Feb 2026 03:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "beta.lamartingale",
+              "snippets": [
+                "beta.lamartingale.io"
+              ]
+            },
+            {
+              "key": "beta-keyword",
+              "snippets": [
+                "beta"
+              ]
+            },
+            {
+              "key": "lamartingale.io",
+              "snippets": [
+                "lamartingale.io"
+              ]
+            },
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            },
+            {
+              "key": "assistant ia",
+              "snippets": [
+                "assistant ia"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#302 - Les 10 mythes de l'investissement qui vous font perdre de l'argent - Mathieu Vaissié",
+          "pubDate": "Thu, 29 Jan 2026 03:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "beta.lamartingale",
+              "snippets": [
+                "beta.lamartingale.io"
+              ]
+            },
+            {
+              "key": "beta-keyword",
+              "snippets": [
+                "beta"
+              ]
+            },
+            {
+              "key": "lamartingale.io",
+              "snippets": [
+                "lamartingale.io"
+              ]
+            },
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            },
+            {
+              "key": "assistant ia",
+              "snippets": [
+                "assistant ia"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#301 - Investir dans la vraie vie - Nicolas Chéron",
+          "pubDate": "Thu, 22 Jan 2026 03:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "beta.lamartingale",
+              "snippets": [
+                "beta.lamartingale.io"
+              ]
+            },
+            {
+              "key": "beta-keyword",
+              "snippets": [
+                "beta"
+              ]
+            },
+            {
+              "key": "lamartingale.io",
+              "snippets": [
+                "lamartingale.io"
+              ]
+            },
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            },
+            {
+              "key": "assistant ia",
+              "snippets": [
+                "assistant ia"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#300 - Immobilier : le coin des bonnes affaires - Philippe Le Trung",
+          "pubDate": "Thu, 15 Jan 2026 03:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "beta.lamartingale",
+              "snippets": [
+                "beta.lamartingale.io"
+              ]
+            },
+            {
+              "key": "beta-keyword",
+              "snippets": [
+                "beta"
+              ]
+            },
+            {
+              "key": "lamartingale.io",
+              "snippets": [
+                "lamartingale.io"
+              ]
+            },
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            },
+            {
+              "key": "assistant ia",
+              "snippets": [
+                "assistant ia"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#299 - Bourse : faire x22 en 22 ans - Romain Burnand",
+          "pubDate": "Thu, 08 Jan 2026 03:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "beta.lamartingale",
+              "snippets": [
+                "beta.lamartingale.io"
+              ]
+            },
+            {
+              "key": "beta-keyword",
+              "snippets": [
+                "beta"
+              ]
+            },
+            {
+              "key": "lamartingale.io",
+              "snippets": [
+                "lamartingale.io"
+              ]
+            },
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            },
+            {
+              "key": "assistant ia",
+              "snippets": [
+                "assistant ia"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#298 - Argent et couple : le piège du 50/50 - Marie-Lahya Simon",
+          "pubDate": "Thu, 01 Jan 2026 03:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "beta.lamartingale",
+              "snippets": [
+                "beta.lamartingale.io"
+              ]
+            },
+            {
+              "key": "beta-keyword",
+              "snippets": [
+                "beta"
+              ]
+            },
+            {
+              "key": "lamartingale.io",
+              "snippets": [
+                "lamartingale.io"
+              ]
+            },
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            },
+            {
+              "key": "assistant ia",
+              "snippets": [
+                "assistant ia"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#297 - Ce que La Martingale vous prépare pour 2026 - Matthieu Stefani",
+          "pubDate": "Thu, 25 Dec 2025 03:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "beta.lamartingale",
+              "snippets": [
+                "beta.lamartingale.io"
+              ]
+            },
+            {
+              "key": "beta-keyword",
+              "snippets": [
+                "beta"
+              ]
+            },
+            {
+              "key": "lamartingale.io",
+              "snippets": [
+                "lamartingale.io"
+              ]
+            },
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            },
+            {
+              "key": "assistant ia",
+              "snippets": [
+                "assistant ia"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#296 - Comment s'enrichir en France ? - Mounir Laggoune",
+          "pubDate": "Thu, 18 Dec 2025 03:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "beta.lamartingale",
+              "snippets": [
+                "beta.lamartingale.io"
+              ]
+            },
+            {
+              "key": "beta-keyword",
+              "snippets": [
+                "beta"
+              ]
+            },
+            {
+              "key": "lamartingale.io",
+              "snippets": [
+                "lamartingale.io"
+              ]
+            },
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            },
+            {
+              "key": "assistant ia",
+              "snippets": [
+                "assistant ia"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#295 - S'enrichir avec Vinted - Marine Bibas",
+          "pubDate": "Thu, 11 Dec 2025 03:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "beta.lamartingale",
+              "snippets": [
+                "beta.lamartingale.io"
+              ]
+            },
+            {
+              "key": "beta-keyword",
+              "snippets": [
+                "beta"
+              ]
+            },
+            {
+              "key": "lamartingale.io",
+              "snippets": [
+                "lamartingale.io"
+              ]
+            },
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            },
+            {
+              "key": "assistant ia",
+              "snippets": [
+                "assistant ia"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#294 - Spatial, quantique, nucléaire : les secteurs qui vont exploser - Charles Beigbeder",
+          "pubDate": "Thu, 04 Dec 2025 03:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "beta.lamartingale",
+              "snippets": [
+                "beta.lamartingale.io"
+              ]
+            },
+            {
+              "key": "beta-keyword",
+              "snippets": [
+                "beta"
+              ]
+            },
+            {
+              "key": "lamartingale.io",
+              "snippets": [
+                "lamartingale.io"
+              ]
+            },
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            },
+            {
+              "key": "assistant ia",
+              "snippets": [
+                "assistant ia"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Pourquoi mettre en place un PERCO, même dans une petite entreprise ? - Back to Basics, avec Amundi",
+          "pubDate": "Mon, 01 Dec 2025 03:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "beta.lamartingale",
+              "snippets": [
+                "beta.lamartingale.io"
+              ]
+            },
+            {
+              "key": "beta-keyword",
+              "snippets": [
+                "beta"
+              ]
+            },
+            {
+              "key": "lamartingale.io",
+              "snippets": [
+                "lamartingale.io"
+              ]
+            },
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            },
+            {
+              "key": "assistant ia",
+              "snippets": [
+                "assistant ia"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#293 - Générer des revenus récurrents grâce à l'IA - Esther Moisy-Kirschbaum",
+          "pubDate": "Thu, 27 Nov 2025 03:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "beta.lamartingale",
+              "snippets": [
+                "beta.lamartingale.io"
+              ]
+            },
+            {
+              "key": "beta-keyword",
+              "snippets": [
+                "beta"
+              ]
+            },
+            {
+              "key": "lamartingale.io",
+              "snippets": [
+                "lamartingale.io"
+              ]
+            },
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            },
+            {
+              "key": "assistant ia",
+              "snippets": [
+                "assistant ia"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#292 - Indépendants : 3 leviers pour économiser des milliers d'euros - Jérôme Vialla",
+          "pubDate": "Thu, 20 Nov 2025 03:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "beta.lamartingale",
+              "snippets": [
+                "beta.lamartingale.io"
+              ]
+            },
+            {
+              "key": "beta-keyword",
+              "snippets": [
+                "beta"
+              ]
+            },
+            {
+              "key": "lamartingale.io",
+              "snippets": [
+                "lamartingale.io"
+              ]
+            },
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            },
+            {
+              "key": "assistant ia",
+              "snippets": [
+                "assistant ia"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Investir dans la transition énergétique - Back to Basics, avec Amundi",
+          "pubDate": "Mon, 17 Nov 2025 03:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "beta.lamartingale",
+              "snippets": [
+                "beta.lamartingale.io"
+              ]
+            },
+            {
+              "key": "beta-keyword",
+              "snippets": [
+                "beta"
+              ]
+            },
+            {
+              "key": "lamartingale.io",
+              "snippets": [
+                "lamartingale.io"
+              ]
+            },
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            },
+            {
+              "key": "assistant ia",
+              "snippets": [
+                "assistant ia"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#291 - Private Equity : trouver les fonds à +20 % net - Paul Moreno Blosseville",
+          "pubDate": "Thu, 13 Nov 2025 03:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "beta.lamartingale",
+              "snippets": [
+                "beta.lamartingale.io"
+              ]
+            },
+            {
+              "key": "beta-keyword",
+              "snippets": [
+                "beta"
+              ]
+            },
+            {
+              "key": "lamartingale.io",
+              "snippets": [
+                "lamartingale.io"
+              ]
+            },
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            },
+            {
+              "key": "assistant ia",
+              "snippets": [
+                "assistant ia"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Comment se protéger des biais cognitifs ? - Back to Basics, avec Amundi",
+          "pubDate": "Mon, 10 Nov 2025 03:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "beta.lamartingale",
+              "snippets": [
+                "beta.lamartingale.io"
+              ]
+            },
+            {
+              "key": "beta-keyword",
+              "snippets": [
+                "beta"
+              ]
+            },
+            {
+              "key": "lamartingale.io",
+              "snippets": [
+                "lamartingale.io"
+              ]
+            },
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            },
+            {
+              "key": "assistant ia",
+              "snippets": [
+                "assistant ia"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#290 - Rénover sans sortir un euro - Hervé Degreve",
+          "pubDate": "Thu, 06 Nov 2025 03:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "beta.lamartingale",
+              "snippets": [
+                "beta.lamartingale.io"
+              ]
+            },
+            {
+              "key": "beta-keyword",
+              "snippets": [
+                "beta"
+              ]
+            },
+            {
+              "key": "lamartingale.io",
+              "snippets": [
+                "lamartingale.io"
+              ]
+            },
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            },
+            {
+              "key": "assistant ia",
+              "snippets": [
+                "assistant ia"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Tout savoir sur les ETF indiciels - Back to Basics, avec Amundi",
+          "pubDate": "Mon, 03 Nov 2025 03:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "beta.lamartingale",
+              "snippets": [
+                "beta.lamartingale.io"
+              ]
+            },
+            {
+              "key": "beta-keyword",
+              "snippets": [
+                "beta"
+              ]
+            },
+            {
+              "key": "lamartingale.io",
+              "snippets": [
+                "lamartingale.io"
+              ]
+            },
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            },
+            {
+              "key": "assistant ia",
+              "snippets": [
+                "assistant ia"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "allolamartingale": {
+      "feed": "allolamartingale.xml",
+      "totalItemsInFeed": 61,
+      "scanned": 30,
+      "items": [
+        {
+          "title": "Impôts 2026 : ce que personne ne vous dit ? - Allo La Martingale #54",
+          "pubDate": "Tue, 21 Apr 2026 16:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Immobilier, la meilleure alternative à la Bourse ? - Allo La Martingale #53",
+          "pubDate": "Tue, 14 Apr 2026 15:00:44 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Panique à la pompe : comment en profiter ?- Allo La Martingale #52",
+          "pubDate": "Tue, 07 Apr 2026 16:30:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Femmes et argent : les erreurs à éviter - Allo La Martingale [Hors-Série]",
+          "pubDate": "Tue, 31 Mar 2026 02:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Le sans risque, refuge ultime en 2026 ?- Allo La Martingale #51",
+          "pubDate": "Tue, 24 Mar 2026 15:27:27 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Dette privée : prochaine crise des subprimes ? - Allo La Martingale #50",
+          "pubDate": "Tue, 17 Mar 2026 16:09:43 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Immersion dans la plus grande salle des marchés d'Europe continentale - Allo La Martingale [Hors-Série]",
+          "pubDate": "Mon, 16 Mar 2026 04:00:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "Crise en Iran : faut-il acheter la panique ? - Allo La Martingale #49",
+          "pubDate": "Tue, 10 Mar 2026 14:36:02 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Crypto en 2026 : la nouvelle stratégie - Allo La Martingale #48",
+          "pubDate": "Tue, 03 Mar 2026 15:42:38 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "IA, Trump : le grand basculement des marchés - Allo La Martingale #47",
+          "pubDate": "Tue, 24 Feb 2026 14:43:22 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Construire sa retraite en 2026 - Allo La Martingale #46",
+          "pubDate": "Tue, 17 Feb 2026 17:01:14 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "PEA : les valeurs à suivre maintenant ! - Allo La Martingale #45",
+          "pubDate": "Tue, 10 Feb 2026 13:50:54 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Une heure pour se mettre à investir - Allo La Martingale #44",
+          "pubDate": "Tue, 03 Feb 2026 15:15:52 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Immobilier locatif : réussir en 2026 - Allo La Martingale #43",
+          "pubDate": "Tue, 27 Jan 2026 14:36:38 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "PLF 2026 : peut-on encore investir en France ? - Allo La Martingale #42",
+          "pubDate": "Tue, 20 Jan 2026 16:39:18 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Marchés au plus haut : faut-il arrêter d’investir ? - Allo La Martingale #41",
+          "pubDate": "Tue, 13 Jan 2026 16:09:19 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Choisir ses ETF en 2026 - Allo La Martingale #40",
+          "pubDate": "Tue, 06 Jan 2026 15:29:20 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Les prédictions chocs pour 2026 - Allo La Martingale #39",
+          "pubDate": "Tue, 30 Dec 2025 09:03:50 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "De l’audience au business : mode d’emploi - Allo La Martingale #38",
+          "pubDate": "Tue, 23 Dec 2025 17:53:39 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "Assurance-vie : indispensable ou surcotée ? - Allo La Martingale #37",
+          "pubDate": "Tue, 16 Dec 2025 16:21:44 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "Investir 10 000 euros fin 2025 - Allo La Martingale #36",
+          "pubDate": "Tue, 09 Dec 2025 15:50:18 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "TotalEnergies débarque à New York - Allo La Martingale Hors-Série",
+          "pubDate": "Mon, 08 Dec 2025 04:00:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "Bourse : les vrais bons plans pour 2026 - Allo La Martingale #35",
+          "pubDate": "Tue, 02 Dec 2025 16:26:21 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "Investir comme Jean-Michel Aulas - Allo La Martingale #34",
+          "pubDate": "Tue, 25 Nov 2025 09:46:39 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "Crypto : les opportunités du moment - Allo La Martingale #33",
+          "pubDate": "Tue, 18 Nov 2025 14:35:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "L'IA, la nouvelle bulle internet ? - Allo La Martingale #32",
+          "pubDate": "Tue, 11 Nov 2025 04:00:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "Immobilier en 2025 : faut-il encore y croire ? - Allo La Martingale #31",
+          "pubDate": "Tue, 04 Nov 2025 15:46:22 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "La recette du portefeuille idéal - Allo La Martingale #30",
+          "pubDate": "Tue, 28 Oct 2025 15:51:11 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "Les ETF à suivre absolument - Allo La Martingale #29",
+          "pubDate": "Tue, 21 Oct 2025 14:28:05 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "L’immobilier sans les clés. - Allo La Martingale #28",
+          "pubDate": "Tue, 14 Oct 2025 15:17:31 GMT",
+          "link": "",
+          "matched": null
+        }
+      ]
+    },
+    "lepanier": {
+      "feed": "lepanier.xml",
+      "totalItemsInFeed": 526,
+      "scanned": 30,
+      "items": [
+        {
+          "title": "#376 - Encuentro : Créer un produit que les clients rachètent 100 fois",
+          "pubDate": "Fri, 20 Mar 2026 04:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#HS 1 to 1 Monaco - Cabaïa, Meta et le plafond de verre : comment débloquer la croissance quand on a tout opti",
+          "pubDate": "Fri, 13 Mar 2026 04:07:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#HS 1 to 1 Monaco - Individualisation : vous avez la donnée. Ce qui manque, c'est comment s'en servir, avec Re",
+          "pubDate": "Fri, 13 Mar 2026 04:06:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#HS 1 to 1 Monaco - E-commerce : 2-3% de conversion / boutique physique : 30-40%. Le gap est là, avec iAdvize",
+          "pubDate": "Fri, 13 Mar 2026 04:05:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#HS 1 to 1 Monaco - Supply chain : la promesse client, c'est le nerf de la guerre, avec Infios",
+          "pubDate": "Fri, 13 Mar 2026 04:04:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "#HS 1 to 1 Monaco - International : arrêtez de vous faire un monde de la traduction, avec Global-e",
+          "pubDate": "Fri, 13 Mar 2026 04:03:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#HS 1 to 1 Monaco - Commerce agentique : votre prochain client n'est peut-être pas un humain, avec Shopify",
+          "pubDate": "Fri, 13 Mar 2026 04:02:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#HS 1 to 1 Monaco - Donnée produit : le chantier invisible qui fait ou défait vos ventes, avec Equadis",
+          "pubDate": "Fri, 13 Mar 2026 04:01:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "[REDIFF] - Onomaturge : Branding et naming, choisir un nom puissant",
+          "pubDate": "Fri, 06 Mar 2026 06:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#375 - leboncoin : La tech et l’IA d’un site utilisé par 1 Français sur 2",
+          "pubDate": "Fri, 27 Feb 2026 04:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#374 - Ethylowheel : L’innovation qui pourrait réduire de 30 % les accidents de la route",
+          "pubDate": "Fri, 20 Feb 2026 04:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#373 - Le Chocolat des Français : boutiques, wholesale et travel retail, comment choisir ses canaux",
+          "pubDate": "Fri, 13 Feb 2026 04:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#372 - Propriété industrielle : Protéger sa marque, méthode, pièges et bonnes pratiques quand on entreprend",
+          "pubDate": "Fri, 06 Feb 2026 04:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#371 - Catch Up Vintage Rides : Grandir mais garder son ADN après 20 ans",
+          "pubDate": "Fri, 30 Jan 2026 04:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#370 - Pierre & Vacances : livret digital, WhatsApp, IA pour enchanter 500K séjours par an",
+          "pubDate": "Fri, 23 Jan 2026 04:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#369 - Yooji : 75k commandes par an en D2C sur un marché de niche",
+          "pubDate": "Fri, 16 Jan 2026 04:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#368 - French Mush : hypercroissance saine et rentable dans un marché réglementé",
+          "pubDate": "Fri, 09 Jan 2026 04:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "[REDIFF] - IA & SEO : Révolutions, stratégies et avenir du référencement avec l’IA",
+          "pubDate": "Fri, 02 Jan 2026 04:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "[REDIFF] - Izipizi : Créer une love brand internationale de lunettes pour toute la famille",
+          "pubDate": "Fri, 26 Dec 2025 04:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#367 - Damart : comment moderniser une marque iconique sans la travestir ?",
+          "pubDate": "Fri, 19 Dec 2025 04:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#366 - Courir : 300 magasins, 18% de CA online et une omnicanalité sans friction",
+          "pubDate": "Fri, 12 Dec 2025 04:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#365 - Catch Up La Fourche : x2 en 2 ans et 100m€ pour un e-commerce bio sur adhésion",
+          "pubDate": "Fri, 05 Dec 2025 04:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#364 - Ritz Paris : transcrire les codes du luxe en ligne, CX, CRM et storytelling",
+          "pubDate": "Fri, 28 Nov 2025 04:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#363 – Esprit Padel Shop : le padel cartonne, eux aussi avec 14 M€ en 5 ans",
+          "pubDate": "Fri, 21 Nov 2025 04:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#362 - Moto-privée : Les apprentissages d’un e-commerçant liquidé",
+          "pubDate": "Fri, 14 Nov 2025 04:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#361 - Back Market : Data, A/B testing et diversification ; moteurs de croissance pour un marché circulaire",
+          "pubDate": "Fri, 07 Nov 2025 04:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#360 - CatchUp Recyclivre : 100 millions € de chiffre d’affaires cumulés : allier rentabilité et durabilité",
+          "pubDate": "Fri, 31 Oct 2025 04:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#359 - Motoblouz : De 70 à 100 millions d’euros de CA : quelle culture d’entreprise pour soutenir cette croiss",
+          "pubDate": "Fri, 24 Oct 2025 03:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#358 - Cherico : comment lancer un produit grande consommation avec le parfait mix digital & retail ?",
+          "pubDate": "Fri, 17 Oct 2025 03:00:00 GMT",
+          "link": "",
+          "matched": [
+            {
+              "key": "newsletter",
+              "snippets": [
+                "newsletter"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "#HS - One to One Biarritz 2025 - Appliquer l’IA à grande échelle dans un environnement ultra-complexe, avec SN",
+          "pubDate": "Fri, 10 Oct 2025 03:00:00 GMT",
+          "link": "",
+          "matched": null
+        }
+      ]
+    },
+    "finscale": {
+      "feed": "finscale.xml",
+      "totalItemsInFeed": 569,
+      "scanned": 30,
+      "items": [
+        {
+          "title": "#338 - 📢 \"From Within\" - Alexis Desouches - Le tabou des véritables transformations en entreprise",
+          "pubDate": "Sat, 25 Apr 2026 22:00:00 GMT",
+          "link": "<![CDATA[https://finscale.business]]>",
+          "matched": null
+        },
+        {
+          "title": "[EXTRAIT] Alexis Desouches - Le tabou des véritables transformations en entreprise",
+          "pubDate": "Wed, 22 Apr 2026 22:00:00 GMT",
+          "link": "<![CDATA[https://finscale.business]]>",
+          "matched": null
+        },
+        {
+          "title": "#337 - Clément Buyse (Slate VC) - Lever un fonds de 250M pour le climat (après un exit aux US)",
+          "pubDate": "Sat, 18 Apr 2026 22:00:00 GMT",
+          "link": "<![CDATA[https://finscale.business]]>",
+          "matched": null
+        },
+        {
+          "title": "[EXTRAIT] Clément Buyse (Slate VC) - Lever un fonds de 250M pour le climat (après un exit aux US)",
+          "pubDate": "Wed, 15 Apr 2026 22:00:00 GMT",
+          "link": "<![CDATA[https://finscale.business]]>",
+          "matched": null
+        },
+        {
+          "title": "#336 - Fanny Picard (Alter Equity) - Responsable et rentable : la finance à impact en actes",
+          "pubDate": "Sat, 11 Apr 2026 22:00:00 GMT",
+          "link": "<![CDATA[https://finscale.business]]>",
+          "matched": null
+        },
+        {
+          "title": "[EXTRAIT] Fanny Picard (Alter Equity) - Responsable et rentable : la finance à impact en actes",
+          "pubDate": "Wed, 08 Apr 2026 22:00:00 GMT",
+          "link": "<![CDATA[https://finscale.business]]>",
+          "matched": null
+        },
+        {
+          "title": "#335 - Emmanuel Delaveau (Partech) - Geoffroy De Cooman (Clariteer)- Ludovic Phalippou (Université Oxford)- Le",
+          "pubDate": "Sat, 04 Apr 2026 22:00:00 GMT",
+          "link": "<![CDATA[https://finscale.business]]>",
+          "matched": null
+        },
+        {
+          "title": "[EXTRAIT] Emmanuel Delaveau (Partech) - Geoffroy De Cooman (Clariteer)- Ludovic Phalippou (Université Oxford)-",
+          "pubDate": "Wed, 01 Apr 2026 22:00:00 GMT",
+          "link": "<![CDATA[https://finscale.business]]>",
+          "matched": null
+        },
+        {
+          "title": "#334 - Anne Lucas (Alta) - The talent unicorn doesn't exist",
+          "pubDate": "Sat, 28 Mar 2026 23:00:00 GMT",
+          "link": "<![CDATA[https://finscale.business]]>",
+          "matched": null
+        },
+        {
+          "title": "[EXCERPT] Anne Lucas (Alta) - The talent unicorn doesn't exist",
+          "pubDate": "Wed, 25 Mar 2026 23:00:00 GMT",
+          "link": "<![CDATA[https://finscale.business]]>",
+          "matched": null
+        },
+        {
+          "title": "#333 - 📢 Episode \"From Within\" - Armelle Renaudin - L’entrepreneuriat comme acte de dignité",
+          "pubDate": "Sat, 21 Mar 2026 23:00:00 GMT",
+          "link": "<![CDATA[https://finscale.business]]>",
+          "matched": null
+        },
+        {
+          "title": "[EXTRAIT] Armelle Renaudin - L’entrepreneuriat comme acte de dignité",
+          "pubDate": "Wed, 18 Mar 2026 23:00:00 GMT",
+          "link": "<![CDATA[https://finscale.business]]>",
+          "matched": null
+        },
+        {
+          "title": "#332 - Thomas Restout (B2C2) - The invisible hand behind a crypto trade",
+          "pubDate": "Sat, 14 Mar 2026 23:00:00 GMT",
+          "link": "<![CDATA[https://finscale.business]]>",
+          "matched": null
+        },
+        {
+          "title": "[EXCERPT] Thomas Restout (B2C2) - The invisible hand behind a crypto trade",
+          "pubDate": "Wed, 11 Mar 2026 23:00:00 GMT",
+          "link": "<![CDATA[https://finscale.business]]>",
+          "matched": null
+        },
+        {
+          "title": "#331 - Robin Wauters - EU Inc: Can It Fix Europe's Tech Fragmentation?",
+          "pubDate": "Sat, 07 Mar 2026 23:00:00 GMT",
+          "link": "<![CDATA[https://finscale.business]]>",
+          "matched": null
+        },
+        {
+          "title": "[EXCERPT] Robin Wauters - EU Inc: Can It Fix Europe's Tech Fragmentation?",
+          "pubDate": "Wed, 04 Mar 2026 23:00:00 GMT",
+          "link": "<![CDATA[https://finscale.business]]>",
+          "matched": null
+        },
+        {
+          "title": "#330 - Chloé Mayenobe (Thunes) - Gérer l'autoroute mondiale du paiement",
+          "pubDate": "Sat, 28 Feb 2026 23:00:00 GMT",
+          "link": "<![CDATA[https://finscale.business]]>",
+          "matched": null
+        },
+        {
+          "title": "[EXTRAIT] Chloé Mayenobe (Thunes) - Gérer l'autoroute mondiale du paiement",
+          "pubDate": "Wed, 25 Feb 2026 23:00:00 GMT",
+          "link": "<![CDATA[https://finscale.business]]>",
+          "matched": null
+        },
+        {
+          "title": "#329 - Yann Charraire (Airfund) - Marchés privés, version scalable",
+          "pubDate": "Sat, 21 Feb 2026 23:00:00 GMT",
+          "link": "<![CDATA[https://finscale.business]]>",
+          "matched": null
+        },
+        {
+          "title": "[EXTRAIT] Yann Charraire (Airfund) - Marchés privés, version scalable",
+          "pubDate": "Wed, 18 Feb 2026 23:00:00 GMT",
+          "link": "<![CDATA[https://finscale.business]]>",
+          "matched": null
+        },
+        {
+          "title": "#328 - Antoine Leclercq (Estreem) - Estreem, l’arme secrète des banques sur le processing des paiements",
+          "pubDate": "Sat, 14 Feb 2026 23:00:00 GMT",
+          "link": "<![CDATA[https://finscale.business]]>",
+          "matched": null
+        },
+        {
+          "title": "[EXTRAIT] Antoine Leclercq (Estreem) - Estreem, l’arme secrète des banques sur le processing des paiements",
+          "pubDate": "Wed, 11 Feb 2026 23:00:00 GMT",
+          "link": "<![CDATA[https://finscale.business]]>",
+          "matched": null
+        },
+        {
+          "title": "#327 - Jorn Lambert (Mastercard) - Payments at a turning point",
+          "pubDate": "Sat, 07 Feb 2026 23:00:00 GMT",
+          "link": "<![CDATA[https://finscale.business]]>",
+          "matched": null
+        },
+        {
+          "title": "[EXCERPT] Jorn Lambert (Mastercard) - Payments at a Turning Point",
+          "pubDate": "Wed, 04 Feb 2026 23:00:00 GMT",
+          "link": "<![CDATA[https://finscale.business]]>",
+          "matched": null
+        },
+        {
+          "title": "#326 - 📢 Episode \"From Within\" - Général Frédéric Gout - Le commandement dans l'armée, le chef face au réel",
+          "pubDate": "Sat, 31 Jan 2026 23:00:00 GMT",
+          "link": "<![CDATA[https://finscale.business]]>",
+          "matched": null
+        },
+        {
+          "title": "[EXTRAIT] Général Frédéric Gout - Le commandement dans l'armée, le chef face au réel",
+          "pubDate": "Wed, 28 Jan 2026 23:00:00 GMT",
+          "link": "<![CDATA[https://finscale.business]]>",
+          "matched": null
+        },
+        {
+          "title": "[PARTENARIAT] #325 - Floriano Ascensao et Rachel Lionsquy (Banque Postale) - Origination durable: fantasme ou ",
+          "pubDate": "Sat, 24 Jan 2026 23:00:00 GMT",
+          "link": "<![CDATA[https://finscale.business]]>",
+          "matched": null
+        },
+        {
+          "title": "[EXTRAIT] Floriano Ascensao et Rachel Lionsquy (Banque Postale) - Origination durable: fantasme ou réalité ?",
+          "pubDate": "Wed, 21 Jan 2026 23:00:00 GMT",
+          "link": "<![CDATA[https://finscale.business]]>",
+          "matched": null
+        },
+        {
+          "title": "#324 - Catherine Charrier-Leflaive (Wakam) - Freiner pour gagner: fortifier le modèle Wakam",
+          "pubDate": "Sat, 17 Jan 2026 23:00:00 GMT",
+          "link": "<![CDATA[https://finscale.business]]>",
+          "matched": null
+        },
+        {
+          "title": "[EXTRAIT] Catherine Charrier-Leflaive (Wakam) - Freiner pour gagner: fortifier le modèle Wakam",
+          "pubDate": "Wed, 14 Jan 2026 23:00:00 GMT",
+          "link": "<![CDATA[https://finscale.business]]>",
+          "matched": null
+        }
+      ]
+    },
+    "passionpatrimoine": {
+      "feed": "passionpatrimoine.xml",
+      "totalItemsInFeed": 216,
+      "scanned": 30,
+      "items": [
+        {
+          "title": "Produits structurés : stratégie ou illusion ? - Question de confiance #9",
+          "pubDate": "Wed, 22 Apr 2026 03:00:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "#148 - Pourquoi certains investisseurs gagnent… puis perdent tout - Mikaël Guéviguian",
+          "pubDate": "Tue, 21 Apr 2026 03:00:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "#147 - Agent immo : survivre à l'ère de l'IA et de Airbnb - Johanna Larrour et Vincent Morin",
+          "pubDate": "Tue, 14 Apr 2026 03:00:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "SCPI : revenir à l'immobilier grâce à la transparence - Franck Inghels - Question de confiance #8",
+          "pubDate": "Wed, 08 Apr 2026 03:00:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "#146 - La RSE : le vrai test de survie des entreprises ? - Sébastien Mandron",
+          "pubDate": "Tue, 07 Apr 2026 03:00:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "[Hors-Série] SCPI : faut-il y revenir en 2026 ? - Matthieu Navarre",
+          "pubDate": "Thu, 02 Apr 2026 03:00:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "#145 - Immobilier de prestige : pourquoi la plus-value n’est plus une évidence - Didier Paradis",
+          "pubDate": "Tue, 31 Mar 2026 03:00:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "[Hors-Série] Indépendants : êtes-vous vraiment protégés en cas de coup dur ? - Sonia Elmlinger et Navelline Du",
+          "pubDate": "Thu, 26 Mar 2026 03:00:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "[LE GRAND TALK] #7 - IA et patrimoine : le conseiller doit-il changer de méthode ?",
+          "pubDate": "Tue, 24 Mar 2026 03:00:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "Le vrai prix d'un conseil patrimonial - Yvan Boutier - Question de confiance #7",
+          "pubDate": "Wed, 18 Mar 2026 03:00:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "#144 - Immobilier : comment définir le juste prix - Kévin Philippe",
+          "pubDate": "Tue, 17 Mar 2026 03:00:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "#143 - L'humain : l'essence-même de la gestion de patrimoine - Elie Attia",
+          "pubDate": "Tue, 10 Mar 2026 03:00:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "[Hors-Série] Être accompagné dans son métier de CGP - Guillaume Le Bellego",
+          "pubDate": "Thu, 05 Mar 2026 03:00:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "#142 - Ouvrir ses horizons pour mieux gérer son patrimoine - Mikaël Mallet",
+          "pubDate": "Tue, 03 Mar 2026 03:00:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "#141 - Monter sa propre entreprise de gestion - Grégory Saleh",
+          "pubDate": "Tue, 24 Feb 2026 03:00:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "#140 - Démocratiser le Bitcoin en France - Victor Charle",
+          "pubDate": "Tue, 17 Feb 2026 03:00:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "#139 - Les cabinets de CGP plus forts que les indépendants ? - Jean-Luc Abert & AIC Patrimoine",
+          "pubDate": "Tue, 10 Feb 2026 03:00:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "Structurer un porte-feuille grâce Private Equity - Frédéric Stolar - Question de confiance #6",
+          "pubDate": "Wed, 04 Feb 2026 03:00:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "#138 - Comprendre avant d’investir - Alexandre Panizzo",
+          "pubDate": "Tue, 03 Feb 2026 03:00:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "#137 - Créer sa visibilité en tant que CGP - Quentin Fehlmann",
+          "pubDate": "Tue, 27 Jan 2026 09:20:52 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "Immobilier : investir sans se tromper de combat - Jean Roucher - Question de confiance #5",
+          "pubDate": "Wed, 21 Jan 2026 03:00:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "[REDIFF] - Sonia Elmlinger - \"Un relevé de carrière sur trois est faux.\"",
+          "pubDate": "Tue, 13 Jan 2026 03:00:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "Comment et pourquoi investir dans l'art ? - Stéphane Debost - Question de confiance #4",
+          "pubDate": "Wed, 07 Jan 2026 03:00:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "[REDIFF] - Angèle Tata - «Il est indispensable de sensibiliser les étudiants à cette notion d’investissement r",
+          "pubDate": "Tue, 30 Dec 2025 03:00:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "[REDIFF] Pierre Morizot - \"Le morceau de Bitcoin que j’ai, c’est pour mes enfants.\"",
+          "pubDate": "Tue, 23 Dec 2025 03:00:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "Comment construire le CGP de demain ? - Yvan Boutier - Question de confiance #3",
+          "pubDate": "Wed, 17 Dec 2025 03:00:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "[REDIFF] - Vincent Winszman - \"Investir dans l’art, c’est diversifier son patrimoine tout en se faisant plaisi",
+          "pubDate": "Tue, 09 Dec 2025 03:00:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "\"L’IA ne remplace pas le conseiller. Il lui donne des super pouvoirs\" - Stéphane Dothée - Question de confianc",
+          "pubDate": "Wed, 03 Dec 2025 03:00:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "[REDIFF] - Capucine Leroy - \" Je sentais que j'étais en train de régresser dans le milieu bancaire. \"",
+          "pubDate": "Tue, 25 Nov 2025 03:00:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "\"La gestion de patrimoine est une affaire de confiance\" - Yvan Boutier - Question de confiance #1",
+          "pubDate": "Wed, 19 Nov 2025 03:00:00 GMT",
+          "link": "",
+          "matched": null
+        }
+      ]
+    },
+    "combiencagagne": {
+      "feed": "combiencagagne.xml",
+      "totalItemsInFeed": 117,
+      "scanned": 30,
+      "items": [
+        {
+          "title": "#68 - Combien ça gagne une laverie automatique - Paul Bocquillon",
+          "pubDate": "Wed, 22 Apr 2026 04:05:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "[ZOOM] Les chiffres de Paul Bocquillon - responsable d’affaire Speed Queen",
+          "pubDate": "Wed, 22 Apr 2026 04:00:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "#67 - Combien ça gagne un député - Stéphane Vojetta",
+          "pubDate": "Wed, 15 Apr 2026 04:05:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "[ZOOM] Les chiffres de Stéphane Vojetta - député",
+          "pubDate": "Wed, 15 Apr 2026 04:00:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "#66 - Combien ça gagne un infirmier libéral - Arnaud Stiehr",
+          "pubDate": "Wed, 08 Apr 2026 04:03:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "[ZOOM] Les chiffres de Arnaud Stiehr - infirmier libéral",
+          "pubDate": "Wed, 08 Apr 2026 04:00:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "[ZOOM] Les chiffres de Angélique Hébert - prothésiste ongulaire",
+          "pubDate": "Wed, 01 Apr 2026 04:20:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "#65 - Combien ça gagne un salon de manucure - Angélique Hébert",
+          "pubDate": "Wed, 01 Apr 2026 04:05:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "[Série Spéciale Franchise avec MyTraffic] - Combien ça gagne une franchise Le Pain Quotidien ? - Olivier Telle",
+          "pubDate": "Mon, 30 Mar 2026 09:50:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "[ZOOM] Les chiffres de Olivier Tellechea - Directeur du développement réseau Le Pain Quotidien",
+          "pubDate": "Mon, 30 Mar 2026 09:47:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "#64 - Combien ça gagne un dealer ?",
+          "pubDate": "Wed, 25 Mar 2026 05:05:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "[ZOOM] Les chiffres de \"6\" - dealer",
+          "pubDate": "Wed, 25 Mar 2026 05:00:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "#63 - Combien ça gagne la fondation des femmes - Anne-Cécile Mailfert",
+          "pubDate": "Wed, 18 Mar 2026 07:31:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "[ZOOM] Les chiffres de Anne-Cécile Mailfert - fondatrice de la fondation des femmes",
+          "pubDate": "Wed, 18 Mar 2026 07:20:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "#62 - Combien ça gagne une championne olympique - Sara Balzer",
+          "pubDate": "Wed, 11 Mar 2026 05:06:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "[ZOOM] Les chiffres de Sara Balzer - escrimeuse olympique",
+          "pubDate": "Wed, 11 Mar 2026 05:00:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "#61 - Combien ça gagne MYM - Pierre Garonnaire",
+          "pubDate": "Wed, 04 Mar 2026 05:05:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "[ZOOM] Les chiffres de Pierre Garonnaire - co-fondateur de MYM",
+          "pubDate": "Wed, 04 Mar 2026 05:00:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "#60 - Combien ça gagne un navigateur du Vendée Globe - Benjamin Ferré",
+          "pubDate": "Wed, 25 Feb 2026 05:05:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "[ZOOM] Les chiffres de Benjamin Ferré - navigateur du Vendée Globe",
+          "pubDate": "Wed, 25 Feb 2026 05:00:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "#59 - Combien ça gagne une wedding planner - Elodie Villemus",
+          "pubDate": "Wed, 18 Feb 2026 05:05:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "[ZOOM] Les chiffres d'Elodie Villemus - wedding planneur",
+          "pubDate": "Wed, 18 Feb 2026 05:00:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "#58 - Combien ça gagne un influenceur cinéma - Regelegorila",
+          "pubDate": "Wed, 11 Feb 2026 05:04:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "[ZOOM] Les chiffres de Regelegorila - influenceur cinéma",
+          "pubDate": "Wed, 11 Feb 2026 05:00:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "#57 - Combien ça gagne une franchise automobile - Romain Barreau",
+          "pubDate": "Wed, 04 Feb 2026 05:05:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "[ZOOM] Les chiffres Romain Barreau - président de Weecars",
+          "pubDate": "Wed, 04 Feb 2026 05:00:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "#56 - Combien ça gagne une championne de para-escalade - Solenne Piret",
+          "pubDate": "Wed, 28 Jan 2026 05:05:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "[ZOOM] Les chiffres de Solenne Piret, championne de para-escalade",
+          "pubDate": "Wed, 28 Jan 2026 05:00:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "#55 - Combien ça gagne un compositeur de musique - Romain Allender",
+          "pubDate": "Wed, 21 Jan 2026 05:05:00 GMT",
+          "link": "",
+          "matched": null
+        },
+        {
+          "title": "[ZOOM] Les chiffres de Romain Allender, compositeur de musique",
+          "pubDate": "Wed, 21 Jan 2026 05:00:00 GMT",
+          "link": "",
+          "matched": null
+        }
+      ]
+    }
+  },
+  "hits": [
+    {
+      "tenant": "lamartingale",
+      "title": "#314 - Bordeaux, Bourgogne ou vins nature : dans quelle bouteille investir ? - Angélique de Lencquesaing",
+      "pubDate": "Thu, 23 Apr 2026 03:00:00 GMT",
+      "pattern": "beta.lamartingale",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#314 - Bordeaux, Bourgogne ou vins nature : dans quelle bouteille investir ? - Angélique de Lencquesaing",
+      "pubDate": "Thu, 23 Apr 2026 03:00:00 GMT",
+      "pattern": "beta-keyword",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#314 - Bordeaux, Bourgogne ou vins nature : dans quelle bouteille investir ? - Angélique de Lencquesaing",
+      "pubDate": "Thu, 23 Apr 2026 03:00:00 GMT",
+      "pattern": "lamartingale.io",
+      "context": "uer aucun nouvel épisode. - pour s'abonner à la newsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://be"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#314 - Bordeaux, Bourgogne ou vins nature : dans quelle bouteille investir ? - Angélique de Lencquesaing",
+      "pubDate": "Thu, 23 Apr 2026 03:00:00 GMT",
+      "pattern": "newsletter",
+      "context": " recevoir toutes les actus et des recommandations exclusives, abonnez-vous à la newsletter, c’est par ici.la martingale est un podcast du label orso media. merci à notre partenaire etoro de soutenir la martingale. allez sur etoro.com et prenez le contrôle de vos investissements. "
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#314 - Bordeaux, Bourgogne ou vins nature : dans quelle bouteille investir ? - Angélique de Lencquesaing",
+      "pubDate": "Thu, 23 Apr 2026 03:00:00 GMT",
+      "pattern": "assistant ia",
+      "context": "ewsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#313 - Comment payer moins d’impôts sur le revenu en 2026 ?- Nahima Zobri",
+      "pubDate": "Thu, 16 Apr 2026 03:00:00 GMT",
+      "pattern": "beta.lamartingale",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#313 - Comment payer moins d’impôts sur le revenu en 2026 ?- Nahima Zobri",
+      "pubDate": "Thu, 16 Apr 2026 03:00:00 GMT",
+      "pattern": "beta-keyword",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#313 - Comment payer moins d’impôts sur le revenu en 2026 ?- Nahima Zobri",
+      "pubDate": "Thu, 16 Apr 2026 03:00:00 GMT",
+      "pattern": "lamartingale.io",
+      "context": "uer aucun nouvel épisode. - pour s'abonner à la newsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://be"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#313 - Comment payer moins d’impôts sur le revenu en 2026 ?- Nahima Zobri",
+      "pubDate": "Thu, 16 Apr 2026 03:00:00 GMT",
+      "pattern": "newsletter",
+      "context": " recevoir toutes les actus et des recommandations exclusives, abonnez-vous à la newsletter, c’est par ici. la martingale est un podcast du label orso media. merci à notre partenaire etoro de soutenir la martingale. allez sur etoro.com et prenez le contrôle de vos investissements."
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#313 - Comment payer moins d’impôts sur le revenu en 2026 ?- Nahima Zobri",
+      "pubDate": "Thu, 16 Apr 2026 03:00:00 GMT",
+      "pattern": "assistant ia",
+      "context": "ewsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#312 - Fonds “verts” : comment éviter les pièges du greenwashing ? - Arthur Aubœuf et Joseph Choueifaty",
+      "pubDate": "Thu, 09 Apr 2026 03:00:00 GMT",
+      "pattern": "beta.lamartingale",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#312 - Fonds “verts” : comment éviter les pièges du greenwashing ? - Arthur Aubœuf et Joseph Choueifaty",
+      "pubDate": "Thu, 09 Apr 2026 03:00:00 GMT",
+      "pattern": "beta-keyword",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#312 - Fonds “verts” : comment éviter les pièges du greenwashing ? - Arthur Aubœuf et Joseph Choueifaty",
+      "pubDate": "Thu, 09 Apr 2026 03:00:00 GMT",
+      "pattern": "lamartingale.io",
+      "context": "uer aucun nouvel épisode. - pour s'abonner à la newsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://be"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#312 - Fonds “verts” : comment éviter les pièges du greenwashing ? - Arthur Aubœuf et Joseph Choueifaty",
+      "pubDate": "Thu, 09 Apr 2026 03:00:00 GMT",
+      "pattern": "newsletter",
+      "context": " recevoir toutes les actus et des recommandations exclusives, abonnez-vous à la newsletter, c’est par ici.la martingale est un podcast du label orso media. merci à notre partenaire etoro de soutenir la martingale. allez sur etoro.com et prenez le contrôle de vos investissements. "
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#312 - Fonds “verts” : comment éviter les pièges du greenwashing ? - Arthur Aubœuf et Joseph Choueifaty",
+      "pubDate": "Thu, 09 Apr 2026 03:00:00 GMT",
+      "pattern": "assistant ia",
+      "context": "ewsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#311 - Investir dans l’hôtellerie à partir de 1000€ - Steve Lepine",
+      "pubDate": "Thu, 02 Apr 2026 03:00:00 GMT",
+      "pattern": "beta.lamartingale",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#311 - Investir dans l’hôtellerie à partir de 1000€ - Steve Lepine",
+      "pubDate": "Thu, 02 Apr 2026 03:00:00 GMT",
+      "pattern": "beta-keyword",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#311 - Investir dans l’hôtellerie à partir de 1000€ - Steve Lepine",
+      "pubDate": "Thu, 02 Apr 2026 03:00:00 GMT",
+      "pattern": "lamartingale.io",
+      "context": "uer aucun nouvel épisode. - pour s'abonner à la newsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://be"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#311 - Investir dans l’hôtellerie à partir de 1000€ - Steve Lepine",
+      "pubDate": "Thu, 02 Apr 2026 03:00:00 GMT",
+      "pattern": "newsletter",
+      "context": " recevoir toutes les actus et des recommandations exclusives, abonnez-vous à la newsletter, c’est par ici.la martingale est un podcast du label orso media. merci à notre partenaire etoro de soutenir la martingale. allez sur etoro.com et prenez le contrôle de vos investissements. "
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#311 - Investir dans l’hôtellerie à partir de 1000€ - Steve Lepine",
+      "pubDate": "Thu, 02 Apr 2026 03:00:00 GMT",
+      "pattern": "assistant ia",
+      "context": "ewsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#310 - Bulle ou rotation ? Ce que les marchés nous préparent vraiment - Anne-Laure Frischlander-Jacobson",
+      "pubDate": "Thu, 26 Mar 2026 03:00:00 GMT",
+      "pattern": "beta.lamartingale",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#310 - Bulle ou rotation ? Ce que les marchés nous préparent vraiment - Anne-Laure Frischlander-Jacobson",
+      "pubDate": "Thu, 26 Mar 2026 03:00:00 GMT",
+      "pattern": "beta-keyword",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#310 - Bulle ou rotation ? Ce que les marchés nous préparent vraiment - Anne-Laure Frischlander-Jacobson",
+      "pubDate": "Thu, 26 Mar 2026 03:00:00 GMT",
+      "pattern": "lamartingale.io",
+      "context": "uer aucun nouvel épisode. - pour s'abonner à la newsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://be"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#310 - Bulle ou rotation ? Ce que les marchés nous préparent vraiment - Anne-Laure Frischlander-Jacobson",
+      "pubDate": "Thu, 26 Mar 2026 03:00:00 GMT",
+      "pattern": "newsletter",
+      "context": " recevoir toutes les actus et des recommandations exclusives, abonnez-vous à la newsletter, c’est par ici.la martingale est un podcast du label orso media. bénéficiez de 0,39% de frais de gestion à vie sur les supports en unités de compte : https://lp.louveinvest.com/offre-av-la-"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#310 - Bulle ou rotation ? Ce que les marchés nous préparent vraiment - Anne-Laure Frischlander-Jacobson",
+      "pubDate": "Thu, 26 Mar 2026 03:00:00 GMT",
+      "pattern": "assistant ia",
+      "context": "ewsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#309 - Investir dans des voitures de collection : ça vaut le coup ? - Gonzague Ruchaud",
+      "pubDate": "Thu, 19 Mar 2026 03:00:00 GMT",
+      "pattern": "beta.lamartingale",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#309 - Investir dans des voitures de collection : ça vaut le coup ? - Gonzague Ruchaud",
+      "pubDate": "Thu, 19 Mar 2026 03:00:00 GMT",
+      "pattern": "beta-keyword",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#309 - Investir dans des voitures de collection : ça vaut le coup ? - Gonzague Ruchaud",
+      "pubDate": "Thu, 19 Mar 2026 03:00:00 GMT",
+      "pattern": "lamartingale.io",
+      "context": "uer aucun nouvel épisode. - pour s'abonner à la newsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://be"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#309 - Investir dans des voitures de collection : ça vaut le coup ? - Gonzague Ruchaud",
+      "pubDate": "Thu, 19 Mar 2026 03:00:00 GMT",
+      "pattern": "newsletter",
+      "context": " recevoir toutes les actus et des recommandations exclusives, abonnez-vous à la newsletter, c’est par ici.la martingale est un podcast du label orso media. bénéficiez de 0,39% de frais de gestion à vie sur les supports en unités de compte : https://lp.louveinvest.com/offre-av-la-"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#309 - Investir dans des voitures de collection : ça vaut le coup ? - Gonzague Ruchaud",
+      "pubDate": "Thu, 19 Mar 2026 03:00:00 GMT",
+      "pattern": "assistant ia",
+      "context": "ewsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#308 - Ne vous faites plus avoir par votre conseiller financier - Pierre Marin",
+      "pubDate": "Thu, 12 Mar 2026 03:00:00 GMT",
+      "pattern": "beta.lamartingale",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#308 - Ne vous faites plus avoir par votre conseiller financier - Pierre Marin",
+      "pubDate": "Thu, 12 Mar 2026 03:00:00 GMT",
+      "pattern": "beta-keyword",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#308 - Ne vous faites plus avoir par votre conseiller financier - Pierre Marin",
+      "pubDate": "Thu, 12 Mar 2026 03:00:00 GMT",
+      "pattern": "lamartingale.io",
+      "context": "uer aucun nouvel épisode. - pour s'abonner à la newsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://be"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#308 - Ne vous faites plus avoir par votre conseiller financier - Pierre Marin",
+      "pubDate": "Thu, 12 Mar 2026 03:00:00 GMT",
+      "pattern": "newsletter",
+      "context": " recevoir toutes les actus et des recommandations exclusives, abonnez-vous à la newsletter, c’est par ici.la martingale est un podcast du label orso media. bénéficiez de 0,39% de frais de gestion à vie sur les supports en unités de compte : https://lp.louveinvest.com/offre-av-la-"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#308 - Ne vous faites plus avoir par votre conseiller financier - Pierre Marin",
+      "pubDate": "Thu, 12 Mar 2026 03:00:00 GMT",
+      "pattern": "assistant ia",
+      "context": "ewsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#307 - La décennie qui va tout changer - Alain Madelin",
+      "pubDate": "Thu, 05 Mar 2026 03:00:00 GMT",
+      "pattern": "beta.lamartingale",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#307 - La décennie qui va tout changer - Alain Madelin",
+      "pubDate": "Thu, 05 Mar 2026 03:00:00 GMT",
+      "pattern": "beta-keyword",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#307 - La décennie qui va tout changer - Alain Madelin",
+      "pubDate": "Thu, 05 Mar 2026 03:00:00 GMT",
+      "pattern": "lamartingale.io",
+      "context": "uer aucun nouvel épisode. - pour s'abonner à la newsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://be"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#307 - La décennie qui va tout changer - Alain Madelin",
+      "pubDate": "Thu, 05 Mar 2026 03:00:00 GMT",
+      "pattern": "newsletter",
+      "context": " recevoir toutes les actus et des recommandations exclusives, abonnez-vous à la newsletter, c’est par ici.la martingale est un podcast du label orso media. merci à notre partenaire louve invest, l’assurance-vie aux frais les plus bas du marché*. bénéficiez de 0,39% de frais de ge"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#307 - La décennie qui va tout changer - Alain Madelin",
+      "pubDate": "Thu, 05 Mar 2026 03:00:00 GMT",
+      "pattern": "assistant ia",
+      "context": "ewsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "Comment intégrer des actifs non cotés dans mon portefeuille ? - Back to Basics, avec Amundi",
+      "pubDate": "Mon, 02 Mar 2026 03:00:00 GMT",
+      "pattern": "beta.lamartingale",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "Comment intégrer des actifs non cotés dans mon portefeuille ? - Back to Basics, avec Amundi",
+      "pubDate": "Mon, 02 Mar 2026 03:00:00 GMT",
+      "pattern": "beta-keyword",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "Comment intégrer des actifs non cotés dans mon portefeuille ? - Back to Basics, avec Amundi",
+      "pubDate": "Mon, 02 Mar 2026 03:00:00 GMT",
+      "pattern": "lamartingale.io",
+      "context": "ktok : / lamartingale_media x : https://x.com/martingalela notre site : https://lamartingale.io notre linktr.ee : https://linktr.ee/lamartingale_media cet épisode a été réalisé en partenariat avec amundi.pour en savoir plus sur amundi, rdv sur amundi.fr - la libre antenne de votr"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "Comment intégrer des actifs non cotés dans mon portefeuille ? - Back to Basics, avec Amundi",
+      "pubDate": "Mon, 02 Mar 2026 03:00:00 GMT",
+      "pattern": "newsletter",
+      "context": "orme audio favorite pour ne manquer aucun nouvel épisode. - pour s'abonner à la newsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. p"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "Comment intégrer des actifs non cotés dans mon portefeuille ? - Back to Basics, avec Amundi",
+      "pubDate": "Mon, 02 Mar 2026 03:00:00 GMT",
+      "pattern": "assistant ia",
+      "context": "ewsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#306 - Objectif rentier : la méthode et les chiffres - Guillaume Angot",
+      "pubDate": "Thu, 26 Feb 2026 03:00:00 GMT",
+      "pattern": "beta.lamartingale",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#306 - Objectif rentier : la méthode et les chiffres - Guillaume Angot",
+      "pubDate": "Thu, 26 Feb 2026 03:00:00 GMT",
+      "pattern": "beta-keyword",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#306 - Objectif rentier : la méthode et les chiffres - Guillaume Angot",
+      "pubDate": "Thu, 26 Feb 2026 03:00:00 GMT",
+      "pattern": "lamartingale.io",
+      "context": "uer aucun nouvel épisode. - pour s'abonner à la newsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://be"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#306 - Objectif rentier : la méthode et les chiffres - Guillaume Angot",
+      "pubDate": "Thu, 26 Feb 2026 03:00:00 GMT",
+      "pattern": "newsletter",
+      "context": " recevoir toutes les actus et des recommandations exclusives, abonnez-vous à la newsletter, c’est par ici.la martingale est un podcast du label orso media. merci à notre partenaire louve invest, l’assurance-vie aux frais les plus bas du marché*. bénéficiez de 0,39% de frais de ge"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#306 - Objectif rentier : la méthode et les chiffres - Guillaume Angot",
+      "pubDate": "Thu, 26 Feb 2026 03:00:00 GMT",
+      "pattern": "assistant ia",
+      "context": "ewsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#305 - Les options : gagner même quand le marché baisse - Romain Daubry",
+      "pubDate": "Thu, 19 Feb 2026 03:00:00 GMT",
+      "pattern": "beta.lamartingale",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#305 - Les options : gagner même quand le marché baisse - Romain Daubry",
+      "pubDate": "Thu, 19 Feb 2026 03:00:00 GMT",
+      "pattern": "beta-keyword",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#305 - Les options : gagner même quand le marché baisse - Romain Daubry",
+      "pubDate": "Thu, 19 Feb 2026 03:00:00 GMT",
+      "pattern": "lamartingale.io",
+      "context": "uer aucun nouvel épisode. - pour s'abonner à la newsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://be"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#305 - Les options : gagner même quand le marché baisse - Romain Daubry",
+      "pubDate": "Thu, 19 Feb 2026 03:00:00 GMT",
+      "pattern": "newsletter",
+      "context": " recevoir toutes les actus et des recommandations exclusives, abonnez-vous à la newsletter, c’est par ici.la martingale est un podcast du label orso media. merci à notre partenaire louve invest, l’assurance-vie aux frais les plus bas du marché*. bénéficiez de 0,39% de frais de ge"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#305 - Les options : gagner même quand le marché baisse - Romain Daubry",
+      "pubDate": "Thu, 19 Feb 2026 03:00:00 GMT",
+      "pattern": "assistant ia",
+      "context": "ewsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#304 - Bitcoin : le zéro ou le million - Alexandre Stachtchenko",
+      "pubDate": "Thu, 12 Feb 2026 03:00:00 GMT",
+      "pattern": "beta.lamartingale",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#304 - Bitcoin : le zéro ou le million - Alexandre Stachtchenko",
+      "pubDate": "Thu, 12 Feb 2026 03:00:00 GMT",
+      "pattern": "beta-keyword",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#304 - Bitcoin : le zéro ou le million - Alexandre Stachtchenko",
+      "pubDate": "Thu, 12 Feb 2026 03:00:00 GMT",
+      "pattern": "lamartingale.io",
+      "context": "uer aucun nouvel épisode. - pour s'abonner à la newsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://be"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#304 - Bitcoin : le zéro ou le million - Alexandre Stachtchenko",
+      "pubDate": "Thu, 12 Feb 2026 03:00:00 GMT",
+      "pattern": "newsletter",
+      "context": " recevoir toutes les actus et des recommandations exclusives, abonnez-vous à la newsletter, c’est par ici.la martingale est un podcast du label orso media. merci à notre partenaire louve invest, l'assurance-vie aux frais les plus bas du marché*. bénéficiez de 0,39% de frais de ge"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#304 - Bitcoin : le zéro ou le million - Alexandre Stachtchenko",
+      "pubDate": "Thu, 12 Feb 2026 03:00:00 GMT",
+      "pattern": "assistant ia",
+      "context": "ewsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#303 - Perdez-vous de l’argent avec votre CGP ? - Yann Le Her",
+      "pubDate": "Thu, 05 Feb 2026 03:00:00 GMT",
+      "pattern": "beta.lamartingale",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#303 - Perdez-vous de l’argent avec votre CGP ? - Yann Le Her",
+      "pubDate": "Thu, 05 Feb 2026 03:00:00 GMT",
+      "pattern": "beta-keyword",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#303 - Perdez-vous de l’argent avec votre CGP ? - Yann Le Her",
+      "pubDate": "Thu, 05 Feb 2026 03:00:00 GMT",
+      "pattern": "lamartingale.io",
+      "context": "uer aucun nouvel épisode. - pour s'abonner à la newsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://be"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#303 - Perdez-vous de l’argent avec votre CGP ? - Yann Le Her",
+      "pubDate": "Thu, 05 Feb 2026 03:00:00 GMT",
+      "pattern": "newsletter",
+      "context": " recevoir toutes les actus et des recommandations exclusives, abonnez-vous à la newsletter, c’est par ici.la martingale est un podcast du label orso media. merci à notre partenaire louve invest, l'assurance-vie aux frais les plus bas du marché*. bénéficiez de 0,39% de frais de ge"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#303 - Perdez-vous de l’argent avec votre CGP ? - Yann Le Her",
+      "pubDate": "Thu, 05 Feb 2026 03:00:00 GMT",
+      "pattern": "assistant ia",
+      "context": "ewsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#302 - Les 10 mythes de l'investissement qui vous font perdre de l'argent - Mathieu Vaissié",
+      "pubDate": "Thu, 29 Jan 2026 03:00:00 GMT",
+      "pattern": "beta.lamartingale",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#302 - Les 10 mythes de l'investissement qui vous font perdre de l'argent - Mathieu Vaissié",
+      "pubDate": "Thu, 29 Jan 2026 03:00:00 GMT",
+      "pattern": "beta-keyword",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#302 - Les 10 mythes de l'investissement qui vous font perdre de l'argent - Mathieu Vaissié",
+      "pubDate": "Thu, 29 Jan 2026 03:00:00 GMT",
+      "pattern": "lamartingale.io",
+      "context": "uer aucun nouvel épisode. - pour s'abonner à la newsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://be"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#302 - Les 10 mythes de l'investissement qui vous font perdre de l'argent - Mathieu Vaissié",
+      "pubDate": "Thu, 29 Jan 2026 03:00:00 GMT",
+      "pattern": "newsletter",
+      "context": " recevoir toutes les actus et des recommandations exclusives, abonnez-vous à la newsletter, c’est par ici.la martingale est un podcast du label orso media. merci à notre partenaire louve invest, l'assurance-vie aux frais les plus bas du marché*. bénéficiez de 0,35% de frais de ge"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#302 - Les 10 mythes de l'investissement qui vous font perdre de l'argent - Mathieu Vaissié",
+      "pubDate": "Thu, 29 Jan 2026 03:00:00 GMT",
+      "pattern": "assistant ia",
+      "context": "ewsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#301 - Investir dans la vraie vie - Nicolas Chéron",
+      "pubDate": "Thu, 22 Jan 2026 03:00:00 GMT",
+      "pattern": "beta.lamartingale",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#301 - Investir dans la vraie vie - Nicolas Chéron",
+      "pubDate": "Thu, 22 Jan 2026 03:00:00 GMT",
+      "pattern": "beta-keyword",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#301 - Investir dans la vraie vie - Nicolas Chéron",
+      "pubDate": "Thu, 22 Jan 2026 03:00:00 GMT",
+      "pattern": "lamartingale.io",
+      "context": "uer aucun nouvel épisode. - pour s'abonner à la newsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://be"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#301 - Investir dans la vraie vie - Nicolas Chéron",
+      "pubDate": "Thu, 22 Jan 2026 03:00:00 GMT",
+      "pattern": "newsletter",
+      "context": " recevoir toutes les actus et des recommandations exclusives, abonnez-vous à la newsletter, c’est par ici.la martingale est un podcast du label orso media. merci à notre partenaire louve invest, l'assurance-vie aux frais les plus bas du marché*. bénéficiez de 0,35% de frais de ge"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#301 - Investir dans la vraie vie - Nicolas Chéron",
+      "pubDate": "Thu, 22 Jan 2026 03:00:00 GMT",
+      "pattern": "assistant ia",
+      "context": "ewsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#300 - Immobilier : le coin des bonnes affaires - Philippe Le Trung",
+      "pubDate": "Thu, 15 Jan 2026 03:00:00 GMT",
+      "pattern": "beta.lamartingale",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#300 - Immobilier : le coin des bonnes affaires - Philippe Le Trung",
+      "pubDate": "Thu, 15 Jan 2026 03:00:00 GMT",
+      "pattern": "beta-keyword",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#300 - Immobilier : le coin des bonnes affaires - Philippe Le Trung",
+      "pubDate": "Thu, 15 Jan 2026 03:00:00 GMT",
+      "pattern": "lamartingale.io",
+      "context": "uer aucun nouvel épisode. - pour s'abonner à la newsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://be"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#300 - Immobilier : le coin des bonnes affaires - Philippe Le Trung",
+      "pubDate": "Thu, 15 Jan 2026 03:00:00 GMT",
+      "pattern": "newsletter",
+      "context": " recevoir toutes les actus et des recommandations exclusives, abonnez-vous à la newsletter, c’est par ici.la martingale est un podcast du label orso media. merci à notre partenaire louve invest, l'assurance-vie aux frais les plus bas du marché*. bénéficiez de 0,35% de frais de ge"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#300 - Immobilier : le coin des bonnes affaires - Philippe Le Trung",
+      "pubDate": "Thu, 15 Jan 2026 03:00:00 GMT",
+      "pattern": "assistant ia",
+      "context": "ewsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#299 - Bourse : faire x22 en 22 ans - Romain Burnand",
+      "pubDate": "Thu, 08 Jan 2026 03:00:00 GMT",
+      "pattern": "beta.lamartingale",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#299 - Bourse : faire x22 en 22 ans - Romain Burnand",
+      "pubDate": "Thu, 08 Jan 2026 03:00:00 GMT",
+      "pattern": "beta-keyword",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#299 - Bourse : faire x22 en 22 ans - Romain Burnand",
+      "pubDate": "Thu, 08 Jan 2026 03:00:00 GMT",
+      "pattern": "lamartingale.io",
+      "context": "uer aucun nouvel épisode. - pour s'abonner à la newsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://be"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#299 - Bourse : faire x22 en 22 ans - Romain Burnand",
+      "pubDate": "Thu, 08 Jan 2026 03:00:00 GMT",
+      "pattern": "newsletter",
+      "context": " recevoir toutes les actus et des recommandations exclusives, abonnez-vous à la newsletter, c’est par ici.la martingale est un podcast du label orso media. merci à notre partenaire louve invest, l'assurance-vie aux frais les plus bas du marché*. bénéficiez de 0,35% de frais de ge"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#299 - Bourse : faire x22 en 22 ans - Romain Burnand",
+      "pubDate": "Thu, 08 Jan 2026 03:00:00 GMT",
+      "pattern": "assistant ia",
+      "context": "ewsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#298 - Argent et couple : le piège du 50/50 - Marie-Lahya Simon",
+      "pubDate": "Thu, 01 Jan 2026 03:00:00 GMT",
+      "pattern": "beta.lamartingale",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#298 - Argent et couple : le piège du 50/50 - Marie-Lahya Simon",
+      "pubDate": "Thu, 01 Jan 2026 03:00:00 GMT",
+      "pattern": "beta-keyword",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#298 - Argent et couple : le piège du 50/50 - Marie-Lahya Simon",
+      "pubDate": "Thu, 01 Jan 2026 03:00:00 GMT",
+      "pattern": "lamartingale.io",
+      "context": "uer aucun nouvel épisode. - pour s'abonner à la newsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://be"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#298 - Argent et couple : le piège du 50/50 - Marie-Lahya Simon",
+      "pubDate": "Thu, 01 Jan 2026 03:00:00 GMT",
+      "pattern": "newsletter",
+      "context": " recevoir toutes les actus et des recommandations exclusives, abonnez-vous à la newsletter, c’est par ici.la martingale est un podcast du label orso media. merci à notre partenaire louve invest, l'assurance-vie aux frais les plus bas du marché*. bénéficiez de 0,35% de frais de ge"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#298 - Argent et couple : le piège du 50/50 - Marie-Lahya Simon",
+      "pubDate": "Thu, 01 Jan 2026 03:00:00 GMT",
+      "pattern": "assistant ia",
+      "context": "ewsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#297 - Ce que La Martingale vous prépare pour 2026 - Matthieu Stefani",
+      "pubDate": "Thu, 25 Dec 2025 03:00:00 GMT",
+      "pattern": "beta.lamartingale",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#297 - Ce que La Martingale vous prépare pour 2026 - Matthieu Stefani",
+      "pubDate": "Thu, 25 Dec 2025 03:00:00 GMT",
+      "pattern": "beta-keyword",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#297 - Ce que La Martingale vous prépare pour 2026 - Matthieu Stefani",
+      "pubDate": "Thu, 25 Dec 2025 03:00:00 GMT",
+      "pattern": "lamartingale.io",
+      "context": "uer aucun nouvel épisode. - pour s'abonner à la newsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://be"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#297 - Ce que La Martingale vous prépare pour 2026 - Matthieu Stefani",
+      "pubDate": "Thu, 25 Dec 2025 03:00:00 GMT",
+      "pattern": "newsletter",
+      "context": " recevoir toutes les actus et des recommandations exclusives, abonnez-vous à la newsletter, c’est par ici. la martingale est un podcast du label orso media. testez notre outil pédagogique pour vous aider à prendre le contrôle de votre argent, ici. merci à notre partenaire enky de"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#297 - Ce que La Martingale vous prépare pour 2026 - Matthieu Stefani",
+      "pubDate": "Thu, 25 Dec 2025 03:00:00 GMT",
+      "pattern": "assistant ia",
+      "context": "ewsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#296 - Comment s'enrichir en France ? - Mounir Laggoune",
+      "pubDate": "Thu, 18 Dec 2025 03:00:00 GMT",
+      "pattern": "beta.lamartingale",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#296 - Comment s'enrichir en France ? - Mounir Laggoune",
+      "pubDate": "Thu, 18 Dec 2025 03:00:00 GMT",
+      "pattern": "beta-keyword",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#296 - Comment s'enrichir en France ? - Mounir Laggoune",
+      "pubDate": "Thu, 18 Dec 2025 03:00:00 GMT",
+      "pattern": "lamartingale.io",
+      "context": "uer aucun nouvel épisode. - pour s'abonner à la newsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://be"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#296 - Comment s'enrichir en France ? - Mounir Laggoune",
+      "pubDate": "Thu, 18 Dec 2025 03:00:00 GMT",
+      "pattern": "newsletter",
+      "context": " recevoir toutes les actus et des recommandations exclusives, abonnez-vous à la newsletter, c’est par ici. la martingale est un podcast du label orso media. merci à notre partenaire enky de soutenir le podcast.bénéficiez de 100€ à 300€ crédités selon le montant investi en cliquan"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#296 - Comment s'enrichir en France ? - Mounir Laggoune",
+      "pubDate": "Thu, 18 Dec 2025 03:00:00 GMT",
+      "pattern": "assistant ia",
+      "context": "ewsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#295 - S'enrichir avec Vinted - Marine Bibas",
+      "pubDate": "Thu, 11 Dec 2025 03:00:00 GMT",
+      "pattern": "beta.lamartingale",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#295 - S'enrichir avec Vinted - Marine Bibas",
+      "pubDate": "Thu, 11 Dec 2025 03:00:00 GMT",
+      "pattern": "beta-keyword",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#295 - S'enrichir avec Vinted - Marine Bibas",
+      "pubDate": "Thu, 11 Dec 2025 03:00:00 GMT",
+      "pattern": "lamartingale.io",
+      "context": "uer aucun nouvel épisode. - pour s'abonner à la newsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://be"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#295 - S'enrichir avec Vinted - Marine Bibas",
+      "pubDate": "Thu, 11 Dec 2025 03:00:00 GMT",
+      "pattern": "newsletter",
+      "context": " recevoir toutes les actus et des recommandations exclusives, abonnez-vous à la newsletter, c’est par ici. la martingale est un podcast du label orso media. merci à notre partenaire enky de soutenir le podcast.bénéficiez de 100€ à 300€ crédités selon le montant investi en cliquan"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#295 - S'enrichir avec Vinted - Marine Bibas",
+      "pubDate": "Thu, 11 Dec 2025 03:00:00 GMT",
+      "pattern": "assistant ia",
+      "context": "ewsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#294 - Spatial, quantique, nucléaire : les secteurs qui vont exploser - Charles Beigbeder",
+      "pubDate": "Thu, 04 Dec 2025 03:00:00 GMT",
+      "pattern": "beta.lamartingale",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#294 - Spatial, quantique, nucléaire : les secteurs qui vont exploser - Charles Beigbeder",
+      "pubDate": "Thu, 04 Dec 2025 03:00:00 GMT",
+      "pattern": "beta-keyword",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#294 - Spatial, quantique, nucléaire : les secteurs qui vont exploser - Charles Beigbeder",
+      "pubDate": "Thu, 04 Dec 2025 03:00:00 GMT",
+      "pattern": "lamartingale.io",
+      "context": "uer aucun nouvel épisode. - pour s'abonner à la newsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://be"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#294 - Spatial, quantique, nucléaire : les secteurs qui vont exploser - Charles Beigbeder",
+      "pubDate": "Thu, 04 Dec 2025 03:00:00 GMT",
+      "pattern": "newsletter",
+      "context": " recevoir toutes les actus et des recommandations exclusives, abonnez-vous à la newsletter, c’est par ici. la martingale est un podcast du label orso media. merci à notre partenaire enky de soutenir le podcast.bénéficiez de 100€ à 300€ crédités selon le montant investi en cliquan"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#294 - Spatial, quantique, nucléaire : les secteurs qui vont exploser - Charles Beigbeder",
+      "pubDate": "Thu, 04 Dec 2025 03:00:00 GMT",
+      "pattern": "assistant ia",
+      "context": "ewsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "Pourquoi mettre en place un PERCO, même dans une petite entreprise ? - Back to Basics, avec Amundi",
+      "pubDate": "Mon, 01 Dec 2025 03:00:00 GMT",
+      "pattern": "beta.lamartingale",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "Pourquoi mettre en place un PERCO, même dans une petite entreprise ? - Back to Basics, avec Amundi",
+      "pubDate": "Mon, 01 Dec 2025 03:00:00 GMT",
+      "pattern": "beta-keyword",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "Pourquoi mettre en place un PERCO, même dans une petite entreprise ? - Back to Basics, avec Amundi",
+      "pubDate": "Mon, 01 Dec 2025 03:00:00 GMT",
+      "pattern": "lamartingale.io",
+      "context": "ktok : / lamartingale_media x : https://x.com/martingalela notre site : https://lamartingale.io notre linktr.ee : https://linktr.ee/lamartingale_media cet épisode a été réalisé en partenariat avec amundi. pour en savoir plus sur amundi, rdv sur amundi.fr - la libre antenne de vot"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "Pourquoi mettre en place un PERCO, même dans une petite entreprise ? - Back to Basics, avec Amundi",
+      "pubDate": "Mon, 01 Dec 2025 03:00:00 GMT",
+      "pattern": "newsletter",
+      "context": "orme audio favorite pour ne manquer aucun nouvel épisode. - pour s'abonner à la newsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. p"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "Pourquoi mettre en place un PERCO, même dans une petite entreprise ? - Back to Basics, avec Amundi",
+      "pubDate": "Mon, 01 Dec 2025 03:00:00 GMT",
+      "pattern": "assistant ia",
+      "context": "ewsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#293 - Générer des revenus récurrents grâce à l'IA - Esther Moisy-Kirschbaum",
+      "pubDate": "Thu, 27 Nov 2025 03:00:00 GMT",
+      "pattern": "beta.lamartingale",
+      "context": "antes : - l’épisode #487 de gdiy avec anton osika (lovable)- studio 71- l’outil beta.lamartingale.io- vidéo : la vidéo de shubham sharma sur les mcpainsi que d’anciens épisodes de la martingale : - l’épisode 16 sur le mouvement fireon vous souhaite une très bonne écoute ! c’est p"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#293 - Générer des revenus récurrents grâce à l'IA - Esther Moisy-Kirschbaum",
+      "pubDate": "Thu, 27 Nov 2025 03:00:00 GMT",
+      "pattern": "beta-keyword",
+      "context": "antes : - l’épisode #487 de gdiy avec anton osika (lovable)- studio 71- l’outil beta.lamartingale.io- vidéo : la vidéo de shubham sharma sur les mcpainsi que d’anciens épisodes de la martingale : - l’épisode 16 sur le mouvement fireon vous souhaite une très bonne écoute ! c’est p"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#293 - Générer des revenus récurrents grâce à l'IA - Esther Moisy-Kirschbaum",
+      "pubDate": "Thu, 27 Nov 2025 03:00:00 GMT",
+      "pattern": "lamartingale.io",
+      "context": " : - l’épisode #487 de gdiy avec anton osika (lovable)- studio 71- l’outil beta.lamartingale.io- vidéo : la vidéo de shubham sharma sur les mcpainsi que d’anciens épisodes de la martingale : - l’épisode 16 sur le mouvement fireon vous souhaite une très bonne écoute ! c’est par ic"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#293 - Générer des revenus récurrents grâce à l'IA - Esther Moisy-Kirschbaum",
+      "pubDate": "Thu, 27 Nov 2025 03:00:00 GMT",
+      "pattern": "newsletter",
+      "context": "u jour : esther moisy-kirschbaum est responsable du développement de magma, une newsletter d'identification de tendances et d'opportunités de business. aux côtés de matthieu stefani, esther et christofer ciminelli nous expliquent comment créer un side business rentable grâce au v"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#293 - Générer des revenus récurrents grâce à l'IA - Esther Moisy-Kirschbaum",
+      "pubDate": "Thu, 27 Nov 2025 03:00:00 GMT",
+      "pattern": "assistant ia",
+      "context": "ewsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#292 - Indépendants : 3 leviers pour économiser des milliers d'euros - Jérôme Vialla",
+      "pubDate": "Thu, 20 Nov 2025 03:00:00 GMT",
+      "pattern": "beta.lamartingale",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#292 - Indépendants : 3 leviers pour économiser des milliers d'euros - Jérôme Vialla",
+      "pubDate": "Thu, 20 Nov 2025 03:00:00 GMT",
+      "pattern": "beta-keyword",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#292 - Indépendants : 3 leviers pour économiser des milliers d'euros - Jérôme Vialla",
+      "pubDate": "Thu, 20 Nov 2025 03:00:00 GMT",
+      "pattern": "lamartingale.io",
+      "context": "uer aucun nouvel épisode. - pour s'abonner à la newsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://be"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#292 - Indépendants : 3 leviers pour économiser des milliers d'euros - Jérôme Vialla",
+      "pubDate": "Thu, 20 Nov 2025 03:00:00 GMT",
+      "pattern": "newsletter",
+      "context": " recevoir toutes les actus et des recommandations exclusives, abonnez-vous à la newsletter, c’est par ici. la martingale est un podcast du label orso media. merci à notre partenaire enky de soutenir le podcast.bénéficiez de 100€ à 300€ crédités selon le montant investi en cliquan"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#292 - Indépendants : 3 leviers pour économiser des milliers d'euros - Jérôme Vialla",
+      "pubDate": "Thu, 20 Nov 2025 03:00:00 GMT",
+      "pattern": "assistant ia",
+      "context": "ewsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "Investir dans la transition énergétique - Back to Basics, avec Amundi",
+      "pubDate": "Mon, 17 Nov 2025 03:00:00 GMT",
+      "pattern": "beta.lamartingale",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "Investir dans la transition énergétique - Back to Basics, avec Amundi",
+      "pubDate": "Mon, 17 Nov 2025 03:00:00 GMT",
+      "pattern": "beta-keyword",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "Investir dans la transition énergétique - Back to Basics, avec Amundi",
+      "pubDate": "Mon, 17 Nov 2025 03:00:00 GMT",
+      "pattern": "lamartingale.io",
+      "context": "ktok : / lamartingale_media x : https://x.com/martingalela notre site : https://lamartingale.io notre linktr.ee : https://linktr.ee/lamartingale_media cet épisode a été réalisé en partenariat avec amundi. pour en savoir plus sur amundi, rdv sur amundi.fr - la libre antenne de vot"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "Investir dans la transition énergétique - Back to Basics, avec Amundi",
+      "pubDate": "Mon, 17 Nov 2025 03:00:00 GMT",
+      "pattern": "newsletter",
+      "context": "orme audio favorite pour ne manquer aucun nouvel épisode. - pour s'abonner à la newsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. p"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "Investir dans la transition énergétique - Back to Basics, avec Amundi",
+      "pubDate": "Mon, 17 Nov 2025 03:00:00 GMT",
+      "pattern": "assistant ia",
+      "context": "ewsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#291 - Private Equity : trouver les fonds à +20 % net - Paul Moreno Blosseville",
+      "pubDate": "Thu, 13 Nov 2025 03:00:00 GMT",
+      "pattern": "beta.lamartingale",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#291 - Private Equity : trouver les fonds à +20 % net - Paul Moreno Blosseville",
+      "pubDate": "Thu, 13 Nov 2025 03:00:00 GMT",
+      "pattern": "beta-keyword",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#291 - Private Equity : trouver les fonds à +20 % net - Paul Moreno Blosseville",
+      "pubDate": "Thu, 13 Nov 2025 03:00:00 GMT",
+      "pattern": "lamartingale.io",
+      "context": "uer aucun nouvel épisode. - pour s'abonner à la newsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://be"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#291 - Private Equity : trouver les fonds à +20 % net - Paul Moreno Blosseville",
+      "pubDate": "Thu, 13 Nov 2025 03:00:00 GMT",
+      "pattern": "newsletter",
+      "context": " recevoir toutes les actus et des recommandations exclusives, abonnez-vous à la newsletter, c’est par ici. la martingale est un podcast du label orso media. merci à notre partenaire enky de soutenir le podcast.bénéficiez de 100€ à 300€ crédités selon le montant investi en cliquan"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#291 - Private Equity : trouver les fonds à +20 % net - Paul Moreno Blosseville",
+      "pubDate": "Thu, 13 Nov 2025 03:00:00 GMT",
+      "pattern": "assistant ia",
+      "context": "ewsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "Comment se protéger des biais cognitifs ? - Back to Basics, avec Amundi",
+      "pubDate": "Mon, 10 Nov 2025 03:00:00 GMT",
+      "pattern": "beta.lamartingale",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "Comment se protéger des biais cognitifs ? - Back to Basics, avec Amundi",
+      "pubDate": "Mon, 10 Nov 2025 03:00:00 GMT",
+      "pattern": "beta-keyword",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "Comment se protéger des biais cognitifs ? - Back to Basics, avec Amundi",
+      "pubDate": "Mon, 10 Nov 2025 03:00:00 GMT",
+      "pattern": "lamartingale.io",
+      "context": "ktok : / lamartingale_media x : https://x.com/martingalela notre site : https://lamartingale.io notre linktr.ee : https://linktr.ee/lamartingale_media cet épisode a été réalisé en partenariat avec amundi. pour en savoir plus sur amundi, rdv sur amundi.fr - la libre antenne de vot"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "Comment se protéger des biais cognitifs ? - Back to Basics, avec Amundi",
+      "pubDate": "Mon, 10 Nov 2025 03:00:00 GMT",
+      "pattern": "newsletter",
+      "context": "orme audio favorite pour ne manquer aucun nouvel épisode. - pour s'abonner à la newsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. p"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "Comment se protéger des biais cognitifs ? - Back to Basics, avec Amundi",
+      "pubDate": "Mon, 10 Nov 2025 03:00:00 GMT",
+      "pattern": "assistant ia",
+      "context": "ewsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#290 - Rénover sans sortir un euro - Hervé Degreve",
+      "pubDate": "Thu, 06 Nov 2025 03:00:00 GMT",
+      "pattern": "beta.lamartingale",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#290 - Rénover sans sortir un euro - Hervé Degreve",
+      "pubDate": "Thu, 06 Nov 2025 03:00:00 GMT",
+      "pattern": "beta-keyword",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#290 - Rénover sans sortir un euro - Hervé Degreve",
+      "pubDate": "Thu, 06 Nov 2025 03:00:00 GMT",
+      "pattern": "lamartingale.io",
+      "context": "uer aucun nouvel épisode. - pour s'abonner à la newsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://be"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#290 - Rénover sans sortir un euro - Hervé Degreve",
+      "pubDate": "Thu, 06 Nov 2025 03:00:00 GMT",
+      "pattern": "newsletter",
+      "context": " recevoir toutes les actus et des recommandations exclusives, abonnez-vous à la newsletter, c’est par ici. la martingale est un podcast du label orso media. merci à notre partenaire enky de soutenir le podcast.bénéficiez de 100€ à 300€ crédités selon le montant investi en cliquan"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "#290 - Rénover sans sortir un euro - Hervé Degreve",
+      "pubDate": "Thu, 06 Nov 2025 03:00:00 GMT",
+      "pattern": "assistant ia",
+      "context": "ewsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "Tout savoir sur les ETF indiciels - Back to Basics, avec Amundi",
+      "pubDate": "Mon, 03 Nov 2025 03:00:00 GMT",
+      "pattern": "beta.lamartingale",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "Tout savoir sur les ETF indiciels - Back to Basics, avec Amundi",
+      "pubDate": "Mon, 03 Nov 2025 03:00:00 GMT",
+      "pattern": "beta-keyword",
+      "context": "ventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'orso media. vous souhaitez entrer en contact avec a rédaction ? ou nous soumettre une collaboration ? ecrivez-nous ici : https://orsomedia.io/contact"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "Tout savoir sur les ETF indiciels - Back to Basics, avec Amundi",
+      "pubDate": "Mon, 03 Nov 2025 03:00:00 GMT",
+      "pattern": "lamartingale.io",
+      "context": "ktok : / lamartingale_media x : https://x.com/martingalela notre site : https://lamartingale.io notre linktr.ee : https://linktr.ee/lamartingale_media cet épisode a été réalisé en partenariat avec amundi. pour en savoir plus sur amundi, rdv sur amundi.fr - la libre antenne de vot"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "Tout savoir sur les ETF indiciels - Back to Basics, avec Amundi",
+      "pubDate": "Mon, 03 Nov 2025 03:00:00 GMT",
+      "pattern": "newsletter",
+      "context": "orme audio favorite pour ne manquer aucun nouvel épisode. - pour s'abonner à la newsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. p"
+    },
+    {
+      "tenant": "lamartingale",
+      "title": "Tout savoir sur les ETF indiciels - Back to Basics, avec Amundi",
+      "pubDate": "Mon, 03 Nov 2025 03:00:00 GMT",
+      "pattern": "assistant ia",
+      "context": "ewsletter, c'est ici : https://lamartingale.io/ - la martingale, c'est aussi un assistant ia qui vous apporte des réponses éclairées issues des interventions des experts passés au micro du podcast. pour tester, direction https://beta.lamartingale.io- la martingale est un média d'"
+    },
+    {
+      "tenant": "allolamartingale",
+      "title": "Impôts 2026 : ce que personne ne vous dit ? - Allo La Martingale #54",
+      "pubDate": "Tue, 21 Apr 2026 16:00:00 GMT",
+      "pattern": "newsletter",
+      "context": " recevoir toutes les actus et des recommandations exclusives, abonnez-vous à la newsletter, c’est par ici.la martingale est un podcast du label orso media. testez notre outil pédagogique pour vous aider à prendre le contrôle de votre argent, ici.merci à notre partenaire ig de sou"
+    },
+    {
+      "tenant": "allolamartingale",
+      "title": "Immobilier, la meilleure alternative à la Bourse ? - Allo La Martingale #53",
+      "pubDate": "Tue, 14 Apr 2026 15:00:44 GMT",
+      "pattern": "newsletter",
+      "context": " recevoir toutes les actus et des recommandations exclusives, abonnez-vous à la newsletter, c’est par ici.la martingale est un podcast du label orso media. testez notre outil pédagogique pour vous aider à prendre le contrôle de votre argent, ici.merci à notre partenaire ig de sou"
+    },
+    {
+      "tenant": "allolamartingale",
+      "title": "Panique à la pompe : comment en profiter ?- Allo La Martingale #52",
+      "pubDate": "Tue, 07 Apr 2026 16:30:00 GMT",
+      "pattern": "newsletter",
+      "context": " recevoir toutes les actus et des recommandations exclusives, abonnez-vous à la newsletter, c’est par ici.la martingale est un podcast du label orso media. testez notre outil pédagogique pour vous aider à prendre le contrôle de votre argent, ici.merci à notre partenaire ig de sou"
+    },
+    {
+      "tenant": "allolamartingale",
+      "title": "Femmes et argent : les erreurs à éviter - Allo La Martingale [Hors-Série]",
+      "pubDate": "Tue, 31 Mar 2026 02:00:00 GMT",
+      "pattern": "newsletter",
+      "context": " recevoir toutes les actus et des recommandations exclusives, abonnez-vous à la newsletter, c’est par ici.la martingale est un podcast du label orso media. testez notre outil pédagogique pour vous aider à prendre le contrôle de votre argent, ici. posez vos questions en cliquant s"
+    },
+    {
+      "tenant": "allolamartingale",
+      "title": "Le sans risque, refuge ultime en 2026 ?- Allo La Martingale #51",
+      "pubDate": "Tue, 24 Mar 2026 15:27:27 GMT",
+      "pattern": "newsletter",
+      "context": " recevoir toutes les actus et des recommandations exclusives, abonnez-vous à la newsletter, c’est par ici.la martingale est un podcast du label orso media. testez notre outil pédagogique pour vous aider à prendre le contrôle de votre argent, ici.merci à notre partenaire ig de sou"
+    },
+    {
+      "tenant": "allolamartingale",
+      "title": "Dette privée : prochaine crise des subprimes ? - Allo La Martingale #50",
+      "pubDate": "Tue, 17 Mar 2026 16:09:43 GMT",
+      "pattern": "newsletter",
+      "context": " recevoir toutes les actus et des recommandations exclusives, abonnez-vous à la newsletter, c’est par ici.la martingale est un podcast du label orso media. testez notre outil pédagogique pour vous aider à prendre le contrôle de votre argent, ici.merci à notre partenaire ig de sou"
+    },
+    {
+      "tenant": "allolamartingale",
+      "title": "Crise en Iran : faut-il acheter la panique ? - Allo La Martingale #49",
+      "pubDate": "Tue, 10 Mar 2026 14:36:02 GMT",
+      "pattern": "newsletter",
+      "context": " recevoir toutes les actus et des recommandations exclusives, abonnez-vous à la newsletter, c’est par ici.la martingale est un podcast du label orso media. testez notre outil pédagogique pour vous aider à prendre le contrôle de votre argent, ici.merci à notre partenaire ig de sou"
+    },
+    {
+      "tenant": "allolamartingale",
+      "title": "Crypto en 2026 : la nouvelle stratégie - Allo La Martingale #48",
+      "pubDate": "Tue, 03 Mar 2026 15:42:38 GMT",
+      "pattern": "newsletter",
+      "context": " recevoir toutes les actus et des recommandations exclusives, abonnez-vous à la newsletter, c’est par ici.la martingale est un podcast du label orso media. testez notre outil pédagogique pour vous aider à prendre le contrôle de votre argent, ici.merci à notre partenaire ig de sou"
+    },
+    {
+      "tenant": "allolamartingale",
+      "title": "IA, Trump : le grand basculement des marchés - Allo La Martingale #47",
+      "pubDate": "Tue, 24 Feb 2026 14:43:22 GMT",
+      "pattern": "newsletter",
+      "context": " recevoir toutes les actus et des recommandations exclusives, abonnez-vous à la newsletter, c’est par ici.la martingale est un podcast du label orso media. testez notre outil pédagogique pour vous aider à prendre le contrôle de votre argent, ici.merci à notre partenaire swaive de"
+    },
+    {
+      "tenant": "allolamartingale",
+      "title": "Construire sa retraite en 2026 - Allo La Martingale #46",
+      "pubDate": "Tue, 17 Feb 2026 17:01:14 GMT",
+      "pattern": "newsletter",
+      "context": " recevoir toutes les actus et des recommandations exclusives, abonnez-vous à la newsletter, c’est par ici.la martingale est un podcast du label orso media. testez notre outil pédagogique pour vous aider à prendre le contrôle de votre argent, ici.merci à notre partenaire swaive de"
+    },
+    {
+      "tenant": "allolamartingale",
+      "title": "PEA : les valeurs à suivre maintenant ! - Allo La Martingale #45",
+      "pubDate": "Tue, 10 Feb 2026 13:50:54 GMT",
+      "pattern": "newsletter",
+      "context": " recevoir toutes les actus et des recommandations exclusives, abonnez-vous à la newsletter, c’est par ici.la martingale est un podcast du label orso media. testez notre outil pédagogique pour vous aider à prendre le contrôle de votre argent, ici.merci à notre partenaire swaive de"
+    },
+    {
+      "tenant": "allolamartingale",
+      "title": "Une heure pour se mettre à investir - Allo La Martingale #44",
+      "pubDate": "Tue, 03 Feb 2026 15:15:52 GMT",
+      "pattern": "newsletter",
+      "context": " recevoir toutes les actus et des recommandations exclusives, abonnez-vous à la newsletter, c’est par ici.la martingale est un podcast du label orso media. testez notre outil pédagogique pour vous aider à prendre le contrôle de votre argent, ici.merci à notre partenaire swaive de"
+    },
+    {
+      "tenant": "allolamartingale",
+      "title": "Immobilier locatif : réussir en 2026 - Allo La Martingale #43",
+      "pubDate": "Tue, 27 Jan 2026 14:36:38 GMT",
+      "pattern": "newsletter",
+      "context": " recevoir toutes les actus et des recommandations exclusives, abonnez-vous à la newsletter, c’est par ici.la martingale est un podcast du label orso media. testez notre outil pédagogique pour vous aider à prendre le contrôle de votre argent, ici. on vous répond en live 🎙️ écrive"
+    },
+    {
+      "tenant": "allolamartingale",
+      "title": "PLF 2026 : peut-on encore investir en France ? - Allo La Martingale #42",
+      "pubDate": "Tue, 20 Jan 2026 16:39:18 GMT",
+      "pattern": "newsletter",
+      "context": " recevoir toutes les actus et des recommandations exclusives, abonnez-vous à la newsletter, c’est par ici.la martingale est un podcast du label orso media. testez notre outil pédagogique pour vous aider à prendre le contrôle de votre argent, ici. on vous répond en live 🎙️ écrive"
+    },
+    {
+      "tenant": "allolamartingale",
+      "title": "Marchés au plus haut : faut-il arrêter d’investir ? - Allo La Martingale #41",
+      "pubDate": "Tue, 13 Jan 2026 16:09:19 GMT",
+      "pattern": "newsletter",
+      "context": " recevoir toutes les actus et des recommandations exclusives, abonnez-vous à la newsletter, c’est par ici.la martingale est un podcast du label orso media. testez notre outil pédagogique pour vous aider à prendre le contrôle de votre argent, ici. on vous répond en live 🎙️ écrive"
+    },
+    {
+      "tenant": "allolamartingale",
+      "title": "Choisir ses ETF en 2026 - Allo La Martingale #40",
+      "pubDate": "Tue, 06 Jan 2026 15:29:20 GMT",
+      "pattern": "newsletter",
+      "context": " recevoir toutes les actus et des recommandations exclusives, abonnez-vous à la newsletter, c’est par ici.la martingale est un podcast du label orso media. testez notre outil pédagogique pour vous aider à prendre le contrôle de votre argent, ici. on vous répond en live 🎙️ écrive"
+    },
+    {
+      "tenant": "lepanier",
+      "title": "#376 - Encuentro : Créer un produit que les clients rachètent 100 fois",
+      "pubDate": "Fri, 20 Mar 2026 04:00:00 GMT",
+      "pattern": "newsletter",
+      "context": "tager : suivez le panier sur instagram @lepanier.podcast ! inscrivez- vous à la newsletter sur lepanier.io pour cartonner en e-comm !écoutez les épisodes sur apple podcasts, spotify ou encore podcast addict hébergé par audiomeans. visitez audiomeans.fr/politique-de-confidentialit"
+    },
+    {
+      "tenant": "lepanier",
+      "title": "#HS 1 to 1 Monaco - Cabaïa, Meta et le plafond de verre : comment débloquer la croissance quand on a tout optimisé",
+      "pubDate": "Fri, 13 Mar 2026 04:07:00 GMT",
+      "pattern": "newsletter",
+      "context": "tager : suivez le panier sur instagram @lepanier.podcast ! inscrivez- vous à la newsletter sur lepanier.io pour cartonner en e-comm !écoutez les épisodes sur apple podcasts, spotify ou encore podcast addict. hébergé par audiomeans. visitez audiomeans.fr/politique-de-confidentiali"
+    },
+    {
+      "tenant": "lepanier",
+      "title": "#HS 1 to 1 Monaco - Individualisation : vous avez la donnée. Ce qui manque, c'est comment s'en servir, avec Reelevant",
+      "pubDate": "Fri, 13 Mar 2026 04:06:00 GMT",
+      "pattern": "newsletter",
+      "context": "tager : suivez le panier sur instagram @lepanier.podcast ! inscrivez- vous à la newsletter sur lepanier.io pour cartonner en e-comm !écoutez les épisodes sur apple podcasts, spotify ou encore podcast addict. hébergé par audiomeans. visitez audiomeans.fr/politique-de-confidentiali"
+    },
+    {
+      "tenant": "lepanier",
+      "title": "#HS 1 to 1 Monaco - E-commerce : 2-3% de conversion / boutique physique : 30-40%. Le gap est là, avec iAdvize",
+      "pubDate": "Fri, 13 Mar 2026 04:05:00 GMT",
+      "pattern": "newsletter",
+      "context": "tager : suivez le panier sur instagram @lepanier.podcast ! inscrivez- vous à la newsletter sur lepanier.io pour cartonner en e-comm !écoutez les épisodes sur apple podcasts, spotify ou encore podcast addict. hébergé par audiomeans. visitez audiomeans.fr/politique-de-confidentiali"
+    },
+    {
+      "tenant": "lepanier",
+      "title": "#HS 1 to 1 Monaco - International : arrêtez de vous faire un monde de la traduction, avec Global-e",
+      "pubDate": "Fri, 13 Mar 2026 04:03:00 GMT",
+      "pattern": "newsletter",
+      "context": "tager : suivez le panier sur instagram @lepanier.podcast ! inscrivez- vous à la newsletter sur lepanier.io pour cartonner en e-comm !écoutez les épisodes sur apple podcasts, spotify ou encore podcast addict hébergé par audiomeans. visitez audiomeans.fr/politique-de-confidentialit"
+    },
+    {
+      "tenant": "lepanier",
+      "title": "#HS 1 to 1 Monaco - Commerce agentique : votre prochain client n'est peut-être pas un humain, avec Shopify",
+      "pubDate": "Fri, 13 Mar 2026 04:02:00 GMT",
+      "pattern": "newsletter",
+      "context": "tager : suivez le panier sur instagram @lepanier.podcast ! inscrivez- vous à la newsletter sur lepanier.io pour cartonner en e-comm !écoutez les épisodes sur apple podcasts, spotify ou encore podcast addict hébergé par audiomeans. visitez audiomeans.fr/politique-de-confidentialit"
+    },
+    {
+      "tenant": "lepanier",
+      "title": "#HS 1 to 1 Monaco - Donnée produit : le chantier invisible qui fait ou défait vos ventes, avec Equadis",
+      "pubDate": "Fri, 13 Mar 2026 04:01:00 GMT",
+      "pattern": "newsletter",
+      "context": "tager : suivez le panier sur instagram @lepanier.podcast ! inscrivez- vous à la newsletter sur lepanier.io pour cartonner en e-comm !écoutez les épisodes sur apple podcasts, spotify ou encore podcast addict hébergé par audiomeans. visitez audiomeans.fr/politique-de-confidentialit"
+    },
+    {
+      "tenant": "lepanier",
+      "title": "[REDIFF] - Onomaturge : Branding et naming, choisir un nom puissant",
+      "pubDate": "Fri, 06 Mar 2026 06:00:00 GMT",
+      "pattern": "newsletter",
+      "context": "tager : suivez le panier sur instagram @lepanier.podcast ! inscrivez- vous à la newsletter sur lepanier.io pour cartonner en e-comm !écoutez les épisodes sur apple podcasts, spotify ou encore podcast addict hébergé par audiomeans. visitez audiomeans.fr/politique-de-confidentialit"
+    },
+    {
+      "tenant": "lepanier",
+      "title": "#375 - leboncoin : La tech et l’IA d’un site utilisé par 1 Français sur 2",
+      "pubDate": "Fri, 27 Feb 2026 04:00:00 GMT",
+      "pattern": "newsletter",
+      "context": "tager : suivez le panier sur instagram @lepanier.podcast ! inscrivez- vous à la newsletter sur lepanier.io pour cartonner en e-comm !écoutez les épisodes sur apple podcasts, spotify ou encore podcast addict hébergé par audiomeans. visitez audiomeans.fr/politique-de-confidentialit"
+    },
+    {
+      "tenant": "lepanier",
+      "title": "#374 - Ethylowheel : L’innovation qui pourrait réduire de 30 % les accidents de la route",
+      "pubDate": "Fri, 20 Feb 2026 04:00:00 GMT",
+      "pattern": "newsletter",
+      "context": "tager : suivez le panier sur instagram @lepanier.podcast ! inscrivez- vous à la newsletter sur lepanier.io pour cartonner en e-comm !écoutez les épisodes sur apple podcasts, spotify ou encore podcast addict hébergé par audiomeans. visitez audiomeans.fr/politique-de-confidentialit"
+    },
+    {
+      "tenant": "lepanier",
+      "title": "#373 - Le Chocolat des Français : boutiques, wholesale et travel retail, comment choisir ses canaux",
+      "pubDate": "Fri, 13 Feb 2026 04:00:00 GMT",
+      "pattern": "newsletter",
+      "context": "tager : suivez le panier sur instagram @lepanier.podcast ! inscrivez- vous à la newsletter sur lepanier.io pour cartonner en e-comm !écoutez les épisodes sur apple podcasts, spotify ou encore podcast addict hébergé par audiomeans. visitez audiomeans.fr/politique-de-confidentialit"
+    },
+    {
+      "tenant": "lepanier",
+      "title": "#372 - Propriété industrielle : Protéger sa marque, méthode, pièges et bonnes pratiques quand on entreprend",
+      "pubDate": "Fri, 06 Feb 2026 04:00:00 GMT",
+      "pattern": "newsletter",
+      "context": "tager : suivez le panier sur instagram @lepanier.podcast ! inscrivez- vous à la newsletter sur lepanier.io pour cartonner en e-comm !écoutez les épisodes sur apple podcasts, spotify ou encore podcast addict hébergé par audiomeans. visitez audiomeans.fr/politique-de-confidentialit"
+    },
+    {
+      "tenant": "lepanier",
+      "title": "#371 - Catch Up Vintage Rides : Grandir mais garder son ADN après 20 ans",
+      "pubDate": "Fri, 30 Jan 2026 04:00:00 GMT",
+      "pattern": "newsletter",
+      "context": "tager : suivez le panier sur instagram @lepanier.podcast ! inscrivez- vous à la newsletter sur lepanier.io pour cartonner en e-comm !écoutez les épisodes sur apple podcasts, spotify ou encore podcast addict hébergé par audiomeans. visitez audiomeans.fr/politique-de-confidentialit"
+    },
+    {
+      "tenant": "lepanier",
+      "title": "#370 - Pierre & Vacances : livret digital, WhatsApp, IA pour enchanter 500K séjours par an",
+      "pubDate": "Fri, 23 Jan 2026 04:00:00 GMT",
+      "pattern": "newsletter",
+      "context": "tager : suivez le panier sur instagram @lepanier.podcast ! inscrivez- vous à la newsletter sur lepanier.io pour cartonner en e-comm !écoutez les épisodes sur apple podcasts, spotify ou encore podcast addict hébergé par audiomeans. visitez audiomeans.fr/politique-de-confidentialit"
+    },
+    {
+      "tenant": "lepanier",
+      "title": "#369 - Yooji : 75k commandes par an en D2C sur un marché de niche",
+      "pubDate": "Fri, 16 Jan 2026 04:00:00 GMT",
+      "pattern": "newsletter",
+      "context": "tager : suivez le panier sur instagram @lepanier.podcast ! inscrivez- vous à la newsletter sur lepanier.io pour cartonner en e-comm !écoutez les épisodes sur apple podcasts, spotify ou encore podcast addict hébergé par audiomeans. visitez audiomeans.fr/politique-de-confidentialit"
+    },
+    {
+      "tenant": "lepanier",
+      "title": "#368 - French Mush : hypercroissance saine et rentable dans un marché réglementé",
+      "pubDate": "Fri, 09 Jan 2026 04:00:00 GMT",
+      "pattern": "newsletter",
+      "context": "tager : suivez le panier sur instagram @lepanier.podcast ! inscrivez- vous à la newsletter sur lepanier.io pour cartonner en e-comm !écoutez les épisodes sur apple podcasts, spotify ou encore podcast addict hébergé par audiomeans. visitez audiomeans.fr/politique-de-confidentialit"
+    },
+    {
+      "tenant": "lepanier",
+      "title": "[REDIFF] - IA & SEO : Révolutions, stratégies et avenir du référencement avec l’IA",
+      "pubDate": "Fri, 02 Jan 2026 04:00:00 GMT",
+      "pattern": "newsletter",
+      "context": "tager : suivez le panier sur instagram @lepanier.podcast ! inscrivez- vous à la newsletter sur lepanier.io pour cartonner en e-comm !écoutez les épisodes sur apple podcasts, spotify ou encore podcast addict hébergé par audiomeans. visitez audiomeans.fr/politique-de-confidentialit"
+    },
+    {
+      "tenant": "lepanier",
+      "title": "[REDIFF] - Izipizi : Créer une love brand internationale de lunettes pour toute la famille",
+      "pubDate": "Fri, 26 Dec 2025 04:00:00 GMT",
+      "pattern": "newsletter",
+      "context": "tager : suivez le panier sur instagram @lepanier.podcast ! inscrivez- vous à la newsletter sur lepanier.io pour cartonner en e-comm !écoutez les épisodes sur apple podcasts, spotify ou encore podcast addict hébergé par audiomeans. visitez audiomeans.fr/politique-de-confidentialit"
+    },
+    {
+      "tenant": "lepanier",
+      "title": "#367 - Damart : comment moderniser une marque iconique sans la travestir ?",
+      "pubDate": "Fri, 19 Dec 2025 04:00:00 GMT",
+      "pattern": "newsletter",
+      "context": "tager : suivez le panier sur instagram @lepanier.podcast ! inscrivez- vous à la newsletter sur lepanier.io pour cartonner en e-comm !écoutez les épisodes sur apple podcasts, spotify ou encore podcast addict hébergé par audiomeans. visitez audiomeans.fr/politique-de-confidentialit"
+    },
+    {
+      "tenant": "lepanier",
+      "title": "#366 - Courir : 300 magasins, 18% de CA online et une omnicanalité sans friction",
+      "pubDate": "Fri, 12 Dec 2025 04:00:00 GMT",
+      "pattern": "newsletter",
+      "context": "tager : suivez le panier sur instagram @lepanier.podcast ! inscrivez- vous à la newsletter sur lepanier.io pour cartonner en e-comm !écoutez les épisodes sur apple podcasts, spotify ou encore podcast addict hébergé par audiomeans. visitez audiomeans.fr/politique-de-confidentialit"
+    },
+    {
+      "tenant": "lepanier",
+      "title": "#365 - Catch Up La Fourche : x2 en 2 ans et 100m€ pour un e-commerce bio sur adhésion",
+      "pubDate": "Fri, 05 Dec 2025 04:00:00 GMT",
+      "pattern": "newsletter",
+      "context": "tager : suivez le panier sur instagram @lepanier.podcast ! inscrivez- vous à la newsletter sur lepanier.io pour cartonner en e-comm !écoutez les épisodes sur apple podcasts, spotify ou encore podcast addict hébergé par audiomeans. visitez audiomeans.fr/politique-de-confidentialit"
+    },
+    {
+      "tenant": "lepanier",
+      "title": "#364 - Ritz Paris : transcrire les codes du luxe en ligne, CX, CRM et storytelling",
+      "pubDate": "Fri, 28 Nov 2025 04:00:00 GMT",
+      "pattern": "newsletter",
+      "context": "tager : suivez le panier sur instagram @lepanier.podcast ! inscrivez- vous à la newsletter sur lepanier.io pour cartonner en e-comm !écoutez les épisodes sur apple podcasts, spotify ou encore podcast addict hébergé par audiomeans. visitez audiomeans.fr/politique-de-confidentialit"
+    },
+    {
+      "tenant": "lepanier",
+      "title": "#363 – Esprit Padel Shop : le padel cartonne, eux aussi avec 14 M€ en 5 ans",
+      "pubDate": "Fri, 21 Nov 2025 04:00:00 GMT",
+      "pattern": "newsletter",
+      "context": "tager : suivez le panier sur instagram @lepanier.podcast ! inscrivez- vous à la newsletter sur lepanier.io pour cartonner en e-comm !écoutez les épisodes sur apple podcasts, spotify ou encore podcast addict. hébergé par audiomeans. visitez audiomeans.fr/politique-de-confidentiali"
+    },
+    {
+      "tenant": "lepanier",
+      "title": "#362 - Moto-privée : Les apprentissages d’un e-commerçant liquidé",
+      "pubDate": "Fri, 14 Nov 2025 04:00:00 GMT",
+      "pattern": "newsletter",
+      "context": "tager : suivez le panier sur instagram @lepanier.podcast ! inscrivez- vous à la newsletter sur lepanier.io pour cartonner en e-comm !écoutez les épisodes sur apple podcasts, spotify ou encore podcast addict hébergé par audiomeans. visitez audiomeans.fr/politique-de-confidentialit"
+    },
+    {
+      "tenant": "lepanier",
+      "title": "#361 - Back Market : Data, A/B testing et diversification ; moteurs de croissance pour un marché circulaire",
+      "pubDate": "Fri, 07 Nov 2025 04:00:00 GMT",
+      "pattern": "newsletter",
+      "context": "tager : suivez le panier sur instagram @lepanier.podcast ! inscrivez- vous à la newsletter sur lepanier.io pour cartonner en e-comm !écoutez les épisodes sur apple podcasts, spotify ou encore podcast addict hébergé par audiomeans. visitez audiomeans.fr/politique-de-confidentialit"
+    },
+    {
+      "tenant": "lepanier",
+      "title": "#360 - CatchUp Recyclivre : 100 millions € de chiffre d’affaires cumulés : allier rentabilité et durabilité",
+      "pubDate": "Fri, 31 Oct 2025 04:00:00 GMT",
+      "pattern": "newsletter",
+      "context": "tager : suivez le panier sur instagram @lepanier.podcast ! inscrivez- vous à la newsletter sur lepanier.io pour cartonner en e-comm !écoutez les épisodes sur apple podcasts, spotify ou encore podcast addict hébergé par audiomeans. visitez audiomeans.fr/politique-de-confidentialit"
+    },
+    {
+      "tenant": "lepanier",
+      "title": "#359 - Motoblouz : De 70 à 100 millions d’euros de CA : quelle culture d’entreprise pour soutenir cette croissance ?",
+      "pubDate": "Fri, 24 Oct 2025 03:00:00 GMT",
+      "pattern": "newsletter",
+      "context": "tager : suivez le panier sur instagram @lepanier.podcast ! inscrivez- vous à la newsletter sur lepanier.io pour cartonner en e-comm !écoutez les épisodes sur apple podcasts, spotify ou encore podcast addict hébergé par audiomeans. visitez audiomeans.fr/politique-de-confidentialit"
+    },
+    {
+      "tenant": "lepanier",
+      "title": "#358 - Cherico : comment lancer un produit grande consommation avec le parfait mix digital & retail ?",
+      "pubDate": "Fri, 17 Oct 2025 03:00:00 GMT",
+      "pattern": "newsletter",
+      "context": "tager : suivez le panier sur instagram @lepanier.podcast ! inscrivez- vous à la newsletter sur lepanier.io pour cartonner en e-comm !écoutez les épisodes sur apple podcasts, spotify ou encore podcast addict hébergé par audiomeans. visitez audiomeans.fr/politique-de-confidentialit"
+    }
+  ]
+}
