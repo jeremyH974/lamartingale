@@ -18,6 +18,6 @@
     "moduleResolution": "node",
     "ignoreDeprecations": "6.0"
   },
-  "include": ["engine/**/*", "instances/**/*", "cli/**/*", "api/**/*", "scripts/**/*.ts", "src/**/*"],
+  "include": ["engine/**/*", "instances/**/*", "clients/**/*", "cli/**/*", "api/**/*", "scripts/**/*.ts", "src/**/*"],
   "exclude": ["node_modules", "dist", "graphify-out"]
 }
