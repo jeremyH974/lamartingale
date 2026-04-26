@@ -1,0 +1,46 @@
+{
+  "meta": {
+    "angle_id": "3",
+    "persona_slug": "stefani",
+    "persona_name": "Matthieu Stefani",
+    "latency_ms": 21238,
+    "input_tokens": 2791,
+    "output_tokens": 1083,
+    "parse_error": null,
+    "rerun": true
+  },
+  "parsed": {
+    "persona": "Matthieu Stefani",
+    "angle_id": "3",
+    "objections": [
+      {
+        "summary": "Ce livrable ressemble à une playlist éditoriale — mes équipes le font déjà à la main dans les show notes.",
+        "rationale": "On produit des épisodes de 2h avec des équipes éditoriales qui connaissent le catalogue par cœur. Dire que Sillon 'classe par lens éditorial' sans me montrer concrètement en quoi ça diffère d'un tableau Notion bien tenu, ça ne me convainc pas. Le différentiel doit être prouvé sur un épisode réel, pas décrit en bullet points."
+      },
+      {
+        "summary": "La démonstration sur Inoxtag est trop propre — elle prouve que vous avez écouté le catalogue, pas que l'outil scale sur 537 épisodes.",
+        "rationale": "Vous avez cherry-pické trois angles lisibles sur un épisode récent très visible. Ce qui m'intéresse c'est : est-ce que ça tient sur un épisode de niche, un invité inconnu du grand public, un épisode de 2019 dont personne ne se souvient ? Si le cross-refs ne marche que sur les épisodes qui marchent déjà, c'est un outil de communication, pas un outil de rétention catalogue."
+      },
+      {
+        "summary": "'Augmente la rétention catalogue' est une affirmation sans donnée — je ne peux pas piloter un KPI que je ne mesure pas.",
+        "rationale": "Je suis aussi Ovni Capital, je lis des métriques. Rétention catalogue c'est quoi exactement ici ? Taux de ré-écoute ? Durée session par auditeur ? Nombre d'épisodes consommés par mois ? Si vous me dites 'c'est la vraie KPI Stefani' sans me montrer comment on la mesure avec ce livrable, vous me parlez de vanity metric habillée en argument business."
+      }
+    ],
+    "resonance_positive": {
+      "summary": "La classification par lens éditorial — et non par similarité brute — est la seule idée vraiment nouvelle ici.",
+      "rationale": "NotebookLM fait de la proximité sémantique. beta.lamartingale.io reste mono-podcast. Ce que vous décrivez — organiser les cross-refs par intention d'écoute (expedition vs creator economy vs prise de risque) — c'est une logique éditoriale que j'ai dans la tête mais que personne n'a encore formalisée en livrable systématique. Si vous me montrez que Sillon extrait ces lens de façon reproductible sur n'importe quel épisode du catalogue, là on a une conversation."
+    },
+    "behavioral_prediction": {
+      "reading_behavior": "lit en entier",
+      "response_behavior": "demande_infos",
+      "forward_behavior": "forward_Lucie",
+      "rationale": "L'angle rétention catalogue est le bon levier — il lit jusqu'au bout. Mais les objections sur la mesurabilité et la scalabilité sont bloquantes pour signer. Il va demander un exemple sur un épisode non-flagship et probablement passer à Lucie pour valider la faisabilité éditoriale avant de s'engager sur un pilote."
+    },
+    "differentiation_score": {
+      "score": 6,
+      "rationale": "La classification par lens est un vrai différentiel vs NotebookLM et Castmagic. Mais le livrable tel que décrit reste un PDF annexe — la moat structurelle cross-6-podcasts n'est pas encore exploitée à plein. Score plafonné tant qu'il n'y a pas de démonstration sur un épisode difficile et une métrique de rétention mesurable."
+    },
+    "in_character_signal": "L'idée des lens c'est bien, mais me montrer Inoxtag c'est facile — montrez-moi que ça marche sur l'épisode de 2021 avec le fondateur que personne n'a écouté jusqu'au bout. Là je signe le pilote."
+  },
+  "raw_text": "{\n  \"persona\": \"Matthieu Stefani\",\n  \"angle_id\": \"3\",\n  \"objections\": [\n    {\n      \"summary\": \"Ce livrable ressemble à une playlist éditoriale — mes équipes le font déjà à la main dans les show notes.\",\n      \"rationale\": \"On produit des épisodes de 2h avec des équipes éditoriales qui connaissent le catalogue par cœur. Dire que Sillon 'classe par lens éditorial' sans me montrer concrètement en quoi ça diffère d'un tableau Notion bien tenu, ça ne me convainc pas. Le différentiel doit être prouvé sur un épisode réel, pas décrit en bullet points.\"\n    },\n    {\n      \"summary\": \"La démonstration sur Inoxtag est trop propre — elle prouve que vous avez écouté le catalogue, pas que l'outil scale sur 537 épisodes.\",\n      \"rationale\": \"Vous avez cherry-pické trois angles lisibles sur un épisode récent très visible. Ce qui m'intéresse c'est : est-ce que ça tient sur un épisode de niche, un invité inconnu du grand public, un épisode de 2019 dont personne ne se souvient ? Si le cross-refs ne marche que sur les épisodes qui marchent déjà, c'est un outil de communication, pas un outil de rétention catalogue.\"\n    },\n    {\n      \"summary\": \"'Augmente la rétention catalogue' est une affirmation sans donnée — je ne peux pas piloter un KPI que je ne mesure pas.\",\n      \"rationale\": \"Je suis aussi Ovni Capital, je lis des métriques. Rétention catalogue c'est quoi exactement ici ? Taux de ré-écoute ? Durée session par auditeur ? Nombre d'épisodes consommés par mois ? Si vous me dites 'c'est la vraie KPI Stefani' sans me montrer comment on la mesure avec ce livrable, vous me parlez de vanity metric habillée en argument business.\"\n    }\n  ],\n  \"resonance_positive\": {\n    \"summary\": \"La classification par lens éditorial — et non par similarité brute — est la seule idée vraiment nouvelle ici.\",\n    \"rationale\": \"NotebookLM fait de la proximité sémantique. beta.lamartingale.io reste mono-podcast. Ce que vous décrivez — organiser les cross-refs par intention d'écoute (expedition vs creator economy vs prise de risque) — c'est une logique éditoriale que j'ai dans la tête mais que personne n'a encore formalisée en livrable systématique. Si vous me montrez que Sillon extrait ces lens de façon reproductible sur n'importe quel épisode du catalogue, là on a une conversation.\"\n  },\n  \"behavioral_prediction\": {\n    \"reading_behavior\": \"lit en entier\",\n    \"response_behavior\": \"demande_infos\",\n    \"forward_behavior\": \"forward_Lucie\",\n    \"rationale\": \"L'angle rétention catalogue est le bon levier — il lit jusqu'au bout. Mais les objections sur la mesurabilité et la scalabilité sont bloquantes pour signer. Il va demander un exemple sur un épisode non-flagship et probablement passer à Lucie pour valider la faisabilité éditoriale avant de s'engager sur un pilote.\"\n  },\n  \"differentiation_score\": {\n    \"score\": 6,\n    \"rationale\": \"La classification par lens est un vrai différentiel vs NotebookLM et Castmagic. Mais le livrable tel que décrit reste un PDF annexe — la moat structurelle cross-6-podcasts n'est pas encore exploitée à plein. Score plafonné tant qu'il n'y a pas de démonstration sur un épisode difficile et une métrique de rétention mesurable.\"\n  },\n  \"in_character_signal\": \"L'idée des lens c'est bien, mais me montrer Inoxtag c'est facile — montrez-moi que ça marche sur l'épisode de 2021 avec le fondateur que personne n'a écouté jusqu'au bout. Là je signe le pilote.\"\n}"
+}

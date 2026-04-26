@@ -1,0 +1,45 @@
+{
+  "meta": {
+    "angle_id": "1",
+    "persona_slug": "esther",
+    "persona_name": "Esther Moisy-Kirschbaum",
+    "latency_ms": 27657,
+    "input_tokens": 2119,
+    "output_tokens": 1240,
+    "parse_error": null
+  },
+  "parsed": {
+    "persona": "Esther Moisy-Kirschbaum",
+    "angle_id": "1",
+    "objections": [
+      {
+        "summary": "L'index sortants est trivial à construire manuellement ou avec un script Cursor en 2h",
+        "rationale": "Un grep sur les descriptions Apple Podcasts + un scrape basique des posts Instagram/TikTok de Stefani, c'est 50 lignes de Python dans Cursor. Pas besoin de Sillon pour ça. La 'primitive lundi' que tu décris comme edge, c'est un tableau CSV avec les titres de clips publiés. Si la valeur différenciante repose sur cette table optionnelle, c'est pas une architecture — c'est un fichier Excel."
+      },
+      {
+        "summary": "Le 'cross-podcast' n'est pas démontré ici, c'est juste du dédup sur GDIY + Cosa Vostra",
+        "rationale": "L'argument cross-corpus de Sillon c'est que tu croises 6 podcasts pour détecter des signaux faibles qu'aucun éditeur ne voit seul. Là tu dédupliques les clips d'un seul éditeur sur ses propres sorties. C'est de la gestion de contenu interne, pas de l'intelligence cross-tenant. Magma fait ça sur des dizaines de sources — un seul éditeur avec 2 shows c'est pas un corpus, c'est une base de données."
+      },
+      {
+        "summary": "L'output ressemble exactement à ce que NotebookLM + une feuille de suivi éditorial produit déjà",
+        "rationale": "J'ai testé NotebookLM sur des corpus podcast. Si je lui fournis les transcripts + une liste des clips déjà publiés en contexte, il me sort des quotes inédites en évitant les reformulations. Le workflow : upload transcripts + paste liste clips Instagram dans le prompt. 20 minutes, pas 2h. L'edge Sillon ici n'est pas démontré — il faudrait me montrer ce que NotebookLM rate structurellement, pas juste 'il n'a pas accès aux sortants' parce que moi je peux les lui passer manuellement."
+      }
+    ],
+    "resonance_positive": {
+      "summary": "L'intention de mesurer la fraîcheur des quotes est le bon instinct éditorial",
+      "rationale": "Stefani clippe les mêmes formules parce qu'il n'a pas de mémoire systémique de ce qu'il a déjà publié — c'est un vrai problème éditorial que je reconnais. Si Sillon peut démontrer que sur 12 mois de GDIY, X% des quotes proposées par des outils classiques sont des reformulations de clips déjà publiés, et que Sillon tombe à Y% — avec des chiffres réels sur un corpus réel — là c'est un argument. Le signal faible 'saturation éditoriale' c'est exactement le type de métrique que Magma chercherait à quantifier."
+    },
+    "behavioral_prediction": {
+      "reading_behavior": "skim",
+      "response_behavior": "demande_infos",
+      "forward_behavior": "pas_de_forward",
+      "rationale": "Je lis en diagonale parce que l'angle est trop proche de ce que je sais déjà faire. Je demande : 'C'est quoi concrètement la taille de l'index sortants aujourd'hui, et t'as un exemple de quote que NotebookLM aurait proposée et que Sillon aurait éliminée ?' Sans exemple concret avec diff visible, je ne forward pas à Matthieu — ça l'exposerait à une question technique qu'il ne pourrait pas défendre."
+    },
+    "differentiation_score": {
+      "score": 3,
+      "rationale": "La primitive décrite (table social_clips_published ou grep descriptions) est reproductible en 2h sur Cursor sans Sillon. L'accès catalogue est le seul vrai edge mais il n'est pas activé ici — on utilise juste 2 podcasts d'un même éditeur. Le cross-tenant qui justifie les embeddings persistants n'est pas exploité. Score 3 et pas 1 parce que l'instinct éditorial est bon et que si le corpus grossit à 6 shows + 18 mois d'historique sortants, l'argument devient plus solide."
+    },
+    "in_character_signal": "L'index sortants c'est un CSV. Si ton edge c'est un CSV que je peux construire en 2h sur Cursor, t'as pas un produit — t'as une feature. Montre-moi ce que le catalogue cross-6-podcasts détecte que GDIY seul ne voit pas."
+  },
+  "raw_text": "{\n  \"persona\": \"Esther Moisy-Kirschbaum\",\n  \"angle_id\": \"1\",\n  \"objections\": [\n    {\n      \"summary\": \"L'index sortants est trivial à construire manuellement ou avec un script Cursor en 2h\",\n      \"rationale\": \"Un grep sur les descriptions Apple Podcasts + un scrape basique des posts Instagram/TikTok de Stefani, c'est 50 lignes de Python dans Cursor. Pas besoin de Sillon pour ça. La 'primitive lundi' que tu décris comme edge, c'est un tableau CSV avec les titres de clips publiés. Si la valeur différenciante repose sur cette table optionnelle, c'est pas une architecture — c'est un fichier Excel.\"\n    },\n    {\n      \"summary\": \"Le 'cross-podcast' n'est pas démontré ici, c'est juste du dédup sur GDIY + Cosa Vostra\",\n      \"rationale\": \"L'argument cross-corpus de Sillon c'est que tu croises 6 podcasts pour détecter des signaux faibles qu'aucun éditeur ne voit seul. Là tu dédupliques les clips d'un seul éditeur sur ses propres sorties. C'est de la gestion de contenu interne, pas de l'intelligence cross-tenant. Magma fait ça sur des dizaines de sources — un seul éditeur avec 2 shows c'est pas un corpus, c'est une base de données.\"\n    },\n    {\n      \"summary\": \"L'output ressemble exactement à ce que NotebookLM + une feuille de suivi éditorial produit déjà\",\n      \"rationale\": \"J'ai testé NotebookLM sur des corpus podcast. Si je lui fournis les transcripts + une liste des clips déjà publiés en contexte, il me sort des quotes inédites en évitant les reformulations. Le workflow : upload transcripts + paste liste clips Instagram dans le prompt. 20 minutes, pas 2h. L'edge Sillon ici n'est pas démontré — il faudrait me montrer ce que NotebookLM rate structurellement, pas juste 'il n'a pas accès aux sortants' parce que moi je peux les lui passer manuellement.\"\n    }\n  ],\n  \"resonance_positive\": {\n    \"summary\": \"L'intention de mesurer la fraîcheur des quotes est le bon instinct éditorial\",\n    \"rationale\": \"Stefani clippe les mêmes formules parce qu'il n'a pas de mémoire systémique de ce qu'il a déjà publié — c'est un vrai problème éditorial que je reconnais. Si Sillon peut démontrer que sur 12 mois de GDIY, X% des quotes proposées par des outils classiques sont des reformulations de clips déjà publiés, et que Sillon tombe à Y% — avec des chiffres réels sur un corpus réel — là c'est un argument. Le signal faible 'saturation éditoriale' c'est exactement le type de métrique que Magma chercherait à quantifier.\"\n  },\n  \"behavioral_prediction\": {\n    \"reading_behavior\": \"skim\",\n    \"response_behavior\": \"demande_infos\",\n    \"forward_behavior\": \"pas_de_forward\",\n    \"rationale\": \"Je lis en diagonale parce que l'angle est trop proche de ce que je sais déjà faire. Je demande : 'C'est quoi concrètement la taille de l'index sortants aujourd'hui, et t'as un exemple de quote que NotebookLM aurait proposée et que Sillon aurait éliminée ?' Sans exemple concret avec diff visible, je ne forward pas à Matthieu — ça l'exposerait à une question technique qu'il ne pourrait pas défendre.\"\n  },\n  \"differentiation_score\": {\n    \"score\": 3,\n    \"rationale\": \"La primitive décrite (table social_clips_published ou grep descriptions) est reproductible en 2h sur Cursor sans Sillon. L'accès catalogue est le seul vrai edge mais il n'est pas activé ici — on utilise juste 2 podcasts d'un même éditeur. Le cross-tenant qui justifie les embeddings persistants n'est pas exploité. Score 3 et pas 1 parce que l'instinct éditorial est bon et que si le corpus grossit à 6 shows + 18 mois d'historique sortants, l'argument devient plus solide.\"\n  },\n  \"in_character_signal\": \"L'index sortants c'est un CSV. Si ton edge c'est un CSV que je peux construire en 2h sur Cursor, t'as pas un produit — t'as une feature. Montre-moi ce que le catalogue cross-6-podcasts détecte que GDIY seul ne voit pas.\"\n}"
+}

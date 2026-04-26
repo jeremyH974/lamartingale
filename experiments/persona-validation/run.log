@@ -1,0 +1,35 @@
+◇ injected env (4) from .env // tip: ⌘ suppress logs { quiet: true }
+[validation] modèle actif : claude-sonnet-4-6
+[validation] 3 personas × 3 angles = 9 appels
+  - persona stefani (5077 chars)
+  - persona christofer (3717 chars)
+  - persona esther (2912 chars)
+  - angle 1 (629 chars)
+  - angle 2 (723 chars)
+  - angle 3 (1123 chars)
+[angle 1 × stefani] calling Sonnet... OK (29135ms, 2862in/1066out, score=2)
+[angle 1 × christofer] calling Sonnet... OK (24287ms, 2407in/1204out, score=3)
+[angle 1 × esther] calling Sonnet... OK (27657ms, 2119in/1240out, score=3)
+[angle 2 × stefani] calling Sonnet... OK (29975ms, 2882in/1396out, score=4)
+[angle 2 × christofer] calling Sonnet... OK (30135ms, 2427in/1349out, score=4)
+[angle 2 × esther] calling Sonnet... OK (30408ms, 2139in/1426out, score=5)
+[angle 3 × stefani] calling Sonnet... OK (33297ms, 3064in/1500out, score=?, PARSE_ERROR=Expected ',' or '}' after property value in JSON at position 4126 (line 27 column 4))
+[angle 3 × christofer] calling Sonnet... OK (29221ms, 2609in/1475out, score=4)
+[angle 3 × esther] calling Sonnet... OK (31905ms, 2321in/1460out, score=4)
+
+=== SUMMARY ===
+┌─────────┬──────────┬──────────────┬───────┬────────────────────────────────────────────────────────────────────────────────────────┐
+│ (index) │ angle_id │ persona_slug │ score │ parseError                                                                             │
+├─────────┼──────────┼──────────────┼───────┼────────────────────────────────────────────────────────────────────────────────────────┤
+│ 0       │ '1'      │ 'stefani'    │ 2     │ null                                                                                   │
+│ 1       │ '1'      │ 'christofer' │ 3     │ null                                                                                   │
+│ 2       │ '1'      │ 'esther'     │ 3     │ null                                                                                   │
+│ 3       │ '2'      │ 'stefani'    │ 4     │ null                                                                                   │
+│ 4       │ '2'      │ 'christofer' │ 4     │ null                                                                                   │
+│ 5       │ '2'      │ 'esther'     │ 5     │ null                                                                                   │
+│ 6       │ '3'      │ 'stefani'    │ '?'   │ "Expected ',' or '}' after property value in JSON at position 4126 (line 27 column 4)" │
+│ 7       │ '3'      │ 'christofer' │ 4     │ null                                                                                   │
+│ 8       │ '3'      │ 'esther'     │ 4     │ null                                                                                   │
+└─────────┴──────────┴──────────────┴───────┴────────────────────────────────────────────────────────────────────────────────────────┘
+Total tokens : 22830 in / 12116 out
+Coût estimé : $0.2502 (input $0.0685 + output $0.1817)

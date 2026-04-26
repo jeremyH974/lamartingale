@@ -1,0 +1,45 @@
+{
+  "meta": {
+    "angle_id": "1",
+    "persona_slug": "stefani",
+    "persona_name": "Matthieu Stefani",
+    "latency_ms": 29135,
+    "input_tokens": 2862,
+    "output_tokens": 1066,
+    "parse_error": null
+  },
+  "parsed": {
+    "persona": "Matthieu Stefani",
+    "angle_id": "1",
+    "objections": [
+      {
+        "summary": "Le problème que tu résous n'est pas le bon problème",
+        "rationale": "La dedup de quotes clippées, c'est un problème d'exécution éditoriale, pas un problème stratégique. Mon équipe Orso sait déjà intuitivement ce qu'elle a sorti ces 3 derniers mois. Ce que tu proposes, c'est automatiser un process qui prend 5 minutes à un éditeur attentif. L'angle ne justifie pas un pilote — il justifie une feature dans un outil existant."
+      },
+      {
+        "summary": "L'index social_clips_published est une promesse technique non résolue, pas un edge",
+        "rationale": "Tu me présentes une 'primitive à construire lundi' comme si c'était un avantage compétitif. Castmagic indexe déjà les outputs qu'il génère. Si ton edge repose sur une table optionnelle ou un grep sur les descriptions Apple/Spotify, c'est fragile — et ça me dit que le vrai système n'existe pas encore. Je ne pilote pas des architectures hypothétiques."
+      },
+      {
+        "summary": "La valeur est côté production, pas côté auditeur — le nom 'auditeur-aware' est donc trompeur",
+        "rationale": "Tu appelles ça 'auditeur-aware' mais le bénéfice réel c'est éviter la redondance dans ma communication sociale. Ce n'est pas de l'intelligence sur l'auditeur, c'est de la gestion de contenu sortant. Le naming crée une confusion sur la proposition de valeur. Si tu me pitches quelque chose qui touche à la rétention auditeur ou à l'expérience d'écoute cross-catalogue, montre-moi ça — là j'écoute. Mais une dedup de clips Instagram, ce n'est pas ce sujet."
+      }
+    ],
+    "resonance_positive": {
+      "summary": "L'idée sous-jacente de croiser catalogue entrant et sorties publiées a un vrai potentiel pour la préparation d'interview",
+      "rationale": "Si tu retournes l'angle — utiliser cet index non pas pour éviter les doublons sociaux mais pour identifier ce que j'ai déjà dit publiquement sur un invité avant de le réinviter — là c'est utile. Pour mes ~50 interviews par an, savoir en 2 minutes ce que j'ai clippé, cité, ou mentionné sur quelqu'un dans les 537 épisodes précédents, c'est de la due diligence réelle. Ce serait une couche que NotebookLM ne peut pas faire seul."
+    },
+    "behavioral_prediction": {
+      "reading_behavior": "skim",
+      "response_behavior": "negative",
+      "forward_behavior": "pas_de_forward",
+      "rationale": "Il lit le titre et le 'Pourquoi NotebookLM ne peut pas' — s'arrête là. La mention 'primitive à construire lundi' le fait décrocher : ça signale un produit qui n'existe pas. Il ne forwardera pas parce que l'angle n'est pas assez solide pour engager son équipe Orso sur quelque chose d'aussi peu construit. Réponse probable : silence ou un 'revenez quand c'est fait'."
+    },
+    "differentiation_score": {
+      "score": 2,
+      "rationale": "Le problème est réel mais marginal, la solution est incomplète par aveu explicite, et l'edge technique repose sur une table optionnelle. Lovable pourrait reconstruire ce grep en quelques heures selon sa propre logique sur le vibe coding. Rien ici n'est structurellement non-reproductible."
+    },
+    "in_character_signal": "Vous me pitchez une feature de gestion de contenu déguisée en intelligence catalogue. Revenez avec le vrai problème — pas le symptôme. Et revenez quand la table existe."
+  },
+  "raw_text": "{\n  \"persona\": \"Matthieu Stefani\",\n  \"angle_id\": \"1\",\n  \"objections\": [\n    {\n      \"summary\": \"Le problème que tu résous n'est pas le bon problème\",\n      \"rationale\": \"La dedup de quotes clippées, c'est un problème d'exécution éditoriale, pas un problème stratégique. Mon équipe Orso sait déjà intuitivement ce qu'elle a sorti ces 3 derniers mois. Ce que tu proposes, c'est automatiser un process qui prend 5 minutes à un éditeur attentif. L'angle ne justifie pas un pilote — il justifie une feature dans un outil existant.\"\n    },\n    {\n      \"summary\": \"L'index social_clips_published est une promesse technique non résolue, pas un edge\",\n      \"rationale\": \"Tu me présentes une 'primitive à construire lundi' comme si c'était un avantage compétitif. Castmagic indexe déjà les outputs qu'il génère. Si ton edge repose sur une table optionnelle ou un grep sur les descriptions Apple/Spotify, c'est fragile — et ça me dit que le vrai système n'existe pas encore. Je ne pilote pas des architectures hypothétiques.\"\n    },\n    {\n      \"summary\": \"La valeur est côté production, pas côté auditeur — le nom 'auditeur-aware' est donc trompeur\",\n      \"rationale\": \"Tu appelles ça 'auditeur-aware' mais le bénéfice réel c'est éviter la redondance dans ma communication sociale. Ce n'est pas de l'intelligence sur l'auditeur, c'est de la gestion de contenu sortant. Le naming crée une confusion sur la proposition de valeur. Si tu me pitches quelque chose qui touche à la rétention auditeur ou à l'expérience d'écoute cross-catalogue, montre-moi ça — là j'écoute. Mais une dedup de clips Instagram, ce n'est pas ce sujet.\"\n    }\n  ],\n  \"resonance_positive\": {\n    \"summary\": \"L'idée sous-jacente de croiser catalogue entrant et sorties publiées a un vrai potentiel pour la préparation d'interview\",\n    \"rationale\": \"Si tu retournes l'angle — utiliser cet index non pas pour éviter les doublons sociaux mais pour identifier ce que j'ai déjà dit publiquement sur un invité avant de le réinviter — là c'est utile. Pour mes ~50 interviews par an, savoir en 2 minutes ce que j'ai clippé, cité, ou mentionné sur quelqu'un dans les 537 épisodes précédents, c'est de la due diligence réelle. Ce serait une couche que NotebookLM ne peut pas faire seul.\"\n  },\n  \"behavioral_prediction\": {\n    \"reading_behavior\": \"skim\",\n    \"response_behavior\": \"negative\",\n    \"forward_behavior\": \"pas_de_forward\",\n    \"rationale\": \"Il lit le titre et le 'Pourquoi NotebookLM ne peut pas' — s'arrête là. La mention 'primitive à construire lundi' le fait décrocher : ça signale un produit qui n'existe pas. Il ne forwardera pas parce que l'angle n'est pas assez solide pour engager son équipe Orso sur quelque chose d'aussi peu construit. Réponse probable : silence ou un 'revenez quand c'est fait'.\"\n  },\n  \"differentiation_score\": {\n    \"score\": 2,\n    \"rationale\": \"Le problème est réel mais marginal, la solution est incomplète par aveu explicite, et l'edge technique repose sur une table optionnelle. Lovable pourrait reconstruire ce grep en quelques heures selon sa propre logique sur le vibe coding. Rien ici n'est structurellement non-reproductible.\"\n  },\n  \"in_character_signal\": \"Vous me pitchez une feature de gestion de contenu déguisée en intelligence catalogue. Revenez avec le vrai problème — pas le symptôme. Et revenez quand la table existe.\"\n}"
+}

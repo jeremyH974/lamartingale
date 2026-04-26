@@ -94,7 +94,7 @@
 - **Source** : agrège `getConfig()` pour chaque tenant du REGISTRY (en excluant `hub`) + 4 queries SQL : `stats_by_tenant`, `featured_by_tenant` (top 3 récents), `cross_guests_top`, `cross_episode_refs_top`.
 - **Cache** : `getCached('universe', 3600, fn)` — 1h TTL. Invalidation manuelle via `/api/cache/clear?prefix=universe`.
 - **Perf** : 4 queries SQL parallèles + 1 boucle REGISTRY. Budget < 400ms cold.
-- **Exclusion hub** : le tenant `hub` n'apparaît pas dans `podcasts[]` (c'est le consommateur, pas un podcast auditeur).
+- **Exclusion hub** : le tenant `hub` n'apparaît pas dans `podcasts[]` (c'est le consommateur, pas un podcast public).
 - **Payload** : ~12 KB gzippé estimé pour 6 podcasts + top 20 cross.
 
 ---

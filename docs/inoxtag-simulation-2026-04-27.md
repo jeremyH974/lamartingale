@@ -19,7 +19,7 @@
 
 ## Sur quels axes Sillon brille
 
-1. **Cross-refs structurellement différenciables**. C'est l'agent pivot. Argumentation `why_mono_podcast_rag_cant_find_this` est solide, le finding honnête sur les zones faibles (creator economy YouTube quasi-dominée par GDIY dans le catalogue) renforce la crédibilité au lieu de la masquer. L'auditeur comprend immédiatement la valeur ajoutée vs un Q&A mono-podcast.
+1. **Cross-refs structurellement différenciables**. C'est l'agent pivot. Argumentation `why_mono_podcast_rag_cant_find_this` est solide, le finding honnête sur les zones faibles (creator economy YouTube quasi-dominée par GDIY dans le catalogue) renforce la crédibilité au lieu de la masquer. Le lecteur du brief comprend immédiatement la valeur ajoutée vs un Q&A mono-podcast.
 
 2. **Newsletter cross-enrichie**. Quand le prompt fournit la liste cross-corpus en contexte, Sonnet l'intègre proprement avec les numéros corrects et une cohérence narrative ("Mathieu Blanchard, son guide dans Kaizen, illustre cette approche cross-disciplinaire... De même, Kilian Jornet (#178), Mike Horn (#272) ou Benjamin Védrines (#519)..."). Un Q&A mono-podcast NotebookLM ne peut pas produire cette mise en perspective sans accès au catalogue 6 podcasts indexé.
 
@@ -35,7 +35,7 @@
 
 ## 3 propositions d'angles éditoriaux où Sillon serait DÉFINITIVEMENT supérieur (guide pour primitives lundi)
 
-### Angle 1 — "Auditeur-aware quote dedup"
+### Angle 1 — "Production-aware quote dedup"
 **Idée** : croiser les quotes proposées Pack 2 avec un index des extraits déjà publiés sur les réseaux GDIY/Cosa Vostra des 12 derniers mois, pour proposer en priorité **des phrases inédites du catalogue** (pas des reformulations de ce que Stefani a déjà clippé sur Instagram/TikTok).
 **Edge Sillon** : nécessite l'accès au catalogue + un index sortants (à construire en primitive lundi : `social_clips_published` table optionnelle, ou simple grep sur descriptions Apple/Spotify).
 **Pourquoi NotebookLM ne peut pas** : pas d'accès aux sortants externes ni au catalogue cross-podcast.
@@ -45,7 +45,7 @@
 **Edge Sillon** : exploite directement `episodes_enrichment.embedding` + classification thématique cross-tenant (déjà en place pour 5/6 podcasts en mode `predefined`).
 **Pourquoi NotebookLM ne peut pas** : nécessite indexation cross-corpus + classification thématique cohérente.
 
-### Angle 3 — "Auditor-mode brief annexe : revoir cet épisode après l'écoute"
+### Angle 3 — "Cross-catalogue brief annexe : revoir cet épisode après l'écoute"
 **Idée** : à la fin du Pack 2, livrer un mini-brief 1 page "**Pour aller plus loin chez nous**" — listing 5-7 épisodes du catalogue qui prolongent les thèmes de l'épisode courant, classés par lens éditorial (pas par similarité brute). Pour Inoxtag : "Si vous avez aimé l'angle expedition → écoutez Mike Horn #272 + Mathieu Blanchard #300 + Védrines #519. Si vous avez aimé l'angle creator economy → écoutez Tibo InShape #485 + Amixem #522 + Hugo Travers #240. Si vous avez aimé l'angle prise de risque créative → écoutez Kikikickz LP #258 + Matthias Dandois #425."
 **Edge Sillon** : c'est essentiellement une extension du livrable cross-refs (qui marche déjà) + classification éditoriale par lens. Un Q&A mono-podcast ne peut **par construction** pas le faire.
 **Bonus business** : ce livrable annexe **augmente la rétention catalogue** chez l'auditeur, ce qui est la vraie KPI Stefani — c'est l'argument à mettre en avant dans le mail du 06/05 (au-delà de "vous gagnez du temps", c'est "vous augmentez la rétention catalogue cross-podcast").
