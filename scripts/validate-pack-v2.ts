@@ -31,7 +31,7 @@ const SOURCE = resolve(
 const V2 = resolve(
   'experiments',
   'autonomy-session-2026-04-28',
-  'pack-pilote-stefani-orso-v2',
+  process.env.PACK_V2_OUT ?? 'pack-pilote-stefani-orso-v2',
 );
 
 const EPISODES = ['plais-platform-sh', 'boissenot-pokemon', 'nooz-optics', 'veyrat-stoik'];

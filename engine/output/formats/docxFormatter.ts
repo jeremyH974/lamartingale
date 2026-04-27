@@ -183,11 +183,7 @@ function buildCrossRefsBody(l: CrossRefsLivrable, _brand: string): Paragraph[] {
       out.push(
         new Paragraph({
           heading: HeadingLevel.HEADING_3,
-          children: [
-            new TextRun(`→ ${ref.episodeNumber} — ${ref.guestName} — `),
-            new TextRun({ text: ref.episodeTitle, italics: true }),
-            new TextRun(` (${ref.podcastSource})`),
-          ],
+          children: buildRefHeadRuns(ref),
         }),
       );
       for (const para of ref.bodyParagraphs) {
@@ -296,6 +292,27 @@ function buildBriefAnnexeBody(l: BriefAnnexeLivrable): Paragraph[] {
     );
   }
   return out;
+}
+
+/**
+ * Construit les TextRun de la ligne de tête d'une cross-ref, en skippant les
+ * champs vides pour éviter "→ #271 —  —  ()" quand certains champs absents.
+ * Bugfix Phase 7a (2026-04-27) : remplace l'interpolation rigide par une
+ * concaténation conditionnelle.
+ */
+function buildRefHeadRuns(ref: import('../types').CrossRef) {
+  const parts: { text: string; italics?: boolean }[] = [];
+  parts.push({ text: '→ ' });
+  const segments: { text: string; italics?: boolean }[] = [];
+  if (ref.episodeNumber) segments.push({ text: ref.episodeNumber });
+  if (ref.guestName) segments.push({ text: ref.guestName });
+  if (ref.episodeTitle) segments.push({ text: ref.episodeTitle, italics: true });
+  for (let i = 0; i < segments.length; i++) {
+    parts.push(segments[i]);
+    if (i < segments.length - 1) parts.push({ text: ' — ' });
+  }
+  if (ref.podcastSource) parts.push({ text: ` (${ref.podcastSource})` });
+  return parts.map((p) => new TextRun(p));
 }
 
 /**

@@ -51,7 +51,10 @@ export function parseKeyMoments(md: string): KeyMomentsLivrable {
   const { title, rest } = stripFirstHeading(md);
   const { subtitle, remaining } = takeSubtitle(rest);
   const moments: KeyMoment[] = [];
-  const blocks = remaining.split(/\n## /).slice(1); // first item is empty (before first ##)
+  // Bugfix Phase 7a (2026-04-27) : préfixe \n pour matcher le PREMIER `## `
+  // quand `remaining` commence directement par `##` (cas où le subtitle a été
+  // strippé). Sans ce préfixe, slice(1) perd silencieusement le moment #1.
+  const blocks = ('\n' + remaining).split(/\n## /).slice(1);
   for (const block of blocks) {
     const m = block.match(
       /^(\d+)\.\s+(.+?)\n\*\*(\d{1,2}:\d{2})[–-](\d{1,2}:\d{2})\*\*\s*·\s*saliency\s+([\d.]+)\s*\n+>\s*(.+?)\n+\*\*Pourquoi c'est saillant\*\*\s*:\s*([\s\S]+?)(?=\n## |\n*$)/,
@@ -86,7 +89,9 @@ export function parseQuotes(md: string): QuotesLivrable {
   const quotes: Quote[] = [];
   // Strip footer "Sillon — production éditoriale..."
   const cleaned = remaining.split(/\n---\s*\n/)[0];
-  const blocks = cleaned.split(/\n## Citation /).slice(1);
+  // Bugfix Phase 7a (2026-04-27) : préfixe \n pour matcher la PREMIÈRE
+  // citation quand `cleaned` commence directement par `## Citation `.
+  const blocks = ('\n' + cleaned).split(/\n## Citation /).slice(1);
   for (const block of blocks) {
     const m = block.match(
       /^(\d+)\s*\n+>\s*\*?«\s*(.+?)\s*»\*?\s*\n>\s*—\s*\*\*([^*]+)\*\*\s*·\s*(\d{1,2}:\d{2})\s*\n+\*\*Plateforme\(s\)\*\*\s*:\s*(.+?)\s*\n\*\*Pourquoi cette citation\*\*\s*:\s*([\s\S]+?)(?=\n## Citation|\n*$)/,
@@ -120,8 +125,12 @@ export function parseQuotes(md: string): QuotesLivrable {
  *  - `→ GDIY #122 — Vincent Huguet (Malt)`
  *  - `→ Les sneakers : mode ou investissement ?`
  *  - `→ #49 - Nima Karimi (Silvr) - Title`
- * Stratégie : extraire ce qui matche, fallback champs vides — le formatter
- * docx affiche ce qui est non-vide, sans throw.
+ *  - `→ #271 — Pierre-Eric Leibovici — *Le VC-as-a-Platform* (Finscale)`
+ *
+ * Stratégie : split sur `—` (em dash, U+2014) UNIQUEMENT pour préserver les
+ * tirets simples dans les noms propres (Pierre-Eric, Jean-Pierre, etc).
+ * Si pas d'em dash, fallback split sur ` - ` (avec espaces autour, jamais
+ * sur `-` collé). Chaque segment est ensuite identifié par sa forme.
  */
 function parseRefHead(headLine: string): {
   episodeNumber: string;
@@ -130,26 +139,71 @@ function parseRefHead(headLine: string): {
   podcastSource: string;
 } {
   const cleaned = headLine.replace(/^→\s*/, '').trim();
-  const numMatch = cleaned.match(/#(\d+)/);
-  const episodeNumber = numMatch ? `#${numMatch[1]}` : '';
 
-  // Source en parenthèses au début (ex: "GDIY #122") ou à la fin (ex: "(Finscale)")
-  let podcastSource = '';
-  const trailingSrc = cleaned.match(/\(([^()]+)\)\s*$/);
-  if (trailingSrc) podcastSource = trailingSrc[1].trim();
-  const leadingSrc = cleaned.match(/^([A-Z][\wÀ-ÖØ-öø-ÿ]+)\s+#\d+/);
-  if (!podcastSource && leadingSrc) podcastSource = leadingSrc[1];
+  // Split sur em dash (—) en priorité. Si absent, fallback ` - ` avec espaces.
+  const segments = cleaned.includes('—')
+    ? cleaned.split(/\s*—\s*/).map((s) => s.trim()).filter(Boolean)
+    : cleaned.split(/\s+-\s+/).map((s) => s.trim()).filter(Boolean);
 
-  // Titre italique
-  const italicTitle = cleaned.match(/\*([^*]+)\*/);
-  const episodeTitle = italicTitle ? italicTitle[1].trim() : '';
-
-  // Guest name : segment après "#NNN —" et avant le titre italique ou la fin.
+  let episodeNumber = '';
   let guestName = '';
-  const guestMatch = cleaned.match(/#\d+\s*[—-]\s*([^—\-*(]+?)\s*(?:[—\-(*]|$)/);
-  if (guestMatch) guestName = guestMatch[1].trim();
+  let episodeTitle = '';
+  let podcastSource = '';
 
-  // Si rien n'a matché, mettre la ligne entière en titre.
+  for (const seg of segments) {
+    // Segment "podcast #N" ou juste "#N" (ex: "GDIY #122", "#271")
+    if (!episodeNumber) {
+      const numOnlyMatch = seg.match(/^#(\d+)$/);
+      const numWithSrcMatch = seg.match(/^([A-Z][\wÀ-ÖØ-öø-ÿ]*)\s+#(\d+)$/);
+      if (numOnlyMatch) {
+        episodeNumber = `#${numOnlyMatch[1]}`;
+        continue;
+      }
+      if (numWithSrcMatch) {
+        if (!podcastSource) podcastSource = numWithSrcMatch[1];
+        episodeNumber = `#${numWithSrcMatch[2]}`;
+        continue;
+      }
+    }
+    // Segment titre italique : "*...*" éventuellement suivi de " (Source)"
+    const italicMatch = seg.match(/^\*([^*]+)\*\s*(?:\(([^()]+)\))?\s*$/);
+    if (italicMatch && !episodeTitle) {
+      episodeTitle = italicMatch[1].trim();
+      if (italicMatch[2] && !podcastSource) podcastSource = italicMatch[2].trim();
+      continue;
+    }
+    // Segment guest : "Prénom Nom" ou "Prénom Nom (suffixe)" — pas d'italique.
+    // Heuristique : si le segment contient ":" ou ressemble plus à un titre
+    // (ex: "Comment investir...", "Les sneakers..."), on le route vers
+    // episodeTitle plutôt que guestName.
+    const looksLikeTitle = /[:?]/.test(seg) || seg.length > 60;
+    if (!guestName && !/^#?\d+$/.test(seg) && !looksLikeTitle) {
+      // Strip trailing "(suffixe)" si présent (ex: "Vincent Huguet (Malt)")
+      const guestStripMatch = seg.match(/^(.+?)\s*\(([^()]+)\)\s*$/);
+      if (guestStripMatch) {
+        guestName = guestStripMatch[1].trim();
+        // Le suffixe en parenthèses est généralement le nom de boîte, pas la
+        // source (Jérémy 2026-04-26 : (Malt) = nom boîte invité). On ignore.
+        void guestStripMatch[2];
+      } else {
+        guestName = seg;
+      }
+      continue;
+    }
+    // Tout segment restant non identifié = titre fallback (cas sans italique).
+    if (!episodeTitle) {
+      // Strip trailing "(Source)" éventuelle.
+      const trailMatch = seg.match(/^(.+?)\s*\(([^()]+)\)\s*$/);
+      if (trailMatch) {
+        episodeTitle = trailMatch[1].trim();
+        if (!podcastSource) podcastSource = trailMatch[2].trim();
+      } else {
+        episodeTitle = seg;
+      }
+    }
+  }
+
+  // Si rien n'a matché du tout, mettre la ligne entière en titre.
   if (!episodeNumber && !guestName && !episodeTitle) {
     return {
       episodeNumber: '',
