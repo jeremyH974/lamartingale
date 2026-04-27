@@ -7,6 +7,7 @@
 // - Pas de champ multi-langue, streaming, webhooks, API publique : pas dans
 //   ROADMAP_INTERNE.md à 12 mois.
 
+import type { OutputFormatsConfig } from '../output/formats/types';
 import type { Lens } from './lens';
 
 export interface ClientConfig {
@@ -35,6 +36,20 @@ export interface ClientConfig {
   active_packs: string[];
 
   notification_email: string;
+
+  /**
+   * Formats de sortie par livrable. Phase 7a : un format unique par livrable.
+   * Phase V2 (prévu) : array possible pour produire plusieurs formats
+   * simultanément (ex: ['docx', 'pdf']). Optionnel : si absent, l'engine
+   * fallback sur Markdown pour rétrocompat avec le pack pilote sandbox.
+   */
+  output_formats?: OutputFormatsConfig;
+
+  /**
+   * Channel de publication (id). Phase 7a : 'local-zip' uniquement.
+   * Phase V2 : 'drive', etc. Optionnel — défaut 'local-zip'.
+   */
+  output_channel?: string;
 
   pilot?: ClientPilot;
 }
