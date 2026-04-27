@@ -483,6 +483,48 @@ Applicable aux futurs scripts : migrations schema (`engine/db/migrate-*.ts`), ba
 
 ---
 
+## 🚨 Phase 7b audit timestamps L2 — pack pilote non envoyable (OPEN, P0, 27/04/26)
+
+**Statut** : **BLOQUANT envoi pilote 17/05**. Phase 7b vidéo en pause tant que non résolu.
+
+**Constat** : audit déclenché pendant test bout-en-bout Phase 7b sur Veyrat (yt-dlp + ffmpeg + `produceClientPack`). Le test a planté côté `validateSpec` sur 2 quotes Veyrat dont les timestamps (`38:30`, `38:50`) dépassent la durée du transcript (1896s = 31:36). Audit étendu aux 4 épisodes pilote → **15/19 quotes L2 ont un timestamp erroné**.
+
+**Chiffres** :
+- L1 key moments : **19/19 OK (100%)**
+- L2 quotes : **4/19 OK (21%)** — soit 79% de timestamps faux
+
+**Typologie des erreurs** :
+- **3 cas HORS_BORNE** : timestamp > durée transcript → hallucination directe (Veyrat L2#3 38:30, Veyrat L2#4 38:50, Doolaeghe L2#5 88:05 sur épisode de 75:46).
+- **11 cas TS_FAUX** : la quote existe textuellement dans le transcript mais à un endroit complètement différent. Décalage observé 7 à 40 minutes. Pattern suggère un mismatch entre l'agent qui sélectionne la quote (Sonnet) et l'attribution du timestamp.
+- **1 cas TEXTE_INTROUVABLE** : Boissenot L2#5 « Pokémon, c'est trois fois plus qu'Harry Potter... » — verbatim non confirmable.
+
+**Validation manuelle (échantillon)** :
+- Plais L2#2 annoncé `02:40` → en transcript = **pub Squarespace** ; le texte réel de la quote est à **09:44** (584s). Décalage 7 min.
+- Doolaeghe L2#1 annoncé `69:40` → texte réel à **31:06** (1866s, et un teaser à 6s). Décalage 38 min.
+
+**Implication business** : si Stefani vérifie 1 quote au hasard sur 4 épisodes, **probabilité ~80% de tomber sur un TS faux ou un hors-borne**. Crédibilité produit en jeu. Phase 6 review « PASS franchement 12/12 » n'a pas vérifié les timestamps — la review portait sur le contenu textuel uniquement.
+
+**Cause racine probable** : bug dans l'agent `extractQuotes` (Phase 6) — l'agent récupère le bon verbatim mais associe un timestamp incorrect (peut-être pris au hasard, peut-être un index off-by-N, peut-être un reuse d'un autre passage). À investiguer.
+
+**Plan de fix** (priorité absolue, avant Phase 7b vidéo) :
+1. Audit du prompt + code de l'agent `extractQuotes`. Identifier d'où vient le timestamp dans le retour LLM.
+2. Re-prompter avec contrainte forte : « le timestamp retourné DOIT correspondre à un segment du transcript dont le texte est ≤ 10s du verbatim choisi ».
+3. Validation programmatique post-LLM : pour chaque quote, vérifier `transcript[ts ± 10s]` contient bien ≥6 mots consécutifs du verbatim. Reject sinon → re-roll ou drop.
+4. Régénérer les 4 packs pilotes (4 × 5 quotes = 20 appels, ~$0-5 si Haiku).
+5. Re-run audit script pour valider 100% intégrité avant envoi.
+
+**Côté Phase 7b** : indépendamment du fix data, ajouter un skip out-of-bounds + warning dans [`engine/output/videoOrchestration.ts`](../engine/output/videoOrchestration.ts) pour ne plus jamais throw sur clip hors-borne (fail-safe Mode B2 vraiment respecté).
+
+**Process** : ajouter une lens « verbatim timestamp alignment » dans le flow validation des packs (Phase 6 et au-delà).
+
+**Audit script** : [`experiments/autonomy-session-2026-04-28/audit-timestamps.js`](../experiments/autonomy-session-2026-04-28/audit-timestamps.js) — réexécutable post-fix pour valider la régression.
+
+**Détection** : 27/04/26, pendant Étape 4 Phase 7b. Sub-mission test e2e Veyrat → bug `validateSpec` → audit étendu.
+
+**Owner** : Jérémy + agent Phase 8 à instancier.
+
+---
+
 ## P0 — Bloquant ou à fort ROI immédiat
 
 ### 1. Deep scrape Orso — 0 articles sur 4 podcasts
