@@ -35,6 +35,12 @@ export interface TranscribedSegment {
 
 export interface TranscribeAudioOptions {
   guestName?: string;
+  /**
+   * Nom d'entreprise/marque associé(e) à l'invité. Injecté dans le prompt
+   * Whisper pour aider la reconnaissance des noms propres ambigus
+   * (ex: "Stoïk" écrit "Stoic" sans contexte). Optional.
+   */
+  companyName?: string;
   model?: 'whisper-1';
   language?: 'fr';
 }
@@ -82,10 +88,12 @@ export interface TranscribeAudioDeps {
   whisperFn: (params: WhisperParams) => Promise<WhisperResponse>;
 }
 
-export function buildWhisperPrompt(guestName?: string): string {
-  const base = 'Podcast français. Vocabulaire entrepreneurial, finance, tech.';
-  if (!guestName?.trim()) return base;
-  return `Podcast français. Invité : ${guestName}. Vocabulaire entrepreneurial, finance, tech.`;
+export function buildWhisperPrompt(guestName?: string, companyName?: string): string {
+  const parts = ['Podcast français.'];
+  if (guestName?.trim()) parts.push(`Invité : ${guestName.trim()}.`);
+  if (companyName?.trim()) parts.push(`Entreprise : ${companyName.trim()}.`);
+  parts.push('Vocabulaire entrepreneurial, finance, tech.');
+  return parts.join(' ');
 }
 
 /**
@@ -134,7 +142,7 @@ export async function transcribeAudio(
     throw new Error('transcribeAudio: audioUrl is required');
   }
 
-  const prompt = buildWhisperPrompt(options.guestName);
+  const prompt = buildWhisperPrompt(options.guestName, options.companyName);
   const language = options.language ?? 'fr';
   const model = options.model ?? 'whisper-1';
 

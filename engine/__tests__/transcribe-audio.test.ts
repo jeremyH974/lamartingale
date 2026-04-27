@@ -50,6 +50,25 @@ describe('buildWhisperPrompt', () => {
     expect(prompt).toContain('Frédéric Plais');
     expect(prompt).toContain('Invité');
   });
+
+  it('injects companyName when provided (finding Stoïk → Stoic)', () => {
+    const prompt = buildWhisperPrompt('Jules Veyrat', 'Stoïk');
+    expect(prompt).toContain('Jules Veyrat');
+    expect(prompt).toContain('Stoïk');
+    expect(prompt).toContain('Entreprise');
+  });
+
+  it('omits companyName mention when missing/empty', () => {
+    expect(buildWhisperPrompt('Plais')).not.toContain('Entreprise');
+    expect(buildWhisperPrompt('Plais', '')).not.toContain('Entreprise');
+    expect(buildWhisperPrompt('Plais', '   ')).not.toContain('Entreprise');
+  });
+
+  it('accepts companyName without guestName (degraded but valid)', () => {
+    const prompt = buildWhisperPrompt(undefined, 'Stoïk');
+    expect(prompt).toContain('Stoïk');
+    expect(prompt).not.toContain('Invité');
+  });
 });
 
 describe('mergeTranscribedChunks', () => {
@@ -204,6 +223,22 @@ describe('transcribeAudio (primitive)', () => {
     );
     const callArgs = whisperFn.mock.calls[0][0];
     expect(callArgs.prompt).toContain('Inoxtag');
+  });
+
+  it('passes companyName via prompt to whisperFn (finding Stoïk→Stoic)', async () => {
+    const whisperFn = vi.fn(async () => ({
+      text: 't',
+      segments: [{ start_seconds: 0, end_seconds: 1, text: 't' }],
+      duration_seconds: 1,
+    }));
+    await transcribeAudio(
+      'https://x/audio.mp3',
+      { guestName: 'Jules Veyrat', companyName: 'Stoïk' },
+      makeDeps({ whisperFn }),
+    );
+    const callArgs = whisperFn.mock.calls[0][0];
+    expect(callArgs.prompt).toContain('Jules Veyrat');
+    expect(callArgs.prompt).toContain('Stoïk');
   });
 
   it('uses default prompt (no guestName) when omitted', async () => {
