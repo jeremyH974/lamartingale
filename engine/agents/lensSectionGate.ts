@@ -88,3 +88,85 @@ export function shouldGenerateLensSection(
 
   return { shouldGenerate: true, details: baseDetails };
 }
+
+// =============================================================================
+// Phase 6 micro-fix 3 — déduplication cross-refs par target_episode_id.
+// =============================================================================
+
+/**
+ * Selection minimale requise pour la déduplication.
+ * Le caller peut étendre avec des champs additionnels — ils sont préservés.
+ */
+export interface DedupableCrossRefSelection {
+  target_episode_id: string;
+  [key: string]: unknown;
+}
+
+export interface DedupCrossRefSelectionsOptions {
+  /**
+   * Ordre de priorité des lens : un episode_id retenu dans une section
+   * lens prioritaire est skip dans les sections suivantes.
+   *
+   * Si absent, l'ordre des clés du Map d'entrée fait foi (insertion order).
+   */
+  lensOrder?: string[];
+}
+
+export interface DedupCrossRefSelectionsResult<T extends DedupableCrossRefSelection> {
+  /** Map dédupliquée — chaque selection apparaît au plus 1 fois sur l'ensemble. */
+  selectionsByLens: Map<string, T[]>;
+  /** Liste des skips effectués (pour log / audit). */
+  removed: Array<{ lens_id: string; target_episode_id: string; first_seen_in: string }>;
+}
+
+/**
+ * Déduplique les sélections cross-refs entre sections lens : si un target_episode_id
+ * apparaît déjà dans une section traitée plus tôt (ordre `lensOrder` ou ordre du Map),
+ * on l'évince des sections suivantes.
+ *
+ * Effet de bord souhaité : éviter qu'un même invité (ex. Zocchetto/PayFit) figure dans
+ * deux sections L3 différentes avec deux rationales contradictoires.
+ *
+ * NB : si une section descend sous 0/1 cross-ref après dédup, on garde ce qu'il reste —
+ * le caller décide de masquer la section ou de l'afficher comme telle.
+ */
+export function dedupCrossRefSelectionsByEpisodeId<T extends DedupableCrossRefSelection>(
+  selectionsByLens: Map<string, T[]>,
+  options: DedupCrossRefSelectionsOptions = {},
+): DedupCrossRefSelectionsResult<T> {
+  const order = options.lensOrder
+    ? options.lensOrder.filter((id) => selectionsByLens.has(id))
+    : Array.from(selectionsByLens.keys());
+
+  // Inclure les lens absents de `lensOrder` à la fin pour ne pas les perdre
+  if (options.lensOrder) {
+    for (const id of selectionsByLens.keys()) {
+      if (!order.includes(id)) order.push(id);
+    }
+  }
+
+  const alreadySelected = new Map<string, string>(); // episode_id -> first_seen_in
+  const result = new Map<string, T[]>();
+  const removed: DedupCrossRefSelectionsResult<T>['removed'] = [];
+
+  for (const lensId of order) {
+    const sels = selectionsByLens.get(lensId) ?? [];
+    const kept: T[] = [];
+    for (const sel of sels) {
+      const epId = sel.target_episode_id;
+      if (alreadySelected.has(epId)) {
+        removed.push({
+          lens_id: lensId,
+          target_episode_id: epId,
+          first_seen_in: alreadySelected.get(epId)!,
+        });
+        continue;
+      }
+      alreadySelected.set(epId, lensId);
+      kept.push(sel);
+    }
+    result.set(lensId, kept);
+  }
+
+  return { selectionsByLens: result, removed };
+}

@@ -1,5 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import { shouldGenerateLensSection } from '@engine/agents/lensSectionGate';
+import {
+  shouldGenerateLensSection,
+  dedupCrossRefSelectionsByEpisodeId,
+} from '@engine/agents/lensSectionGate';
 
 describe('shouldGenerateLensSection', () => {
   it('skips when matches_on_episode < 3 (default)', () => {
@@ -68,5 +71,41 @@ describe('shouldGenerateLensSection', () => {
       threshold_candidates: 5,
       threshold_distance: 0.7,
     });
+  });
+});
+
+describe('dedupCrossRefSelectionsByEpisodeId (Phase 6 micro-fix 3)', () => {
+  it('removes a target_episode_id seen earlier from later lens sections', () => {
+    const input = new Map([
+      ['lens-A', [
+        { target_episode_id: 'gdiy-100', why: 'angle A' },
+        { target_episode_id: 'lm-50', why: 'angle A also' },
+      ]],
+      ['lens-B', [
+        { target_episode_id: 'gdiy-100', why: 'angle B (DOUBLON)' },
+        { target_episode_id: 'finscale-12', why: 'angle B unique' },
+      ]],
+    ]);
+    const { selectionsByLens, removed } = dedupCrossRefSelectionsByEpisodeId(input, {
+      lensOrder: ['lens-A', 'lens-B'],
+    });
+    expect(selectionsByLens.get('lens-A')!.map((s) => s.target_episode_id))
+      .toEqual(['gdiy-100', 'lm-50']);
+    expect(selectionsByLens.get('lens-B')!.map((s) => s.target_episode_id))
+      .toEqual(['finscale-12']);
+    expect(removed).toEqual([
+      { lens_id: 'lens-B', target_episode_id: 'gdiy-100', first_seen_in: 'lens-A' },
+    ]);
+  });
+
+  it('preserves all selections when there are no duplicates across lens', () => {
+    const input = new Map([
+      ['lens-A', [{ target_episode_id: 'gdiy-100' }, { target_episode_id: 'lm-50' }]],
+      ['lens-B', [{ target_episode_id: 'finscale-12' }, { target_episode_id: 'lp-7' }]],
+    ]);
+    const { selectionsByLens, removed } = dedupCrossRefSelectionsByEpisodeId(input);
+    expect(selectionsByLens.get('lens-A')!).toHaveLength(2);
+    expect(selectionsByLens.get('lens-B')!).toHaveLength(2);
+    expect(removed).toHaveLength(0);
   });
 });

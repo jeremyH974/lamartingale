@@ -74,10 +74,20 @@ const FALLBACK_RESULT: QualityValidationResult = {
   ],
 };
 
+export interface BuildValidatorPromptOptions {
+  /**
+   * Phase 6 micro-fix 2 (F-V5-3) : ajoute une consigne de format JSON renforcée
+   * pour le retry post parse-error. Évite les pré-ambules / wrapping markdown
+   * que Sonnet glisse parfois (~15% des appels en V5).
+   */
+  strictJsonMode?: boolean;
+}
+
 export function buildValidatorPrompt(
   livrable: string,
   livrableType: LivrableType,
   context: QualityValidationContext,
+  options: BuildValidatorPromptOptions = {},
 ): string {
   const blacklist = context.styleCorpus.host_blacklist_phrases ?? [];
   const forbidden = context.forbiddenPatterns ?? [];
@@ -148,14 +158,30 @@ JSON STRICT (pas de markdown wrapping, pas de préambule). Schema :
     }
   ],
   "rewriteSuggestions": "<si score < 7.5 : suggestions concrètes de réécriture des passages problématiques>"
-}`;
+}${options.strictJsonMode ? `
+
+## RÉPONSE OBLIGATOIRE — FORMAT STRICT (retry post parse-error)
+Réponds UNIQUEMENT avec un JSON strict valide, sans markdown, sans backticks,
+sans préambule, sans bloc \`\`\`json. Aucune ligne avant l'accolade ouvrante.
+Aucune ligne après l'accolade fermante. Le résultat doit pouvoir passer
+JSON.parse() sans erreur. Si tu glisses ne serait-ce qu'un caractère hors JSON,
+le pipeline plante.` : ''}`;
 }
+
+export interface ValidateLivrableQualityOptions {
+  /** Strict JSON mode pour retry post parse-error (Phase 6 micro-fix 2). */
+  strictJsonMode?: boolean;
+}
+
+/** Marqueur description fallback parse-error — utilisé par robust wrapper. */
+export const PARSE_ERROR_DESCRIPTION_PREFIX = 'Validator JSON parse failed';
 
 export async function validateLivrableQuality(
   livrable: string,
   livrableType: LivrableType,
   context: QualityValidationContext,
   llmFn: LLMFn,
+  options: ValidateLivrableQualityOptions = {},
 ): Promise<QualityValidationResult> {
   if (!livrable?.trim()) {
     return {
@@ -171,7 +197,9 @@ export async function validateLivrableQuality(
     };
   }
 
-  const prompt = buildValidatorPrompt(livrable, livrableType, context);
+  const prompt = buildValidatorPrompt(livrable, livrableType, context, {
+    strictJsonMode: options.strictJsonMode,
+  });
   let raw: unknown;
   try {
     raw = await llmFn(prompt, { temperature: 0.2, maxTokens: 1500 });
@@ -198,7 +226,7 @@ export async function validateLivrableQuality(
         {
           category: 'generic-content',
           severity: 'major',
-          description: `Validator JSON parse failed: ${(err as Error).message.slice(0, 200)}`,
+          description: `${PARSE_ERROR_DESCRIPTION_PREFIX}: ${(err as Error).message.slice(0, 200)}`,
         },
       ],
     };
@@ -218,6 +246,47 @@ export async function validateLivrableQuality(
       ],
     };
   }
+}
+
+/**
+ * Phase 6 micro-fix 2 (F-V5-3) — wrapper retry-on-parse-error.
+ *
+ * Sonnet retourne du JSON malformé ~15% des appels en V5 (préambule, wrapping
+ * markdown). Au lieu de gaspiller un budget Opus rewrite sur ce qui est en
+ * réalité un fallback parse-error, on retry 1x avec un prompt strict avant
+ * de laisser le résultat se propager.
+ */
+export async function validateLivrableQualityRobust(
+  livrable: string,
+  livrableType: LivrableType,
+  context: QualityValidationContext,
+  llmFn: LLMFn,
+  maxRetries: number = 1,
+): Promise<QualityValidationResult> {
+  let result = await validateLivrableQuality(livrable, livrableType, context, llmFn);
+
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    if (!isParseErrorResult(result)) return result;
+    // eslint-disable-next-line no-console
+    console.warn(
+      `[Validator] Parse error attempt ${attempt}, retrying with strict JSON prompt`,
+    );
+    result = await validateLivrableQuality(livrable, livrableType, context, llmFn, {
+      strictJsonMode: true,
+    });
+  }
+
+  return result;
+}
+
+function isParseErrorResult(r: QualityValidationResult): boolean {
+  return (
+    r.score === 0 &&
+    !r.passed &&
+    r.issues.some((i) =>
+      i.description.startsWith(PARSE_ERROR_DESCRIPTION_PREFIX),
+    )
+  );
 }
 
 export interface RewriteOptions {
@@ -447,7 +516,7 @@ export async function runValidatedGenerationV5(
   let currentSource: V5RunHistoryEntry['source'] = 'sonnet-initial';
 
   for (let opusAttempt = 0; opusAttempt <= maxOpusRewrites; opusAttempt++) {
-    const validation = await validateLivrableQuality(
+    const validation = await validateLivrableQualityRobust(
       currentText,
       opts.livrableType,
       opts.context,
@@ -512,7 +581,7 @@ export async function runValidatedGenerationV5(
       livrableType: opts.livrableType,
       episodeContext: opts.episodeContext,
     });
-    const degradedValidation = await validateLivrableQuality(
+    const degradedValidation = await validateLivrableQualityRobust(
       degradedText,
       opts.livrableType,
       opts.context,

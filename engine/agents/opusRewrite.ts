@@ -81,6 +81,24 @@ export function buildOpusRewritePrompt(opts: OpusRewriteOptions): string {
     ? `# SUGGESTIONS CIBLÉES DU VALIDATEUR\n\n${opts.validation.rewriteSuggestions}\n`
     : '';
 
+  // Phase 6 micro-fix 1 (F-V5-2) — naming explicite des cross-refs en newsletter.
+  // Sonnet généralisait avec "d'autres fondateurs", on force le format nommé.
+  const crossRefNamingBlock = opts.livrableType === 'newsletter'
+    ? `
+
+f) CONTRAINTE NAMING CROSS-REFS (impérative) :
+Quand tu intègres les cross-références du catalogue ${ec.ecosystemCanonicalPhrase} dans la newsletter,
+tu DOIS nommer chaque cross-ref par son invité + sa boîte dans le flux du
+texte. Format type : "Pierre-Eric Leibovici (Daphni)", "Frédéric Mazzella
+(BlaBlaCar)", "Firmin Zocchetto (PayFit)".
+
+Tu NE DOIS PAS généraliser avec des formules comme "d'autres fondateurs",
+"des invités précédents", ou "le catalogue Orso a creusé". Si la cross-ref
+mérite d'être citée, elle est nommée. Sinon elle ne figure pas.
+
+Exception : tu peux mentionner "${ec.ecosystemCanonicalPhrase}"${ec.ecosystemAlternative ? ` ou "${ec.ecosystemAlternative}"` : ''} comme référence générale en plus du naming explicite des cross-refs.`
+    : '';
+
   return `Tu vas réécrire un livrable éditorial pour le podcast "${ec.podcastDisplayName}" hosté par ${ec.hostName}.
 
 # CONTEXTE STRATÉGIQUE
@@ -119,7 +137,7 @@ c) Mentionner naturellement "${ec.ecosystemCanonicalPhrase}"${ec.ecosystemAltern
 
 d) Pas de questions rhétoriques creuses en conclusion ("Quelles sont vos réflexions ?", "Et vous, qu'en pensez-vous ?").
 
-e) Les chiffres mentionnés doivent venir du transcript (ci-dessous), pas d'inventions.
+e) Les chiffres mentionnés doivent venir du transcript (ci-dessous), pas d'inventions.${crossRefNamingBlock}
 
 # DONNÉES ÉPISODE
 

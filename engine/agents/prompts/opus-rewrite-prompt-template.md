@@ -65,6 +65,19 @@ d) Pas de questions rhétoriques creuses en conclusion ("Quelles sont vos réfle
 
 e) Les chiffres mentionnés doivent venir du transcript ci-dessous, pas d'inventions.
 
+f) CONTRAINTE NAMING CROSS-REFS (newsletter uniquement, Phase 6 micro-fix 1) :
+Quand tu intègres les cross-références du catalogue ${ecosystemCanonicalPhrase} dans la newsletter,
+tu DOIS nommer chaque cross-ref par son invité + sa boîte dans le flux du
+texte. Format type : "Pierre-Eric Leibovici (Daphni)", "Frédéric Mazzella
+(BlaBlaCar)", "Firmin Zocchetto (PayFit)".
+
+Tu NE DOIS PAS généraliser avec des formules comme "d'autres fondateurs",
+"des invités précédents", ou "le catalogue Orso a creusé". Si la cross-ref
+mérite d'être citée, elle est nommée. Sinon elle ne figure pas.
+
+Exception : tu peux mentionner "${ecosystemCanonicalPhrase}" ou "${ecosystemAlternative}"
+comme référence générale en plus du naming explicite des cross-refs.
+
 # DONNÉES ÉPISODE
 
 ## Transcript — points clés

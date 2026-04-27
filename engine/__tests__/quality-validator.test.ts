@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import {
   validateLivrableQuality,
+  validateLivrableQualityRobust,
   buildValidatorPrompt,
   rewriteLivrable,
   runValidatedGeneration,
@@ -106,6 +107,43 @@ describe('validateLivrableQuality', () => {
     expect(r.passed).toBe(false);
     expect(r.issues[0].category).toBe('forbidden-phrase');
     expect(r.rewriteSuggestions).toBeDefined();
+  });
+});
+
+describe('validateLivrableQualityRobust (Phase 6 micro-fix 2)', () => {
+  it('returns first attempt result when JSON is valid (no retry)', async () => {
+    let calls = 0;
+    const llm: LLMFn = vi.fn(async () => {
+      calls++;
+      return JSON.stringify({ passed: true, score: 8.0, issues: [] });
+    });
+    const r = await validateLivrableQualityRobust('texte', 'newsletter', CTX, llm);
+    expect(r.passed).toBe(true);
+    expect(r.score).toBe(8.0);
+    expect(calls).toBe(1);
+  });
+
+  it('retries with strict JSON prompt on parse error and succeeds on attempt 2', async () => {
+    const captured: string[] = [];
+    let calls = 0;
+    const llm: LLMFn = vi.fn(async (prompt: string) => {
+      captured.push(prompt);
+      calls++;
+      // 1er appel : Sonnet glisse un préambule + wrapping markdown -> parse fail
+      if (calls === 1) return 'Voici le résultat :\n```json\n{ not_valid_json }\n```';
+      // 2e appel (retry strict) : JSON propre
+      return JSON.stringify({ passed: false, score: 6.5, issues: [
+        { category: 'tone-mismatch', severity: 'major', description: 'Trop scolaire' },
+      ], rewriteSuggestions: 'Casser les phrases.' });
+    });
+    const r = await validateLivrableQualityRobust('texte', 'newsletter', CTX, llm);
+    expect(calls).toBe(2);
+    expect(r.score).toBe(6.5);
+    // Le 2e prompt doit contenir la consigne strict-JSON
+    expect(captured[1]).toContain('FORMAT STRICT');
+    expect(captured[1]).toContain('JSON.parse()');
+    // Le 1er prompt ne doit pas la contenir
+    expect(captured[0]).not.toContain('FORMAT STRICT');
   });
 });
 
