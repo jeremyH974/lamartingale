@@ -75,6 +75,68 @@ Body paragraph 1.
     expect(text).not.toMatch(/—\s+\(\s*\)/);
   });
 
+  it('parses Veyrat 4-segment format `#N - Guest - Company - Title` correctly', () => {
+    // Bugfix Phase 7a v3 (2026-04-27) : format Veyrat utilise ` - ` (hyphen-space)
+    // au lieu de ` — ` (em dash) ET 4 segments (Company entre Guest et Title).
+    // Le précédent fix attribuait "Riot" à episodeTitle et perdait le vrai titre.
+    const md = `# 🔗 Cross-références — Test Veyrat
+
+## Si vous avez aimé l'angle
+
+Intro.
+
+---
+
+### → #286 - Benjamin Netter - Riot - Pourquoi la cybersécurité doit être l'affaire de tous
+
+Body.
+
+---
+
+### → #333 - Jeremy Jawish - Shift Technology - La licorne silencieuse qui lutte contre la fraude dans 25 pays
+
+Body.
+
+---
+`;
+    const out = parseCrossRefs(md);
+    const refs = out.sections[0].refs;
+    expect(refs).toHaveLength(2);
+    expect(refs[0].episodeNumber).toBe('#286');
+    expect(refs[0].guestName).toBe('Benjamin Netter (Riot)');
+    expect(refs[0].episodeTitle).toContain('Pourquoi la cybersécurité');
+    expect(refs[1].episodeNumber).toBe('#333');
+    expect(refs[1].guestName).toBe('Jeremy Jawish (Shift Technology)');
+    expect(refs[1].episodeTitle).toContain('La licorne silencieuse');
+  });
+
+  it('Veyrat docx renders title (no empty `()` artifact, full episode title visible)', async () => {
+    const md = `# 🔗 Cross-références — Test Veyrat
+
+## Si vous avez aimé
+
+Intro.
+
+---
+
+### → #286 - Benjamin Netter - Riot - Pourquoi la cybersécurité doit être l'affaire de tous
+
+Body.
+
+---
+`;
+    const livrable = parseCrossRefs(md);
+    const f = new DocxFormatter();
+    const out = await f.formatLivrable(livrable, CTX);
+    const text = extractDocxText(out.buffer);
+    expect(text).toContain('Benjamin Netter');
+    expect(text).toContain('Riot');
+    expect(text).toContain('Pourquoi la cybersécurité');
+    // Pas d'artefact "— ()" ou "—  —"
+    expect(text).not.toMatch(/—\s+\(\s*\)/);
+    expect(text).not.toMatch(/—\s+—\s*$/);
+  });
+
   it('docx rendering skips empty fields gracefully when title or source absent', async () => {
     const mdNoTitle = `# 🔗 Cross-références — Test
 

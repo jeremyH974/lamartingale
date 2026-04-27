@@ -120,6 +120,17 @@ export function parseQuotes(md: string): QuotesLivrable {
 // L3 — Cross-refs by lens
 
 /**
+ * Strippe un suffixe `(Truc)` éventuel à la fin d'un segment, et appelle
+ * `onCaptured` avec son contenu. Retourne le segment sans le suffixe.
+ */
+function stripTrailingParens(seg: string, onCaptured: (captured: string) => void): string {
+  const m = seg.match(/^(.+?)\s*\(([^()]+)\)\s*$/);
+  if (!m) return seg;
+  onCaptured(m[2].trim());
+  return m[1].trim();
+}
+
+/**
  * Parse une ligne de tête de ref. Format observé multi-épisodes :
  *  - `→ #299 — Firmin Zocchetto (PayFit) — *Title* (Source)`
  *  - `→ GDIY #122 — Vincent Huguet (Malt)`
@@ -150,56 +161,75 @@ function parseRefHead(headLine: string): {
   let episodeTitle = '';
   let podcastSource = '';
 
+  // Passe 1 : extraire numéro + italique + sources explicites. Les segments
+  // non-classifiés (texte brut) sont conservés dans `unmatched`.
+  const unmatched: string[] = [];
   for (const seg of segments) {
-    // Segment "podcast #N" ou juste "#N" (ex: "GDIY #122", "#271")
-    if (!episodeNumber) {
-      const numOnlyMatch = seg.match(/^#(\d+)$/);
-      const numWithSrcMatch = seg.match(/^([A-Z][\wÀ-ÖØ-öø-ÿ]*)\s+#(\d+)$/);
-      if (numOnlyMatch) {
-        episodeNumber = `#${numOnlyMatch[1]}`;
-        continue;
-      }
-      if (numWithSrcMatch) {
-        if (!podcastSource) podcastSource = numWithSrcMatch[1];
-        episodeNumber = `#${numWithSrcMatch[2]}`;
-        continue;
-      }
+    // "podcast #N" ou "#N"
+    const numOnlyMatch = seg.match(/^#(\d+)$/);
+    const numWithSrcMatch = seg.match(/^([A-Z][\wÀ-ÖØ-öø-ÿ]*)\s+#(\d+)$/);
+    if (!episodeNumber && numOnlyMatch) {
+      episodeNumber = `#${numOnlyMatch[1]}`;
+      continue;
     }
-    // Segment titre italique : "*...*" éventuellement suivi de " (Source)"
+    if (!episodeNumber && numWithSrcMatch) {
+      if (!podcastSource) podcastSource = numWithSrcMatch[1];
+      episodeNumber = `#${numWithSrcMatch[2]}`;
+      continue;
+    }
+    // Titre italique "*...*" éventuellement suivi de "(Source)"
     const italicMatch = seg.match(/^\*([^*]+)\*\s*(?:\(([^()]+)\))?\s*$/);
     if (italicMatch && !episodeTitle) {
       episodeTitle = italicMatch[1].trim();
       if (italicMatch[2] && !podcastSource) podcastSource = italicMatch[2].trim();
       continue;
     }
-    // Segment guest : "Prénom Nom" ou "Prénom Nom (suffixe)" — pas d'italique.
-    // Heuristique : si le segment contient ":" ou ressemble plus à un titre
-    // (ex: "Comment investir...", "Les sneakers..."), on le route vers
-    // episodeTitle plutôt que guestName.
-    const looksLikeTitle = /[:?]/.test(seg) || seg.length > 60;
-    if (!guestName && !/^#?\d+$/.test(seg) && !looksLikeTitle) {
-      // Strip trailing "(suffixe)" si présent (ex: "Vincent Huguet (Malt)")
-      const guestStripMatch = seg.match(/^(.+?)\s*\(([^()]+)\)\s*$/);
-      if (guestStripMatch) {
-        guestName = guestStripMatch[1].trim();
-        // Le suffixe en parenthèses est généralement le nom de boîte, pas la
-        // source (Jérémy 2026-04-26 : (Malt) = nom boîte invité). On ignore.
-        void guestStripMatch[2];
-      } else {
-        guestName = seg;
-      }
-      continue;
+    unmatched.push(seg);
+  }
+
+  // Passe 2 : attribuer les segments non-classifiés selon leur position et
+  // leur forme. Bugfix Phase 7a (2026-04-27 v3) : le format Veyrat
+  // `#N - Guest - Company - Title` produit 3 segments unmatched ; le
+  // précédent code prenait Guest+Title et perdait Company OU prenait
+  // Guest+Company et perdait Title. Le bon comportement : guest=1er,
+  // title=DERNIER (le plus long en général), et fusionner les segments
+  // intermédiaires dans guestName comme "(Company)" pour préserver
+  // l'info contextuelle (ex: "Benjamin Netter (Riot)").
+  const looksLikeTitle = (s: string) => /[:?]/.test(s) || s.length > 60;
+
+  if (unmatched.length === 1) {
+    // Un seul segment : guest si court+pas titre-like, sinon titre.
+    const seg = unmatched[0];
+    if (!episodeTitle && looksLikeTitle(seg)) {
+      episodeTitle = stripTrailingParens(seg, (src) => {
+        if (!podcastSource) podcastSource = src;
+      });
+    } else if (!guestName) {
+      guestName = stripTrailingParens(seg, () => {
+        // Suffixe en parenthèses = nom boîte invité, on l'ignore
+      });
     }
-    // Tout segment restant non identifié = titre fallback (cas sans italique).
-    if (!episodeTitle) {
-      // Strip trailing "(Source)" éventuelle.
-      const trailMatch = seg.match(/^(.+?)\s*\(([^()]+)\)\s*$/);
-      if (trailMatch) {
-        episodeTitle = trailMatch[1].trim();
-        if (!podcastSource) podcastSource = trailMatch[2].trim();
+  } else if (unmatched.length >= 2) {
+    // Premier = guest, dernier = titre, intermédiaires fusionnés dans guest.
+    const first = unmatched[0];
+    const last = unmatched[unmatched.length - 1];
+    const middles = unmatched.slice(1, -1);
+
+    if (!guestName) {
+      const guestBase = stripTrailingParens(first, () => {
+        // ignore suffixe boîte ici
+      });
+      // Fusionne les middles (typiquement nom de boîte Veyrat) en suffixe " (X, Y)"
+      if (middles.length > 0) {
+        guestName = `${guestBase} (${middles.join(', ')})`;
       } else {
-        episodeTitle = seg;
+        guestName = guestBase;
       }
+    }
+    if (!episodeTitle) {
+      episodeTitle = stripTrailingParens(last, (src) => {
+        if (!podcastSource) podcastSource = src;
+      });
     }
   }
 
