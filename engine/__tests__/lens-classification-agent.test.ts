@@ -143,6 +143,36 @@ describe('buildSegmentPrompt', () => {
     expect(p).toMatch(/CONSIGNES STRICTES/);
     expect(p).toMatch(/JSON strict/);
   });
+
+  it('does NOT include a concrete rationale example (anti prompt-leak fix A)', () => {
+    // Phase 4 V2 fix: the OLD prompt cited a fixed Ovni Capital rationale
+    // ("Le segment évoque une scaleup B2B européenne en Series B+, profil
+    // typique Ovni Capital") which Sonnet copied verbatim onto unrelated
+    // episodes. The new prompt must use placeholders only.
+    const seg = { start_seconds: 0, end_seconds: 60, text: 'Test segment' };
+    const p = buildSegmentPrompt(seg, stefaniOrsoConfig.lenses);
+    expect(p).not.toContain('scaleup B2B européenne en Series B+');
+    expect(p).not.toContain('profil typique Ovni Capital');
+    expect(p).not.toContain('"matched_concepts": ["scaleup tech B2B", "levée Series B+"]');
+  });
+
+  it('contains explicit anti-copy and silence-preferred instructions (fix D)', () => {
+    const seg = { start_seconds: 0, end_seconds: 60, text: 'Test segment' };
+    const p = buildSegmentPrompt(seg, stefaniOrsoConfig.lenses);
+    expect(p).toMatch(/JAMAIS recopier|JAMAIS produire un rationale générique/);
+    expect(p).toMatch(/élément PRÉCIS et SPÉCIFIQUE du segment/);
+    expect(p).toMatch(/SILENCE PRÉFÉRÉ|silence est une réponse VALIDE/);
+    expect(p).toMatch(/expressions? LITTÉRALES?/);
+  });
+
+  it('uses placeholder-style schema rather than a concrete sample value', () => {
+    const seg = { start_seconds: 0, end_seconds: 60, text: 'Test segment' };
+    const p = buildSegmentPrompt(seg, stefaniOrsoConfig.lenses);
+    // Schema shape uses <placeholders>, not concrete strings
+    expect(p).toMatch(/<id-d-une-lens-listée-plus-haut>/);
+    expect(p).toMatch(/<phrase-citant-un-élément-précis-du-segment-fourni-ci-dessus-pas-générique>/);
+    expect(p).toMatch(/<nombre-entre-0-et-1>/);
+  });
 });
 
 describe('lensClassificationAgent', () => {
@@ -254,6 +284,27 @@ describe('lensClassificationAgent', () => {
 
     expect(result.events_created).toHaveLength(0);
     expect(result.warnings.some((w) => /unknown lens_id/.test(w))).toBe(true);
+  });
+
+  it('accepts {matches: []} as valid silence (no warning about parse/schema)', async () => {
+    // Fix D, Phase 4 V2 : Sonnet retournant {matches: []} doit être traité
+    // comme une réponse valide (pas un bug). Aucun warning de type "JSON
+    // parse failed" ou "schema validation failed" ne doit être émis.
+    const { fn: persistFn } = trackingPersistFn();
+    const segCount = chunkTranscriptIntoAnalyticSegments(TRANSCRIPT, 240).length;
+    const llmFn = fixedLlmFn(Array(segCount).fill({ matches: [] }));
+
+    const result = await lensClassificationAgent(TRANSCRIPT, stefaniOrsoConfig, baseOpts, {
+      llmFn,
+      persistFn,
+    });
+
+    expect(result.events_created).toHaveLength(0);
+    // Silence valide : aucune erreur de parse/schema
+    expect(result.warnings.some((w) => /JSON parse failed/.test(w))).toBe(false);
+    expect(result.warnings.some((w) => /schema validation failed/.test(w))).toBe(false);
+    // L'agent peut quand même émettre "No matches passed threshold" /
+    // "Lens X never matched" — ce sont des informations, pas des erreurs.
   });
 
   it('returns 0 events with warning when no lens matches anywhere', async () => {

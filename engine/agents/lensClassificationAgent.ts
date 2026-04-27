@@ -158,26 +158,30 @@ ${segment.text}
 2. Si une lens NE matche PAS du tout, NE LA RETOURNE PAS dans matches[]. Pas de score 0 forcé.
 3. Si une lens matche faiblement, retourne un lens_score entre 0.0 et 0.3 (le caller filtrera).
 4. Si une lens matche bien, retourne un lens_score entre 0.3 et 1.0.
-5. rationale (20-500 chars) DOIT s'appuyer sur des éléments PRÉSENTS dans le segment.
+5. rationale (20-500 chars) DOIT citer un élément PRÉCIS et SPÉCIFIQUE du segment de transcript fourni ci-dessus.
+   - Tu ne dois JAMAIS produire un rationale générique sans ancrage dans le texte réel du segment.
+   - Tu ne dois JAMAIS recopier ou paraphraser un rationale d'un autre segment ou d'un exemple générique.
+   - Le rationale doit pouvoir être vérifié contre le segment ligne par ligne.
    - Pas de citation chiffrée (€, %, M, k) qui n'est pas littéralement dans le segment.
    - Pas de connaissance générale au-delà du segment.
-6. matched_concepts (optionnel) liste les concepts ou phrases du segment qui ont déclenché le match. Citation littérale ou paraphrase très proche autorisée.
+6. matched_concepts (optionnel) liste 1-3 expressions LITTÉRALES extraites du segment ci-dessus qui ont déclenché le match. Pas de paraphrase, pas de concept générique copié de la liste de la lens.
 7. lens_id DOIT être strictement l'un des id ci-dessus.
+8. SILENCE PRÉFÉRÉ : si aucune lens n'est applicable au segment, retourne {"matches": []}. Le silence est une réponse VALIDE et préférée à un faux positif. Ne force PAS un match si le segment est éditorial-base, transition, intro/outro, ou hors-sujet.
 
 ## OUTPUT
-JSON strict (pas de markdown wrapping, pas de préambule) :
+JSON strict (pas de markdown wrapping, pas de préambule). Schema (placeholders à remplacer par tes valeurs réelles, pas à recopier) :
 {
   "matches": [
     {
-      "lens_id": "ovni-vc-deeptech",
-      "lens_score": 0.85,
-      "rationale": "Le segment évoque une scaleup B2B européenne en Series B+, profil typique Ovni Capital.",
-      "matched_concepts": ["scaleup tech B2B", "levée Series B+"]
+      "lens_id": "<id-d-une-lens-listée-plus-haut>",
+      "lens_score": <nombre-entre-0-et-1>,
+      "rationale": "<phrase-citant-un-élément-précis-du-segment-fourni-ci-dessus-pas-générique>",
+      "matched_concepts": ["<expression-littérale-extraite-du-segment>", "..."]
     }
   ]
 }
 
-Si aucune lens ne matche du tout : {"matches": []}`;
+Si aucune lens ne matche : {"matches": []}`;
 }
 
 export async function lensClassificationAgent(
