@@ -351,6 +351,17 @@ export const stefaniOrsoConfig: ClientConfig = {
 
   notification_email: 'matthieu@orsomedia.io', // à confirmer Jérémy
 
+  // Phase 7a : formats pro pour envoi pilote Stefani-Orso. L1/L2 en xlsx
+  // (exploitable community manager), L3/L4/L5 en docx (édition collaborative).
+  output_formats: {
+    L1_keyMoments: 'xlsx',
+    L2_quotes: 'xlsx',
+    L3_crossRefs: 'docx',
+    L4_newsletter: 'docx',
+    L5_briefAnnexe: 'docx',
+  },
+  output_channel: 'local-zip',
+
   pilot: {
     is_pilot: true,
     pilot_episodes_target: 4,
