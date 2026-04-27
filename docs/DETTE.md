@@ -6,6 +6,50 @@ Classement par priorité décroissante. **P0 = bloquant / P1 = forte valeur / P2
 
 ---
 
+## Phase 5 V1 — Whisper sans diarization → attribution host/invité ambiguë (P1)
+
+**Constat** : sur Plais (GDIY #266), le pipeline `extractQuotes` a
+attribué la phrase "Nous sommes la moyenne des personnes que nous
+fréquentons" à Frédéric Plais alors que c'est la **phrase-fétiche
+documentée de Matthieu Stefani** (cf. `docs/PERSONAS_ORSO.md` ligne 70-71,
+`tics rhétoriques`). Le verbatim guard est passé parce que la phrase est
+réellement dans le transcript (peut-être dite par Stefani, ou citée par
+Plais qui paraphrase Stefani — impossible à savoir sans diarization).
+
+**Cause structurelle** : OpenAI Whisper API standard ne retourne PAS de
+speaker labels. Tous les segments du transcript sont "anonymes". Le
+pipeline ne peut donc pas savoir si une phrase verbatim vient du host ou
+de l'invité.
+
+**Mitigations en place (V2 commit a venir)** :
+- `ClientToneProfile.host_blacklist_phrases` : liste de phrases-fétiches
+  du host à rejeter automatiquement (Stefani : "Nous sommes la moyenne
+  des personnes que nous fréquentons" + tagline GDIY).
+- Prompt `extractQuotes` enrichi avec règles :
+  - Rejeter quotes contenant marqueurs 1ère personne plurielle ambigus.
+  - Rejeter quotes ressemblant à une question d'interviewer.
+  - Rejeter explicitement les phrases-fétiches connues du host.
+- Cf. commit prochain "fix(quotes): host-blacklist + diarization-aware
+  prompt".
+
+**Solution complète post-pilote** (P1, P3 délai) :
+- Intégrer **Whisper diarization** : 3 options, choix à faire selon
+  budget/qualité/intégration :
+  - **AssemblyAI** : API hosted, Speaker Labels, tarif ~$0.025/min audio
+    (vs Whisper $0.006/min). Pour 4 épisodes pilote 35h cumulés ≈ $52.5.
+  - **Deepgram** : API hosted, Diarization, tarif similaire.
+  - **PyAnnote** ou **whisperX** : self-hosted Python, gratuit côté API
+    mais demande infra GPU (~$0.50/h GPU).
+- Décision à prendre quand les 4 épisodes pilote sont définitivement OK
+  + ROI mesuré : si Stefani relit et signale d'autres mauvaises
+  attributions → bascule diarization. Sinon liste noire suffit pour V1
+  pilote.
+
+**Pas bloquant** pour la livraison Stefani 13/05 — la mitigation V2
+(host_blacklist + prompt) couvre les phrases-fétiches connues.
+
+---
+
 ## Phase 4 V4 — editorial-base over-matching sur transcripts longs (P2)
 
 **Constat** : sur GDIY #266 Plais (Whisper réel, 47 segments analytiques

@@ -312,6 +312,41 @@ describe('extractQuotes', () => {
     ).rejects.toThrow(/guestName is required/);
   });
 
+  it('rejects quote matching a host-blacklisted phrase (V2 FIX 5 / F-P5-2)', async () => {
+    // Use a phrase that IS verbatim in TRANSCRIPT so verbatim guard passes,
+    // then test that the host-blacklist filter rejects it. The phrase
+    // mimics Stefani's signature attribution scenario.
+    const VERBATIM_PHRASE_FROM_TRANSCRIPT =
+      "le Bitcoin n'est pas un investissement, c'est une idéologie";
+    const blacklistTest = {
+      quotes: [
+        {
+          text: VERBATIM_PHRASE_FROM_TRANSCRIPT,
+          author: 'Alexandre Boissenot',
+          start_seconds: 0,
+          end_seconds: 30,
+          platform_fit: ['twitter'],
+          rationale: 'Test rejet host-blacklist phrase even when verbatim guard passes.',
+        },
+      ],
+    };
+    const result = await extractQuotes(TRANSCRIPT, {
+      guestName: 'Alexandre Boissenot',
+      podcastContext: LM_CTX,
+      hostBlacklistPhrases: [VERBATIM_PHRASE_FROM_TRANSCRIPT],
+    }, { llmFn: fixedLlmFn(blacklistTest) });
+    expect(result.quotes).toHaveLength(0);
+    expect(result.warnings.some((w) => /host-blacklisted phrase/.test(w))).toBe(true);
+  });
+
+  it('keeps quote when host-blacklist is empty/undefined (default behavior)', async () => {
+    const result = await extractQuotes(TRANSCRIPT, {
+      guestName: 'Alexandre Boissenot',
+      podcastContext: LM_CTX,
+    }, { llmFn: fixedLlmFn(VERBATIM_VALID) });
+    expect(result.quotes.length).toBeGreaterThan(0);
+  });
+
   it('throws when transcript empty', async () => {
     await expect(
       extractQuotes({ ...TRANSCRIPT, full_text: '' }, {

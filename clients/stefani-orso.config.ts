@@ -24,12 +24,22 @@ export const stefaniOrsoConfig: ClientConfig = {
       "\"fascinant...\", \"ne ratez pas...\".",
     forbidden_patterns: [
       'plongez dans',
+      'plonge dans',
       'fascinant',
       'ne ratez pas',
       'incontournable',
       'révolutionnaire',
     ],
     style_examples: [], // à remplir lundi avec extraits Stefani réels
+    // V2 FIX 5 (Phase 5 finding F-P5-2) : phrases du host à ne JAMAIS
+    // attribuer à un invité. Mitigation pilote de l'absence de
+    // diarization Whisper (cf. docs/DETTE.md).
+    host_blacklist_phrases: [
+      // Phrase-fétiche Stefani documentée (PERSONAS_ORSO.md ligne 70)
+      'Nous sommes la moyenne des personnes que nous fréquentons',
+      // Tagline GDIY iconique
+      'Bravo vous avez écouté cet épisode de GDIY jusqu\'au bout',
+    ],
   },
 
   // Lens registry pilote Stefani-Orso — 5 lens (4 thématiques + 1 fallback).

@@ -91,11 +91,61 @@ export function buildPrompt(
   options: ExtractKeyMomentsOptions,
 ): string {
   const { guestName, podcastContext, maxMoments = DEFAULT_MAX_MOMENTS } = options;
-  const truncated =
-    transcript.full_text.length > PROMPT_TRANSCRIPT_CHAR_LIMIT
-      ? transcript.full_text.slice(0, PROMPT_TRANSCRIPT_CHAR_LIMIT) +
-        '\n[... transcript tronqué pour limites tokens]'
-      : transcript.full_text;
+
+  // V2 fix F-P5-3 : pour des timestamps PRÉCIS (pas hallucinés), on
+  // construit un transcript "indexé" qui montre à Sonnet les segments
+  // Whisper réels avec leurs start_seconds/end_seconds. Sonnet doit
+  // ensuite citer un segment_index, ou retourner directement un
+  // start_seconds/end_seconds qui correspond à un boundary réel des
+  // segments.
+  const segments = transcript.segments;
+  let segmentsBlock = '';
+  let truncated = transcript.full_text;
+
+  if (segments && segments.length > 0) {
+    // Down-sample: pour les transcripts longs (~3000 segments Whisper),
+    // injecter tout serait trop long. On groupe en chunks ~30s pour
+    // avoir un index time-grossier mais utilisable.
+    const groupSeconds = 30;
+    const groups: Array<{ start: number; end: number; text: string }> = [];
+    let bucketStart: number | null = null;
+    let bucketTexts: string[] = [];
+    let bucketEnd = 0;
+    for (const s of segments) {
+      if (bucketStart === null) bucketStart = s.start_seconds;
+      bucketTexts.push(s.text);
+      bucketEnd = s.end_seconds;
+      if (bucketEnd - bucketStart >= groupSeconds) {
+        groups.push({ start: bucketStart, end: bucketEnd, text: bucketTexts.join(' ').trim() });
+        bucketStart = null;
+        bucketTexts = [];
+      }
+    }
+    if (bucketStart !== null && bucketTexts.length > 0) {
+      groups.push({ start: bucketStart, end: bucketEnd, text: bucketTexts.join(' ').trim() });
+    }
+    // If too long, truncate by char limit
+    let totalChars = 0;
+    const usedGroups: typeof groups = [];
+    for (const g of groups) {
+      if (totalChars + g.text.length > PROMPT_TRANSCRIPT_CHAR_LIMIT) break;
+      usedGroups.push(g);
+      totalChars += g.text.length;
+    }
+    segmentsBlock = usedGroups
+      .map((g) => `[${g.start.toFixed(0)}-${g.end.toFixed(0)}s] ${g.text}`)
+      .join('\n');
+    if (usedGroups.length < groups.length) {
+      segmentsBlock += `\n[... transcript tronqué après ${usedGroups.length}/${groups.length} groupes 30s]`;
+    }
+  } else {
+    // Fallback: legacy behavior on full_text
+    truncated =
+      transcript.full_text.length > PROMPT_TRANSCRIPT_CHAR_LIMIT
+        ? transcript.full_text.slice(0, PROMPT_TRANSCRIPT_CHAR_LIMIT) +
+          '\n[... transcript tronqué pour limites tokens]'
+        : transcript.full_text;
+  }
 
   return `Tu es éditeur expert en podcast français. Tu identifies les moments les plus clippables d'une interview pour réseaux sociaux et newsletters.
 
@@ -106,27 +156,28 @@ ${podcastContext.host_name ? `Animateur : ${podcastContext.host_name}\n` : ''}In
 ## CONSIGNES STRICTES
 1. Sélectionne EXACTEMENT ${maxMoments} moments saillants. Pas plus, pas moins.
 2. Chaque moment dure 30 à 180 secondes (start_seconds, end_seconds en temps absolu transcript).
-3. Saillant = opinion forte, anecdote spécifique, prise de position contre-intuitive, donnée précise.
-4. INTERDICTION ABSOLUE : ne JAMAIS citer un chiffre (€, %, vues, abonnés, M, k) qui n'apparaît PAS littéralement dans le transcript fourni. Si tu n'es pas certain qu'un chiffre est dans le transcript, n'en cite pas dans hook/title/rationale.
-5. Le hook (1 phrase) doit accrocher pour réseaux sociaux. Pas de clickbait creux.
-6. Le rationale explique pourquoi CE moment est saillant pour ce podcast.
-7. saliency_score ∈ [0..1].
-8. title fait 8 à 12 mots.
+3. **start_seconds et end_seconds DOIVENT correspondre à des boundaries de segments réels listés ci-dessous (ex: si tu vois [120-150s], tu peux choisir start_seconds=120 et end_seconds dans un segment voisin)**. NE JAMAIS inventer des timestamps ronds (00:00, 05:00, 10:00). Si tu n'es pas certain, choisis des timestamps qui apparaissent EXPLICITEMENT dans la liste des segments fournie.
+4. Saillant = opinion forte, anecdote spécifique, prise de position contre-intuitive, donnée précise.
+5. INTERDICTION ABSOLUE : ne JAMAIS citer un chiffre (€, %, vues, abonnés, M, k) qui n'apparaît PAS littéralement dans le transcript fourni. Si tu n'es pas certain qu'un chiffre est dans le transcript, n'en cite pas dans hook/title/rationale.
+6. Le hook (1 phrase) doit accrocher pour réseaux sociaux. Pas de clickbait creux. Pas d'expressions type "Plongez dans...", "Fascinant...", "Incontournable...", "Révolutionnaire..." — le ton est direct, anti-cliché.
+7. Le rationale explique pourquoi CE moment est saillant pour ce podcast en CITANT un élément précis du segment correspondant.
+8. saliency_score ∈ [0..1].
+9. title fait 8 à 12 mots.
 
-## TRANSCRIPT
-${truncated}
+## TRANSCRIPT (${segmentsBlock ? 'segments indexés' : 'full text'})
+${segmentsBlock || truncated}
 
 ## OUTPUT
 Réponds UNIQUEMENT en JSON strict (pas de markdown wrapping, pas de préambule) :
 {
   "moments": [
     {
-      "start_seconds": 120,
-      "end_seconds": 180,
-      "title": "Titre 8 à 12 mots",
-      "hook": "Phrase d'accroche réseau social",
-      "rationale": "Pourquoi ce moment est saillant",
-      "saliency_score": 0.85
+      "start_seconds": <nombre-aligné-sur-un-boundary-de-segment-fourni>,
+      "end_seconds": <nombre-aligné-sur-un-boundary-de-segment-fourni>,
+      "title": "<titre-8-à-12-mots>",
+      "hook": "<phrase-accroche-anti-cliché>",
+      "rationale": "<pourquoi-saillant-citant-élément-précis-du-segment>",
+      "saliency_score": <0-1>
     }
   ]
 }`;

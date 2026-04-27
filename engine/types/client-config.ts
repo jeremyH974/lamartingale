@@ -45,6 +45,21 @@ export interface ClientToneProfile {
   forbidden_patterns: string[];
   // Extraits de référence (vide au pilote, rempli post-discovery).
   style_examples: string[];
+  /**
+   * Phrases-fétiches du host à NE PAS attribuer à l'invité dans
+   * extractQuotes. Mitigation pilote du gap diarization Whisper
+   * (Phase 5 V1 finding F-P5-2). Optional.
+   *
+   * Une quote dont le `text` contient (case-insensitive substring)
+   * une de ces chaînes sera REJETÉE même si elle passe le verbatim
+   * guard, parce que l'attribution est probablement erronée.
+   *
+   * À enrichir au fil du pilote si nouvelles phrases-fétiches
+   * découvertes. Solution complète post-pilote : intégrer Whisper
+   * diarization (AssemblyAI / Deepgram / Whisper plugin) — cf.
+   * docs/DETTE.md.
+   */
+  host_blacklist_phrases?: string[];
 }
 
 export interface ClientSensitiveTopic {

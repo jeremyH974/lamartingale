@@ -156,9 +156,48 @@ describe('buildPrompt', () => {
     expect(p).toMatch(/INTERDICTION ABSOLUE/);
   });
 
-  it('truncates very long transcripts', () => {
+  it('uses segments-indexed transcript when segments available (V2 FIX 4 / F-P5-3)', () => {
+    const t: TranscriptResult = {
+      ...TRANSCRIPT,
+      segments: [
+        { start_seconds: 0, end_seconds: 15, text: 'segment debut' },
+        { start_seconds: 15, end_seconds: 35, text: 'segment middle' },
+        { start_seconds: 35, end_seconds: 60, text: 'segment late' },
+      ],
+    };
+    const p = buildPrompt(t, {
+      guestName: 'X',
+      podcastContext: GDIY_CTX,
+    });
+    // Prompt should contain time-indexed groups, not raw full_text dump
+    expect(p).toMatch(/\[0-\d+s\]/);
+    expect(p).toMatch(/segments indexés/);
+    expect(p).toMatch(/aligné-sur-un-boundary-de-segment-fourni|boundaries de segments réels/);
+  });
+
+  it('falls back to full_text when segments are empty', () => {
+    const t: TranscriptResult = { ...TRANSCRIPT, segments: [] };
+    const p = buildPrompt(t, {
+      guestName: 'X',
+      podcastContext: GDIY_CTX,
+    });
+    // Falls back to the legacy full_text path
+    expect(p).toMatch(/full text/);
+  });
+
+  it('forbids cliché clickbait expressions in hooks (V2 FIX 1)', () => {
+    const p = buildPrompt(TRANSCRIPT, {
+      guestName: 'X',
+      podcastContext: GDIY_CTX,
+    });
+    expect(p).toMatch(/Plongez dans|Fascinant|Incontournable|Révolutionnaire/);
+    expect(p).toMatch(/anti-cliché|clickbait/);
+  });
+
+  it('truncates very long transcripts (segments fallback path)', () => {
     const long: TranscriptResult = {
       ...TRANSCRIPT,
+      segments: [], // forces full_text fallback path
       full_text: 'a'.repeat(80_000),
     };
     const p = buildPrompt(long, {
@@ -166,6 +205,25 @@ describe('buildPrompt', () => {
       podcastContext: GDIY_CTX,
     });
     expect(p).toContain('tronqué');
+  });
+
+  it('truncates segment-indexed prompts at the char limit (V2 FIX 4)', () => {
+    // Build many synthetic segments with long text so groups exceed limit
+    const segs = Array.from({ length: 200 }, (_, i) => ({
+      start_seconds: i * 30,
+      end_seconds: (i + 1) * 30,
+      text: 'a'.repeat(500),
+    }));
+    const long: TranscriptResult = {
+      ...TRANSCRIPT,
+      segments: segs,
+      full_text: 'aaa',
+    };
+    const p = buildPrompt(long, {
+      guestName: 'X',
+      podcastContext: GDIY_CTX,
+    });
+    expect(p).toMatch(/transcript tronqué après \d+\/\d+ groupes/);
   });
 });
 

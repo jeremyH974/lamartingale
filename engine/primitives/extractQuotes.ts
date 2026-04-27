@@ -47,6 +47,12 @@ export interface ExtractQuotesOptions {
   hostName?: string;
   podcastContext: PodcastContext;
   maxQuotes?: number;
+  /**
+   * Phrases-fétiches du host à rejeter automatiquement (substring match
+   * normalisé) même si verbatim guard passe. Mitigation pilote du gap
+   * diarization Whisper. Cf. ClientToneProfile.host_blacklist_phrases.
+   */
+  hostBlacklistPhrases?: string[];
 }
 
 export interface ExtractQuotesConfig {
@@ -103,11 +109,19 @@ export function buildPrompt(
 Podcast : ${podcastContext.podcast_name} (${podcastContext.editorial_focus})
 ${hostName ? `Animateur : ${hostName}\n` : ''}Invité : ${guestName}
 
+## ATTRIBUTION HOST/INVITÉ — RÈGLE CRITIQUE
+Le transcript Whisper ne contient PAS de speaker labels. ${hostName ? `Le host ${hostName} ouvre généralement l'épisode et pose les questions ; les passages affirmatifs longs sont généralement de l'invité ${guestName}.` : ''}
+
+RÈGLE STRICTE (Phase 5 V2 fix F-P5-2) :
+- Si une quote contient des marqueurs de PREMIÈRE PERSONNE PLURIELLE ("nous sommes", "on a fait", "notre approche", "nous avons") sans qu'il soit ABSOLUMENT clair par le contexte qu'elle vient de ${guestName}, EXCLUS-la.
+- Si une quote ressemble à une question d'interviewer ("est-ce que tu…", "tu peux nous dire…", "donc en fait…"), EXCLUS-la (c'est probablement le host).
+- Si une quote est une PHRASE-FÉTICHE connue du host (ex: "Nous sommes la moyenne des personnes que nous fréquentons" est une phrase-fétiche de Matthieu Stefani), EXCLUS-la même si elle apparaît verbatim dans le transcript — elle vient du host pas de l'invité.
+
 ## CONSIGNES STRICTES (NON NÉGOCIABLES)
 1. Sélectionne jusqu'à ${maxQuotes} citations.
 2. Chaque "text" DOIT être VERBATIM du transcript fourni — copie/colle, pas de paraphrase, pas de reformulation, pas de "lissage" même mineur.
 3. Si tu ne trouves pas ${maxQuotes} citations vraiment verbatim, retourne MOINS. Mieux 3 verbatims que 5 paraphrases.
-4. "author" DOIT être strictement "${guestName}"${hostName ? ` ou "${hostName}"` : ''} (texte exact). Aucune autre valeur.
+4. "author" DOIT être strictement "${guestName}" (texte exact). Si tu n'es pas sûr que la phrase vient de ${guestName}, EXCLUS-la.
 5. Idéal text < 280 chars (compatible Twitter). Au-delà, tu peux retourner mais "platform_fit" doit refléter la limite (pas de "twitter" si > 280 chars).
 6. start_seconds / end_seconds = bornes du segment transcript où la quote apparaît.
 7. platform_fit ⊂ {"twitter", "linkedin", "instagram"} — au moins 1 plateforme.
@@ -189,6 +203,23 @@ export async function extractQuotes(
         `quote[${i}] rejected: text not verbatim in transcript (paraphrase or hallucination)`,
       );
       continue;
+    }
+
+    // V2 FIX 5 (F-P5-2) : reject host-blacklisted phrases (e.g. Stefani's
+    // signature "Nous sommes la moyenne des personnes…") — even though
+    // verbatim guard passes, attribution is structurally ambiguous
+    // without speaker labels.
+    if (options.hostBlacklistPhrases && options.hostBlacklistPhrases.length > 0) {
+      const normQuote = normalizeForVerbatim(validated.text);
+      const matchedHostPhrase = options.hostBlacklistPhrases.find((phrase) =>
+        normQuote.includes(normalizeForVerbatim(phrase)),
+      );
+      if (matchedHostPhrase) {
+        warnings.push(
+          `quote[${i}] rejected: text contains host-blacklisted phrase "${matchedHostPhrase.slice(0, 60)}..." (likely attributed to host, not guest)`,
+        );
+        continue;
+      }
     }
 
     // Auto-fix platform_fit incoherent: remove 'twitter' if text > 280 chars.
