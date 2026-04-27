@@ -115,6 +115,13 @@ export const stefaniOrsoConfig: ClientConfig = {
       },
       description:
         'Insurtech B2B (cyber, RH, garantie spécialisée).',
+      // V4 finding F-V4-1 : Plais (Platform.sh) reçoit 10 faux positifs
+      // marginaux (score 0.30-0.40) car Sonnet associe "risque" générique
+      // (sécurité/données/Patriot Act) à "risque assurable". Seuil 0.5
+      // élimine les marginaux tout en préservant les vrais matches Veyrat
+      // (Stoïk insurtech) qui sont à score plus élevé sur sujet assurance
+      // central.
+      match_threshold: 0.5,
     },
     {
       id: 'editorial-base',
