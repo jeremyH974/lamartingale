@@ -20,11 +20,69 @@ export type PackOutputFormat = 'markdown';
 // 'google-docs', 'pdf', 'html-newsletter'. Étendre le type littéral
 // au moment où chaque format est construit.
 
+/**
+ * Bénéficiaire d'un pack — qui consomme le livrable.
+ *
+ * Engagement 3 du brief-primitives-2026-04-28 : champ string libre pour
+ * supporter la tripartition créateur / audience / sponsor sans coder les
+ * 3 modes maintenant.
+ *
+ * - Pilote Stefani-Orso = 'creator' uniquement (cap 4 anti-overgeneralization).
+ * - Espace 2 (re-circulation catalogue) = 'audience' future.
+ * - Espace 3 (pitch decks sponsor) = 'sponsor' future.
+ *
+ * Le set fermé n'est pas verrouillé via un union TS pour permettre aux
+ * clients de définir leurs propres beneficiary_type sans modif engine.
+ * La validation runtime (présence + non-vide) vit dans
+ * `validatePackDefinition()`.
+ */
+export type PackBeneficiaryType = string;
+
 export interface PackDefinition {
   pack_id: string;
   display_name: string;
   steps: PackStep[];
   output_format: PackOutputFormat;
+  /**
+   * Bénéficiaire du pack. Mandatory à partir de l'Engagement 3.
+   * Pilote = 'creator'.
+   */
+  beneficiary_type: PackBeneficiaryType;
+}
+
+/**
+ * Valide qu'une PackDefinition a tous ses champs obligatoires non-vides.
+ * Throw avec un message diagnostiquable.
+ *
+ * Discipline runtime : ne fait PAS confiance au TS — un caller JS, ou un
+ * import depuis un JSON, peut violer le contrat. La validation est simple
+ * (présence + type primitif) ; on ne valide pas la valeur sémantique de
+ * beneficiary_type (qui est ouverte par design).
+ */
+export function validatePackDefinition(
+  packDef: unknown,
+): asserts packDef is PackDefinition {
+  if (typeof packDef !== 'object' || packDef === null) {
+    throw new Error('validatePackDefinition: packDef must be an object');
+  }
+  const p = packDef as Record<string, unknown>;
+  if (typeof p.pack_id !== 'string' || !p.pack_id.trim()) {
+    throw new Error('validatePackDefinition: pack_id is required (non-empty string)');
+  }
+  if (typeof p.display_name !== 'string' || !p.display_name.trim()) {
+    throw new Error('validatePackDefinition: display_name is required');
+  }
+  if (!Array.isArray(p.steps)) {
+    throw new Error('validatePackDefinition: steps must be an array');
+  }
+  if (typeof p.output_format !== 'string' || !p.output_format) {
+    throw new Error('validatePackDefinition: output_format is required');
+  }
+  if (typeof p.beneficiary_type !== 'string' || !p.beneficiary_type.trim()) {
+    throw new Error(
+      'validatePackDefinition: beneficiary_type is required (non-empty string). Pilot expects "creator".',
+    );
+  }
 }
 
 export interface PackStep {
