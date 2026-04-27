@@ -1,7 +1,7 @@
 # Sillon — Backlog stratégique des idées produit
 
 > Référentiel de priorisation des idées identifiées pour la suite de Sillon
-> Source : conversation stratégique 26-30 avril 2026 + retours session marathon V1-V5 + Phase 6
+> Source : conversation stratégique 26-30 avril 2026 + retours session marathon V1-V5 + Phase 6 + Phase 7a/7b
 > Statut : référentiel évolutif. À relire au moment du retour Stefani.
 > **NE PAS engager de développement à partir de ce document sans décision explicite par phase.**
 
@@ -43,6 +43,7 @@ Ordre d'application stricte : on n'avance jamais sur une idée Catégorie B/C/D 
 - Élimine 100% des risques d'erreur d'attribution (vs ~80-90% aujourd'hui)
 - Base technique pour features futures : ratio temps de parole, segments d'interruption, transition speaker
 - Argument différenciant vs Castmagic/NotebookLM (qui ne diarizent pas systématiquement)
+- **Prérequis pour B5 (Transcript publié multi-plateformes)** — sans diarization, transcript publié = "block" indistinct
 
 **Quand activer** : Phase 8 post-merge Phase 7a/7b, AVANT envoi pilote idéalement, sinon dans les 2 semaines post-envoi
 
@@ -156,6 +157,132 @@ Ordre d'application stricte : on n'avance jamais sur une idée Catégorie B/C/D 
 - Signal d'au moins 1-2 prospects supplémentaires (autres podcasters)
 
 **Note** : Le doc stratégique antérieur tranche à 5-15k€/mois sur la base d'hypothèses non vérifiées. **Ne pas acter ce positionnement avant signal client réel**. Discussion à reprendre post-retour Stefani avec data réelle.
+
+### B5 — Transcript publié multi-plateformes (SRT/VTT/JSON) ⭐ NOUVEAU
+
+**Description** : génération automatique du transcript formaté pour publication directe sur les plateformes de podcast/vidéo (YouTube, Apple Podcasts Connect, Spotify, Acast). 
+
+Formats à supporter :
+- **SRT** (sous-titres standard, compatible YouTube)
+- **VTT** (web standard, alternative SRT)
+- **Apple Podcasts Connect JSON** (avec speaker labels)
+- **Spotify JSON** (avec timestamps + speaker)
+- **YouTube description block** (transcript brut formaté avec sauts par speaker)
+
+**Déclencheur d'activation** : Stefani ou Christofer mentionne :
+- "J'aimerais utiliser les transcripts pour [YouTube/Apple/Spotify]"
+- "J'ai besoin de sous-titres pour mes épisodes"  
+- "Je passe du temps à formater le transcript pour publier"
+- "Le transcript serait utile en sortie de Sillon"
+
+**Coût estimé si activé** : 1 jour dev (formatters multiples, transformation pure depuis transcript Whisper)
+
+**Coût LLM** : $0 (pas d'appel LLM, juste transformation format)
+
+**Dépendance** : **Q1 diarization (A1) est PRÉREQUIS** pour qualité publishable. Sans Q1, transcript = "block" indistinct sans labels speaker. À activer **uniquement après A1 livré**.
+
+**Bénéfice si activé** : 
+- Stefani gagne 30-60 min de retravail manuel par épisode
+- Sillon devient "tout-en-un" pour la chaîne de publication
+- Différenciation faible vs Castmagic (qui le fait déjà), mais commodité utile en pack premium
+
+**Risque** : dilue le différenciateur cross-corpus. Castmagic/Descript font déjà ça. Si Stefani priorise ce livrable, signal qu'il valorise la commodité plus que le pivot Sillon — à creuser en RDV.
+
+### B6 — Chapitrage horodaté ⭐ NOUVEAU
+
+**Description** : génération automatique du chapitrage continu de l'épisode (5-12 chapitres avec titres et timestamps), format collable directement dans description YouTube ou Apple Podcasts.
+
+Format de sortie type :
+```
+00:00 - Introduction
+03:42 - L'arrivée chez Platform.sh
+12:15 - Le pari du 100% remote
+28:50 - Lever 140 millions sans bureau
+...
+```
+
+**Différence avec Key moments (L1 existant)** :
+- **Key moments** = 5 moments les plus saillants, durée variable, choisis pour impact viral
+- **Chapitres** = découpage continu de l'épisode (chaque seconde dans un chapitre), titres orientés thématique
+
+C'est un livrable distinct nécessitant un prompt LLM dédié au chapitrage.
+
+**Déclencheur d'activation** : Stefani ou Christofer mentionne :
+- "J'aimerais que mes épisodes soient chapitrés automatiquement"
+- "Le chapitrage me prend du temps"
+- "Je veux des chapitres YouTube/Apple Podcasts"
+- "Mes auditeurs réclament des chapitres"
+
+**Coût estimé si activé** : 2 jours dev (nouveau prompt + nouvel agent + formatter YouTube/Apple + tests régression)
+
+**Coût LLM** : ~$0.20 par épisode (Sonnet pour chapitrage, validation Sonnet, rewrite Opus si <7.5)
+
+**Dépendance** : aucune (pas besoin de Q1 diarization)
+
+**Bénéfice si activé** :
+- Gain de temps significatif pour l'équipe Orso (chapitrage manuel = 30-45 min par épisode)
+- Améliore la consommation profonde du catalogue (auditeurs naviguent par chapitre)
+- Synergie avec D3 Dashboard rétention (mesurer quels chapitres sont les plus écoutés)
+
+**Risque** : qualité du chapitrage à valider — un bon chapitrage demande compréhension fine du flow narratif, pas juste découpage temporel. Premier livrable de chapitrage à QA humainement avant validation produit.
+
+### B7 — Description SEO-optimisée multi-plateformes ⭐ NOUVEAU
+
+**Description** : génération automatique de la description podcast/YouTube optimisée SEO, en 2 versions :
+- **Version longue YouTube** (jusqu'à 5000 caractères) : hook + bullets sujets + invité + cross-refs + hashtags
+- **Version courte Apple/Spotify** (max 4000 caractères) : version condensée
+
+Structure type :
+```
+[Hook 2-3 phrases - les 200 premiers caractères critiques pour SEO]
+
+Dans cet épisode :
+• Sujet 1 (avec timestamp si chapitrage activé)
+• Sujet 2
+• Sujet 3
+...
+
+L'invité : [Nom] - [Bio courte] - [LinkedIn]
+
+Pour aller plus loin dans le catalogue :
+• [Cross-ref 1 - utilise les données existantes Sillon]
+• [Cross-ref 2]
+
+#hashtag1 #hashtag2 #hashtag3
+```
+
+**Déclencheur d'activation** : Stefani ou Christofer mentionne :
+- "J'ai du mal à écrire les descriptions"
+- "Je veux mieux référencer mes épisodes"
+- "Mes descriptions ne sont pas optimisées SEO"
+- "J'aimerais automatiser les descriptions Apple/Spotify"
+
+**Coût estimé si activé** : 1 jour dev (nouveau prompt + agent + formatter + tests)
+
+**Coût LLM** : ~$0.15 par épisode
+
+**Dépendance** : 
+- Cross-refs existants (déjà produits par Sillon) — utilisable directement
+- B6 chapitrage : si activé, descriptions intègrent les timestamps chapitrés
+
+**Bénéfice si activé** :
+- Gain de temps : 15-30 min par épisode économisées
+- Meilleur référencement SEO (keywords pertinents, structure standardisée)
+- Cohérence cross-épisodes
+
+**Risque** : Sillon entre frontalement en compétition avec les outils SEO podcast (Capsho, Castmagic, etc.). Le différenciateur Sillon = qualité du contenu et cross-corpus, pas SEO en soi.
+
+### Note transversale B5/B6/B7 — "Identité produit"
+
+L'activation simultanée de B5+B6+B7 transformerait Sillon de :
+
+**Sillon V1 actuel** : "moteur cross-corpus pour valoriser ton catalogue podcast" (différenciateur unique)
+
+**Sillon + B5/B6/B7** : "assistant complet de production-publication podcast" (concurrence frontale Castmagic/Descript/Capsho)
+
+**Implication stratégique** : si le retour Stefani priorise B5/B6/B7 plutôt que le pivot cross-corpus, c'est un **signal majeur** sur le positionnement produit. Ne pas activer aveuglément — discuter en RDV avec Stefani pour comprendre quel positionnement il valorise vraiment.
+
+**Reco** : si déclencheur clair sur 1 des 3 → activer celui-là. Si déclencheur sur 2-3 → RDV obligatoire avant activation pour discuter positionnement business.
 
 ---
 
@@ -279,5 +406,6 @@ Ordre d'application stricte : on n'avance jamais sur une idée Catégorie B/C/D 
 | Date | Modification | Source |
 |---|---|---|
 | 2026-04-30 | Création initiale | Session marathon Sillon V1-V5 + Phase 6 + doc stratégique antérieur |
+| 2026-04-30 | Ajout B5/B6/B7 (transcript publié, chapitrage, description SEO) | Discussion soirée 30/04 sur extension scope publication podcast |
 | à venir | Mise à jour post-retour Stefani | Retour réel Stefani-Orso |
 | à venir | Reclassement post-signature client #1 | Décision business |
