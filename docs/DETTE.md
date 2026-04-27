@@ -6,6 +6,48 @@ Classement par priorité décroissante. **P0 = bloquant / P1 = forte valeur / P2
 
 ---
 
+## ✅ Phase 2 architecturale — bug parser SQL des wrappers de migration (FERMÉE 2026-04-28)
+
+**Avant** : `engine/db/migrate-entities.ts` (et tous les wrappers `migrate-*.ts`
+qui ont copié son pattern) parsait les fichiers `.sql` ainsi :
+
+```ts
+const statements = sqlContent
+  .split(/;\s*\n/)
+  .map(s => s.trim())
+  .filter(s => s.length > 0 && !s.startsWith('--'));
+```
+
+Le filtre `!s.startsWith('--')` était appliqué APRÈS le split et regardait
+le 1er caractère du statement entier. Or après split sur `;\n`, le
+**premier bloc** d'une migration standard contient l'en-tête de
+commentaires + le 1er CREATE TABLE. Comme ce bloc commence par `--`, le
+filtre droppait silencieusement le CREATE TABLE.
+
+**Symptôme observé** : la migration `2026-04-27-create-entities.sql` a dû
+être appliquée via un one-shot `npx tsx -e ".then() chaîné"` plutôt
+qu'avec le wrapper. Le wrapper `migrate-entities.ts` était donc cassé en
+silence depuis sa création.
+
+**Résolution (commit Phase 2 / Engagement 1)** :
+- Nouveau module `engine/db/run-sql-file.ts` exposant
+  `parseSqlStatements(sql: string): string[]` qui strippe les lignes de
+  commentaires AVANT le split, puis split sur `;`. Plus robuste.
+- `engine/db/migrate-entities.ts` refactoré pour utiliser `runSqlFile()`.
+- Nouveau wrapper `engine/db/migrate-editorial-events.ts` qui utilise la
+  même infra (Engagement 1 : table editorial_events).
+- Tests : `engine/__tests__/run-sql-file.test.ts` (10 tests dont 1
+  *witness test* qui prouve que l'ancien parser droppait bien le 1er
+  statement sur le contenu réel des migrations).
+
+**Migration future** : tous les futurs wrappers `engine/db/migrate-*.ts`
+doivent utiliser `runSqlFile()` plutôt que de copier l'ancien pattern.
+Les anciens wrappers `migrate-tenant.ts`, `migrate-rss-exhaustive.ts`,
+etc., héritent probablement du même bug — à auditer si une re-application
+est jamais nécessaire (idempotence sauf eux-mêmes).
+
+---
+
 ## Règle smoke test pour flags UI
 
 Un flag qui affecte l'UI doit être smoke-testé avec une vérification
