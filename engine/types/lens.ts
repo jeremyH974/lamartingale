@@ -30,4 +30,11 @@ export interface Lens {
   /** Paramètres lus par la scoring-strategy (shape libre selon strategy). */
   parameters: Record<string, unknown>;
   description?: string;
+  /**
+   * Seuil de match minimum pour persistance, par-lens. Override le seuil
+   * global (default 0.3). Utile pour les lens fallback "editorial-base"
+   * qui matchent trop largement et qu'on veut garder à un seuil plus haut.
+   * Range [0..1].
+   */
+  match_threshold?: number;
 }

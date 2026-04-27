@@ -229,6 +229,9 @@ export async function lensClassificationAgent(
   const distribution: { [lens_id: string]: number } = {};
   let llmCalls = 0;
 
+  // Per-lens threshold lookup (overrides global threshold per-lens).
+  const lensById = new Map(lenses.map((l) => [l.id, l]));
+
   for (let i = 0; i < segments.length; i++) {
     const seg = segments[i];
     const prompt = buildSegmentPrompt(seg, lenses);
@@ -263,7 +266,9 @@ export async function lensClassificationAgent(
         warnings.push(`segment[${i}].match[${j}] uses unknown lens_id '${match.lens_id}' — skipped`);
         continue;
       }
-      if (match.lens_score < threshold) {
+      const lensSpecificThreshold = lensById.get(match.lens_id)?.match_threshold;
+      const effectiveThreshold = lensSpecificThreshold ?? threshold;
+      if (match.lens_score < effectiveThreshold) {
         continue; // below threshold, not persisted (intentional, no warning)
       }
 

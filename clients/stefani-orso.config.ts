@@ -82,14 +82,15 @@ export const stefaniOrsoConfig: ClientConfig = {
       scoring_strategy_id: 'concept-match-v1',
       applicable_content_types: ['podcast_episode'],
       parameters: {
+        // V4 recalibration : ancrage explicite "DTC" / "consommateur" dans
+        // chaque concept pour exclure le SaaS B2B générique (V3 finding F4).
         concepts: [
-          'e-commerce DTC',
-          'acquisition payante (Facebook Ads, Google, Amazon)',
-          'performance marketing',
-          'CAC LTV unit economics',
-          'scaling operationnel rapide',
-          'brand-building digital natif',
-          'retail tactique data-driven',
+          'e-commerce DTC (vente directe consommateur)',
+          'acquisition payante DTC : Facebook Ads, Google Ads, Amazon Ads',
+          'performance marketing pour produit physique consommateur',
+          'CAC LTV pour brand DTC',
+          'scaling DTC : lancement produit, fulfillment, retours',
+          'brand digital natif vendant en direct',
         ],
       },
       description:
@@ -101,14 +102,15 @@ export const stefaniOrsoConfig: ClientConfig = {
       scoring_strategy_id: 'concept-match-v1',
       applicable_content_types: ['podcast_episode'],
       parameters: {
+        // V4 recalibration : resserrer dans le domaine assurance pour exclure
+        // le SaaS B2B générique servant des financiers (V3 finding F2).
         concepts: [
-          'insurtech B2B',
-          'cyber-insurance',
-          'assurance entreprise spécialisée',
-          'tech au service de la finance',
-          'product mid-market',
-          'distribution via courtiers',
-          'risque émergent',
+          'insurtech B2B (assurance + tech)',
+          'cyber-insurance ou assurance cyber',
+          'couverture risques entreprise',
+          'distribution assurance via courtiers',
+          "sinistralité, prime, polices d'assurance",
+          'risque émergent assurable',
         ],
       },
       description:
@@ -130,6 +132,12 @@ export const stefaniOrsoConfig: ClientConfig = {
       },
       description:
         'Lens fallback générique, applicable à la plupart des épisodes Orso.',
+      // V4 recalibration : seuil par-lens à 0.6 (vs 0.3 global) pour que
+      // ce fallback ne devienne pas dominant — si Sonnet retourne un match
+      // 0.4-0.5 sur editorial-base, c'est probablement du bruit. On garde
+      // les concepts génériques mais on exige un score plus haut (V3
+      // finding F3 : 20/47 segments matchés sur Plais = over-matching).
+      match_threshold: 0.6,
     },
   ],
 

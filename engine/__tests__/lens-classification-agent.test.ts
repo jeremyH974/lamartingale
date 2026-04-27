@@ -385,13 +385,46 @@ describe('lensClassificationAgent', () => {
     ).rejects.toThrow(/no lenses applicable/);
   });
 
+  it('respects per-lens match_threshold (V4 fallback editorial-base case)', async () => {
+    // Custom client config with editorial-base having match_threshold=0.6
+    const customConfig = {
+      ...stefaniOrsoConfig,
+      lenses: stefaniOrsoConfig.lenses.map((l) =>
+        l.id === 'editorial-base' ? { ...l, match_threshold: 0.6 } : l,
+      ),
+    };
+    const { fn: persistFn } = trackingPersistFn();
+    const llmFn = fixedLlmFn([
+      {
+        matches: [
+          // editorial-base at 0.5 → below per-lens threshold 0.6 → DROPPED
+          { lens_id: 'editorial-base', lens_score: 0.5, rationale: 'Some segment 1 rationale long enough to satisfy zod min 20.' },
+          // editorial-base at 0.7 → above 0.6 → KEPT
+          { lens_id: 'editorial-base', lens_score: 0.7, rationale: 'Stronger editorial match anchored in a specific segment quote.' },
+          // ovni-vc-deeptech at 0.4 → above global 0.3 → KEPT
+          { lens_id: 'ovni-vc-deeptech', lens_score: 0.4, rationale: 'Scaleup B2B mention in segment, profil VC plausible.' },
+        ],
+      },
+      { matches: [] },
+    ]);
+    const result = await lensClassificationAgent(TRANSCRIPT, customConfig, baseOpts, {
+      llmFn,
+      persistFn,
+    });
+    // editorial-base 0.5 dropped, 0.7 kept → 1 event on editorial-base
+    // ovni-vc 0.4 kept → 1 event on ovni-vc
+    expect(result.lens_distribution['editorial-base']).toBe(1);
+    expect(result.lens_distribution['ovni-vc-deeptech']).toBe(1);
+    expect(result.events_created).toHaveLength(2);
+  });
+
   it('aggregates lens distribution across segments', async () => {
     const { fn: persistFn } = trackingPersistFn();
     const llmFn = fixedLlmFn([
       {
         matches: [
           { lens_id: 'ovni-vc-deeptech', lens_score: 0.8, rationale: 'Segment 1 : scaleup B2B levée Series B+, profil Ovni clair.' },
-          { lens_id: 'editorial-base', lens_score: 0.5, rationale: 'Segment 1 : aussi du parcours entrepreneurial classique.' },
+          { lens_id: 'editorial-base', lens_score: 0.7, rationale: 'Segment 1 : aussi du parcours entrepreneurial classique (above 0.6 lens threshold).' },
         ],
       },
       {
