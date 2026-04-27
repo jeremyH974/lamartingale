@@ -87,6 +87,42 @@ export interface ClientToneProfile {
    * registre.
    */
   persona_guidance?: string;
+
+  /**
+   * Corpus de style pour few-shot injection (Phase 5 V4 refonte).
+   * Newsletters réelles du host servant d'exemples dans les prompts
+   * L3/L4/L5, plus phrases-fétiches blacklist + signature expressions
+   * + référence écosystème éditorial.
+   *
+   * Cf. docs/brief-phase5-v4-refonte-2026-04-30.md (Change 1).
+   */
+  style_corpus?: ClientStyleCorpus;
+}
+
+export interface ClientStyleCorpusNewsletter {
+  id: string;
+  title: string;
+  date: string; // YYYY-MM-DD
+  url?: string;
+  pattern_tags: string[];
+  excerpts: string[];
+  reco_format_example?: string;
+}
+
+export interface ClientStyleCorpusEcosystemReference {
+  canonical_phrase: string;
+  alternatives: string[];
+  must_appear_in: Array<'newsletter' | 'brief-annexe' | 'cross-refs'>;
+  appearance_style: string;
+}
+
+export interface ClientStyleCorpus {
+  newsletters: ClientStyleCorpusNewsletter[];
+  /** Phrases du host à NE JAMAIS attribuer à un invité (extension de host_blacklist_phrases). */
+  host_blacklist_phrases: string[];
+  /** Vocabulaire emblématique pour reconnaissance (pas pour imitation forcée). */
+  signature_expressions: string[];
+  ecosystem_reference: ClientStyleCorpusEcosystemReference;
 }
 
 export interface ClientSensitiveTopic {

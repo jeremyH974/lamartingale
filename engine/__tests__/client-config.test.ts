@@ -54,4 +54,40 @@ describe('stefani-orso client config', () => {
       expect(Array.isArray((lens.parameters as { concepts?: unknown }).concepts)).toBe(true);
     }
   });
+
+  // V4 (refonte Phase 5) — vérifie le bloc style_corpus injecté pour few-shot.
+  describe('style_corpus (Phase 5 V4)', () => {
+    const corpus = stefaniOrsoConfig.tone_profile.style_corpus;
+
+    it('declares 6 Stefani newsletters with required metadata', () => {
+      expect(corpus).toBeDefined();
+      expect(corpus!.newsletters).toHaveLength(6);
+      for (const n of corpus!.newsletters) {
+        expect(n.id).toMatch(/^[a-z0-9-]+$/);
+        expect(n.title).toBeTruthy();
+        expect(n.date).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+        expect(n.pattern_tags.length).toBeGreaterThan(0);
+      }
+    });
+
+    it('declares the host_blacklist_phrases superset (>= V2 list)', () => {
+      const blacklist = corpus!.host_blacklist_phrases;
+      expect(blacklist).toContain('Nous sommes la moyenne des personnes que nous fréquentons');
+      expect(blacklist).toContain('Casquette Verte');
+    });
+
+    it('declares ecosystem_reference with canonical phrase + alternatives', () => {
+      const eco = corpus!.ecosystem_reference;
+      expect(eco.canonical_phrase).toBe('écosystème Orso');
+      expect(eco.alternatives.length).toBeGreaterThan(0);
+      expect(eco.must_appear_in).toEqual(
+        expect.arrayContaining(['newsletter', 'brief-annexe']),
+      );
+    });
+
+    it('declares signature_expressions for recognition', () => {
+      expect(corpus!.signature_expressions.length).toBeGreaterThan(0);
+      expect(corpus!.signature_expressions).toContain('Boom.');
+    });
+  });
 });

@@ -71,6 +71,155 @@ export const stefaniOrsoConfig: ClientConfig = {
       "Matthieu Stefani, créateur GDIY. Ton ferme, références concrètes, " +
       "anecdotes business, pas de jargon. Ses lecteurs sont entrepreneurs " +
       "et investisseurs senior — pas besoin d'expliquer les bases.",
+
+    // V4 (refonte Phase 5 V4 — brief 2026-04-30) : corpus de style pour
+    // few-shot injection L3/L4/L5. 6 newsletters Stefani réelles stockées
+    // dans data/style-corpus/stefani/. Chargées à la demande par
+    // engine/agents/loadStyleCorpus.ts (pas inlines ici pour ne pas
+    // bloater la config).
+    style_corpus: {
+      newsletters: [
+        {
+          id: 'usages-ia-2026-04',
+          title: "Les meilleurs usages de l'IA",
+          date: '2026-04-21',
+          url: 'https://matt.kessel.media/posts/pst_6cacd87ea485417d913df6d2712b2d2f/les-meilleurs-usages-de-lia',
+          pattern_tags: [
+            'anecdote-personnelle',
+            'questions-ouvertes',
+            'diagnostic-systemique',
+            'sujet-tech',
+          ],
+          excerpts: [
+            "Aujourd'hui j'ai envie de vous partager une anecdote...",
+            'Génie.',
+            "Cette anecdote m'a fait réaliser quelque chose qui me travaille depuis...",
+            "Un sommelier-comptable-courtier permanent, accessible à 3h du matin si besoin.",
+          ],
+          reco_format_example:
+            "Tout le monde a grandi avec Maya l'Abeille. Mais personne ne sait ce qui se passe vraiment derrière. Sixte de Vauplane a racheté ces franchises. Construit sa propre IA pour les produire. Et atteint 22 milliards de vues par an en faisant l'exact inverse de ce qu'Hollywood fait depuis toujours.\n\nSa thèse : refuser l'IA aujourd'hui, c'est refuser l'arrivée du son en 1927.\n\nUn épisode qui va changer votre regard sur l'animation, l'IA, et ce que \"créer\" veut encore dire.",
+        },
+        {
+          id: 'acheter-juste-2025-11',
+          title: 'Acheter juste, ou acheter possible ?',
+          date: '2025-11-03',
+          pattern_tags: [
+            'opening-court',
+            'tension-personnelle',
+            'pistes-numerotees',
+            'conclusion-transcendante',
+            'analyse-systemique',
+          ],
+          excerpts: [
+            "En 2025, il \"faut\" passer à l'électrique.",
+            "Sur le papier, j'y vais. 100%.",
+            'Dans la vraie vie, je cale.',
+            "Le consommateur devient l'ultime régulateur, sommé de résoudre seul ce que l'industrie et la politique ont laissé filer.",
+            "L'injonction morale, sans infrastructure cohérente, devient un impôt psychologique.",
+          ],
+        },
+        {
+          id: 'souhaits-2026-01',
+          title: 'Ce que je vous souhaite en 2026',
+          date: '2026-01-11',
+          pattern_tags: [
+            'titre-provocateur',
+            'mot-isole',
+            'liste-numerotee-actionnable',
+            'discipline-mentale',
+          ],
+          excerpts: [
+            'Rien.',
+            'Ou plutôt si.',
+            'Les choses ne tombent pas du ciel. Elles se provoquent.',
+            "Vouloir ne suffit pas. Vouloir, c'est un mirage.",
+            "Faire d'abord ce qui est pénible a un effet immédiat : la charge mentale s'effondre.",
+          ],
+        },
+        {
+          id: 'taxe-zucman-2025-09',
+          title: "L'idée n'est plus de savoir si mais quand",
+          date: '2025-09-22',
+          pattern_tags: [
+            'constat-brutal',
+            'prise-de-position',
+            'questions-cadrantes',
+            'analyse-politique',
+          ],
+          excerpts: [
+            'Terminé le débat sur cette taxe.',
+            "Le débat n'est plus.",
+            "Cette taxe va donc arriver, et c'est probablement une bonne chose.",
+          ],
+        },
+        {
+          id: 'moyenne-efforts-2025-09',
+          title: 'Sommes-nous la moyenne de nos efforts ?',
+          date: '2025-09-15',
+          pattern_tags: [
+            'phrase-fetiche-exergue',
+            'dialogue-rapporte',
+            'conclusion-engagee',
+            'tension-morale',
+          ],
+          excerpts: [
+            'Essaye donc de courir un marathon sans entraînement.',
+            "Mais une chose reste non négociable : l'effort, le travail, l'engagement.",
+            'Pour que la moyenne générale remonte enfin.',
+          ],
+        },
+        {
+          id: 'tout-vendre-2025-04',
+          title: 'Faut-il tout vendre maintenant ?',
+          date: '2025-04-21',
+          pattern_tags: [
+            'titre-question',
+            'analyse-strategique',
+            'conclusion-rassurante-lucide',
+            'long-terme',
+          ],
+          excerpts: [
+            'Et pourtant si vous ne gardez pas la tête froide en ce moment, que vous changez de direction telle une girouette avec le sens du vent, vous allez rapidement vous perdre.',
+            'Alors la stratégie est claire : pensez long terme et respectez votre mission.',
+            'Tout va bien se passer.',
+          ],
+        },
+      ],
+      // V4 — extension de host_blacklist_phrases : phrases-fétiches Stefani
+      // qui ne doivent JAMAIS être attribuées à l'invité ni recopiées dans
+      // newsletter/brief annexe (sauf si Stefani lui-même les écrit).
+      host_blacklist_phrases: [
+        'Nous sommes la moyenne des personnes que nous fréquentons',
+        'Nous sommes la moyenne des personnes',
+        'On est la moyenne des personnes',
+        'Casquette Verte',
+        'Bisous,',
+        'Matt/',
+      ],
+      signature_expressions: [
+        'Boom.',
+        'Sale.',
+        'Génie.',
+        'Fou.',
+        'Le feu',
+        "à l'arrache",
+        'tout bien réfléchi',
+        'Au fond',
+        'DCA',
+        'single source of truth',
+      ],
+      ecosystem_reference: {
+        canonical_phrase: 'écosystème Orso',
+        alternatives: [
+          'la team GDIY et Orso Media',
+          "l'équipe d'Orso",
+          'nos amis du catalogue Orso',
+          'catalogue Orso Media',
+        ],
+        must_appear_in: ['newsletter', 'brief-annexe'],
+        appearance_style: 'naturelle, pas forcée',
+      },
+    },
   },
 
   // Lens registry pilote Stefani-Orso — 5 lens (4 thématiques + 1 fallback).
