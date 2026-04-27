@@ -32,4 +32,26 @@ describe('stefani-orso client config', () => {
     expect(stefaniOrsoConfig.lenses.length).toBeGreaterThan(0);
     expect(stefaniOrsoConfig.sensitive_topics.length).toBeGreaterThan(0);
   });
+
+  it('declares the 5 pilot lenses (4 thematic + 1 fallback)', () => {
+    const ids = stefaniOrsoConfig.lenses.map((l) => l.id);
+    expect(ids).toEqual(
+      expect.arrayContaining([
+        'ovni-vc-deeptech',
+        'alternative-investments',
+        'dtc-acquisition-tactical',
+        'b2b-insurance-tech',
+        'editorial-base',
+      ]),
+    );
+    expect(stefaniOrsoConfig.lenses).toHaveLength(5);
+  });
+
+  it('all pilot lenses use concept-match-v1 scoring strategy', () => {
+    for (const lens of stefaniOrsoConfig.lenses) {
+      expect(lens.scoring_strategy_id).toBe('concept-match-v1');
+      expect(lens.applicable_content_types).toContain('podcast_episode');
+      expect(Array.isArray((lens.parameters as { concepts?: unknown }).concepts)).toBe(true);
+    }
+  });
 });

@@ -7,6 +7,8 @@
 // - Pas de champ multi-langue, streaming, webhooks, API publique : pas dans
 //   ROADMAP_INTERNE.md à 12 mois.
 
+import type { Lens } from './lens';
+
 export interface ClientConfig {
   client_id: string;
   display_name: string;
@@ -17,10 +19,12 @@ export interface ClientConfig {
 
   tone_profile: ClientToneProfile;
 
-  // Lentilles d'analyse activables selon contexte (rôle invité etc.).
-  // Cas présent : ovni-vc pour Stefani. Cas futur : chaque client podcast
-  // aura ses lens propres.
-  lenses: ClientLens[];
+  // Lentilles d'analyse activables selon contexte. Engagement 2 du brief
+  // primitives 2026-04-28 : passage du shape ad-hoc {label, activates_when}
+  // au shape Lens générique (id, type, scoring_strategy_id, parameters)
+  // partagé entre clients podcast et futurs clients verticales.
+  // Cf. engine/types/lens.ts.
+  lenses: Lens[];
 
   // Sujets à ne jamais évoquer/inférer dans les outputs. Cas présent :
   // alvo-egery côté Stefani. Cas futur : chaque client a ses sujets sensibles.
@@ -41,14 +45,6 @@ export interface ClientToneProfile {
   forbidden_patterns: string[];
   // Extraits de référence (vide au pilote, rempli post-discovery).
   style_examples: string[];
-}
-
-export interface ClientLens {
-  id: string;
-  label: string;
-  description: string;
-  // Règle d'activation textuelle (lue par l'agent pack lundi-mardi).
-  activates_when: string;
 }
 
 export interface ClientSensitiveTopic {
