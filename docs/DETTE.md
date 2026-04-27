@@ -6,6 +6,42 @@ Classement par priorité décroissante. **P0 = bloquant / P1 = forte valeur / P2
 
 ---
 
+## Phase 4 V4 — editorial-base over-matching sur transcripts longs (P2)
+
+**Constat** : sur GDIY #266 Plais (Whisper réel, 47 segments analytiques
+de 4min sur 185 min audio total), la lens fallback `editorial-base`
+matche 11 segments (vs 1 sur Nooz, 0 sur Boissenot, 0 sur Veyrat). Les
+rationales sont éditorialement pertinents ("parcours entrepreneurial,
+prise de risque, discipline mentale") — Plais a réellement du contenu
+biographique riche dans son interview 3h.
+
+**Mitigations en place** :
+- Per-lens `match_threshold: 0.6` sur editorial-base (engine/types/lens.ts
+  + commit efbc0ad). Réduit V3→V4 de 20 à 11 matches sur Plais.
+- Filtrage top-N par lens dans les livrables Phase 5 (constante
+  `MAX_MATCHES_PER_LENS = 5` appliquée dans cross-refs by lens + brief
+  annexe). Mitige l'impact UX sans toucher au scoring.
+
+**Hypothèses sur la cause** :
+1. **Signal éditorial réel** — Plais est un fondateur expérimenté dans
+   un format long (3h), donc il développe des réflexions "leçons
+   business" plus que sur une interview courte (Veyrat 31min).
+2. **Lens fallback paramétrée trop large** — concepts génériques
+   (parcours entrepreneurial, leçons business, discipline mentale) qui
+   matchent tout podcast entrepreneurial.
+
+**À investiguer post-pilote** :
+- Mesurer la distribution editorial-base sur 10+ épisodes diversifiés
+  (durée + invité différents). Si le pattern "long format = +matches"
+  se confirme, c'est un signal éditorial à valoriser, pas un bug.
+- Si surfsce après livraison Stefani : raffiner concepts editorial-base
+  pour exiger un thème "biographique pivot" (tournant majeur, philosophie
+  hors business pur) plutôt que des éléments toujours présents.
+
+**Pas bloquant** pour la livraison Stefani 13/05.
+
+---
+
 ## ✅ Phase 2 architecturale — bug parser SQL des wrappers de migration (FERMÉE 2026-04-28)
 
 **Avant** : `engine/db/migrate-entities.ts` (et tous les wrappers `migrate-*.ts`
