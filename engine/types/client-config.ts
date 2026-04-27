@@ -60,6 +60,33 @@ export interface ClientToneProfile {
    * docs/DETTE.md.
    */
   host_blacklist_phrases?: string[];
+
+  /**
+   * Vocabulaire à privilégier dans les rédactions Sillon. Phase 5 V3
+   * finding : Sonnet utilise des formulations scolaires/médiocres par
+   * défaut quand on lui dit juste "ton direct". Lui donner des termes
+   * positifs concrets l'oriente plus efficacement que des interdictions
+   * seules.
+   */
+  prefer_vocabulary?: string[];
+
+  /**
+   * Contraintes de style explicites (longueur phrases, transitions,
+   * fin de paragraphe, opinions tranchées vs neutralité).
+   */
+  style_constraints?: {
+    sentence_length?: string;
+    tone?: string;
+    transitions?: string;
+    ending?: string;
+  };
+
+  /**
+   * Description courte du persona-cible et de son lecteur. Injectée
+   * dans les prompts éditoriaux L3/L4/L5 pour que Sonnet calibre son
+   * registre.
+   */
+  persona_guidance?: string;
 }
 
 export interface ClientSensitiveTopic {

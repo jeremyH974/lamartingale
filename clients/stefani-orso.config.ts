@@ -29,8 +29,18 @@ export const stefaniOrsoConfig: ClientConfig = {
       'ne ratez pas',
       'incontournable',
       'révolutionnaire',
+      // V3 — auto-éval Phase 5 V2 a flaggé ces formules scolaires :
+      'ouvrent des pistes intéressantes',
+      'des perspectives variées',
+      'ce qui est essentiel dans',
+      'résonance avec', // formule scolaire trop fréquente
+      'préparation d\'interviews et de due diligence',
+      // Connecteurs scolaires lourds que Stefani évite
+      'par ailleurs',
+      'en outre',
+      'de plus,',
     ],
-    style_examples: [], // à remplir lundi avec extraits Stefani réels
+    style_examples: [], // à remplir post-pilote avec extraits Stefani réels
     // V2 FIX 5 (Phase 5 finding F-P5-2) : phrases du host à ne JAMAIS
     // attribuer à un invité. Mitigation pilote de l'absence de
     // diarization Whisper (cf. docs/DETTE.md).
@@ -40,6 +50,27 @@ export const stefaniOrsoConfig: ClientConfig = {
       // Tagline GDIY iconique
       'Bravo vous avez écouté cet épisode de GDIY jusqu\'au bout',
     ],
+    // V3 (décision Jérémy 2026-04-28) : calibration tone Stefani concrète.
+    prefer_vocabulary: [
+      'préparation interview',     // pas "due diligence"
+      'investisseur',              // pas le sigle "VC"
+      'production éditoriale',     // pas "valeur côté auditeur"
+      'créateur',                  // contexte hôte podcast
+      'opérateur',                 // pour parler des fondateurs
+      'catalogue',                 // référence cross-corpus
+    ],
+    style_constraints: {
+      sentence_length: 'courte à moyenne (max 25 mots)',
+      tone: 'opinions tranchées, pas de neutralité diplomatique',
+      transitions:
+        'directes, pas de connecteurs scolaires (par ailleurs, en outre, de plus)',
+      ending:
+        'pas de phrase de conclusion molle. Si phrase finale, doit poser une question ou affirmer une thèse.',
+    },
+    persona_guidance:
+      "Matthieu Stefani, créateur GDIY. Ton ferme, références concrètes, " +
+      "anecdotes business, pas de jargon. Ses lecteurs sont entrepreneurs " +
+      "et investisseurs senior — pas besoin d'expliquer les bases.",
   },
 
   // Lens registry pilote Stefani-Orso — 5 lens (4 thématiques + 1 fallback).
