@@ -359,3 +359,186 @@ export async function runValidatedGeneration(
     history,
   };
 }
+
+// =============================================================================
+// Phase 5 V5 — Pipeline avec rewrite Opus 4.7 + fail-safe Option B-dégradée.
+// =============================================================================
+
+import {
+  rewriteWithOpus,
+  type OpusEpisodeContext,
+} from '@engine/agents/opusRewrite';
+import type { LoadedNewsletter } from '@engine/agents/loadStyleCorpus';
+
+export interface V5RunHistoryEntry {
+  iteration: number;
+  source: 'sonnet-initial' | 'opus-rewrite-1' | 'opus-rewrite-2' | 'degraded-fallback';
+  score: number;
+  passed: boolean;
+}
+
+export interface ValidatedGenerationV5Result {
+  finalText: string;
+  finalSource: V5RunHistoryEntry['source'];
+  finalValidation: QualityValidationResult;
+  history: V5RunHistoryEntry[];
+  /** True si le pipeline a basculé en format dégradé. */
+  usedDegradedFallback: boolean;
+}
+
+export interface DegradedFallbackBuilderArgs {
+  bestText: string;
+  bestValidation: QualityValidationResult;
+  livrableType: LivrableType;
+  episodeContext: OpusEpisodeContext;
+}
+
+export type DegradedFallbackBuilder = (
+  args: DegradedFallbackBuilderArgs,
+) => string | Promise<string>;
+
+export interface RunValidatedGenerationV5Options {
+  /** Texte produit par la génération Sonnet initiale. */
+  initialText: string;
+  livrableType: LivrableType;
+  context: QualityValidationContext;
+  episodeContext: OpusEpisodeContext;
+  /** Newsletters host chargées (avec stripFrontMatter — fix F-V4-1). */
+  newsletters: LoadedNewsletter[];
+  /** LLM Sonnet pour validation. Doit rester stable (oracle). */
+  validatorLlmFn: LLMFn;
+  /** LLM Opus 4.7 pour rewrite premium. */
+  rewriteLlmFn: LLMFn;
+  /** Cap longueur cible passée au prompt Opus. */
+  targetLength: string;
+  /** Contraintes spécifiques livrable passées au prompt Opus. */
+  specificConstraints: string;
+  /** Threshold qualité (défaut 7.5). */
+  passThreshold?: number;
+  /** Max rewrites Opus (défaut 2 — cap dur du brief V5). */
+  maxOpusRewrites?: number;
+  /** Builder format dégradé. Si absent et cap atteint, retourne best-of. */
+  degradedFallbackBuilder?: DegradedFallbackBuilder;
+  rewriteMaxTokens?: number;
+}
+
+/**
+ * Pipeline Phase 5 V5 :
+ *  1. Validate `initialText` (Sonnet).
+ *  2. Si score < threshold → rewrite Opus 4.7 → re-validate.
+ *  3. Si toujours sous cap → rewrite Opus 4.7 #2 → re-validate.
+ *  4. Si toujours sous cap → bascule degradedFallbackBuilder (si fourni).
+ *
+ * Retourne la meilleure version vue OU le format dégradé si fourni.
+ */
+export async function runValidatedGenerationV5(
+  opts: RunValidatedGenerationV5Options,
+): Promise<ValidatedGenerationV5Result> {
+  const passThreshold = opts.passThreshold ?? 7.5;
+  const maxOpusRewrites = opts.maxOpusRewrites ?? 2;
+
+  const history: V5RunHistoryEntry[] = [];
+  let bestText = opts.initialText;
+  let bestSource: V5RunHistoryEntry['source'] = 'sonnet-initial';
+  let bestValidation: QualityValidationResult | null = null;
+
+  // Pass 1 — validation Sonnet de la génération initiale
+  let currentText = opts.initialText;
+  let currentSource: V5RunHistoryEntry['source'] = 'sonnet-initial';
+
+  for (let opusAttempt = 0; opusAttempt <= maxOpusRewrites; opusAttempt++) {
+    const validation = await validateLivrableQuality(
+      currentText,
+      opts.livrableType,
+      opts.context,
+      opts.validatorLlmFn,
+    );
+    history.push({
+      iteration: opusAttempt + 1,
+      source: currentSource,
+      score: validation.score,
+      passed: validation.passed,
+    });
+
+    if (!bestValidation || validation.score > bestValidation.score) {
+      bestValidation = validation;
+      bestText = currentText;
+      bestSource = currentSource;
+    }
+
+    if (validation.passed && validation.score >= passThreshold) {
+      return {
+        finalText: currentText,
+        finalSource: currentSource,
+        finalValidation: validation,
+        history,
+        usedDegradedFallback: false,
+      };
+    }
+
+    if (opusAttempt >= maxOpusRewrites) break;
+
+    // Rewrite Opus suivant
+    currentSource = opusAttempt === 0 ? 'opus-rewrite-1' : 'opus-rewrite-2';
+    try {
+      currentText = await rewriteWithOpus({
+        livrable: currentText,
+        livrableType: opts.livrableType,
+        validation,
+        iterationCount: opusAttempt + 1,
+        episodeContext: opts.episodeContext,
+        newsletters: opts.newsletters,
+        targetLength: opts.targetLength,
+        specificConstraints: opts.specificConstraints,
+        llmFn: opts.rewriteLlmFn,
+        maxTokens: opts.rewriteMaxTokens,
+      });
+    } catch (err) {
+      // Rewrite Opus a planté : on garde la meilleure version, on tente fallback
+      // NB : log stderr volontaire pour diagnostiquer (cap dur reste appliqué).
+      // eslint-disable-next-line no-console
+      console.warn(
+        `[runValidatedGenerationV5] rewrite Opus #${opusAttempt + 1} failed: ${(err as Error).message?.slice(0, 300) ?? err}`,
+      );
+      break;
+    }
+  }
+
+  // Cap atteint sans PASS — bascule fail-safe si builder fourni
+  if (opts.degradedFallbackBuilder && bestValidation) {
+    const degradedText = await opts.degradedFallbackBuilder({
+      bestText,
+      bestValidation,
+      livrableType: opts.livrableType,
+      episodeContext: opts.episodeContext,
+    });
+    const degradedValidation = await validateLivrableQuality(
+      degradedText,
+      opts.livrableType,
+      opts.context,
+      opts.validatorLlmFn,
+    );
+    history.push({
+      iteration: history.length + 1,
+      source: 'degraded-fallback',
+      score: degradedValidation.score,
+      passed: degradedValidation.passed,
+    });
+    return {
+      finalText: degradedText,
+      finalSource: 'degraded-fallback',
+      finalValidation: degradedValidation,
+      history,
+      usedDegradedFallback: true,
+    };
+  }
+
+  // Pas de fallback fourni → retourne la meilleure version vue
+  return {
+    finalText: bestText,
+    finalSource: bestSource,
+    finalValidation: bestValidation ?? FALLBACK_RESULT,
+    history,
+    usedDegradedFallback: false,
+  };
+}

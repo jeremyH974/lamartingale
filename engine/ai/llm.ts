@@ -37,6 +37,15 @@ export function getLLMFast() {
   return openai('gpt-4o-mini');
 }
 
+// Modèle premium — rewrite éditorial Phase 5 V5 (déclenché si validation Sonnet < cap qualité).
+// Pas de fallback OpenAI : Opus est requis pour le pattern d'imitation persona.
+export function getLLMPremium() {
+  if (!process.env.ANTHROPIC_API_KEY) {
+    throw new Error('getLLMPremium requires ANTHROPIC_API_KEY (no fallback for Opus rewrite)');
+  }
+  return anthropic('claude-opus-4-7');
+}
+
 // Identifiant lisible du modèle actif — pour logs / réponses API.
 export function getModelId(which: 'main' | 'fast' = 'main'): string {
   if (process.env.ANTHROPIC_API_KEY) {

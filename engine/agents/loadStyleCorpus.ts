@@ -26,6 +26,40 @@ export interface LoadedNewsletter extends ClientStyleCorpusNewsletter {
   truncated: boolean;
 }
 
+/**
+ * Strips leading H1 + Markdown blockquote front-matter ('> Date / > Auteur / > URL / > Pattern tags').
+ *
+ * Phase 5 V5 fix F-V4-1 : sans ce strip, Sonnet recopie le pattern de
+ * front-matter dans la newsletter générée et hallucine date/URL/auteur —
+ * ce qui produit des metadata inventées attribuées à Stefani.
+ */
+export function stripFrontMatter(content: string): string {
+  const lines = content.split('\n');
+  let firstContentLine = 0;
+
+  // Skip leading H1 if present (titre exposé séparément via metadata wrapper)
+  if (lines[0]?.startsWith('# ')) {
+    firstContentLine = 1;
+  }
+
+  // Skip blank lines after H1
+  while (firstContentLine < lines.length && lines[firstContentLine].trim() === '') {
+    firstContentLine++;
+  }
+
+  // Skip front-matter block (consecutive lines starting with '> ')
+  while (firstContentLine < lines.length && lines[firstContentLine].startsWith('> ')) {
+    firstContentLine++;
+  }
+
+  // Skip blank lines after front-matter
+  while (firstContentLine < lines.length && lines[firstContentLine].trim() === '') {
+    firstContentLine++;
+  }
+
+  return lines.slice(firstContentLine).join('\n');
+}
+
 export interface LoadStyleCorpusOptions {
   corpus: ClientStyleCorpus;
   /** slug sous-dossier (ex: 'stefani'). Default: derive from canonical_phrase. */
@@ -82,12 +116,14 @@ export async function loadStyleCorpusNewsletters(
       // même si un fichier est en cours de rédaction.
       continue;
     }
-    const truncated = raw.length > maxCharsPerNewsletter;
+    // Phase 5 V5 fix F-V4-1 : strip front-matter avant injection
+    const stripped = stripFrontMatter(raw);
+    const truncated = stripped.length > maxCharsPerNewsletter;
     out.push({
       ...meta,
       body: truncated
-        ? raw.slice(0, maxCharsPerNewsletter) + '\n\n[... extrait tronqué]'
-        : raw,
+        ? stripped.slice(0, maxCharsPerNewsletter) + '\n\n[... extrait tronqué]'
+        : stripped,
       truncated,
     });
   }
