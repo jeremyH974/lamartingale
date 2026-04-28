@@ -34,6 +34,39 @@
 - Tags rollback granulaires : `pre-pilote-phase-{a,a5,b,c,g,h,i,j,k,l}`
   + `pre-pilote-v1-archive`
 
+### ÉTAT 2026-04-28 PM — Scénario B refonte hub v2
+
+Branche `feat/hub-v2-scenario-b @ 79fb0fd` complétée pour cible pilote
+initiale. **À étendre selon stratégie produit Sillon globale** (en
+arbitrage Jérémy + Claude.ai).
+
+- M1 hero refondu + brief inline + cross-mini ✅
+- M2 RAG showcase passif (3 Q/R pré-cuites) ✅
+- M3 invités partagés 2 tiers + toggle ✅
+- M4 cross-refs SVG graphique réseau ✅
+- M5.1 vision 4 cartes (anti-Beepers carte 4 v3) ✅
+- M5.2 EN AVANT-PREMIÈRE 3 cartes briefs LM #312/#313/#314 ✅
+- 64 briefs invités DB (vs 51 master), $0.103 LLM Scénario B
+- Décision merge/pause reportée arbitrage post-stratégie produit
+
+Détails : `docs/scenario-b-status-cloture.md`.
+
+### Pépites identifiées audit capabilities-2026-04-28
+
+Audit `docs/audit-capabilities-global-2026-04-28.md` a révélé 89 % de
+l'API ignorée par le hub (51/56 endpoints) + plusieurs capacités
+matures jamais exposées. Recos R1-R5 prêtes à intégrer post-arbitrage :
+
+| # | Reco | Effort CC | Coût LLM | Valeur Stefani |
+|---|---|---|---|---|
+| **R1** | UI recherche sémantique réelle (`/api/cross/search`) | 3-4 h | $0 | 🔥 |
+| **R2** | UI chat conversationnel réel (`/api/cross/chat`) | 4-6 h | $0 | 🔥 |
+| **R3** | Page lisible 1 pack pilote (Boissenot LM #174) | 6-8 h | $0 | 🔥 |
+| **R4** | Embeddings 999 ép. manquants (IFTTD/DVA/OLR/AlloLM/Fleurons) | 1-2 h | ~$5 | 🟡 |
+| **R5** | 11 briefs invités complémentaires (75 cross — 64 actuels) | 2 h | ~$0.40 | 🟡 |
+
+Total top 5 = 16-22 h CC + ~$5,40 LLM. Sous cap $10 Scénario B.
+
 ---
 
 ## CATÉGORIE A — Validé, à intégrer Phase 8+ (4-5 jours dev)

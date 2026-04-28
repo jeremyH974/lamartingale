@@ -908,3 +908,49 @@ Complexité identifiée dans le sample Rail 2 :
 - **État** : `cli/index.ts` n'a que `deploy --podcast <id>` (requiredOption). Pas de `--all` pour déployer les 7 tenants en une commande.
 - **Impact** : pour re-déployer après un changement global (ex: fix dans `engine/api.ts`), il faut enchaîner 7 `npm run deploy:<tenant>` séquentiels.
 - **Action** : ajouter `program.command('deploy').option('--all')` + boucle async sur `listPodcasts()` (`cli/index.ts`). Priorité P3 (confort dev, pas bloquant). Si ajouté, aussi exposer `"deploy:all"` dans `package.json` scripts.
+
+## Scénario B post-pilote — items à statuer (P2)
+
+Identifiés pendant la session refonte hub v2 (28/04 PM, branche `feat/hub-v2-scenario-b @ 79fb0fd`).
+
+1. **Retirer `AUTH_BYPASS_PREVIEW` env Vercel + bypass middleware** (P1 quand pilote envoyé)
+   - Code : `engine/auth/middleware.ts` lignes 41-48 (commentaire `Phase Scénario B M1 validation`)
+   - Action : commit revert + `vercel env rm AUTH_BYPASS_PREVIEW preview --yes`
+   - Bloquant si on garde la branche en attente sans la merger : le bypass est explicitement gated `process.env.AUTH_BYPASS_PREVIEW === 'true'`. Sans cette env var sur Production, aucun risque prod. Mais à retirer pour propreté code.
+
+2. **Réévaluer carte 4 v3 selon stratégie produit Sillon globale**
+   - Body actuel : "infrastructure éditoriale d un univers de marques", verticales presse/AV/talent
+   - Bullet 2 dynamique : "{guests} invités briefés (vs {briefedGuests} aujourd hui)"
+   - À reframer si stratégie produit Sillon évolue (ex : pivot multi-écosystèmes audio-only, ou pivot SaaS B2B agences éditoriales)
+
+3. **Pipeline `runPack()` non implémenté** (P2 post-décision stratégique)
+   - `engine/pipelines/runPack.ts` ligne 142 : `throw new Error('runPack: not implemented yet')`
+   - Toute la production des 5 livrables (key-moments / quotes / cross-refs / newsletter / brief-annexe) passe par `experiments/.../phase6-runner.ts` script ad-hoc avec slugs hardcodés
+   - Industrialisation : implémenter orchestrateur + persistance DB `editorial_events` (table créée mais 0 rows)
+   - Effort estimé : 2-3 jours CC + ~$1 800 LLM full corpus 3 354 ép.
+
+4. **13 briefs invités complémentaires** (P3 quick win)
+   - 75 invités cross-podcast (>= 2 podcasts), 64 ont un brief, 11 manquent
+   - Script existant `scripts/run-guest-brief.ts --guest-id <X> --write` pour chacun
+   - Coût : ~$0.40 total
+
+5. **999 épisodes sans embedding** (P2 cohérence audit)
+   - Tenants concernés : iftd (706), demainvousappartient (98), onlacherien (82), allolamartingale (58), fleurons (6) + (gdiy 4 manquants, finscale 6 manquants, lamartingale 35 manquants, passionpatrimoine 3 manquants, combiencagagne 1 manquant) ≈ 999 total
+   - Script : `PODCAST_ID=<id> npx tsx engine/ai/embeddings.ts`
+   - Coût : ~$5 total
+   - Active recherche sémantique cross-corpus complète (audit reco R4)
+
+6. **Bug populate-cross-guests : Angélique de Lencquesaing tenant_appearances [8]→[314]** (RÉSOLU 28/04)
+   - Fix manuel ciblé 1 row appliqué session M5.0 finalisation
+   - Investigation racine populate-cross-guests recommandée (autres rows potentiellement buggées sur eps recents auto-ingerés vs tenant_appearances obsolète)
+   - Audit léger à prévoir : `SELECT cpg.canonical_name, cpg.tenant_appearances FROM cross_podcast_guests cpg JOIN episodes e ON e.tenant_id = cpg.tenant_appearances->0->>'tenant_id' WHERE NOT (cpg.tenant_appearances->0->'episode_numbers' @> to_jsonb(e.episode_number))` — vérifie cohérence ep_number cpg vs episodes table.
+
+7. **Recherche cross-podcast UI réelle dans hub** (P3 audit R1)
+   - Endpoint `GET /api/cross/search?q=` existe et fonctionne
+   - Hub n affiche pas de barre de saisie (seulement 3 démos passives M2)
+   - Effort 3-4h CC, $0 LLM
+
+8. **Chat conversationnel cross-podcast UI réelle dans hub** (P3 audit R2)
+   - Endpoint `POST /api/cross/chat` existe et fonctionne (utilisé pour générer les 3 démos passives M2)
+   - Hub n affiche pas de barre de saisie
+   - Effort 4-6h CC, $0 LLM
