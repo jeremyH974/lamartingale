@@ -152,6 +152,8 @@ export async function getUniverse(): Promise<UniverseResponse> {
       SELECT
         tenant_id,
         count(*) FILTER (WHERE (episode_type = 'full' OR episode_type IS NULL) AND editorial_type = 'full')::int AS episodes,
+        count(*) FILTER (WHERE (episode_type = 'full' OR episode_type IS NULL) AND editorial_type = 'full' AND episode_number IS NOT NULL)::int AS true_full_with_ep,
+        max(episode_number) FILTER (WHERE (episode_type = 'full' OR episode_type IS NULL) AND editorial_type = 'full' AND episode_number IS NOT NULL)::int AS max_full_ep_num,
         COALESCE(SUM(duration_seconds) FILTER (WHERE (episode_type = 'full' OR episode_type IS NULL) AND editorial_type = 'full'), 0)::bigint AS total_seconds,
         count(DISTINCT lower(trim(COALESCE(NULLIF(guest, ''), guest_from_title))))
           FILTER (WHERE COALESCE(NULLIF(guest, ''), guest_from_title) IS NOT NULL AND editorial_type = 'full')::int AS guests,
@@ -219,6 +221,22 @@ export async function getUniverse(): Promise<UniverseResponse> {
   const podcasts: UniversePodcast[] = configs.map((c) => {
     const s = statsByTenant.get(c.database.tenantId) || {};
     const domain = c.deploy?.domain || `${c.deploy.vercelProject}.vercel.app`;
+    // Phase K (2026-04-28) — displayed_count : aligne le compteur card sur la
+    // perception du producteur (dernier # publié) plutôt que sur le strict
+    // count true-full. Évite les écarts visibles type "#314 mais 273 ép." qui
+    // donnent l'impression d'un comptage incohérent. Règle :
+    //   - ratio (true_full_with_ep / true_full) > 0.8 → max_full_ep_num
+    //     (LM 314, LP 376, OLR 45, GDIY 537, Finscale 338, etc.)
+    //   - sinon → count true-full strict (IFTTD ratio 0.01 → 700,
+    //     fleurons ratio 0.67 → 3 ; numérotation partielle ou catalogue jeune)
+    // Note hero : `data.universe.totals.episodes` reste la somme des true-full
+    // counts (compte réel agrégé). La somme des cards peut différer légèrement
+    // du hero — accepté comme edge case, le visiteur ne fait pas l'addition.
+    const trueFullCount = Number(s.episodes || 0);
+    const trueFullWithEp = Number(s.true_full_with_ep || 0);
+    const maxFullEp = s.max_full_ep_num != null ? Number(s.max_full_ep_num) : null;
+    const ratio = trueFullCount > 0 ? trueFullWithEp / trueFullCount : 0;
+    const displayedCount = ratio > 0.8 && maxFullEp != null ? maxFullEp : trueFullCount;
     return {
       id: c.id,
       name: c.name,
@@ -231,7 +249,7 @@ export async function getUniverse(): Promise<UniverseResponse> {
       branding: c.branding,
       hub_order: c.hub_order ?? null,
       stats: {
-        episodes: Number(s.episodes || 0),
+        episodes: displayedCount,
         hours: Math.round(Number(s.total_seconds || 0) / 3600),
         guests: Number(s.guests || 0),
         articles: Number(s.articles || 0),
@@ -303,7 +321,15 @@ export async function getUniverse(): Promise<UniverseResponse> {
   }));
 
   // 6. Totals.
-  const totalEpisodes = podcasts.reduce((s, p) => s + p.stats.episodes, 0);
+  // Phase K (2026-04-28) — hero `totals.episodes` reste basé sur la somme
+  // STRICTE des true-full counts (pas sur displayedCount). Pourquoi : le
+  // hero représente l'agrégat éditorial réel (somme des "vrais" eps), tandis
+  // que les cards affichent la perception producteur (dernier # publié).
+  // Edge case accepté : la somme des cards peut différer légèrement du hero.
+  const totalEpisodes = configs.reduce((sum, c) => {
+    const s = statsByTenant.get(c.database.tenantId) || {};
+    return sum + Number(s.episodes || 0);
+  }, 0);
   const totalHours = podcasts.reduce((s, p) => s + p.stats.hours, 0);
   const totalGuests = podcasts.reduce((s, p) => s + p.stats.guests, 0);
   const crossEpisodeRefs = pairStats.reduce((s, p) => s + p.count, 0);
