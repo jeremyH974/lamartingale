@@ -308,7 +308,7 @@ export async function getUniverse(): Promise<UniverseResponse> {
     universe: {
       id: 'ms',
       name: 'Univers MS',
-      tagline: `${podcasts.length} podcasts, un écosystème.`,
+      tagline: `${podcasts.length} podcast${podcasts.length > 1 ? 's' : ''}, un écosystème.`,
       producers,
       totals: {
         podcasts: podcasts.length,
