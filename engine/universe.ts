@@ -102,6 +102,7 @@ export interface UniverseResponse {
       guests: number;
       crossGuests: number;
       crossEpisodeRefs: number;
+      briefedGuests: number;
     };
   };
   podcasts: UniversePodcast[];
@@ -141,8 +142,8 @@ export async function getUniverse(): Promise<UniverseResponse> {
     });
   const tenantIds = configs.map((c) => c.database.tenantId);
 
-  // 2. Queries parallèles : stats + featured + cross-refs raw + cross-guests.
-  const [statsRows, featuredRows, crossRefsRaw, crossGuestsRaw] = await Promise.all([
+  // 2. Queries parallèles : stats + featured + cross-refs raw + cross-guests + briefs count.
+  const [statsRows, featuredRows, crossRefsRaw, crossGuestsRaw, briefsCountRow] = await Promise.all([
     sql`
       -- Stats hero hub : double filtre iTunes (episode_type) + éditorial
       -- (editorial_type, Phase A.5.4) pour compter uniquement les "vrais"
@@ -199,6 +200,7 @@ export async function getUniverse(): Promise<UniverseResponse> {
         AND el.link_type NOT IN ('linkedin', 'social', 'audio', 'podcast_platform')
     ` as any,
     getCrossGuests({ sharedOnly: true, limit: 20 }),
+    sql`SELECT count(*)::int AS c FROM cross_podcast_guests WHERE brief_md IS NOT NULL` as any,
   ]);
 
   // 3. Monter les podcasts[].
@@ -353,6 +355,7 @@ export async function getUniverse(): Promise<UniverseResponse> {
         guests: totalGuests,
         crossGuests: (crossGuestsRaw as any).total,
         crossEpisodeRefs,
+        briefedGuests: Number((briefsCountRow as any[])[0]?.c || 0),
       },
     },
     podcasts,

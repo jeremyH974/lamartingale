@@ -881,17 +881,17 @@
               </svg>
             </div>
             <div>
-              <div class="vc-eyebrow">Demain — verticales 2027</div>
-              <div class="vc-title">L'infrastructure éditoriale de votre univers de marques</div>
+              <div class="vc-eyebrow">La suite</div>
+              <div class="vc-title">Le potentiel à venir</div>
             </div>
           </div>
           <div class="vc-body">
-            L'architecture est générique. Demain, Sillon s'étend à d'autres écosystèmes éditoriaux : presse écrite, audiovisuel, gestion de talent. Chacun avec sa propre mémoire, son branding, ses droits d'accès. Sillon n'est pas un outil podcast — c'est l'infrastructure éditoriale d'un univers de marques.
+            Sillon n'est pas un outil podcast — c'est l'infrastructure éditoriale d'un univers de marques. À court terme, elle s'enrichit sur l'écosystème Stefani. À plus long terme, elle s'étend à d'autres univers éditoriaux.
           </div>
           <ul class="vc-list">
-            <li>Presse écrite — Q1 2027</li>
-            <li>Audiovisuel — 2027</li>
-            <li>Gestion de talent — 2027</li>
+            <li>Recherche conversationnelle complète activée</li>
+            <li><span id="vc-stat-target">…</span> invités briefés (vs <span id="vc-stat-briefed">…</span> aujourd'hui)</li>
+            <li>Demain : presse, audiovisuel, gestion de talent</li>
           </ul>
         </article>
       </div>
@@ -1038,9 +1038,14 @@
   const vcStatEps = document.getElementById('vc-stat-eps');
   const vcStatGuests = document.getElementById('vc-stat-guests');
   const vcStatShared = document.getElementById('vc-stat-shared');
+  const vcStatTarget = document.getElementById('vc-stat-target');
+  const vcStatBriefed = document.getElementById('vc-stat-briefed');
   if (vcStatEps) vcStatEps.textContent = fmtNum(data.universe.totals.episodes);
   if (vcStatGuests) vcStatGuests.textContent = fmtNum(data.universe.totals.guests);
   if (vcStatShared) vcStatShared.textContent = fmtNum(data.universe.totals.crossGuests);
+  // Carte 4 — vision target = totalGuests (1607), briefed actuel = briefedGuests
+  if (vcStatTarget) vcStatTarget.textContent = fmtNum(data.universe.totals.guests);
+  if (vcStatBriefed) vcStatBriefed.textContent = fmtNum(data.universe.totals.briefedGuests || 0);
 
   footerProducers.textContent = 'Producteurs · ' + data.universe.producers.join(' · ');
 

@@ -1182,6 +1182,10 @@ export function filterUniverseByTenants(full: any, allowed: Set<string>): any {
         guests: totalGuests,
         crossGuests: guests.length,
         crossEpisodeRefs,
+        // Préserve briefedGuests : compteur global non-scopé tenant (cross_podcast_guests
+        // est unique cross-tenant). Acceptable sur Scénario B M5.1 — la carte 4 montre
+        // le potentiel global de la plateforme, pas la couverture du scope auth.
+        briefedGuests: full.universe?.totals?.briefedGuests ?? 0,
       },
     },
     podcasts,
