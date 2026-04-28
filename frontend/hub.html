@@ -582,6 +582,67 @@
   }
   .pair-graph-legend .swatch.faded { opacity: 0.32; }
 
+  /* ============ UPCOMING BRIEFS (Scénario B M5.2) ============ */
+  .upcoming-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;
+    margin-top: 8px;
+  }
+  @media (max-width: 980px) {
+    .upcoming-grid { grid-template-columns: 1fr; }
+  }
+  .upcoming-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 22px;
+    display: flex; flex-direction: column; gap: 14px;
+    text-decoration: none; color: inherit;
+    transition: border-color 0.2s, transform 0.2s;
+    position: relative;
+  }
+  .upcoming-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-1px);
+  }
+  .upcoming-card .uc-head {
+    display: flex; align-items: center; gap: 14px;
+  }
+  .upcoming-card .uc-avatar {
+    flex: 0 0 auto; width: 52px; height: 52px; border-radius: 50%;
+    background: linear-gradient(135deg, #00F5A0, #004cff);
+    color: #000; font-size: 16px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    letter-spacing: -0.01em;
+  }
+  .upcoming-card .uc-eyebrow {
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--fg-3); font-weight: 700; margin-bottom: 4px;
+  }
+  .upcoming-card .uc-name {
+    font-size: 15px; font-weight: 700; color: var(--fg);
+    line-height: 1.25; letter-spacing: -0.01em;
+  }
+  .upcoming-card .uc-title {
+    font-size: 13px; color: var(--fg-2); line-height: 1.5;
+  }
+  .upcoming-card .uc-badges {
+    display: flex; gap: 6px; flex-wrap: wrap;
+  }
+  .upcoming-card .uc-badges .badge {
+    font-size: 10px; padding: 3px 9px;
+  }
+  .upcoming-card .uc-cta {
+    margin-top: auto; padding-top: 8px;
+    font-size: 12px; font-weight: 700; color: var(--accent);
+    letter-spacing: 0.02em;
+  }
+  .upcoming-footer {
+    margin-top: 28px; padding: 18px 22px;
+    background: var(--bg-2); border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 12.5px; color: var(--fg-2); line-height: 1.55;
+    text-align: center;
+  }
+  .upcoming-footer strong { color: var(--fg); }
+
   /* ============ VISION CARDS (Scénario B M5.1) ============ */
   .vision-grid {
     display: grid; grid-template-columns: 1fr 1fr; gap: 18px;
@@ -677,6 +738,7 @@
       <a href="#podcasts">Podcasts</a>
       <a href="#guests">Invités partagés</a>
       <a href="#vision">Demain</a>
+      <a href="#upcoming-briefs">Avant-première</a>
       <div id="session-box" class="session-box" style="display:none">
         <span id="session-email" class="session-email"></span>
         <button id="logout-btn" class="logout-btn" type="button">Déconnexion</button>
@@ -898,6 +960,69 @@
     </div>
   </section>
 
+  <!-- UPCOMING BRIEFS (Scénario B M5.2) -->
+  <section class="block" id="upcoming-briefs">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">En avant-première pour vous</div>
+        <div class="section-title">Vos 3 derniers invités La Martingale, déjà brieffés par Sillon</div>
+        <div class="section-sub">Sur les <span id="ub-stat-lm">…</span> épisodes La Martingale et <span id="ub-stat-guests">…</span> invités indexés dans l'écosystème, Sillon a déjà préparé <span id="ub-stat-briefs">…</span> briefs. Audit complet du catalogue : disponible sur demande.</div>
+      </div>
+      <div class="upcoming-grid">
+        <a class="upcoming-card" href="/guest-brief/joseph-choueifaty">
+          <div class="uc-head">
+            <div class="uc-avatar">AC</div>
+            <div>
+              <div class="uc-eyebrow">LM #312 · 09 avril 2026</div>
+              <div class="uc-name">Arthur Auboeuf &amp; Joseph Choueifaty</div>
+            </div>
+          </div>
+          <div class="uc-title">Fonds « verts » : comment éviter les pièges du greenwashing ?</div>
+          <div class="uc-badges">
+            <span class="badge" data-pc="#004cff" style="--pc:#004cff">La Martingale</span>
+            <span class="badge">Brief cross-corpus · 3 podcasts</span>
+          </div>
+          <div class="uc-cta">Voir le brief Sillon →</div>
+        </a>
+
+        <a class="upcoming-card" href="/guest-brief/nahima-zobri">
+          <div class="uc-head">
+            <div class="uc-avatar">NZ</div>
+            <div>
+              <div class="uc-eyebrow">LM #313 · 16 avril 2026</div>
+              <div class="uc-name">Nahima Zobri</div>
+            </div>
+          </div>
+          <div class="uc-title">Comment payer moins d'impôts sur le revenu en 2026 ?</div>
+          <div class="uc-badges">
+            <span class="badge" data-pc="#004cff" style="--pc:#004cff">La Martingale</span>
+            <span class="badge">Brief LM · 1ʳᵉ intervention</span>
+          </div>
+          <div class="uc-cta">Voir le brief Sillon →</div>
+        </a>
+
+        <a class="upcoming-card" href="/guest-brief/angelique-de-lencquesaing">
+          <div class="uc-head">
+            <div class="uc-avatar">AL</div>
+            <div>
+              <div class="uc-eyebrow">LM #314 · 23 avril 2026</div>
+              <div class="uc-name">Angélique de Lencquesaing</div>
+            </div>
+          </div>
+          <div class="uc-title">Bordeaux, Bourgogne ou vins nature : dans quelle bouteille investir ?</div>
+          <div class="uc-badges">
+            <span class="badge" data-pc="#004cff" style="--pc:#004cff">La Martingale</span>
+            <span class="badge">Brief LM · 1ʳᵉ intervention</span>
+          </div>
+          <div class="uc-cta">Voir le brief Sillon →</div>
+        </a>
+      </div>
+      <div class="upcoming-footer">
+        <strong><span id="ub-foot-briefs">…</span> briefs</strong> sur <strong><span id="ub-foot-guests">…</span> invités</strong> indexés. Audit complet du catalogue : disponible sur demande.
+      </div>
+    </div>
+  </section>
+
   <!-- FOOTER -->
   <footer>
     <div><strong>Univers MS</strong> — l'écosystème podcast de Matthieu Stefani</div>
@@ -1046,6 +1171,22 @@
   // Carte 4 — vision target = totalGuests (1607), briefed actuel = briefedGuests
   if (vcStatTarget) vcStatTarget.textContent = fmtNum(data.universe.totals.guests);
   if (vcStatBriefed) vcStatBriefed.textContent = fmtNum(data.universe.totals.briefedGuests || 0);
+
+  // Upcoming briefs section (Scénario B M5.2) — chiffres dynamiques cohérents
+  const lmPodcast = (data.podcasts || []).find(p => p.id === 'lamartingale');
+  const lmEps = lmPodcast?.stats?.episodes || 0;
+  const totalGuestsDyn = data.universe.totals.guests || 0;
+  const totalBriefsDyn = data.universe.totals.briefedGuests || 0;
+  const ubStatLm = document.getElementById('ub-stat-lm');
+  const ubStatGuests = document.getElementById('ub-stat-guests');
+  const ubStatBriefs = document.getElementById('ub-stat-briefs');
+  const ubFootBriefs = document.getElementById('ub-foot-briefs');
+  const ubFootGuests = document.getElementById('ub-foot-guests');
+  if (ubStatLm) ubStatLm.textContent = fmtNum(lmEps);
+  if (ubStatGuests) ubStatGuests.textContent = fmtNum(totalGuestsDyn);
+  if (ubStatBriefs) ubStatBriefs.textContent = fmtNum(totalBriefsDyn);
+  if (ubFootBriefs) ubFootBriefs.textContent = fmtNum(totalBriefsDyn);
+  if (ubFootGuests) ubFootGuests.textContent = fmtNum(totalGuestsDyn);
 
   footerProducers.textContent = 'Producteurs · ' + data.universe.producers.join(' · ');
 
