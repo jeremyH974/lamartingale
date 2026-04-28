@@ -6,7 +6,40 @@ Classement par priorité décroissante. **P0 = bloquant / P1 = forte valeur / P2
 
 ---
 
-## ✅ CHANGELOG — Pré-pilote Stefani 2026-04-28 (Phases A→H)
+## Audit numérotation RSS catalogue producteur — feature Sillon V2 (P3)
+
+**Constat** (Phase K Bug #5 investigation 2026-04-28) : la détection
+automatique des trous séquentiels dans la numérotation `<itunes:episode>`
+des feeds RSS révèle des patterns intéressants :
+- LM 54 trous séquentiels (#3-22, …) — feed Audiomeans tronquée aux ~290
+  derniers eps (politique standard d'Audiomeans pour les flux principaux,
+  les vieux épisodes #1-22 ne sont pas dans le RSS publique)
+- LP 1 trou (#363) — épisode dépublié ou renuméroté
+- OLR 1 trou (#28) — idem
+- 37 mismatch globaux ep_num DB vs `#NUM` initial dans le titre (drift +/-1
+  récurrent : Audiomeans renumérote parfois à la marge)
+
+**Mitigation Phase K appliquée** : compteur card = `displayedCount`
+basé sur `MAX(episode_number)` filtré full quand le ratio
+(eps_avec_epnum / total_full) > 0.8. Aligne le card sur la perception
+du producteur (dernier # publié) plutôt que strict count true-full.
+Évite les écarts visibles type "#314 mais 273 ép.".
+
+**Plan fix V2** (post-pilote Stefani, conditionnel signal positif) :
+1. Endpoint `/api/admin/audit-numbering/:tenant_id` qui retourne :
+   - Trous séquentiels détectés (`generate_series 1..MAX` minus DB)
+   - Episodes dépubliés probables (gap + dates contextuelles)
+   - Episodes renommés (mismatch ep_num DB vs `#NUM` titre)
+2. Vue admin créateur dédiée : "Audit éditorial RSS — voici les épisodes
+   manquants/dépubliés/renommés dans votre flux sur les N derniers"
+3. **Pitch potentiel additionnel à Stefani** : Sillon devient aussi un
+   outil d'audit éditorial du catalogue (pas seulement RAG/cross-corpus).
+
+**Cap budget V2 estimé** : $0 LLM (pure SQL + UI).
+
+---
+
+## ✅ CHANGELOG — Pré-pilote Stefani 2026-04-28 (Phases A→K)
 
 **14/17 bugs P0/P1/P2 du rapport audit hub UI 2026-04-28 résolus** (82%) :
 
