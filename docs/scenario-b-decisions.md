@@ -29,3 +29,19 @@ choix internes CC sans avoir à demander.
 [2026-04-28 PM] [M1 validation] [Niveau A] Pour M2-M5 : envisager alias Vercel custom stable "ms-hub-v2-preview.vercel.app" pointant sur dernier deploy de feat/hub-v2-scenario-b. Set AUTH_BASE_URL Preview une fois sur cet alias = patch one-shot vs répété. À évaluer post-M1.
 
 [2026-04-28 PM] [M1 validation] [Niveau A] Side-effect sécu : .audit-hub/.env.preview-snapshot et .audit-hub/.env.prod-snapshot2 contiennent secrets en clair (Anthropic key, OpenAI key, DATABASE_URL creds). Gitignored .audit-hub/. À supprimer post-validation pour hygiène.
+
+[2026-04-28 PM] [M1 fix] [Niveau C] Bug bloquant détecté Jérémy : 4 sections "Chargement infini". Cause : renderCrossMini(data) appelée AVANT pcById défini. Fix commit 7cf5895 : hoist pcById + try/catch défensif renderCrossMini + disclaimer Citations Phase C dans brief inline. Force redeploy → ms-5rantuc5f-... AUTH_BASE_URL Preview API mis à jour. HTML déployé vérifié via Vercel API (file uid fa4746d) — fix présent.
+
+[2026-04-28 PM] [M1 fix] [Niveau A] Branche poussée sur origin/feat/hub-v2-scenario-b (pour cohérence GitHub + accès si rollback distant nécessaire).
+
+[2026-04-28 PM] [M1 validation] [Niveau C user] Deployment Protection (ssoProtection) désactivé OFF global sur projet ms-hub à la demande Jérémy pour débloquer validation visuelle preview. Avant : `{deploymentType: "all_except_custom_domains"}`. Après : `null`. PAS DE RESTAURATION jusqu'à signal Jérémy explicite. À documenter aussi pour M2-M5 : la preview reste accessible direct sans SSO Vercel pour les futures itérations (économise les patches AUTH_BASE_URL répétés).
+
+[2026-04-28 PM] [M1 validation] [Niveau C user] Re-clarification : SSO Vercel doit être restauré (not what user veut désactiver), seul login HUB applicative (magic-link) reste désactivé. ssoProtection re-activé `all_except_custom_domains`. AUTH_BYPASS_PREVIEW=true conservé. User passe SSO Vercel 1 fois (login Vercel.com), puis accès direct hub v2 sans magic-link grâce au bypass app-level.
+
+[2026-04-28 PM] [M1 cleanup] [Niveau A] Alias stable `https://ms-hub-v2-preview.vercel.app` créé pointant sur deploy `ms-duyvp171g-...` (qui contient le bypass). Pattern post-deploy à appliquer pour M2-M5 : après `vercel deploy --force`, faire `vercel alias set <new-deploy-url> ms-hub-v2-preview.vercel.app` pour basculer l'alias sur le dernier deploy. Évite patches AUTH_BASE_URL répétés.
+
+[2026-04-28 PM] [M1 cleanup] [Niveau A] AUTH_BASE_URL Preview RM'd (CLI add bloqué git_branch_required, API token Vercel expiré entre calls). Décision pragmatique : laisser Preview vide → code engine/api.ts:1059 baseUrl(req) fallback sur req.headers.host (= ms-hub-v2-preview.vercel.app si user y accède). Combiné avec AUTH_BYPASS_PREVIEW, magic-link n'est jamais déclenché donc AUTH_BASE_URL Preview superflu. AUTH_BASE_URL Production préservée à `https://ms-hub.vercel.app`.
+
+[2026-04-28 PM] [M1 cleanup] [Niveau A] .audit-hub/.env.preview-snapshot + .env.prod-snapshot + .env.prod-snapshot2 supprimés (contenaient secrets en clair). Gitignored .audit-hub/ donc jamais committé.
+
+[2026-04-28 PM] [M1 closed pré-validation] [Niveau A] M1 fonctionnellement prêt sur https://ms-hub-v2-preview.vercel.app après login Vercel SSO. Tests 715/715, audit-timestamps 35/35 préservé. ATTENTE retest visuel + screenshots Jérémy.
