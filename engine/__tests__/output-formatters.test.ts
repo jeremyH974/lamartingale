@@ -121,6 +121,32 @@ describe('markdown formatter — Phase 7a', () => {
       expect(rendered).toContain(m.timestampStart);
     }
   });
+
+  // Phase 8.4 — Garde-fou client-facing : aucune fuite de cuisine interne
+  // (warnings auto-éval, footers dev, références à des coûts LLM, mentions
+  // de phases internes). Le markdown rendu va à Stefani — aucune metadata
+  // dev ne doit s'y glisser.
+  it.each(['plais-platform-sh', 'boissenot-pokemon', 'nooz-optics', 'veyrat-stoik'])(
+    'L2 quotes rendered markdown contains NO dev metadata (%s)',
+    async (slug) => {
+      const original = readEp(slug, '02-quotes.md');
+      const livrable = parseQuotes(original);
+      const f = new MarkdownFormatter();
+      const out = await f.formatLivrable(livrable, CTX);
+      const rendered = out.buffer.toString('utf-8');
+      // Aucun marqueur sandbox/dev
+      expect(rendered).not.toMatch(/Warnings auto-éval/i);
+      expect(rendered).not.toMatch(/Generated Phase \d/i);
+      expect(rendered).not.toMatch(/Cost: \$/);
+      expect(rendered).not.toMatch(/extractQuotes refactored/i);
+      expect(rendered).not.toMatch(/segment_index/);
+      expect(rendered).not.toMatch(/temporal_spread/);
+      expect(rendered).not.toMatch(/Returned \d+ quotes \(expected \d+\)/i);
+      expect(rendered).not.toMatch(/rejected:/i);
+      // Footer client-facing présent
+      expect(rendered).toContain('Sillon');
+    },
+  );
 });
 
 describe('pdf formatter — V2 placeholder', () => {
