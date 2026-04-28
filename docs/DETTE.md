@@ -1,8 +1,74 @@
 # Dette technique — Podcast Engine
 
-État au **28 avril 2026**, après Phase A→C pré-pilote Stefani (audit hub UI 360°, extension périmètre 11 tenants, editorial_type, cleanup data quality, briefs cross-tenant bulk).
+État au **28 avril 2026**, après Phase A→H pré-pilote Stefani.
 
 Classement par priorité décroissante. **P0 = bloquant / P1 = forte valeur / P2 = améliorations / P3 = moyen terme**.
+
+---
+
+## ✅ CHANGELOG — Pré-pilote Stefani 2026-04-28 (Phases A→H)
+
+**14/17 bugs P0/P1/P2 du rapport audit hub UI 2026-04-28 résolus** (82%) :
+
+### P0 (4/4) ✅ tous résolus
+- P0-1 doublon `#NUM #NUM` cards podcast → Phase A1 (cleanTitle helper)
+- P0-2 Finscale top 3 `[EXTRAIT]` → Phase A2 (cosmétique) + Phase E (racine, feed Podcastics)
+- P0-3 drift counts hub config → Phase A3a (description sans chiffres figés)
+- P0-4 cross-refs dégénérées → Phase A6 (decidePairStatsRendering, fallback amorce)
+
+### P1 (4/6) ✅ résolus
+- P1-1 LP `#HS` featured → Phase A4 (filter SQL CTE) + A.5.4 (editorial_type='hs')
+- P1-2 pollution cross_podcast_guests → Phases B2/B3/B4 (DELETE 31 + isValidPersonName élargi 12 patterns)
+- P1-3 briefs invités vides → Phase C (50 nouveaux briefs bulk, 61/75 = 81% cross-tenant)
+- P1-5 lien retour `/hub.html` → `/` → Phase A5
+
+### P2 (6/7) ✅ résolus
+- P2-1 producers footer → G1 audit (3 producers cohérents Cosa Vostra/Gokyo/Orso Media)
+- P2-2 pluralisation podcast(s) → Phase G2
+- P2-3 single-word jean-sebastien → Phase B4
+- P2-4 espaces multiples → Phase B5a (250 episodes)
+- P2-6 LM 4 eps duration NULL → Phase G3 (DELETE 4 orphans sans audio_url ni guid)
+- P2-7 GDIY 1 ep title NULL → Phase A.5.5a (re-ingest backfill)
+
+### Reportés V2 (3 items)
+- P1-4 soft-404 `/guest-brief/<random>` (cf. section dédiée plus bas)
+- P1-6 LP/GDIY guests sous-évalués (Phase D skipped — pipeline guest extraction RSS limité)
+- P2-4b accents perdus (Frédéric/Stéphane/Géraldine, risque régression auto)
+
+### Extensions structurelles Phases A.5 / B / C / E
+- **+5 tenants Orso** ingérés (fleurons, iftd, demainvousappartient, allolamartingale, onlacherien) → 6 → 11 tenants
+- **Re-ingest 6 existants** sur feeds Audiomeans à jour (LM, GDIY, LP, FS, PP, CCG)
+- **+ feed Podcastics Finscale** (P0-2 racine, +164 true-full FS)
+- **Colonne `editorial_type`** ajoutée + backfill 2409 rows (full/extract/teaser/rediff/bonus/hs)
+- **Module pur `classifyEditorialType`** + 15 tests + appliqué à l'INSERT ingest-rss + UPSERT
+- **Module pur `pickUpsertStrategy`** + 6 tests (fix LP `episode_number=null` + guid)
+- **Module pur `isValidPersonName`** + 12 tests (corpus 30 pollutions B2)
+- **Module pur `decidePairStatsRendering`** + 9 tests (fallback amorce ≥5 refs)
+- **Fix critique `match-guests.ts:268` TRUNCATE → ON CONFLICT** (B0 P0, préserve brief_md)
+
+### Stats DB finales 2026-04-28 (post-Phase G)
+- 11 tenants, **2595 true-full eps** (double filtre `episode_type` iTunes ∧ `editorial_type='full'`)
+- **1261 cross_podcast_guests**, 75 cross-tenant (≥ 2 pods), 61 avec brief
+- 0 row pollution résiduelle (filtre B3 robuste, re-runs idempotents)
+- 0 doublon Allo LM cross-tenant (B7)
+- 0 espace multiple `\s{2,}` dans titles
+- audit-timestamps 35/35 préservé à travers 8 commits Phase A→G
+
+### Cumul session LLM
+- Phase A : $0
+- Phase A.5 : $0 (Whisper bulk skipped)
+- Phase B : $0
+- Phase C : **$1.83** (50 briefs Sonnet)
+- Phase E : $0
+- Phase G : $0
+- **Total : ~$1.83 / cap session $60 (3%)**
+
+### Tags rollback granulaire
+- `pre-pilote-phase-a` (8cc5a3b)
+- `pre-pilote-phase-a5` (137518c)
+- `pre-pilote-phase-b` (cbbd9fb)
+- `pre-pilote-phase-c` (09f7deb)
+- `pre-pilote-phase-g` (0d341a7)
 
 ---
 
