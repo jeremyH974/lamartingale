@@ -9,7 +9,7 @@ import type { PodcastConfig } from '@engine/config/podcast.config';
 export const hubConfig: PodcastConfig = {
   id: 'hub',
   name: 'Univers MS',
-  tagline: 'Six podcasts, un écosystème. La plus grande bibliothèque francophone sur le business, la finance et l\'investissement.',
+  tagline: 'L\'écosystème podcast Matthieu Stefani × Orso Media : business, finance, investissement, entrepreneuriat.',
   host: 'Matthieu Stefani',
   producer: 'Orso Media × Cosa Vostra × Gokyo',
   // Description sans chiffres figés : le hero `/` lit `data.universe.totals.*`
@@ -18,7 +18,7 @@ export const hubConfig: PodcastConfig = {
   // qu'un nouvel épisode était ingéré (mesuré 2026-04-28 : drift cumulé ~500
   // épisodes vs DB réelle). On garde la prose qualitative.
   description:
-    'L\'univers Matthieu Stefani × Orso Media réunit six podcasts : La Martingale (argent & investissement), Génération Do It Yourself (entrepreneuriat), Le Panier (e-commerce), Finscale (fintech), Passion Patrimoine (gestion de patrimoine) et Combien ça gagne (business models). La plus grande bibliothèque francophone d\'expertise sur le business, la finance et l\'investissement.',
+    'L\'univers Matthieu Stefani × Orso Media réunit ses podcasts : La Martingale (argent & investissement), Génération Do It Yourself (entrepreneuriat), Le Panier (e-commerce), Finscale (fintech), Passion Patrimoine (gestion de patrimoine), Combien ça gagne (business models), Fleurons (sagas d\'entreprises françaises), IFTTD (tech & dev), Demain Vous Appartient (RSE & impact), Allo La Martingale (call-in argent) et On Lâche Rien (entrepreneuriat féminin). La plus grande bibliothèque francophone d\'expertise sur le business, la finance et l\'investissement.',
 
   website: 'https://ms-hub.vercel.app',
   episodeUrlPattern: '',
