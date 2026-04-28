@@ -273,7 +273,7 @@
   <header class="hero">
     <div class="eyebrow" id="hero-eyebrow">Univers Matthieu Stefani</div>
     <h1>
-      <span id="hero-podcast-count">—</span> podcasts,<br>
+      <span id="hero-podcast-count">—</span> <span id="hero-podcast-word">podcasts</span>,<br>
       un <span class="gradient">écosystème</span>.
     </h1>
     <p class="tagline" id="hero-tagline">Chargement de l'univers…</p>
@@ -438,11 +438,15 @@
     fetch('/api/auth/me').then(r => r.ok ? r.json() : null).then(showSession).catch(() => {});
   }
 
-  // Title
-  document.title = `${data.universe.name} — ${data.universe.totals.podcasts} podcasts, un écosystème`;
+  // Title (Phase G2 — pluralisation podcast(s) edge case)
+  const podcastsN = data.universe.totals.podcasts;
+  const podcastsWord = podcastsN > 1 ? 'podcasts' : 'podcast';
+  document.title = `${data.universe.name} — ${podcastsN} ${podcastsWord}, un écosystème`;
 
   // Hero
-  heroCount.textContent = data.universe.totals.podcasts;
+  heroCount.textContent = podcastsN;
+  const heroWord = document.getElementById('hero-podcast-word');
+  if (heroWord) heroWord.textContent = podcastsWord;
   heroTagline.textContent = data.universe.tagline;
   heroStats.innerHTML = [
     { n: fmtNum(data.universe.totals.episodes), l: 'épisodes' },
