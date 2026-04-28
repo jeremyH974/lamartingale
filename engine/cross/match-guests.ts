@@ -264,8 +264,22 @@ async function main() {
   if (DRY) {
     console.log('  DRY run — pas d\'upsert');
   } else {
-    // Truncate + batch insert pour rester simple & reproductible.
-    await sql`TRUNCATE cross_podcast_guests RESTART IDENTITY`;
+    // Phase B0 (2026-04-28) — TRUNCATE retiré : il détruisait les briefs
+    // (brief_md, key_positions, quotes, original_questions,
+    // brief_generated_at, brief_model) générés par Phase 1.5 vitrine et,
+    // à terme, ceux générés en bulk par Phase C. L'UPSERT ON CONFLICT
+    // ci-dessous préserve nativement ces colonnes : seules les colonnes
+    // listées dans `DO UPDATE SET … = EXCLUDED.*` sont réécrites.
+    //
+    // Conséquence — entries orphelines : un guest qui disparaît du dataset
+    // courant (ex. titre RSS modifié → canonical_name différent) reste en
+    // table jusqu'à un cleanup explicite. Acceptable phase pilote ; cycle
+    // de vie complet (soft-delete `is_active` ou cleanup périodique) à
+    // implémenter post-pilote V2 si nécessaire.
+    //
+    // Schema : UNIQUE (canonical_name) déjà présent
+    // (cross_podcast_guests_canonical_name_key) — pas de CREATE INDEX
+    // additionnel nécessaire.
 
     const chunks: Array<{
       canonical: string; display: string; bio: string | null; linkedin: string | null;
