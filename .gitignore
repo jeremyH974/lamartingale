@@ -48,3 +48,6 @@ experiments/*
 
 # Verbose execution logs from sandboxes (kept locally, not archived)
 experiments/**/*.log
+
+# Audit sandbox (read-only DB dumps + crawl captures)
+.audit-hub/

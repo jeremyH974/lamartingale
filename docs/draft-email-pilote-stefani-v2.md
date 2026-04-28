@@ -49,7 +49,7 @@ Je me permets de revenir vers vous avec un projet que j'ai construit ces dernier
 
 **Le contexte**
 
-Le catalogue Orso Media représente ~3000 épisodes répartis sur 6 podcasts. C'est un actif éditorial considérable, mais largement sous-exploité dans sa dimension cross-corpus. Aujourd'hui, un auditeur GDIY ne sait pas qu'un sujet qu'il vient d'écouter a été creusé sous un autre angle dans Finscale ou Le Panier.
+Le catalogue Orso Media représente près de 2 500 épisodes répartis sur 6 podcasts. C'est un actif éditorial considérable, mais largement sous-exploité dans sa dimension cross-corpus. Aujourd'hui, un auditeur GDIY ne sait pas qu'un sujet qu'il vient d'écouter a été creusé sous un autre angle dans Finscale ou Le Panier.
 
 **Ce que j'ai construit — Sillon**
 

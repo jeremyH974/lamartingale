@@ -459,10 +459,25 @@
   for (const p of data.podcasts) pcById[p.id] = p.branding.primaryColor;
 
   // PODCASTS GRID
+  // Affichage : on préfixe `#NUM ` côté UI, donc on retire le `#NUM - ` que GDIY/LP/PP/CCG
+  // embarquent déjà dans leur title RSS pour éviter le doublon `#535 #535 - …`. On retire
+  // aussi les markers RSS purement éditoriaux ([EXTRAIT], [EXCERPT], [teaser], [REDIFF])
+  // qui polluent le titre sans apporter d'info à un visiteur du hub.
+  function cleanTitle(t, epNum) {
+    if (!t) return '';
+    let out = String(t);
+    out = out.replace(/^\s*\[(extrait|excerpt|teaser|rediff(?:usion)?|bonus|replay)\]\s*/i, '');
+    if (epNum != null) {
+      const re = new RegExp(`^\\s*#${epNum}\\s*[-–—:]\\s*`);
+      out = out.replace(re, '');
+    }
+    return out.trim();
+  }
   grid.innerHTML = data.podcasts.map(p => {
     const featuredHtml = p.featured.slice(0, 3).map(ep => {
       const num = ep.episode_number != null ? `#${ep.episode_number} ` : '';
-      return `<li title="${esc(ep.title)}">${num}${esc(ep.title)}</li>`;
+      const cleaned = cleanTitle(ep.title, ep.episode_number);
+      return `<li title="${esc(ep.title)}">${num}${esc(cleaned)}</li>`;
     }).join('');
     const hasContent = p.stats.episodes > 0;
     return `
@@ -509,21 +524,43 @@
   }
 
   // PAIR STATS
-  const pairs = (data.cross.pairStats || []).slice(0, 10);
-  if (pairs.length === 0) {
-    pairList.innerHTML = `<div class="fallback"><strong>Les références explicites entre podcasts sont en cours d'indexation.</strong><br>Disponible après activation du pipeline cross_podcast_ref (Phase D).</div>`;
+  // La décision de rendu (mode 'normal' vs 'fallback' + amorce) est prise côté
+  // backend dans engine/cross/pair-stats-rendering.ts (testé unitairement) puis
+  // exposée dans `data.cross.pairStatsRendering`. Le frontend rend simplement
+  // ce que le backend a décidé. Compat backward : si pairStatsRendering est
+  // absent (cache servi pré-Phase A re-codée), on retombe sur l'ancien seuil
+  // length === 0.
+  const rendering = data.cross.pairStatsRendering;
+  const nameBy = Object.fromEntries(data.podcasts.map(p => [p.id, p.name]));
+  function renderPairRow(p) {
+    const pcFrom = pcById[p.from] || 'var(--fg)';
+    const pcTo = pcById[p.to] || 'var(--fg)';
+    return `<div class="pair-row">
+      <span class="badge" style="--pc:${esc(pcFrom)}" data-pc>${esc(nameBy[p.from] || p.from)}</span>
+      <span class="arrow">→</span>
+      <span class="badge" style="--pc:${esc(pcTo)}" data-pc>${esc(nameBy[p.to] || p.to)}</span>
+      <span class="count">${p.count} ref${p.count > 1 ? 's' : ''}</span>
+    </div>`;
+  }
+  const fallbackMsg = `<div class="fallback"><strong>Couverture cross-références en cours d'indexation.</strong><br>La détection des références explicites entre podcasts s'appuie sur les articles éditoriaux scrapés. À ce jour, cette couverture est complète sur La Martingale, Génération Do It Yourself et Le Panier — mais Finscale, Passion Patrimoine et Combien ça gagne n'ont pas encore d'articles éditoriaux indexés. La section sera enrichie au fur et à mesure de l'ingestion.</div>`;
+
+  if (rendering) {
+    if (rendering.mode === 'normal') {
+      pairList.innerHTML = '<div class="pair-list">' + rendering.display.map(renderPairRow).join('') + '</div>';
+    } else {
+      const starterHtml = (rendering.starter && rendering.starter.length)
+        ? `<div class="pair-list" style="margin-top:14px;">${rendering.starter.map(renderPairRow).join('')}</div>`
+        : '';
+      pairList.innerHTML = fallbackMsg + starterHtml;
+    }
   } else {
-    const nameBy = Object.fromEntries(data.podcasts.map(p => [p.id, p.name]));
-    pairList.innerHTML = '<div class="pair-list">' + pairs.map(p => {
-      const pcFrom = pcById[p.from] || 'var(--fg)';
-      const pcTo = pcById[p.to] || 'var(--fg)';
-      return `<div class="pair-row">
-        <span class="badge" style="--pc:${esc(pcFrom)}" data-pc>${esc(nameBy[p.from] || p.from)}</span>
-        <span class="arrow">→</span>
-        <span class="badge" style="--pc:${esc(pcTo)}" data-pc>${esc(nameBy[p.to] || p.to)}</span>
-        <span class="count">${p.count} ref${p.count > 1 ? 's' : ''}</span>
-      </div>`;
-    }).join('') + '</div>';
+    // Compat backward : ancienne forme de cache.
+    const pairs = (data.cross.pairStats || []).slice(0, 10);
+    if (pairs.length === 0) {
+      pairList.innerHTML = fallbackMsg;
+    } else {
+      pairList.innerHTML = '<div class="pair-list">' + pairs.map(renderPairRow).join('') + '</div>';
+    }
   }
 })();
 </script>
