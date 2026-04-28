@@ -8,6 +8,7 @@ import {
   ensureUniverseInit,
 } from '../db/cross-queries';
 import { pickGuestLinkedin, buildExclusions } from '../scraping/linkedin-filter';
+import { isValidPersonName } from './is-valid-person-name';
 
 // ============================================================================
 // Match & merge guests cross-tenant.
@@ -44,23 +45,9 @@ function isHost(normName: string): boolean {
   return HOSTS_NORMALIZED.some(h => normName.includes(h));
 }
 
-// Filtre permettant d'exclure les faux noms générés par l'extracteur RSS :
-// marqueurs `[REDIFF]`/`[EXTRAIT]`, prénoms seuls (`Jean`), tokens génériques.
-function isValidPersonName(raw: string): boolean {
-  const trimmed = raw.trim();
-  if (!trimmed) return false;
-  if (trimmed.startsWith('[') || trimmed.startsWith('#')) return false;
-  if (/^\d+$/.test(trimmed)) return false;
-  // Doit comporter au moins 2 tokens (nom + prénom ou prénom composé avec tiret)
-  const tokenCount = trimmed.split(/[\s\-]+/).filter(Boolean).length;
-  if (tokenCount < 2) return false;
-  // Premier caractère doit être une majuscule (pas une particule seule)
-  if (!/^[A-ZÀ-Ý]/.test(trimmed)) return false;
-  // Blocklist de faux positifs courants
-  const BAD_NAMES = /^(rediff|extrait|bonus|zoom|episode|hors[- ]?serie|interview|special|partenariat|replay|bande[- ]?annonce|teaser)\b/i;
-  if (BAD_NAMES.test(trimmed)) return false;
-  return true;
-}
+// Phase B3 (2026-04-28) — fonction extracée dans engine/cross/is-valid-person-name.ts
+// (module pur, testable, élargi pour couvrir les 30 cas pollution B2). Importée
+// au top du fichier. Conservée here-comment pour traçabilité git blame.
 
 type AppearanceRow = {
   tenant_id: string;
@@ -264,8 +251,22 @@ async function main() {
   if (DRY) {
     console.log('  DRY run — pas d\'upsert');
   } else {
-    // Truncate + batch insert pour rester simple & reproductible.
-    await sql`TRUNCATE cross_podcast_guests RESTART IDENTITY`;
+    // Phase B0 (2026-04-28) — TRUNCATE retiré : il détruisait les briefs
+    // (brief_md, key_positions, quotes, original_questions,
+    // brief_generated_at, brief_model) générés par Phase 1.5 vitrine et,
+    // à terme, ceux générés en bulk par Phase C. L'UPSERT ON CONFLICT
+    // ci-dessous préserve nativement ces colonnes : seules les colonnes
+    // listées dans `DO UPDATE SET … = EXCLUDED.*` sont réécrites.
+    //
+    // Conséquence — entries orphelines : un guest qui disparaît du dataset
+    // courant (ex. titre RSS modifié → canonical_name différent) reste en
+    // table jusqu'à un cleanup explicite. Acceptable phase pilote ; cycle
+    // de vie complet (soft-delete `is_active` ou cleanup périodique) à
+    // implémenter post-pilote V2 si nécessaire.
+    //
+    // Schema : UNIQUE (canonical_name) déjà présent
+    // (cross_podcast_guests_canonical_name_key) — pas de CREATE INDEX
+    // additionnel nécessaire.
 
     const chunks: Array<{
       canonical: string; display: string; bio: string | null; linkedin: string | null;

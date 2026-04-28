@@ -21,8 +21,17 @@ export const lamartingaleConfig: PodcastConfig = {
   github: 'https://github.com/jeremyH974/lamartingale',
 
   rssFeeds: {
-    main: 'https://feed.audiomeans.fr/feed/la-martingale-010afa69a4c1.xml',
-    secondary: 'https://feed.audiomeans.fr/feed/allo-la-martingale-5d56dcf7.xml',
+    // Phase B6 (2026-04-28) : migration vers UUID-style canonique Audiomeans.
+    // Ancienne URL 'feed.audiomeans.fr/feed/la-martingale-010afa69a4c1.xml'
+    // (singulier `feed.`, slug humain) renvoyait 301 vers la nouvelle URL
+    // canonique. Le redirect fonctionnait silencieusement mais aurait pu
+    // disparaître à terme côté Audiomeans → migration préventive.
+    main: 'https://feeds.audiomeans.fr/feed/647b907b-5a2f-4a11-94cb-591d604cb1b9.xml',
+    // secondary 'allo-la-martingale-5d56dcf7' retiré : le flux Allo La
+    // Martingale a son propre tenant `allolamartingale` depuis Phase A.5.2.
+    // Conserver le secondary ici créait un doublon cross-tenant (les rows
+    // Allo LM étaient ingérées 2 fois — sous tenant lamartingale ET sous
+    // tenant allolamartingale). Cleanup des ~58 rows orphelines en Phase B7.
   },
 
   platforms: {
