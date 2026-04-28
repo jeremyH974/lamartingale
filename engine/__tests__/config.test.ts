@@ -33,8 +33,11 @@ describe('M1 — Config Factory', () => {
 
   it('4. has RSS feed URLs configured', () => {
     const cfg = getConfig();
-    expect(cfg.rssFeeds.main).toMatch(/^https:\/\/feed\.audiomeans\.fr\//);
-    expect(cfg.rssFeeds.secondary).toBeDefined();
+    // Phase B6 (2026-04-28) : LM main feed migré vers UUID-style canonique
+    // (feeds.audiomeans.fr/feed/<uuid>.xml). secondary `allo-la-martingale`
+    // retiré (Allo LM est désormais un tenant séparé `allolamartingale` —
+    // cf. Phase A.5.2).
+    expect(cfg.rssFeeds.main).toMatch(/^https:\/\/feeds\.audiomeans\.fr\//);
   });
 
   it('5. has scraping flags (hasArticles, timelineInRss)', () => {

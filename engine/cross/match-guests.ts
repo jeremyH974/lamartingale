@@ -8,6 +8,7 @@ import {
   ensureUniverseInit,
 } from '../db/cross-queries';
 import { pickGuestLinkedin, buildExclusions } from '../scraping/linkedin-filter';
+import { isValidPersonName } from './is-valid-person-name';
 
 // ============================================================================
 // Match & merge guests cross-tenant.
@@ -44,23 +45,9 @@ function isHost(normName: string): boolean {
   return HOSTS_NORMALIZED.some(h => normName.includes(h));
 }
 
-// Filtre permettant d'exclure les faux noms générés par l'extracteur RSS :
-// marqueurs `[REDIFF]`/`[EXTRAIT]`, prénoms seuls (`Jean`), tokens génériques.
-function isValidPersonName(raw: string): boolean {
-  const trimmed = raw.trim();
-  if (!trimmed) return false;
-  if (trimmed.startsWith('[') || trimmed.startsWith('#')) return false;
-  if (/^\d+$/.test(trimmed)) return false;
-  // Doit comporter au moins 2 tokens (nom + prénom ou prénom composé avec tiret)
-  const tokenCount = trimmed.split(/[\s\-]+/).filter(Boolean).length;
-  if (tokenCount < 2) return false;
-  // Premier caractère doit être une majuscule (pas une particule seule)
-  if (!/^[A-ZÀ-Ý]/.test(trimmed)) return false;
-  // Blocklist de faux positifs courants
-  const BAD_NAMES = /^(rediff|extrait|bonus|zoom|episode|hors[- ]?serie|interview|special|partenariat|replay|bande[- ]?annonce|teaser)\b/i;
-  if (BAD_NAMES.test(trimmed)) return false;
-  return true;
-}
+// Phase B3 (2026-04-28) — fonction extracée dans engine/cross/is-valid-person-name.ts
+// (module pur, testable, élargi pour couvrir les 30 cas pollution B2). Importée
+// au top du fichier. Conservée here-comment pour traçabilité git blame.
 
 type AppearanceRow = {
   tenant_id: string;
