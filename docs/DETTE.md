@@ -483,9 +483,18 @@ Applicable aux futurs scripts : migrations schema (`engine/db/migrate-*.ts`), ba
 
 ---
 
-## 🚨 Phase 7b audit timestamps L2 — pack pilote non envoyable (OPEN, P0, 27/04/26)
+## 🚧 Phase 7b audit timestamps L2 — fix architectural appliqué (Phase 8.2 IN PROGRESS, 28/04/26)
 
-**Statut** : **BLOQUANT envoi pilote 17/05**. Phase 7b vidéo en pause tant que non résolu.
+**Statut** : fix code mergé dans branche `fix/extractquotes-timestamps`. Régénération réelle 8.3 + audit 8.4 à venir avant verdict final RESOLVED. **Bloque toujours envoi pilote 17/05** tant que les 4 packs ne sont pas régénérés et auditiés ≥ 95% OK.
+
+**Fix appliqué Phase 8.2** (commit fix/extractquotes-timestamps) :
+- `extractQuotes` refactoré : le LLM ne reçoit plus `full_text` plat mais un bloc `[N] text` (segments indexés sans timestamps). Sonnet retourne `segment_index_start`/`segment_index_end` (sélection d'index) au lieu de `start_seconds`/`end_seconds` (calcul halluciné).
+- Validation 3 couches post-extraction : bornes / fenêtre prompt (anti-hallucination index) / verbatim trouvable dans fenêtre ±10s.
+- Pipeline résout `segment_index → timestamps Whisper réels` côté serveur. Output public inchangé (backward-compat Phase 6/7a).
+- **Bonus** : passage `PROMPT_TRANSCRIPT_CHAR_LIMIT` 50 000 → 250 000 chars résout aussi un bug pré-existant de truncation massive (Plais GDIY perdait 76% du transcript = 188 min réduites à 24 min vues par le LLM, Boissenot/Doolaeghe ~30%). Cette dette était silencieuse avant l'audit Phase 7b.
+- 657/657 tests verts (baseline 638 + 19 nets), 0 régression.
+
+**Statut original** : BLOQUANT envoi pilote 17/05. Phase 7b vidéo en pause tant que non résolu.
 
 **Constat** : audit déclenché pendant test bout-en-bout Phase 7b sur Veyrat (yt-dlp + ffmpeg + `produceClientPack`). Le test a planté côté `validateSpec` sur 2 quotes Veyrat dont les timestamps (`38:30`, `38:50`) dépassent la durée du transcript (1896s = 31:36). Audit étendu aux 4 épisodes pilote → **15/19 quotes L2 ont un timestamp erroné**.
 
