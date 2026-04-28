@@ -105,26 +105,48 @@
     color: var(--accent); font-weight: 600; margin-bottom: 24px;
   }
   .hero h1 {
-    font-size: clamp(40px, 5.5vw, 76px);
-    line-height: 1;
+    font-size: clamp(36px, 5.5vw, 76px);
+    line-height: 1.05;
     font-weight: 800;
     letter-spacing: -0.03em;
-    margin-bottom: 24px;
-    max-width: 960px;
+    margin-bottom: 20px;
+    max-width: 980px;
   }
   .hero h1 .gradient {
     background: linear-gradient(135deg, #4a7aff, #00F5A0);
     -webkit-background-clip: text; background-clip: text; color: transparent;
   }
   .hero .tagline {
-    font-size: 19px; color: var(--fg-2); max-width: 680px;
-    margin-bottom: 48px;
+    font-size: 18px; color: var(--fg-2); max-width: 720px;
+    margin-bottom: 28px; line-height: 1.5;
   }
+  .hero .tagline .construction {
+    color: var(--fg-3); font-style: italic; font-size: 15px;
+  }
+  .hero-cta {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 28px; border-radius: 99px;
+    background: var(--accent); color: #000;
+    font-weight: 700; font-size: 15px;
+    transition: transform 0.15s, box-shadow 0.15s;
+    margin-bottom: 56px;
+  }
+  .hero-cta:hover { transform: translateY(-1px); box-shadow: 0 8px 24px -8px var(--accent); }
+  .hero-cta .arrow { transition: transform 0.15s; }
+  .hero-cta:hover .arrow { transform: translateX(2px); }
   .hero-stats {
     display: flex; gap: 48px; flex-wrap: wrap; justify-content: center;
   }
-  .hero-stat .n { font-size: 40px; font-weight: 800; letter-spacing: -0.02em; color: var(--fg); }
-  .hero-stat .l { font-size: 12px; color: var(--fg-3); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 4px; }
+  .hero-stat .n { font-size: 36px; font-weight: 800; letter-spacing: -0.02em; color: var(--fg); }
+  .hero-stat .l { font-size: 11px; color: var(--fg-3); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 4px; }
+  @media (max-width: 600px) {
+    .hero { padding: 100px 20px 60px; min-height: auto; }
+    .hero h1 { font-size: 32px; line-height: 1.1; }
+    .hero .tagline { font-size: 15px; margin-bottom: 24px; }
+    .hero-cta { padding: 12px 22px; font-size: 14px; margin-bottom: 40px; }
+    .hero-stats { gap: 24px; }
+    .hero-stat .n { font-size: 28px; }
+  }
 
   /* ============ SECTION ============ */
   section.block { padding: 80px 32px; border-top: 1px solid var(--border); }
@@ -201,6 +223,100 @@
   .podcast-card .cta:hover { opacity: 0.88; }
   /* accent secondaire visible contre fond clair : if primaryColor is light, the CSS still holds; fine for #000000 (GDIY) */
 
+  /* ============ BRIEF INLINE (Scénario B M1.2) ============ */
+  .brief-inline {
+    background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+    padding: 32px; max-width: 880px; margin: 0 auto;
+    display: grid; grid-template-columns: 96px 1fr; gap: 24px; align-items: start;
+  }
+  .brief-inline .avatar {
+    width: 96px; height: 96px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), #004cff);
+    color: #000; font-size: 32px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    letter-spacing: -0.02em;
+  }
+  .brief-inline .body { display: flex; flex-direction: column; gap: 18px; }
+  .brief-inline .head { display: flex; flex-direction: column; gap: 8px; }
+  .brief-inline .head .name { font-size: 24px; font-weight: 800; letter-spacing: -0.01em; }
+  .brief-inline .head .meta { font-size: 13px; color: var(--fg-3); display: flex; gap: 12px; flex-wrap: wrap; }
+  .brief-inline .head .tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .brief-inline .head .tag {
+    font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 99px;
+    background: rgba(0, 245, 160, 0.12); color: var(--accent);
+    text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  .brief-inline h3 {
+    font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--fg-3); font-weight: 700; margin: 4px 0;
+  }
+  .brief-inline .about { font-size: 14px; color: var(--fg-2); line-height: 1.55; }
+  .brief-inline .positions, .brief-inline .quotes, .brief-inline .questions {
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .brief-inline .position-row {
+    font-size: 13px; color: var(--fg); padding: 10px 12px;
+    background: var(--bg-2); border-radius: 8px; line-height: 1.5;
+    border-left: 2px solid var(--accent);
+  }
+  .brief-inline .quote-row {
+    font-size: 13px; color: var(--fg); padding: 10px 14px;
+    background: var(--bg-2); border-radius: 8px; line-height: 1.55;
+    font-style: italic; border-left: 2px solid #4a7aff;
+  }
+  .brief-inline .quote-row::before { content: "« "; color: var(--fg-3); }
+  .brief-inline .quote-row::after { content: " »"; color: var(--fg-3); }
+  .brief-inline .question-row {
+    font-size: 13px; color: var(--fg); padding: 10px 12px;
+    background: var(--bg-2); border-radius: 8px; line-height: 1.5;
+    border-left: 2px solid #ef476f;
+  }
+  .brief-inline .question-row::before { content: "🔥 "; }
+  .brief-inline-label {
+    text-align: center; margin: 0 auto 20px; max-width: 880px;
+    font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--fg-3); font-weight: 700;
+  }
+  .brief-inline-label .accent { color: var(--accent); }
+  .brief-inline-cta {
+    display: flex; justify-content: center; margin-top: 28px;
+  }
+  .brief-inline-cta a {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 11px 22px; border-radius: 99px;
+    background: var(--bg-2); border: 1px solid var(--border);
+    color: var(--fg); font-weight: 600; font-size: 13px;
+    transition: border-color 0.15s, color 0.15s, transform 0.15s;
+  }
+  .brief-inline-cta a:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+  @media (max-width: 720px) {
+    .brief-inline { grid-template-columns: 1fr; padding: 24px; gap: 18px; }
+    .brief-inline .avatar { margin: 0 auto; }
+    .brief-inline .head { text-align: center; align-items: center; }
+    .brief-inline .head .meta { justify-content: center; }
+    .brief-inline .head .tags { justify-content: center; }
+  }
+
+  /* ============ CROSS-GUEST MINI (Scénario B M1.3) ============ */
+  .cross-mini-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px; max-width: 1080px; margin: 32px auto 0;
+  }
+  .cross-mini {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 20px; display: flex; flex-direction: column; gap: 12px;
+    transition: border-color 0.2s, transform 0.2s;
+    text-decoration: none; color: inherit;
+  }
+  .cross-mini:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .cross-mini .name { font-size: 16px; font-weight: 700; letter-spacing: -0.01em; }
+  .cross-mini .pods-line { font-size: 12px; color: var(--fg-3); }
+  .cross-mini .badges { display: flex; gap: 6px; flex-wrap: wrap; }
+  .cross-mini .cta {
+    margin-top: auto; font-size: 12px; color: var(--accent); font-weight: 600;
+    display: inline-flex; align-items: center; gap: 4px;
+  }
+
   /* ============ GUESTS ============ */
   .guest-list { display: flex; flex-direction: column; gap: 10px; }
   .guest-row {
@@ -268,6 +384,7 @@
       <div>Univers<strong style="font-weight:900">MS</strong></div>
     </div>
     <div class="nav-right">
+      <a href="#brief-example">Exemple</a>
       <a href="#podcasts">Podcasts</a>
       <a href="#guests">Invités partagés</a>
       <div id="session-box" class="session-box" style="display:none">
@@ -277,16 +394,53 @@
     </div>
   </nav>
 
-  <!-- HERO -->
+  <!-- HERO (Scénario B M1.1) -->
   <header class="hero">
     <div class="eyebrow" id="hero-eyebrow">Univers Matthieu Stefani</div>
     <h1>
-      <span id="hero-podcast-count">—</span> <span id="hero-podcast-word">podcasts</span>,<br>
-      un <span class="gradient">écosystème</span>.
+      <span id="hero-podcast-count">11</span> <span id="hero-podcast-word">podcasts</span>,
+      <span class="gradient">1 mémoire éditoriale</span>.
     </h1>
-    <p class="tagline" id="hero-tagline">Chargement de l'univers…</p>
+    <p class="tagline" id="hero-tagline">
+      Sillon indexe, relie et synthétise les <span id="hero-tagline-count">11</span> podcasts
+      de l'écosystème <strong>Stefani × Orso Media</strong>.
+      <span class="construction">En construction active.</span>
+    </p>
+    <a href="#brief-example" class="hero-cta">
+      Voir un exemple de brief <span class="arrow">→</span>
+    </a>
     <div class="hero-stats" id="hero-stats"></div>
   </header>
+
+  <!-- BRIEF INLINE EXAMPLE (Scénario B M1.2) -->
+  <section class="block" id="brief-example">
+    <div class="container">
+      <div class="brief-inline-label">
+        Exemple — <span class="accent" id="brief-others-count">60</span> autres briefs disponibles
+      </div>
+      <div id="brief-inline-card">
+        <div class="loading">Chargement du brief vitrine…</div>
+      </div>
+      <div class="brief-inline-cta">
+        <a href="/guest-brief/eric-larcheveque">Voir le brief complet <span>→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CROSS-CORPUS MINI (Scénario B M1.3) -->
+  <section class="block" id="cross-corpus-preview">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">Cross-corpus</div>
+        <div class="section-title">Les invités qui circulent dans l'écosystème</div>
+        <div class="section-sub">Une poignée de profils apparaissent dans 3 podcasts ou plus.
+          Sillon les identifie automatiquement et prépare un brief croisé.</div>
+      </div>
+      <div class="cross-mini-grid" id="cross-mini-grid">
+        <div class="loading">Chargement…</div>
+      </div>
+    </div>
+  </section>
 
   <!-- PODCASTS -->
   <section class="block" id="podcasts">
@@ -451,11 +605,13 @@
   const podcastsWord = podcastsN > 1 ? 'podcasts' : 'podcast';
   document.title = `${data.universe.name} — ${podcastsN} ${podcastsWord}, un écosystème`;
 
-  // Hero
+  // Hero (Scénario B M1.1)
   heroCount.textContent = podcastsN;
   const heroWord = document.getElementById('hero-podcast-word');
   if (heroWord) heroWord.textContent = podcastsWord;
-  heroTagline.textContent = data.universe.tagline;
+  // Tagline statique HTML — on update juste le compteur inline si différent du défaut
+  const heroTaglineCount = document.getElementById('hero-tagline-count');
+  if (heroTaglineCount) heroTaglineCount.textContent = podcastsN;
   heroStats.innerHTML = [
     { n: fmtNum(data.universe.totals.episodes), l: 'épisodes' },
     { n: fmtNum(data.universe.totals.hours), l: 'heures' },
@@ -465,6 +621,15 @@
   ].map(s => `<div class="hero-stat"><div class="n">${s.n}</div><div class="l">${s.l}</div></div>`).join('');
 
   footerProducers.textContent = 'Producteurs · ' + data.universe.producers.join(' · ');
+
+  // Brief inline Larchevêque (Scénario B M1.2) — fetch en parallèle, public endpoint
+  renderBriefInline().catch(e => {
+    const target = document.getElementById('brief-inline-card');
+    if (target) target.innerHTML = `<div class="fallback">Exemple de brief temporairement indisponible.</div>`;
+  });
+
+  // Cross-mini grid (Scénario B M1.3) — top 3 cross-tenant 3+ podcasts
+  renderCrossMini(data);
 
   // Index tenant → primaryColor (pour les badges)
   const pcById = {};
@@ -577,6 +742,138 @@
     } else {
       pairList.innerHTML = '<div class="pair-list">' + pairs.map(renderPairRow).join('') + '</div>';
     }
+  }
+
+  // ──────────────────────────────────────────────────────────────────────
+  // Scénario B M1.2 — brief inline Larchevêque
+  // Pattern : composant render réutilisable, fetch public endpoint
+  // /api/cross/guests/eric-larcheveque/brief, render compressé.
+  // ──────────────────────────────────────────────────────────────────────
+  async function renderBriefInline() {
+    const target = document.getElementById('brief-inline-card');
+    if (!target) return;
+    const res = await fetch('/api/cross/guests/eric-larcheveque/brief');
+    if (!res.ok) throw new Error(`brief HTTP ${res.status}`);
+    const b = await res.json();
+
+    const initials = (b.display_name || b.canonical_name)
+      .split(/\s+/).filter(Boolean).slice(0, 2)
+      .map(s => s[0]?.toUpperCase()).join('') || '?';
+    const tenants = (b.tenant_appearances || []).map(a => a.tenant_id);
+    const totalEps = (b.tenant_appearances || []).reduce((s, a) => s + (a.episode_numbers?.length || 0), 0);
+
+    const positions = (b.key_positions || []).slice(0, 3);
+    const quotes = (b.quotes || []).slice(0, 2);
+    const questions = b.original_questions || [];
+    const highQ = questions.find(q => (q.depth_score || '').toLowerCase() === 'high') || questions[0];
+
+    // Brief MD compressé : 1er paragraphe ou ~250 chars
+    const aboutShort = (b.brief_md || '')
+      .split(/\n\n+/)[0]
+      .replace(/[#*_`]/g, '')
+      .slice(0, 280)
+      .trim();
+
+    target.innerHTML = `
+      <div class="brief-inline">
+        <div class="avatar">${esc(initials)}</div>
+        <div class="body">
+          <div class="head">
+            <div class="name">${esc(b.display_name || b.canonical_name)}</div>
+            <div class="meta">
+              <span>${tenants.length} podcast${tenants.length > 1 ? 's' : ''}</span>
+              <span>·</span>
+              <span>${totalEps} épisode${totalEps > 1 ? 's' : ''}</span>
+              ${b.linkedin_url ? `<span>·</span><a href="${esc(b.linkedin_url)}" target="_blank" rel="noopener" style="color:var(--accent);">LinkedIn ↗</a>` : ''}
+            </div>
+            <div class="tags">${tenants.map(t => `<span class="tag">${esc(prettyTenant(t))}</span>`).join('')}</div>
+          </div>
+
+          ${aboutShort ? `<div><h3>À propos</h3><div class="about">${esc(aboutShort)}${(b.brief_md || '').length > 280 ? '…' : ''}</div></div>` : ''}
+
+          ${positions.length ? `<div>
+            <h3>Positions tranchées</h3>
+            <div class="positions">
+              ${positions.map(p => `<div class="position-row">${esc(p.position || '')}</div>`).join('')}
+            </div>
+          </div>` : ''}
+
+          ${quotes.length ? `<div>
+            <h3>Citations clés</h3>
+            <div class="quotes">
+              ${quotes.map(q => `<div class="quote-row">${esc(q.text || '')}</div>`).join('')}
+            </div>
+          </div>` : ''}
+
+          ${highQ ? `<div>
+            <h3>Question à explorer</h3>
+            <div class="questions">
+              <div class="question-row">${esc(highQ.question || '')}</div>
+            </div>
+          </div>` : ''}
+        </div>
+      </div>
+    `;
+  }
+
+  // ──────────────────────────────────────────────────────────────────────
+  // Scénario B M1.3 — cross-corpus mini cards (top 3 cross-tenant)
+  // Sélection : 3 guests avec count >= 3 (3+ podcasts), tri descendant.
+  // Slug calculé local (canonical → slug normalisé pour le lien).
+  // ──────────────────────────────────────────────────────────────────────
+  function slugifyCanonical(name) {
+    return String(name || '').toLowerCase()
+      .normalize('NFD').replace(/[̀-ͯ]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  }
+
+  function renderCrossMini(data) {
+    const target = document.getElementById('cross-mini-grid');
+    if (!target) return;
+    // Top 3 guests apparaissant dans 3+ podcasts (cross-tenant fort)
+    const candidates = (data.cross.guests || [])
+      .filter(g => (g.count || 0) >= 3)
+      .slice(0, 6); // sécu : on prend 6 puis on garde 3 par tri éditorial
+    // Tri : nb_eps desc puis nb_pods desc
+    candidates.sort((a, b) => {
+      const ea = a.appearances?.length || 0;
+      const eb = b.appearances?.length || 0;
+      if (eb !== ea) return eb - ea;
+      return (b.podcasts?.length || 0) - (a.podcasts?.length || 0);
+    });
+    const top3 = candidates.slice(0, 3);
+    if (top3.length === 0) {
+      target.innerHTML = `<div class="fallback">Pas assez d'invités cross-corpus indexés pour ce périmètre.</div>`;
+      return;
+    }
+    const nameByPodcast = Object.fromEntries(data.podcasts.map(p => [p.id, p.name]));
+    target.innerHTML = top3.map(g => {
+      const slug = slugifyCanonical(g.canonical);
+      const podcastsList = (g.podcasts || []);
+      const badges = podcastsList.map(pid => {
+        const pc = pcById[pid];
+        const label = nameByPodcast[pid] || pid;
+        return `<span class="badge" ${pc ? `style="--pc:${esc(pc)}"` : ''} data-pc>${esc(label)}</span>`;
+      }).join('');
+      return `<a class="cross-mini" href="/guest-brief/${esc(slug)}">
+        <div class="name">${esc(g.canonical.replace(/\b\w/g, c => c.toUpperCase()))}</div>
+        <div class="pods-line">${podcastsList.length} podcasts · ${g.count} épisode${g.count > 1 ? 's' : ''}</div>
+        <div class="badges">${badges}</div>
+        <div class="cta">Voir le brief →</div>
+      </a>`;
+    }).join('');
+  }
+
+  function prettyTenant(id) {
+    const map = {
+      gdiy: 'GDIY', lamartingale: 'La Martingale', lepanier: 'Le Panier',
+      finscale: 'Finscale', passionpatrimoine: 'Passion Patrimoine',
+      combiencagagne: 'Combien ça gagne', fleurons: 'Fleurons',
+      iftd: 'IFTTD', demainvousappartient: 'Demain Vous Appartient',
+      allolamartingale: 'Allo La Martingale', onlacherien: 'On Lâche Rien',
+    };
+    return map[id] || id || '?';
   }
 })();
 </script>
