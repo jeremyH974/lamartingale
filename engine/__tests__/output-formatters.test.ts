@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import ExcelJS from 'exceljs';
 import { DocxFormatter, parseInlineFormatting } from '../output/formats/docxFormatter';
 import { MarkdownFormatter } from '../output/formats/markdownFormatter';
 import { PdfFormatter } from '../output/formats/pdfFormatter';
@@ -104,6 +105,77 @@ describe('xlsx formatter — Phase 7a', () => {
     const f = new XlsxFormatter();
     await expect(f.formatLivrable(livrable, CTX)).rejects.toThrow(/does not support/);
   });
+
+  // Phase 8.4 KO follow-up — Garde-fou client-facing : aucun jargon dev
+  // (nom de phase roadmap, nom de modèle LLM, nom de variable interne) ne
+  // doit apparaître dans les headers ou cellules d'un xlsx livré.
+  // Découvert : "Lien vidéo (Phase 7b)" et "Lien micro-clip (Phase 7b)"
+  // visibles dans 02-quotes.xlsx + 01-key-moments.xlsx — perçu "produit
+  // en cours" par un lecteur externe.
+  const BANNED_XLSX_PATTERNS: RegExp[] = [
+    /\bPhase \d/i,
+    /\bSonnet\b/i,
+    /\bHaiku\b/i,
+    /\bOpus\b/i,
+    /\bWhisper\b/i,
+    /\bextractQuotes?\b/i,
+    /\bsegment_index\b/i,
+    /\btemporal_spread\b/i,
+    /\blensClassif/i,
+    /\bTODO\b/i,
+    /\bFIXME\b/i,
+  ];
+
+  async function extractAllXlsxText(buffer: Buffer): Promise<string[]> {
+    const wb = new ExcelJS.Workbook();
+    await wb.xlsx.load(buffer);
+    const out: string[] = [];
+    wb.eachSheet((sheet) => {
+      out.push(sheet.name);
+      sheet.eachRow((row) => {
+        row.eachCell((cell) => {
+          const v = cell.value;
+          if (v == null) return;
+          if (typeof v === 'string' || typeof v === 'number') {
+            out.push(String(v));
+          } else if (typeof v === 'object' && 'richText' in v && Array.isArray((v as any).richText)) {
+            for (const r of (v as any).richText) out.push(String(r.text));
+          } else {
+            out.push(JSON.stringify(v));
+          }
+        });
+      });
+    });
+    return out;
+  }
+
+  it.each(['plais-platform-sh', 'boissenot-pokemon', 'nooz-optics', 'veyrat-stoik'])(
+    'L1 key-moments xlsx contains NO dev jargon (%s)',
+    async (slug) => {
+      const livrable = parseKeyMoments(readEp(slug, '01-key-moments.md'));
+      const f = new XlsxFormatter();
+      const out = await f.formatLivrable(livrable, CTX);
+      const texts = await extractAllXlsxText(out.buffer);
+      const joined = texts.join('\n');
+      for (const re of BANNED_XLSX_PATTERNS) {
+        expect(joined, `pattern ${re} found in ${slug}/01-key-moments.xlsx`).not.toMatch(re);
+      }
+    },
+  );
+
+  it.each(['plais-platform-sh', 'boissenot-pokemon', 'nooz-optics', 'veyrat-stoik'])(
+    'L2 quotes xlsx contains NO dev jargon (%s)',
+    async (slug) => {
+      const livrable = parseQuotes(readEp(slug, '02-quotes.md'));
+      const f = new XlsxFormatter();
+      const out = await f.formatLivrable(livrable, CTX);
+      const texts = await extractAllXlsxText(out.buffer);
+      const joined = texts.join('\n');
+      for (const re of BANNED_XLSX_PATTERNS) {
+        expect(joined, `pattern ${re} found in ${slug}/02-quotes.xlsx`).not.toMatch(re);
+      }
+    },
+  );
 });
 
 describe('markdown formatter — Phase 7a', () => {

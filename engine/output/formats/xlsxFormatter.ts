@@ -74,7 +74,6 @@ function buildKeyMomentsSheet(wb: ExcelJS.Workbook, l: KeyMomentsLivrable, brand
     { header: 'Saliency', key: 'saliency', width: 10 },
     { header: 'Quote / extrait', key: 'quote', width: 60 },
     { header: "Pourquoi c'est saillant", key: 'pourquoi', width: 70 },
-    { header: 'Lien vidéo (Phase 7b)', key: 'video', width: 24 },
   ];
   sheet.columns = columns;
 
@@ -89,7 +88,6 @@ function buildKeyMomentsSheet(wb: ExcelJS.Workbook, l: KeyMomentsLivrable, brand
       saliency: m.saliency,
       quote: m.quote,
       pourquoi: m.pourquoi,
-      video: '',
     });
     styleDataRow(row);
     row.getCell('saliency').numFmt = '0.00';
@@ -109,7 +107,6 @@ function buildQuotesSheet(wb: ExcelJS.Workbook, l: QuotesLivrable, brand: string
     { header: 'Timestamp', key: 'timestamp', width: 10 },
     { header: 'Plateformes suggérées', key: 'plateformes', width: 22 },
     { header: 'Pourquoi cette citation', key: 'pourquoi', width: 60 },
-    { header: 'Lien micro-clip (Phase 7b)', key: 'video', width: 26 },
   ];
   sheet.columns = columns;
 
@@ -123,7 +120,6 @@ function buildQuotesSheet(wb: ExcelJS.Workbook, l: QuotesLivrable, brand: string
       timestamp: q.timestamp,
       plateformes: q.plateformes.join(', '),
       pourquoi: q.pourquoi,
-      video: '',
     });
     styleDataRow(row);
   }

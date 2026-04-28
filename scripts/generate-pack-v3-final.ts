@@ -29,7 +29,45 @@ import {
   parseNewsletter,
   parseQuotes,
 } from '../engine/output/parsers/markdownParser';
-import type { FormatterContext, Livrable, QuotesLivrable } from '../engine/output/types';
+import type {
+  FormatterContext,
+  KeyMomentsLivrable,
+  Livrable,
+  QuotesLivrable,
+} from '../engine/output/types';
+
+/**
+ * Liste de mots/concepts internes pipeline qui NE DOIVENT PAS apparaître dans
+ * un livrable client-facing. Source : grep réel sur les sandbox V1
+ * (subtitles "extraits Sonnet avec timestamps Whisper réels", colonnes xlsx
+ * "Lien vidéo (Phase 7b)", etc.).
+ */
+const CLIENT_FACING_BANNED_TERMS = [
+  /\bSonnet\b/i,
+  /\bHaiku\b/i,
+  /\bOpus\b/i,
+  /\bWhisper\b/i,
+  /\bextractQuotes?\b/i,
+  /\bsegment_index\b/i,
+  /\btemporal_spread\b/i,
+  /\bPhase \d/i,
+  /\blensClassif/i,
+];
+
+/**
+ * Réécrit un subtitle hérité du sandbox V1 si celui-ci mentionne du jargon
+ * pipeline (Sonnet, Whisper, etc.). Override par un subtitle client-facing
+ * équivalent au format Plais (le seul propre dans le sandbox V1).
+ */
+function sanitizeKeyMomentsSubtitle(l: KeyMomentsLivrable): KeyMomentsLivrable {
+  if (!l.subtitle) return l;
+  const dirty = CLIENT_FACING_BANNED_TERMS.some((re) => re.test(l.subtitle!));
+  if (!dirty) return l;
+  return {
+    ...l,
+    subtitle: `${l.moments.length} moments clippables avec timestamps`,
+  };
+}
 
 const SOURCE_V1 = resolve(
   'experiments',
@@ -54,19 +92,19 @@ const EPISODES = [
   { slug: 'veyrat-stoik', displayRef: 'Finscale #107 Jules Veyrat (Stoïk)' },
 ];
 
-const README = `# Pack pilote V3 — Sillon × Matthieu Stefani / Orso Media
+const README = `# Pack pilote — Sillon × Matthieu Stefani / Orso Media
 
-> Phase 8 : intégrité timestamps L2 corrigée (extractQuotes refactor).
-> Généré le ${new Date().toISOString().slice(0, 10)} par \`scripts/generate-pack-v3-final.ts\`.
+> 4 épisodes pilote — livrables prêts à l'emploi.
+> Généré le ${new Date().toISOString().slice(0, 10)}.
 
 ## Contenu du pack
 
 Pour chaque épisode (4 dossiers) :
-- \`01-key-moments.xlsx\` — 4-5 moments clippables avec timestamps + saliency
-- \`02-quotes.xlsx\` — citations verbatim social-ready (timestamps validés segment_index)
+- \`01-key-moments.xlsx\` — moments clippables avec timestamps et saliency
+- \`02-quotes.xlsx\` — citations verbatim prêtes pour les réseaux sociaux
 - \`03-cross-refs-by-lens.docx\` — cross-références par angle éditorial
-- \`04-newsletter.docx\` — article édito ~400 mots
-- \`05-brief-annexe.docx\` — brief synthèse cross-catalogue
+- \`04-newsletter.docx\` — article éditorial
+- \`05-brief-annexe.docx\` — brief de synthèse cross-catalogue
 
 ---
 
@@ -113,7 +151,9 @@ async function main() {
 
   const episodes = EPISODES.map((e) => {
     const livrables: Livrable[] = [
-      parseKeyMoments(readFileSync(resolve(SOURCE_V1, e.slug, '01-key-moments.md'), 'utf-8')),
+      sanitizeKeyMomentsSubtitle(
+        parseKeyMoments(readFileSync(resolve(SOURCE_V1, e.slug, '01-key-moments.md'), 'utf-8')),
+      ),
       buildQuotesLivrableFromJson(
         resolve(SOURCE_V3_L2, e.slug, 'quotes.json'),
         e.displayRef,
@@ -123,7 +163,7 @@ async function main() {
       parseBriefAnnexe(readFileSync(resolve(SOURCE_V1, e.slug, '05-brief-annexe.md'), 'utf-8')),
     ];
     const l2 = livrables[1] as QuotesLivrable;
-    console.log(`  ${e.slug} : ${l2.quotes.length} quotes L2 fix Phase 8`);
+    console.log(`  ${e.slug} : ${l2.quotes.length} quotes`);
     return buildEpisode(e.slug, e.displayRef, livrables);
   });
 
