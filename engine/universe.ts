@@ -151,6 +151,10 @@ export async function getUniverse(): Promise<UniverseResponse> {
         FROM episodes
         WHERE tenant_id = ANY(${tenantIds})
           AND (episode_type = 'full' OR episode_type IS NULL)
+          -- Exclut les hors-séries événementiels (LP "#HS 1 to 1 Monaco …",
+          -- PP "#HS …") du featured top 3 du hub : ce sont des contenus
+          -- one-shot non représentatifs du format principal du podcast.
+          AND title !~* '^\s*#?\s*HS\b'
       )
       SELECT id, tenant_id, episode_number, title, slug, date_created
       FROM ranked

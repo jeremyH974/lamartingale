@@ -459,10 +459,25 @@
   for (const p of data.podcasts) pcById[p.id] = p.branding.primaryColor;
 
   // PODCASTS GRID
+  // Affichage : on préfixe `#NUM ` côté UI, donc on retire le `#NUM - ` que GDIY/LP/PP/CCG
+  // embarquent déjà dans leur title RSS pour éviter le doublon `#535 #535 - …`. On retire
+  // aussi les markers RSS purement éditoriaux ([EXTRAIT], [EXCERPT], [teaser], [REDIFF])
+  // qui polluent le titre sans apporter d'info à un visiteur du hub.
+  function cleanTitle(t, epNum) {
+    if (!t) return '';
+    let out = String(t);
+    out = out.replace(/^\s*\[(extrait|excerpt|teaser|rediff(?:usion)?|bonus|replay)\]\s*/i, '');
+    if (epNum != null) {
+      const re = new RegExp(`^\\s*#${epNum}\\s*[-–—:]\\s*`);
+      out = out.replace(re, '');
+    }
+    return out.trim();
+  }
   grid.innerHTML = data.podcasts.map(p => {
     const featuredHtml = p.featured.slice(0, 3).map(ep => {
       const num = ep.episode_number != null ? `#${ep.episode_number} ` : '';
-      return `<li title="${esc(ep.title)}">${num}${esc(ep.title)}</li>`;
+      const cleaned = cleanTitle(ep.title, ep.episode_number);
+      return `<li title="${esc(ep.title)}">${num}${esc(cleaned)}</li>`;
     }).join('');
     const hasContent = p.stats.episodes > 0;
     return `
@@ -509,9 +524,15 @@
   }
 
   // PAIR STATS
+  // Seuil de qualité éditoriale : en deçà de 5 paires, l'agrégation est trop
+  // creuse pour être représentative et donne l'impression d'un écosystème
+  // pauvre. On bascule sur un fallback honnête plutôt que rendre une liste
+  // dégénérée. Cause racine : Finscale, Passion Patrimoine et Combien ça gagne
+  // n'ont pas encore d'articles éditoriaux scrapés (la détection cross-refs
+  // s'appuie sur les liens enrichis depuis l'article HTML, pas le RSS brut).
   const pairs = (data.cross.pairStats || []).slice(0, 10);
-  if (pairs.length === 0) {
-    pairList.innerHTML = `<div class="fallback"><strong>Les références explicites entre podcasts sont en cours d'indexation.</strong><br>Disponible après activation du pipeline cross_podcast_ref (Phase D).</div>`;
+  if (pairs.length < 5) {
+    pairList.innerHTML = `<div class="fallback"><strong>Couverture cross-références en cours d'indexation.</strong><br>La détection des références explicites entre podcasts s'appuie sur les articles éditoriaux scrapés. À ce jour, cette couverture est complète sur La Martingale, Génération Do It Yourself et Le Panier — mais Finscale, Passion Patrimoine et Combien ça gagne n'ont pas encore d'articles éditoriaux indexés. La section sera enrichie au fur et à mesure de l'ingestion.</div>`;
   } else {
     const nameBy = Object.fromEntries(data.podcasts.map(p => [p.id, p.name]));
     pairList.innerHTML = '<div class="pair-list">' + pairs.map(p => {
