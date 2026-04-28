@@ -52,6 +52,12 @@ choix internes CC sans avoir à demander.
 
 [2026-04-28 PM] [M2.1] [Niveau A] Frontend section RAG showcase ajoutée : 3 cards Q/R en accordion (1ère ouverte par défaut), markdown bold rendering, sources cliquables avec pod-badge brand colors. Disclaimer honnête "moteur conversationnelle complet activé sur signal positif". Nav top "Démo" ajouté entre "Exemple" et "Podcasts".
 
+[2026-04-28 PM] [M3] [Niveau A] Invités partagés repensés en 2 tiers : Tier 1 ★★★ (3+ podcasts, top 7 grille 3 col) + Tier 2 ★★ (2 podcasts, top 12 grille condensée 4-5 col). Toggle "Voir tous les N invités" expand fallback liste plate compacte (le reste tier1 + tier2). Fetch /api/cross/guests/shared (public, tous les ≥2 pods, cache 10min) avec fallback graceful sur data.cross.guests (top 20) si endpoint indisponible.
+
+[2026-04-28 PM] [M3] [Niveau A] Section title rebrandée : "La densité éditoriale de l'écosystème" (vs "Le noyau dur du réseau"). Sub-tagline pédagogique : "Plus un invité circule dans l'écosystème, plus il y est légitime éditorialement." Compteur dynamique titre injecte le nb total cross-tenant guests réel (pas figé "72").
+
+[2026-04-28 PM] [M3] [Niveau A] Cards Tier 1 : avatar initiales + nom + meta (X podcasts · Y épisodes) + badges brand colorés + clickable vers /guest-brief/<slug>. Cards Tier 2 : nom + 2 badges + eps count. Slug calculé front (NFD lower + tiret). Cohérence avec pattern M1.3 cross-mini.
+
 [2026-04-28 PM] [M2 dette V2] [Niveau A] Notes pour DETTE.md V2 (post-pilote, conditionnel signal Stefani) :
 - Switcher gpt-4o-mini → Sonnet 4.6 (pourquoi fallback ? config getLLM ?)
 - Update system prompt cross-queries.ts:793 "LM+GDIY" → "11 podcasts écosystème"

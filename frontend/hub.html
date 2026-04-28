@@ -395,7 +395,108 @@
     display: inline-flex; align-items: center; gap: 4px;
   }
 
-  /* ============ GUESTS ============ */
+  /* ============ GUESTS TIERS (Scénario B M3) ============ */
+  .tier-section { margin-top: 28px; }
+  .tier-section + .tier-section { margin-top: 48px; }
+  .tier-header {
+    display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap;
+    margin-bottom: 18px;
+  }
+  .tier-header .stars {
+    font-size: 14px; letter-spacing: 0.05em; color: var(--accent);
+  }
+  .tier-header .tier-title {
+    font-size: 18px; font-weight: 700; letter-spacing: -0.01em; color: var(--fg);
+  }
+  .tier-header .tier-count {
+    font-size: 12px; color: var(--fg-3); font-weight: 500;
+  }
+  .tier1-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 14px;
+  }
+  .tier1-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 18px; display: flex; gap: 14px; align-items: center;
+    transition: border-color 0.2s, transform 0.2s;
+    text-decoration: none; color: inherit;
+  }
+  .tier1-card:hover { border-color: var(--accent); transform: translateY(-1px); }
+  .tier1-card .avatar-mini {
+    flex: 0 0 auto; width: 44px; height: 44px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), #004cff);
+    color: #000; font-size: 14px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    letter-spacing: -0.01em;
+  }
+  .tier1-card .body { flex: 1; min-width: 0; }
+  .tier1-card .name {
+    font-size: 14px; font-weight: 700; letter-spacing: -0.01em; color: var(--fg);
+    margin-bottom: 4px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .tier1-card .meta { font-size: 11px; color: var(--fg-3); margin-bottom: 6px; }
+  .tier1-card .badges { display: flex; gap: 4px; flex-wrap: wrap; }
+  .tier1-card .badges .badge {
+    font-size: 10px; padding: 2px 7px;
+  }
+
+  .tier2-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+  }
+  .tier2-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+    padding: 10px 12px;
+    display: flex; flex-direction: column; gap: 4px;
+    transition: border-color 0.15s;
+    text-decoration: none; color: inherit;
+  }
+  .tier2-card:hover { border-color: var(--accent); }
+  .tier2-card .name {
+    font-size: 13px; font-weight: 600; color: var(--fg);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .tier2-card .row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .tier2-card .row .badge { font-size: 9px; padding: 1px 6px; }
+  .tier2-card .row .eps {
+    font-size: 10px; color: var(--fg-3); margin-left: auto;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .tier-toggle-wrap {
+    margin-top: 28px; display: flex; justify-content: center;
+  }
+  .tier-toggle {
+    padding: 10px 22px; border-radius: 99px;
+    background: var(--bg-2); border: 1px solid var(--border);
+    color: var(--fg-2); font-weight: 600; font-size: 13px;
+    cursor: pointer; transition: border-color 0.15s, color 0.15s;
+  }
+  .tier-toggle:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* Hidden flat list rendered when toggled */
+  .guest-flat-list {
+    display: none; margin-top: 28px;
+    flex-direction: column; gap: 6px;
+  }
+  .guest-flat-list.expanded { display: flex; }
+  .guest-flat-list .row {
+    display: flex; gap: 12px; align-items: center;
+    padding: 8px 14px; background: var(--card);
+    border: 1px solid var(--border); border-radius: 8px;
+    font-size: 13px;
+  }
+  .guest-flat-list .row .name { flex: 1; font-weight: 600; color: var(--fg); }
+  .guest-flat-list .row .pods { color: var(--fg-3); font-size: 11px; }
+  .guest-flat-list .row .eps { color: var(--fg-3); font-size: 11px; }
+
+  @media (max-width: 600px) {
+    .tier1-grid { grid-template-columns: 1fr; }
+    .tier2-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* ============ GUESTS LEGACY (avant Scénario B M3) ============ */
   .guest-list { display: flex; flex-direction: column; gap: 10px; }
   .guest-row {
     display: flex; align-items: center; gap: 14px;
@@ -559,12 +660,16 @@
     <div class="container">
       <div class="section-header">
         <div class="section-label">Invités partagés</div>
-        <div class="section-title" id="guests-title">Le noyau dur du réseau</div>
-        <div class="section-sub">Invités apparaissant dans au moins deux podcasts de l'univers. Signal fort de densité éditoriale.</div>
+        <div class="section-title" id="guests-title">La densité éditoriale de l'écosystème</div>
+        <div class="section-sub" id="guests-sub">Invités apparaissant dans au moins deux podcasts. Plus un invité circule dans l'écosystème, plus il y est légitime éditorialement.</div>
       </div>
-      <div id="guest-list">
+      <div id="guests-tiers">
         <div class="loading">Chargement des invités partagés…</div>
       </div>
+      <div class="tier-toggle-wrap" id="guests-toggle-wrap" style="display:none;">
+        <button type="button" class="tier-toggle" id="guests-toggle">Voir tous les invités partagés →</button>
+      </div>
+      <div class="guest-flat-list" id="guest-flat-list"></div>
     </div>
   </section>
 
@@ -798,25 +903,14 @@
     `;
   }).join('');
 
-  // GUESTS
-  const topGuests = (data.cross.guests || []).slice(0, 10);
-  if (topGuests.length === 0) {
-    guestList.innerHTML = `<div class="fallback"><strong>Agrégation des invités en cours.</strong><br>Le scrape approfondi cross-tenant est en cours. Disponible après activation du pipeline cross-guests.</div>`;
-  } else {
-    guestList.innerHTML = '<div class="guest-list">' + topGuests.map(g => {
-      const badges = (g.podcasts || []).map(pid => {
-        const pc = pcById[pid];
-        const label = (data.podcasts.find(p => p.id === pid) || {}).name || pid;
-        return `<span class="badge" ${pc ? `style="--pc:${esc(pc)}"` : ''} data-pc>${esc(label)}</span>`;
-      }).join('');
-      return `<div class="guest-row">
-        <span class="name">${esc(g.canonical)}</span>
-        <span class="badges">${badges}</span>
-        <span class="eps-count">${g.count} ép.</span>
-      </div>`;
-    }).join('') + '</div>';
-    guestsTitle.textContent = `${data.universe.totals.crossGuests} invités partagés`;
-  }
+  // GUESTS TIERS (Scénario B M3) — fetch endpoint shared (tous les cross-tenant
+  // ≥ 2 podcasts, sans limite) puis split en 2 tiers. Fallback sur data.cross.guests
+  // (top 20) si l'endpoint shared échoue.
+  renderGuestsTiers(data).catch(e => {
+    console.error('[hub-v2] renderGuestsTiers error:', e);
+    const tiersTarget = document.getElementById('guests-tiers');
+    if (tiersTarget) tiersTarget.innerHTML = `<div class="fallback">Agrégation cross-tenant temporairement indisponible.</div>`;
+  });
 
   // PAIR STATS
   // La décision de rendu (mode 'normal' vs 'fallback' + amorce) est prise côté
@@ -1034,6 +1128,148 @@
         </div>
       </details>`;
     }).join('');
+  }
+
+  // ──────────────────────────────────────────────────────────────────────
+  // Scénario B M3 — Invités partagés repensés (2 tiers + toggle expand)
+  // Fetch /api/cross/guests/shared (public, tous les ≥2 pods, cache 10min).
+  // Tier 1 ★★★ : podcasts_count >= 3 (top 7 grille 3 col)
+  // Tier 2 ★★ : podcasts_count === 2 (grille condensée 4-5 col)
+  // Toggle "Voir tous" → liste plate compacte (le reste du tier 2 + tout)
+  // ──────────────────────────────────────────────────────────────────────
+  async function renderGuestsTiers(data) {
+    const tiersTarget = document.getElementById('guests-tiers');
+    const toggleWrap = document.getElementById('guests-toggle-wrap');
+    const flatList = document.getElementById('guest-flat-list');
+    const toggleBtn = document.getElementById('guests-toggle');
+    if (!tiersTarget) return;
+
+    // Try fetch enriched list
+    let allGuests = [];
+    try {
+      const res = await fetch('/api/cross/guests/shared');
+      if (res.ok) {
+        const json = await res.json();
+        allGuests = (json.guests || []).filter(g => g.is_cross_podcast);
+      }
+    } catch { /* fallback à data.cross.guests */ }
+
+    // Fallback : data.cross.guests (limité à 20 mais utilisable)
+    if (allGuests.length === 0 && data?.cross?.guests) {
+      // Adapter le format /api/universe vers UnifiedGuest-like
+      allGuests = data.cross.guests.map(g => ({
+        name: g.canonical,
+        appearances: (g.appearances || []).map(a => ({
+          podcast: a.podcast,
+          podcast_name: a.podcast_name,
+          episodes: [{ number: a.episodeNumber, title: a.title }],
+        })),
+        total_episodes: g.count || 0,
+        podcasts_count: (g.podcasts || []).length,
+        is_cross_podcast: true,
+      }));
+    }
+
+    if (allGuests.length === 0) {
+      tiersTarget.innerHTML = `<div class="fallback">Pas encore d'invités cross-tenant indexés.</div>`;
+      return;
+    }
+
+    // Tri par podcasts_count desc puis total_episodes desc
+    allGuests.sort((a, b) => {
+      if (b.podcasts_count !== a.podcasts_count) return b.podcasts_count - a.podcasts_count;
+      return (b.total_episodes || 0) - (a.total_episodes || 0);
+    });
+
+    const tier1 = allGuests.filter(g => g.podcasts_count >= 3);
+    const tier2 = allGuests.filter(g => g.podcasts_count === 2);
+
+    // Update title compteurs
+    const titleEl = document.getElementById('guests-title');
+    if (titleEl) titleEl.textContent = `${allGuests.length} invités partagés — la densité éditoriale`;
+
+    // Capitalize helper (canonical_name est lowercase en DB)
+    const capitalize = s => String(s || '').replace(/\b\w/g, c => c.toUpperCase());
+
+    // Slug pour lien guest-brief
+    const slugifyName = s => String(s || '').toLowerCase()
+      .normalize('NFD').replace(/[̀-ͯ]/g, '')
+      .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+
+    // Initials helper
+    const initialsOf = s => String(s || '').split(/\s+/).filter(Boolean).slice(0, 2)
+      .map(t => t[0]?.toUpperCase()).join('') || '?';
+
+    // Render tier 1 (top 7 grille — sélection éditoriale, on peut afficher tous si ≤7)
+    const tier1Display = tier1.slice(0, 7);
+    const tier1Html = tier1Display.length > 0 ? `
+      <div class="tier-section">
+        <div class="tier-header">
+          <span class="stars">★★★</span>
+          <span class="tier-title">Cœur cross-corpus — 3 podcasts ou plus</span>
+          <span class="tier-count">${tier1.length} invité${tier1.length > 1 ? 's' : ''}</span>
+        </div>
+        <div class="tier1-grid">
+          ${tier1Display.map(g => {
+            const badges = (g.appearances || []).map(a => {
+              const pc = pcById[a.podcast] || 'var(--fg-3)';
+              return `<span class="badge" style="--pc:${esc(pc)}" data-pc>${esc(a.podcast_name || a.podcast)}</span>`;
+            }).join('');
+            return `<a class="tier1-card" href="/guest-brief/${esc(slugifyName(g.name))}">
+              <div class="avatar-mini">${esc(initialsOf(capitalize(g.name)))}</div>
+              <div class="body">
+                <div class="name">${esc(capitalize(g.name))}</div>
+                <div class="meta">${g.podcasts_count} podcasts · ${g.total_episodes} épisode${g.total_episodes > 1 ? 's' : ''}</div>
+                <div class="badges">${badges}</div>
+              </div>
+            </a>`;
+          }).join('')}
+        </div>
+      </div>` : '';
+
+    // Render tier 2 (top 12 grille condensée)
+    const tier2Display = tier2.slice(0, 12);
+    const tier2Html = tier2Display.length > 0 ? `
+      <div class="tier-section">
+        <div class="tier-header">
+          <span class="stars">★★</span>
+          <span class="tier-title">Cross-corpus — 2 podcasts</span>
+          <span class="tier-count">${tier2.length} invité${tier2.length > 1 ? 's' : ''}</span>
+        </div>
+        <div class="tier2-grid">
+          ${tier2Display.map(g => {
+            const badges = (g.appearances || []).map(a => {
+              const pc = pcById[a.podcast] || 'var(--fg-3)';
+              return `<span class="badge" style="--pc:${esc(pc)}" data-pc>${esc(a.podcast_name || a.podcast)}</span>`;
+            }).join('');
+            return `<a class="tier2-card" href="/guest-brief/${esc(slugifyName(g.name))}">
+              <div class="name">${esc(capitalize(g.name))}</div>
+              <div class="row">${badges}<span class="eps">${g.total_episodes} ép.</span></div>
+            </a>`;
+          }).join('')}
+        </div>
+      </div>` : '';
+
+    tiersTarget.innerHTML = tier1Html + tier2Html;
+
+    // Toggle "Voir tous" : show flat list of remaining (tier1 hors top 7 + tier2 hors top 12)
+    const remaining = [...tier1.slice(7), ...tier2.slice(12)];
+    if (remaining.length > 0 && toggleWrap && flatList && toggleBtn) {
+      toggleWrap.style.display = 'flex';
+      flatList.innerHTML = remaining.map(g => {
+        return `<div class="row">
+          <span class="name"><a href="/guest-brief/${esc(slugifyName(g.name))}" style="color:inherit;text-decoration:none;">${esc(capitalize(g.name))}</a></span>
+          <span class="pods">${g.podcasts_count} pods</span>
+          <span class="eps">${g.total_episodes} ép.</span>
+        </div>`;
+      }).join('');
+      toggleBtn.addEventListener('click', () => {
+        const expanded = flatList.classList.toggle('expanded');
+        toggleBtn.textContent = expanded
+          ? `Masquer la liste complète ↑`
+          : `Voir tous les ${allGuests.length} invités partagés →`;
+      });
+    }
   }
 
   function prettyTenant(id) {
