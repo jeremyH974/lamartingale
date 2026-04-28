@@ -22,7 +22,11 @@
 const fs = require('fs');
 const path = require('path');
 
-const DEFAULT_PACK = 'experiments/autonomy-session-2026-04-28/pack-pilote-stefani-orso';
+// Phase A.5.5a (2026-04-28) : DEFAULT_PACK mis à jour pour pointer vers le
+// pack v3-final-md-audit (post-Phase 8 extractQuotes fix, 35/35 baseline).
+// L'ancien défaut 'pack-pilote-stefani-orso/' était la version Phase 6
+// pré-fix qui retourne 23/39 (normal pour l'historique, pas une régression).
+const DEFAULT_PACK = 'experiments/autonomy-session-2026-04-28/pack-pilote-stefani-orso-v3-final-md-audit';
 const DEFAULT_TRANSCRIPTS = 'experiments/autonomy-session-2026-04-28/transcripts';
 const DEFAULT_EPISODES = [
   { slug: 'plais-platform-sh', label: 'Plais GDIY #266', transcript: 'gdiy-266' },

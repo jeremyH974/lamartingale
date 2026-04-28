@@ -23,7 +23,10 @@ export const gdiyConfig: PodcastConfig = {
   github: 'https://github.com/jeremyH974/lamartingale',
 
   rssFeeds: {
-    main: 'https://feed.audiomeans.fr/feed/6f7fe82b-98c7-472d-b15d-5f6f36ad515e.xml',
+    // Phase A.5.5a (2026-04-28) : URL Audiomeans mise à jour. Ancienne valeur
+    // 'feed.audiomeans.fr/feed/6f7fe82b-...xml' → 403, n'existe plus.
+    // Nouvelle URL canonique UUID-style (cf. iTunes API lookup STOP A.5.1).
+    main: 'https://feeds.audiomeans.fr/feed/b4a5ee3a-9230-4f9f-988d-2ae156a2d5a9.xml',
   },
 
   platforms: {

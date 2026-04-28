@@ -17,7 +17,14 @@ const config: PodcastConfig = {
   episodeUrlPattern: '',
 
   rssFeeds: {
-    main: 'https://feeds.audiomeans.fr/feed/55e0559e-ee0f-44ea-9e0f-acb0a18ec478.xml',
+    // Phase E (2026-04-28) : bascule vers feed Podcastics (full episodes only,
+    // 0 [EXTRAIT], 370 items #1→#338). La feed Audiomeans publique
+    // (55e0559e-…) mélange volontairement full + extracts (modèle marketing
+    // de découverte) → 50% pollution éditoriale en DB. Feed Podcastics est
+    // le rail officiel propre. Cf. STOP Phase E pour investigation détaillée.
+    main: 'https://feeds.podcastics.com/podcastics/podcasts/rss/577_788fef8ed7fb672b61179b42b5059bed.rss',
+    // Audiomeans archivée (conservée en commentaire pour traçabilité) :
+    // 'https://feeds.audiomeans.fr/feed/55e0559e-ee0f-44ea-9e0f-acb0a18ec478.xml'
   },
 
   platforms: {

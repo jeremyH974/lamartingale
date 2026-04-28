@@ -6,6 +6,12 @@ import { lepanierConfig } from '../../instances/lepanier.config';
 import { finscaleConfig } from '../../instances/finscale.config';
 import { passionpatrimoineConfig } from '../../instances/passionpatrimoine.config';
 import { combiencagagneConfig } from '../../instances/combiencagagne.config';
+// Phase A.5 (2026-04-28) — extension périmètre Orso : 5 nouveaux tenants.
+import { fleuronsConfig } from '../../instances/fleurons.config';
+import { iftdConfig } from '../../instances/iftd.config';
+import { demainvousappartientConfig } from '../../instances/demainvousappartient.config';
+import { allolamartingaleConfig } from '../../instances/allolamartingale.config';
+import { onlacherienConfig } from '../../instances/onlacherien.config';
 
 // Registry des configs disponibles. Ajouter un nouveau podcast =
 // importer sa config ici + enregistrer l'entrée.
@@ -19,6 +25,11 @@ const REGISTRY: Record<string, PodcastConfig> = {
   finscale: finscaleConfig,
   passionpatrimoine: passionpatrimoineConfig,
   combiencagagne: combiencagagneConfig,
+  fleurons: fleuronsConfig,
+  iftd: iftdConfig,
+  demainvousappartient: demainvousappartientConfig,
+  allolamartingale: allolamartingaleConfig,
+  onlacherien: onlacherienConfig,
 };
 
 // Ajout paresseux pour les podcasts suivants (évite les imports circulaires

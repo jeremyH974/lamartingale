@@ -139,19 +139,28 @@ export async function getUniverse(): Promise<UniverseResponse> {
   // 2. Queries parallèles : stats + featured + cross-refs raw + cross-guests.
   const [statsRows, featuredRows, crossRefsRaw, crossGuestsRaw] = await Promise.all([
     sql`
+      -- Stats hero hub : double filtre iTunes (episode_type) + éditorial
+      -- (editorial_type, Phase A.5.4) pour compter uniquement les "vrais"
+      -- épisodes pleins, pas les bonus iTunes ni les extracts/teasers/hs/rediffs
+      -- éditoriaux. Cf. engine/util/classify-editorial-type.ts pour la
+      -- sémantique des deux colonnes.
       SELECT
         tenant_id,
-        count(*) FILTER (WHERE (episode_type = 'full' OR episode_type IS NULL))::int AS episodes,
-        COALESCE(SUM(duration_seconds) FILTER (WHERE (episode_type = 'full' OR episode_type IS NULL)), 0)::bigint AS total_seconds,
+        count(*) FILTER (WHERE (episode_type = 'full' OR episode_type IS NULL) AND editorial_type = 'full')::int AS episodes,
+        COALESCE(SUM(duration_seconds) FILTER (WHERE (episode_type = 'full' OR episode_type IS NULL) AND editorial_type = 'full'), 0)::bigint AS total_seconds,
         count(DISTINCT lower(trim(COALESCE(NULLIF(guest, ''), guest_from_title))))
-          FILTER (WHERE COALESCE(NULLIF(guest, ''), guest_from_title) IS NOT NULL)::int AS guests,
-        count(*) FILTER (WHERE article_content IS NOT NULL AND length(article_content) > 500)::int AS articles,
-        max(date_created)::date AS last_episode_date
+          FILTER (WHERE COALESCE(NULLIF(guest, ''), guest_from_title) IS NOT NULL AND editorial_type = 'full')::int AS guests,
+        count(*) FILTER (WHERE article_content IS NOT NULL AND length(article_content) > 500 AND editorial_type = 'full')::int AS articles,
+        max(date_created) FILTER (WHERE editorial_type = 'full')::date AS last_episode_date
       FROM episodes
       WHERE tenant_id = ANY(${tenantIds})
       GROUP BY tenant_id
     ` as any,
     sql`
+      -- Featured top 3 par tenant : double filtre iTunes (episode_type) +
+      -- éditorial (editorial_type, Phase A.5.4). editorial_type='full' exclut
+      -- automatiquement les extracts/teasers/hs/rediffs/bonus éditoriaux du
+      -- featured (corrige Finscale top3 [EXTRAIT] et LP top3 #HS Monaco).
       WITH ranked AS (
         SELECT
           id, tenant_id, episode_number, title, slug, date_created,
@@ -159,10 +168,7 @@ export async function getUniverse(): Promise<UniverseResponse> {
         FROM episodes
         WHERE tenant_id = ANY(${tenantIds})
           AND (episode_type = 'full' OR episode_type IS NULL)
-          -- Exclut les hors-séries événementiels (LP "#HS 1 to 1 Monaco …",
-          -- PP "#HS …") du featured top 3 du hub : ce sont des contenus
-          -- one-shot non représentatifs du format principal du podcast.
-          AND title !~* '^\s*#?\s*HS\b'
+          AND editorial_type = 'full'
       )
       SELECT id, tenant_id, episode_number, title, slug, date_created
       FROM ranked

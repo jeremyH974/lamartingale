@@ -49,7 +49,7 @@ Je me permets de revenir vers vous avec un projet que j'ai construit ces dernier
 
 **Le contexte**
 
-Le catalogue Orso Media représente près de 2 500 épisodes répartis sur 6 podcasts. C'est un actif éditorial considérable, mais largement sous-exploité dans sa dimension cross-corpus. Aujourd'hui, un auditeur GDIY ne sait pas qu'un sujet qu'il vient d'écouter a été creusé sous un autre angle dans Finscale ou Le Panier.
+Sillon indexe aujourd'hui 11 podcasts du catalogue Orso Media — La Martingale, GDIY, Le Panier, Finscale, Passion Patrimoine, Combien ça gagne, Fleurons, IFTTD, Demain Vous Appartient, Allo La Martingale, On Lâche Rien — soit près de 3 500 épisodes. C'est un actif éditorial considérable, mais largement sous-exploité dans sa dimension cross-corpus. Aujourd'hui, un auditeur GDIY ne sait pas qu'un sujet qu'il vient d'écouter a été creusé sous un autre angle dans Finscale, Le Panier ou Fleurons.
 
 **Ce que j'ai construit — Sillon**
 

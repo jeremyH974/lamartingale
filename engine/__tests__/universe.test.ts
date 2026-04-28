@@ -28,13 +28,14 @@ describe('Universe — configs (sans DB)', () => {
     expect(byId.get('combiencagagne')!.hub_order).toBe(6);
   });
 
-  it('tri par hub_order asc', () => {
+  it('tri par hub_order asc — 6 originaux puis 5 ajouts Phase A.5', () => {
     const sorted = getAllConfigs()
       .filter((c) => c.id !== 'hub')
       .sort((a, b) => (a.hub_order ?? Infinity) - (b.hub_order ?? Infinity))
       .map((c) => c.id);
     expect(sorted).toEqual([
       'lamartingale', 'gdiy', 'lepanier', 'finscale', 'passionpatrimoine', 'combiencagagne',
+      'fleurons', 'iftd', 'demainvousappartient', 'allolamartingale', 'onlacherien',
     ]);
   });
 
