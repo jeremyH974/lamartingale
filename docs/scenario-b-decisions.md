@@ -58,6 +58,14 @@ choix internes CC sans avoir à demander.
 
 [2026-04-28 PM] [M3] [Niveau A] Cards Tier 1 : avatar initiales + nom + meta (X podcasts · Y épisodes) + badges brand colorés + clickable vers /guest-brief/<slug>. Cards Tier 2 : nom + 2 badges + eps count. Slug calculé front (NFD lower + tiret). Cohérence avec pattern M1.3 cross-mini.
 
+[2026-04-28 PM] [M4] [Niveau A] Décision design : 11 nœuds (cohérence storytelling hub vs 6 nœuds focus). Nœuds avec ≥1 paire significative en plein, autres en grisé (opacity 0.32). Storytelling : transparence sur la couverture cross-refs en cours pour les 5 nouveaux + Combien ça gagne (host orsomedia.io partagé). Compteur dans header "X tenants en couverture indexation".
+
+[2026-04-28 PM] [M4] [Niveau A] SVG pur (pas de lib externe). Layout cercle 11 nœuds répartis 360°, premier en haut. Edges = courbe quadratique légère pour distinguer aller-retour (LM→GDIY vs GDIY→LM, offset perpendiculaire 12px). Stroke width ∝ log(count). Color = brand color du tenant source. Arrowhead par tenant source via SVG marker. Edge label = count (chiffre milieu). Hover edge = title attribute "X → Y : N refs". Légende sous SVG : 3 items (cross-refs détectées / en cours / épaisseur ∝ volume).
+
+[2026-04-28 PM] [M4] [Niveau A] Helper shortLabel() pour les noms longs côté SVG (max 12 chars, mapping explicite : "La Martingale" → "LM", "Génération Do It Yourself" → "GDIY", etc.).
+
+[2026-04-28 PM] [M4] [Niveau A] Seuil min 5 refs réutilisé (cohérence avec decidePairStatsRendering Phase A6). Si 0 paire significative → SVG non rendu (fallback amorce du pair-list au-dessus suffit). Container vide propre, pas de placeholder.
+
 [2026-04-28 PM] [M2 dette V2] [Niveau A] Notes pour DETTE.md V2 (post-pilote, conditionnel signal Stefani) :
 - Switcher gpt-4o-mini → Sonnet 4.6 (pourquoi fallback ? config getLLM ?)
 - Update system prompt cross-queries.ts:793 "LM+GDIY" → "11 podcasts écosystème"

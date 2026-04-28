@@ -523,6 +523,65 @@
      (Linear, Notion, etc.). */
   .badge[data-pc] { border-color: var(--pc); color: var(--fg); }
 
+  /* ============ PAIR GRAPH SVG (Scénario B M4) ============ */
+  .pair-graph-wrap {
+    margin-top: 32px; padding: 24px;
+    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+  }
+  .pair-graph-header {
+    display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+  .pair-graph-header .label {
+    font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--fg-3); font-weight: 700;
+  }
+  .pair-graph-header .title {
+    font-size: 15px; font-weight: 700; color: var(--fg);
+  }
+  .pair-graph-header .sub {
+    font-size: 11px; color: var(--fg-3); font-style: italic;
+    margin-left: auto;
+  }
+  .pair-graph-svg {
+    width: 100%; height: auto; max-height: 480px;
+    display: block; margin: 0 auto;
+  }
+  .pair-graph-svg .node-circle {
+    transition: r 0.2s, stroke-width 0.2s;
+  }
+  .pair-graph-svg .node-circle.faded {
+    opacity: 0.32;
+  }
+  .pair-graph-svg .node-label {
+    font-size: 11px; font-weight: 700;
+    text-anchor: middle; dominant-baseline: middle;
+    pointer-events: none;
+  }
+  .pair-graph-svg .node-label.faded { opacity: 0.5; }
+  .pair-graph-svg .edge {
+    fill: none; opacity: 0.65; transition: opacity 0.2s, stroke-width 0.2s;
+  }
+  .pair-graph-svg .edge:hover { opacity: 0.95; }
+  .pair-graph-svg .edge-label {
+    font-size: 10px; font-weight: 600; fill: var(--fg-2);
+    text-anchor: middle; dominant-baseline: middle;
+    pointer-events: none;
+  }
+  .pair-graph-legend {
+    margin-top: 18px; display: flex; gap: 14px;
+    flex-wrap: wrap; font-size: 11px; color: var(--fg-3);
+    align-items: center;
+  }
+  .pair-graph-legend .item {
+    display: flex; gap: 6px; align-items: center;
+  }
+  .pair-graph-legend .swatch {
+    width: 14px; height: 14px; border-radius: 50%;
+    border: 1px solid var(--border);
+  }
+  .pair-graph-legend .swatch.faded { opacity: 0.32; }
+
   /* ============ PAIR STATS ============ */
   .pair-list { display: flex; flex-direction: column; gap: 8px; }
   .pair-row {
@@ -684,6 +743,7 @@
       <div id="pair-list">
         <div class="loading">Chargement des références…</div>
       </div>
+      <div id="pair-graph-container"></div>
     </div>
   </section>
 
@@ -950,6 +1010,13 @@
     } else {
       pairList.innerHTML = '<div class="pair-list">' + pairs.map(renderPairRow).join('') + '</div>';
     }
+  }
+
+  // Scénario B M4 — Cross-refs SVG graphique réseau (sous le pair-list)
+  try {
+    renderPairGraph(data);
+  } catch (e) {
+    console.error('[hub-v2] renderPairGraph error:', e);
   }
 
   // ──────────────────────────────────────────────────────────────────────
@@ -1270,6 +1337,159 @@
           : `Voir tous les ${allGuests.length} invités partagés →`;
       });
     }
+  }
+
+  // ──────────────────────────────────────────────────────────────────────
+  // Scénario B M4 — Cross-refs SVG graphique réseau
+  // 11 nœuds tenants en cercle. Nœuds avec ≥1 paire significative en plein,
+  // les autres en grisé (cohérent storytelling 11 podcasts + transparence
+  // sur la couverture cross-refs en cours).
+  // Edges : paires ≥ MIN_REFS, épaisseur ∝ log(count), couleur source.
+  // SVG pur (pas de lib), responsive via viewBox.
+  // ──────────────────────────────────────────────────────────────────────
+  function renderPairGraph(data) {
+    const target = document.getElementById('pair-graph-container');
+    if (!target) return;
+    const podcasts = data.podcasts || [];
+    if (podcasts.length === 0) return;
+    // Source pairs : pairStats brut (toutes), on garde celles ≥ MIN_REFS
+    const MIN_REFS = 5;
+    const allPairs = (data.cross.pairStats || []);
+    const pairs = allPairs.filter(p => p.count >= MIN_REFS);
+    if (pairs.length === 0) {
+      // Pas assez de signal pour un graphe lisible — on n'affiche rien
+      // (le fallback amorce du pair-list au-dessus suffit comme représentation)
+      return;
+    }
+
+    // Layout : cercle, 11 nœuds répartis sur 360°, premier en haut (-90°)
+    const W = 720, H = 460;
+    const cx = W / 2, cy = H / 2;
+    const radius = Math.min(W, H) * 0.36;
+    const N = podcasts.length;
+    const nodeR = 26;
+
+    const positions = podcasts.map((p, i) => {
+      const angle = -Math.PI / 2 + (i * 2 * Math.PI / N);
+      return {
+        id: p.id,
+        name: p.name,
+        color: p.branding?.primaryColor || '#7a7a7a',
+        x: cx + radius * Math.cos(angle),
+        y: cy + radius * Math.sin(angle),
+      };
+    });
+    const posById = Object.fromEntries(positions.map(p => [p.id, p]));
+
+    // Identifier les nœuds avec ≥1 edge (pour griser les autres)
+    const activeNodes = new Set();
+    for (const p of pairs) { activeNodes.add(p.from); activeNodes.add(p.to); }
+
+    // Stroke width ∝ log(count). Min 1.5, max 6.
+    const maxCount = Math.max(...pairs.map(p => p.count));
+    const minCount = MIN_REFS;
+    const strokeFor = (count) => {
+      if (maxCount === minCount) return 3;
+      const t = Math.log(count) / Math.log(maxCount);
+      return 1.5 + t * 4.5;
+    };
+
+    // Build edges paths : courbe quadratique légère pour distinguer aller-retour
+    const edgesHtml = pairs.map((p, idx) => {
+      const a = posById[p.from], b = posById[p.to];
+      if (!a || !b) return '';
+      const sw = strokeFor(p.count);
+      // Direction = vecteur a→b
+      const dx = b.x - a.x, dy = b.y - a.y;
+      const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+      // Offset perpendiculaire pour distinguer A→B de B→A (asymétrie)
+      const perpX = -dy / dist, perpY = dx / dist;
+      const offset = 12;
+      // Point milieu décalé
+      const mx = (a.x + b.x) / 2 + perpX * offset;
+      const my = (a.y + b.y) / 2 + perpY * offset;
+      // Réduit le path pour ne pas atteindre le centre des nœuds (R=nodeR)
+      const aShortX = a.x + (mx - a.x) * (nodeR / dist);
+      const aShortY = a.y + (my - a.y) * (nodeR / dist);
+      const bShortX = b.x - (b.x - mx) * (nodeR / dist);
+      const bShortY = b.y - (b.y - my) * (nodeR / dist);
+      return `
+        <path class="edge"
+              d="M${aShortX.toFixed(1)},${aShortY.toFixed(1)} Q${mx.toFixed(1)},${my.toFixed(1)} ${bShortX.toFixed(1)},${bShortY.toFixed(1)}"
+              stroke="${esc(a.color)}" stroke-width="${sw.toFixed(1)}"
+              marker-end="url(#arrow-${esc(p.from)})">
+          <title>${esc((data.podcasts.find(x => x.id === p.from) || {}).name || p.from)} → ${esc((data.podcasts.find(x => x.id === p.to) || {}).name || p.to)} : ${p.count} ref${p.count > 1 ? 's' : ''}</title>
+        </path>
+        <text class="edge-label" x="${mx.toFixed(1)}" y="${my.toFixed(1)}">${p.count}</text>`;
+    }).join('');
+
+    // Markers (arrowheads) une fois par tenant source pour color-match
+    const markersHtml = [...new Set(pairs.map(p => p.from))].map(srcId => {
+      const color = posById[srcId]?.color || '#7a7a7a';
+      return `<marker id="arrow-${esc(srcId)}" viewBox="0 0 10 10" refX="9" refY="5"
+                     markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M0,0 L10,5 L0,10 z" fill="${esc(color)}"/>
+              </marker>`;
+    }).join('');
+
+    // Nodes
+    const nodesHtml = positions.map(p => {
+      const isActive = activeNodes.has(p.id);
+      const cls = isActive ? '' : ' faded';
+      return `
+        <g>
+          <circle class="node-circle${cls}" cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${nodeR}"
+                  fill="var(--bg)" stroke="${esc(p.color)}" stroke-width="2.5">
+            <title>${esc(p.name)}</title>
+          </circle>
+          <text class="node-label${cls}" x="${p.x.toFixed(1)}" y="${p.y.toFixed(1)}"
+                fill="var(--fg)">${esc(shortLabel(p.name))}</text>
+        </g>`;
+    }).join('');
+
+    // Hub orsomedia.io central note (5 nodes + CCG share host so excluded from URL cross-refs)
+    const fadedCount = N - activeNodes.size;
+    const fadedNote = fadedCount > 0
+      ? `<span style="margin-left:auto;font-size:11px;color:var(--fg-3);font-style:italic;">${fadedCount} tenants en couverture indexation</span>`
+      : '';
+
+    target.innerHTML = `
+      <div class="pair-graph-wrap">
+        <div class="pair-graph-header">
+          <span class="label">Visualisation</span>
+          <span class="title">Top ${pairs.length} paires de citations cross-podcasts</span>
+          ${fadedNote}
+        </div>
+        <svg class="pair-graph-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">
+          <defs>${markersHtml}</defs>
+          <g class="edges">${edgesHtml}</g>
+          <g class="nodes">${nodesHtml}</g>
+        </svg>
+        <div class="pair-graph-legend">
+          <div class="item"><span class="swatch" style="background:var(--accent);"></span>Cross-refs URL détectées (≥ ${MIN_REFS} refs)</div>
+          <div class="item"><span class="swatch faded" style="background:var(--fg-3);"></span>Indexation cross-refs en cours</div>
+          <div class="item">Épaisseur du trait ∝ volume de citations</div>
+        </div>
+      </div>
+    `;
+  }
+
+  // Helper : raccourcit le nom du podcast pour le label SVG (max 12 chars).
+  function shortLabel(name) {
+    const map = {
+      'La Martingale': 'LM',
+      'Génération Do It Yourself': 'GDIY',
+      'Le Panier': 'LP',
+      'Finscale': 'Finscale',
+      'Passion Patrimoine': 'PP',
+      'Combien ça gagne': 'CCG',
+      'Fleurons': 'Fleurons',
+      'IFTTD — If This Then Dev': 'IFTTD',
+      'Demain Vous Appartient': 'DVA',
+      'Allo La Martingale': 'Allo LM',
+      'On Lâche Rien !': 'OLR',
+    };
+    return map[name] || name.slice(0, 12);
   }
 
   function prettyTenant(id) {
