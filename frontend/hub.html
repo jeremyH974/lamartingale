@@ -582,6 +582,56 @@
   }
   .pair-graph-legend .swatch.faded { opacity: 0.32; }
 
+  /* ============ VISION CARDS (Scénario B M5.1) ============ */
+  .vision-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 18px;
+    margin-top: 8px;
+  }
+  @media (max-width: 760px) {
+    .vision-grid { grid-template-columns: 1fr; }
+  }
+  .vision-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-left: 3px solid var(--accent-color, var(--accent));
+    border-radius: 12px; padding: 22px 24px;
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .vision-card .vc-head {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .vision-card .vc-icon {
+    width: 36px; height: 36px; border-radius: 9px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--accent-color, var(--accent));
+    flex-shrink: 0;
+  }
+  .vision-card .vc-icon svg { width: 18px; height: 18px; }
+  .vision-card .vc-eyebrow {
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--fg-3); font-weight: 700;
+    margin-bottom: 2px;
+  }
+  .vision-card .vc-title {
+    font-size: 16px; font-weight: 700; color: var(--fg); line-height: 1.3;
+  }
+  .vision-card .vc-body {
+    font-size: 13.5px; color: var(--fg-2); line-height: 1.55;
+  }
+  .vision-card .vc-list {
+    list-style: none; display: flex; flex-direction: column; gap: 6px;
+    margin-top: 4px;
+  }
+  .vision-card .vc-list li {
+    font-size: 12.5px; color: var(--fg-2); line-height: 1.5;
+    padding-left: 16px; position: relative;
+  }
+  .vision-card .vc-list li::before {
+    content: "→"; position: absolute; left: 0;
+    color: var(--accent-color, var(--accent)); font-weight: 700;
+  }
+
   /* ============ PAIR STATS ============ */
   .pair-list { display: flex; flex-direction: column; gap: 8px; }
   .pair-row {
@@ -626,6 +676,7 @@
       <a href="#rag-showcase">Démo</a>
       <a href="#podcasts">Podcasts</a>
       <a href="#guests">Invités partagés</a>
+      <a href="#vision">Demain</a>
       <div id="session-box" class="session-box" style="display:none">
         <span id="session-email" class="session-email"></span>
         <button id="logout-btn" class="logout-btn" type="button">Déconnexion</button>
@@ -744,6 +795,106 @@
         <div class="loading">Chargement des références…</div>
       </div>
       <div id="pair-graph-container"></div>
+    </div>
+  </section>
+
+  <!-- VISION (Scénario B M5.1) -->
+  <section class="block" id="vision">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">Demain avec Sillon</div>
+        <div class="section-title">À qui ça sert, concrètement</div>
+        <div class="section-sub">Une plateforme, quatre usages. Aujourd'hui en construction sur l'écosystème Stefani — extensible à d'autres demain.</div>
+      </div>
+      <div class="vision-grid">
+        <article class="vision-card" style="--accent-color: #00F5A0;">
+          <div class="vc-head">
+            <div class="vc-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="vc-eyebrow">Pour l'animateur</div>
+              <div class="vc-title">Préparer un invité en 5 minutes</div>
+            </div>
+          </div>
+          <div class="vc-body">
+            <span id="vc-stat-eps">…</span> épisodes interrogeables, <span id="vc-stat-guests">…</span> invités identifiés. Avant un enregistrement, le brief de ton invité te sort tout ce qui a déjà été dit dans l'écosystème — citations, positions, questions encore ouvertes.
+          </div>
+          <ul class="vc-list">
+            <li>Brief pré-cuit dès qu'un invité a parlé sur 2+ podcasts</li>
+            <li>Recherche conversationnelle sur l'archive complète</li>
+            <li>Références croisées remontées automatiquement</li>
+          </ul>
+        </article>
+
+        <article class="vision-card" style="--accent-color: #004cff;">
+          <div class="vc-head">
+            <div class="vc-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
+              </svg>
+            </div>
+            <div>
+              <div class="vc-eyebrow">Pour Orso Media</div>
+              <div class="vc-title">Voir 11 podcasts comme un seul écosystème</div>
+            </div>
+          </div>
+          <div class="vc-body">
+            Mutualiser les invités, valoriser le back-catalog, repérer les angles déjà couverts ou les sujets orphelins. Sillon transforme une production multi-shows en une mémoire éditoriale unique.
+          </div>
+          <ul class="vc-list">
+            <li>Cartographie cross-shows : qui rebondit où, sur quoi</li>
+            <li>Invités partagés : <span id="vc-stat-shared">…</span> noms repérés sur 2+ podcasts</li>
+            <li>Références entre épisodes tracées et navigables</li>
+          </ul>
+        </article>
+
+        <article class="vision-card" style="--accent-color: #f59e0b;">
+          <div class="vc-head">
+            <div class="vc-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+              </svg>
+            </div>
+            <div>
+              <div class="vc-eyebrow">Pour vos invités</div>
+              <div class="vc-title">Une trace consolidée de leurs interventions</div>
+            </div>
+          </div>
+          <div class="vc-body">
+            Un invité passé sur trois podcasts retrouve sur Sillon un brief unique — citations, prises de position, contexte éditorial. Réutilisable en interview presse, en pitch, ou simplement pour archive personnelle.
+          </div>
+          <ul class="vc-list">
+            <li>Page invité dédiée, partageable et lisible</li>
+            <li>Contenu vérifiable — toutes les sources sont datées</li>
+            <li>Mise à jour automatique à chaque nouvelle intervention</li>
+          </ul>
+        </article>
+
+        <article class="vision-card" style="--accent-color: #ef476f;">
+          <div class="vc-head">
+            <div class="vc-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </div>
+            <div>
+              <div class="vc-eyebrow">Demain — verticales 2027</div>
+              <div class="vc-title">Extensible à d'autres écosystèmes</div>
+            </div>
+          </div>
+          <div class="vc-body">
+            L'architecture est générique : un nouveau podcast s'instancie en 3 commandes (RSS + ingest + deploy). Sillon peut s'étendre à d'autres écosystèmes éditoriaux — chacun avec sa propre mémoire, son branding, ses droits d'accès.
+          </div>
+          <ul class="vc-list">
+            <li>Multi-écosystème : un studio = une instance, isolée par défaut</li>
+            <li>Pipeline d'ingestion identique pour tous les tenants</li>
+            <li>Branding et droits d'accès configurables par instance</li>
+          </ul>
+        </article>
+      </div>
     </div>
   </section>
 
@@ -882,6 +1033,14 @@
     { n: fmtNum(data.universe.totals.crossGuests), l: 'invités partagés' },
     { n: fmtNum(data.universe.totals.crossEpisodeRefs), l: 'refs croisées' },
   ].map(s => `<div class="hero-stat"><div class="n">${s.n}</div><div class="l">${s.l}</div></div>`).join('');
+
+  // Vision section (Scénario B M5.1) — chiffres dynamiques cohérents avec hero
+  const vcStatEps = document.getElementById('vc-stat-eps');
+  const vcStatGuests = document.getElementById('vc-stat-guests');
+  const vcStatShared = document.getElementById('vc-stat-shared');
+  if (vcStatEps) vcStatEps.textContent = fmtNum(data.universe.totals.episodes);
+  if (vcStatGuests) vcStatGuests.textContent = fmtNum(data.universe.totals.guests);
+  if (vcStatShared) vcStatShared.textContent = fmtNum(data.universe.totals.crossGuests);
 
   footerProducers.textContent = 'Producteurs · ' + data.universe.producers.join(' · ');
 

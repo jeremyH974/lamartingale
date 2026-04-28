@@ -75,3 +75,5 @@ choix internes CC sans avoir à demander.
 - Tests qualité 10 prompts variés post-fixes
 - Coût budget activation : $5-15 selon volume démos prévues
 - À ajouter dans docs/DETTE.md section axe pipeline-brief Phase Scénario B V2.
+
+[2026-04-28 PM] [M5.0] [Niveau A] Vérification briefs LM #312/#313/#314 : Joseph Choueifaty (#312, 4 eps/3 pods) brief existant ✅, Arthur Auboeuf (#312, 2 eps/2 pods) brief généré 3.05¢ ✅, Nahima Zobri (#313, 1 ep/1 pod) mono-pod skip, Angélique de Lencquesaing (#314, 1 ep/1 pod) mono-pod skip. Total coût M5.0 = 3.05¢ / cap 12¢. M5.2 racontera honnêtement story mono-pod : "1ère intervention sur Sillon, brief cross-pod activé dès 2e podcast".
