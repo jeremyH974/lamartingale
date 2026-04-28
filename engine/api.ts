@@ -14,6 +14,7 @@ import { createMagicLink, consumeMagicLink } from './auth/magic-link';
 import { sign as signSession, cookieSetHeader, cookieClearHeader } from './auth/session';
 import { getAccessScope } from './auth/access';
 import { requireHubAuth, optionalHubAuth, requireRoot } from './auth/middleware';
+import { decidePairStatsRendering } from './cross/pair-stats-rendering';
 
 const app = express();
 app.use(cors());
@@ -1184,7 +1185,14 @@ export function filterUniverseByTenants(full: any, allowed: Set<string>): any {
       },
     },
     podcasts,
-    cross: { guests, episodeRefs, pairStats },
+    cross: {
+      guests,
+      episodeRefs,
+      pairStats,
+      // Re-décide le rendu après filtrage par scope auth : si la session
+      // n'a accès qu'à 2 tenants, la décision pré-filtre est invalide.
+      pairStatsRendering: decidePairStatsRendering(pairStats),
+    },
   };
 }
 

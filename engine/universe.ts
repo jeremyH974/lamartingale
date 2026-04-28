@@ -27,6 +27,7 @@ import type { PodcastConfig } from './config';
 import { websiteHostFromUrl } from './scraping/rss/extractors';
 import { isEpisodeRefCandidate } from './classify/episode-ref-rules';
 import { getCrossGuests } from './db/cross-queries';
+import { decidePairStatsRendering, type PairStatsRenderingDecision } from './cross/pair-stats-rendering';
 
 function sqlClient() {
   const url = process.env.DATABASE_URL;
@@ -108,6 +109,13 @@ export interface UniverseResponse {
     guests: UniverseCrossGuest[];
     episodeRefs: UniverseCrossEpisodeRef[];
     pairStats: UniversePairStat[];
+    /**
+     * Décision de rendu pour le frontend (Phase A re-codée).
+     * Si `pairStatsRendering.mode === 'fallback'`, le frontend doit afficher le
+     * fallback explicite + l'amorce `pairStatsRendering.starter` (top 3) plutôt
+     * que la liste complète `pairStats`.
+     */
+    pairStatsRendering: PairStatsRenderingDecision;
   };
 }
 
@@ -310,6 +318,7 @@ export async function getUniverse(): Promise<UniverseResponse> {
       guests,
       episodeRefs,
       pairStats,
+      pairStatsRendering: decidePairStatsRendering(pairStats),
     },
   };
 }

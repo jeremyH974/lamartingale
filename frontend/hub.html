@@ -524,27 +524,43 @@
   }
 
   // PAIR STATS
-  // Seuil de qualité éditoriale : en deçà de 5 paires, l'agrégation est trop
-  // creuse pour être représentative et donne l'impression d'un écosystème
-  // pauvre. On bascule sur un fallback honnête plutôt que rendre une liste
-  // dégénérée. Cause racine : Finscale, Passion Patrimoine et Combien ça gagne
-  // n'ont pas encore d'articles éditoriaux scrapés (la détection cross-refs
-  // s'appuie sur les liens enrichis depuis l'article HTML, pas le RSS brut).
-  const pairs = (data.cross.pairStats || []).slice(0, 10);
-  if (pairs.length < 5) {
-    pairList.innerHTML = `<div class="fallback"><strong>Couverture cross-références en cours d'indexation.</strong><br>La détection des références explicites entre podcasts s'appuie sur les articles éditoriaux scrapés. À ce jour, cette couverture est complète sur La Martingale, Génération Do It Yourself et Le Panier — mais Finscale, Passion Patrimoine et Combien ça gagne n'ont pas encore d'articles éditoriaux indexés. La section sera enrichie au fur et à mesure de l'ingestion.</div>`;
+  // La décision de rendu (mode 'normal' vs 'fallback' + amorce) est prise côté
+  // backend dans engine/cross/pair-stats-rendering.ts (testé unitairement) puis
+  // exposée dans `data.cross.pairStatsRendering`. Le frontend rend simplement
+  // ce que le backend a décidé. Compat backward : si pairStatsRendering est
+  // absent (cache servi pré-Phase A re-codée), on retombe sur l'ancien seuil
+  // length === 0.
+  const rendering = data.cross.pairStatsRendering;
+  const nameBy = Object.fromEntries(data.podcasts.map(p => [p.id, p.name]));
+  function renderPairRow(p) {
+    const pcFrom = pcById[p.from] || 'var(--fg)';
+    const pcTo = pcById[p.to] || 'var(--fg)';
+    return `<div class="pair-row">
+      <span class="badge" style="--pc:${esc(pcFrom)}" data-pc>${esc(nameBy[p.from] || p.from)}</span>
+      <span class="arrow">→</span>
+      <span class="badge" style="--pc:${esc(pcTo)}" data-pc>${esc(nameBy[p.to] || p.to)}</span>
+      <span class="count">${p.count} ref${p.count > 1 ? 's' : ''}</span>
+    </div>`;
+  }
+  const fallbackMsg = `<div class="fallback"><strong>Couverture cross-références en cours d'indexation.</strong><br>La détection des références explicites entre podcasts s'appuie sur les articles éditoriaux scrapés. À ce jour, cette couverture est complète sur La Martingale, Génération Do It Yourself et Le Panier — mais Finscale, Passion Patrimoine et Combien ça gagne n'ont pas encore d'articles éditoriaux indexés. La section sera enrichie au fur et à mesure de l'ingestion.</div>`;
+
+  if (rendering) {
+    if (rendering.mode === 'normal') {
+      pairList.innerHTML = '<div class="pair-list">' + rendering.display.map(renderPairRow).join('') + '</div>';
+    } else {
+      const starterHtml = (rendering.starter && rendering.starter.length)
+        ? `<div class="pair-list" style="margin-top:14px;">${rendering.starter.map(renderPairRow).join('')}</div>`
+        : '';
+      pairList.innerHTML = fallbackMsg + starterHtml;
+    }
   } else {
-    const nameBy = Object.fromEntries(data.podcasts.map(p => [p.id, p.name]));
-    pairList.innerHTML = '<div class="pair-list">' + pairs.map(p => {
-      const pcFrom = pcById[p.from] || 'var(--fg)';
-      const pcTo = pcById[p.to] || 'var(--fg)';
-      return `<div class="pair-row">
-        <span class="badge" style="--pc:${esc(pcFrom)}" data-pc>${esc(nameBy[p.from] || p.from)}</span>
-        <span class="arrow">→</span>
-        <span class="badge" style="--pc:${esc(pcTo)}" data-pc>${esc(nameBy[p.to] || p.to)}</span>
-        <span class="count">${p.count} ref${p.count > 1 ? 's' : ''}</span>
-      </div>`;
-    }).join('') + '</div>';
+    // Compat backward : ancienne forme de cache.
+    const pairs = (data.cross.pairStats || []).slice(0, 10);
+    if (pairs.length === 0) {
+      pairList.innerHTML = fallbackMsg;
+    } else {
+      pairList.innerHTML = '<div class="pair-list">' + pairs.map(renderPairRow).join('') + '</div>';
+    }
   }
 })();
 </script>
