@@ -37,10 +37,12 @@ d('M2 — Tenant Isolation', () => {
   });
 
   it('2. lamartingale tenant has its episodes tagged', async () => {
-    // Post-GDIY ingestion : la DB contient plusieurs tenants. On vérifie
-    // juste que LM garde son volume attendu (>300).
+    // Post-Phase B7 (2026-04-28) : 58 rows doublons Allo La Martingale ont été
+    // supprimés du tenant lamartingale (cf. scripts/cleanup-allo-lm-duplicates.ts)
+    // car Allo LM est maintenant un tenant séparé `allolamartingale`.
+    // Volume attendu LM : ~298 (vs >300 avant). Seuil >250 = marge confortable.
     const [{ c: lm }] = await sql`SELECT count(*) as c FROM episodes WHERE tenant_id = ${TENANT}`;
-    expect(Number(lm)).toBeGreaterThan(300);
+    expect(Number(lm)).toBeGreaterThan(250);
 
     // Et que chaque épisode a bien un tenant non vide.
     const [{ c: untagged }] = await sql`SELECT count(*) as c FROM episodes WHERE tenant_id IS NULL OR tenant_id = ''`;

@@ -397,8 +397,11 @@
       </section>
 
       <section>
-        <h2>Verbatims <span style="font-size:13px;color:var(--fg-3);font-weight:500;">· ${quotes.length}</span></h2>
-        ${quotes.map(renderQuote).join('') || '<p style="color:var(--fg-3)">Aucun verbatim extrait.</p>'}
+        <h2>Citations clés <span style="font-size:13px;color:var(--fg-3);font-weight:500;">· ${quotes.length}</span></h2>
+        <p class="brief-disclaimer" style="font-size:13px;color:var(--fg-3);font-style:italic;margin-top:-6px;margin-bottom:14px;line-height:1.5;">
+          Punchlines extraites du contenu éditorial publié par les producteurs (articles, résumés). Pas de transcript audio indexé sur ce périmètre — V2.
+        </p>
+        ${quotes.map(renderQuote).join('') || '<p style="color:var(--fg-3)">Aucune citation extraite.</p>'}
       </section>
 
       <section>
