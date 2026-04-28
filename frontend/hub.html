@@ -463,24 +463,28 @@
   for (const p of data.podcasts) pcById[p.id] = p.branding.primaryColor;
 
   // PODCASTS GRID
-  // Affichage : on préfixe `#NUM ` côté UI, donc on retire le `#NUM - ` que GDIY/LP/PP/CCG
-  // embarquent déjà dans leur title RSS pour éviter le doublon `#535 #535 - …`. On retire
-  // aussi les markers RSS purement éditoriaux ([EXTRAIT], [EXCERPT], [teaser], [REDIFF])
-  // qui polluent le titre sans apporter d'info à un visiteur du hub.
-  function cleanTitle(t, epNum) {
+  // Affichage : on préfixe `#NUM ` côté UI, donc on retire tout `#NUM` initial du title
+  // RSS pour éviter le doublon `#535 #535 - …`.
+  //
+  // Phase I1+I2 (2026-04-28) — élargissement regex :
+  //   - séparateur entre `#NUM` et le reste du titre maintenant OPTIONNEL
+  //     (DVA utilise un simple espace, pas un dash : "#88 Episode spécial …")
+  //   - le NUM matché n'a PAS besoin de correspondre à ep_num — on strip
+  //     n'importe quel `#\d+` initial (gère les drift LM #314 vs ep_num=3144
+  //     et tous les drift +/-1 récurrents identifiés par I0)
+  //   - les markers RSS éditoriaux [EXTRAIT]/[EXCERPT]/[teaser]/[REDIFF]/etc.
+  //     sont strippés comme avant.
+  function cleanTitle(t /*, epNum (legacy param, plus utilisé) */) {
     if (!t) return '';
     let out = String(t);
     out = out.replace(/^\s*\[(extrait|excerpt|teaser|rediff(?:usion)?|bonus|replay)\]\s*/i, '');
-    if (epNum != null) {
-      const re = new RegExp(`^\\s*#${epNum}\\s*[-–—:]\\s*`);
-      out = out.replace(re, '');
-    }
+    out = out.replace(/^\s*#\d+\s*([-–—:]\s*)?/, '');
     return out.trim();
   }
   grid.innerHTML = data.podcasts.map(p => {
     const featuredHtml = p.featured.slice(0, 3).map(ep => {
       const num = ep.episode_number != null ? `#${ep.episode_number} ` : '';
-      const cleaned = cleanTitle(ep.title, ep.episode_number);
+      const cleaned = cleanTitle(ep.title);
       return `<li title="${esc(ep.title)}">${num}${esc(cleaned)}</li>`;
     }).join('');
     const hasContent = p.stats.episodes > 0;

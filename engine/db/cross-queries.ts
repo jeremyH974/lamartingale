@@ -1,6 +1,7 @@
 import { neon } from '@neondatabase/serverless';
 import { getAllConfigs } from '../config/index';
 import { buildExclusions, type LinkedinExclusions } from '../scraping/linkedin-filter';
+import { isValidPersonName } from '../cross/is-valid-person-name';
 
 // ============================================================================
 // Cross-tenant queries — agrègent TOUS les podcasts présents en DB.
@@ -352,6 +353,13 @@ export async function getCrossGuests(opts: { sharedOnly?: boolean; limit?: numbe
     const raw = (r.guest_raw || '').trim();
     if (!raw) continue;
     if (isHost(raw)) continue;
+    // Phase I3 (2026-04-28) — applique le même filtre isValidPersonName
+    // que match-guests.ts (Phase B3). Sans ça, le hub /api/universe affichait
+    // "Jean" en 1ère position de la liste "X invités partagés" car
+    // getCrossGuests ne filtrait que sur length < 3, pas sur les patterns
+    // structurels (single-word, RSS markers, etc.). Cohérence avec le
+    // filtre INSERT-time de cross_podcast_guests.
+    if (!isValidPersonName(raw)) continue;
     const norm = normalizeName(raw);
     if (norm.length < 3) continue;
 
