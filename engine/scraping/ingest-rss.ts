@@ -23,6 +23,7 @@ import { neon } from '@neondatabase/serverless';
 import { getConfig } from '@engine/config';
 import { extractItem, extractChannelMetadata, computePublishFrequencyDays, websiteHostFromUrl } from './rss/extractors';
 import { classifyEditorialType } from '../util/classify-editorial-type';
+import { pickUpsertStrategy } from './rss/pick-upsert-strategy';
 
 const sql = neon(process.env.DATABASE_URL!);
 const cfg = getConfig();
@@ -172,13 +173,22 @@ async function main() {
   });
 
   for (const { parsed } of sortedItems) {
-    if (parsed.episodeNumber == null && !parsed.guid) {
+    // Phase A.5.5a — choix de stratégie UPSERT (pure, testable). Avant : path
+    // 'isFull' utilisait toujours ON CONFLICT (tenant_id, episode_number) →
+    // crash uq_episodes_tenant_guid quand Audiomeans renvoyait un item full
+    // avec episode_number=null mais guid existant en DB (cas LP #328/#319/etc).
+    const strategy = pickUpsertStrategy({
+      episodeType: parsed.episodeType,
+      episodeNumber: parsed.episodeNumber,
+      guid: parsed.guid,
+    });
+    if (strategy === 'skip') {
       skipped++;
       continue;
     }
 
     const isFull = parsed.episodeType === 'full' || parsed.episodeType == null;
-    const epNumForRow = isFull ? parsed.episodeNumber : null;
+    const epNumForRow = strategy === 'episode_number' ? parsed.episodeNumber : null;
     const parentEpNum = isFull ? null : parsed.episodeNumber;
 
     // editorial_type — orthogonal à episode_type (iTunes RSS) :
@@ -196,18 +206,24 @@ async function main() {
     if (parsed.sponsors.length) stats.withSponsors++;
     if (parsed.links.length) stats.withLinks++;
 
-    const isNew = isFull
+    const isNew = strategy === 'episode_number'
       ? epNumForRow != null && !existingNums.has(epNumForRow)
       : true;
 
     if (DRY_RUN) {
-      if (isFull) { if (isNew) inserted++; else updated++; }
+      if (strategy === 'episode_number') { if (isNew) inserted++; else updated++; }
       else insertedExtracts++;
       continue;
     }
 
-    // 2 chemins d'upsert : full par (tenant_id, episode_number), bonus par (tenant_id, guid).
-    if (isFull) {
+    // 3 chemins d'upsert (Phase A.5.5a) :
+    //   - 'episode_number' : full strict, ON CONFLICT (tenant_id, episode_number)
+    //   - 'guid'           : bonus/trailer ET full sans episode_number,
+    //                        ON CONFLICT (tenant_id, guid) — ce path englobe le
+    //                        cas LP où Audiomeans a perdu <itunes:episode> sur
+    //                        certains rows existants.
+    //   - 'skip'           : déjà traité plus haut.
+    if (strategy === 'episode_number') {
       await sql`
         INSERT INTO episodes (
           tenant_id, episode_number, parent_episode_number, title, slug, pillar, date_created,
