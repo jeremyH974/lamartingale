@@ -127,7 +127,12 @@ export async function getUniverse(): Promise<UniverseResponse> {
   const sql = sqlClient();
 
   // 1. Résoudre les tenants hub-éligibles (hors 'hub' lui-même) triés par hub_order.
-  const configs = getAllConfigs()
+  // On garde aussi la config 'hub' à part pour récupérer la tagline éditoriale
+  // (sinon le hero `<n> podcasts, un écosystème` dupliquerait avec une tagline
+  // générée identique — Bug #4 Phase J).
+  const allConfigs = getAllConfigs();
+  const hubCfg = allConfigs.find((c) => c.id === 'hub');
+  const configs = allConfigs
     .filter((c) => c.id !== 'hub')
     .sort((a, b) => {
       const oa = a.hub_order ?? Number.POSITIVE_INFINITY;
@@ -308,7 +313,12 @@ export async function getUniverse(): Promise<UniverseResponse> {
     universe: {
       id: 'ms',
       name: 'Univers MS',
-      tagline: `${podcasts.length} podcast${podcasts.length > 1 ? 's' : ''}, un écosystème.`,
+      // Phase J Bug #4 (2026-04-28) — tagline éditoriale distincte du h1 hero
+      // ("<n> podcasts, un écosystème" affiché statiquement par le frontend).
+      // On expose la tagline du hub.config.ts (Phase A.5.3 : "L'écosystème
+      // podcast Matthieu Stefani × Orso Media : business, finance,
+      // investissement, entrepreneuriat."). Fallback safe si config hub absente.
+      tagline: hubCfg?.tagline || `${podcasts.length} podcast${podcasts.length > 1 ? 's' : ''}, un écosystème.`,
       producers,
       totals: {
         podcasts: podcasts.length,
