@@ -483,18 +483,55 @@ Applicable aux futurs scripts : migrations schema (`engine/db/migrate-*.ts`), ba
 
 ---
 
-## 🚧 Phase 7b audit timestamps L2 — fix architectural appliqué (Phase 8.2 IN PROGRESS, 28/04/26)
+## ✅ Phase 7b audit timestamps L2 — RÉSOLU Phase 8 (28/04/26)
 
-**Statut** : fix code mergé dans branche `fix/extractquotes-timestamps`. Régénération réelle 8.3 + audit 8.4 à venir avant verdict final RESOLVED. **Bloque toujours envoi pilote 17/05** tant que les 4 packs ne sont pas régénérés et auditiés ≥ 95% OK.
+**Statut** : **RÉSOLU**. Audit final pack v3-final = **35/35 OK (100%)** — 19/19 L1 préservés + 16/16 L2 corrigés (vs 4/19 pré-fix). 0 hors-borne. Pack envoyable à Stefani.
 
-**Fix appliqué Phase 8.2** (commit fix/extractquotes-timestamps) :
+**Tag** : `phase-8-extractquotes-fix` sur master (merge `fix/extractquotes-timestamps`).
+**Commit fix code** : `b335b34` (Phase 8.2).
+**Pack final** : [`experiments/autonomy-session-2026-04-28/pack-pilote-stefani-orso-v3-final/`](../experiments/autonomy-session-2026-04-28/pack-pilote-stefani-orso-v3-final/).
+**Audit archive** : [`experiments/autonomy-session-2026-04-28/audit-timestamps-v3-final-2026-04-28.txt`](../experiments/autonomy-session-2026-04-28/audit-timestamps-v3-final-2026-04-28.txt).
+
+**Fix appliqué Phase 8.2** (commit `b335b34`) :
 - `extractQuotes` refactoré : le LLM ne reçoit plus `full_text` plat mais un bloc `[N] text` (segments indexés sans timestamps). Sonnet retourne `segment_index_start`/`segment_index_end` (sélection d'index) au lieu de `start_seconds`/`end_seconds` (calcul halluciné).
 - Validation 3 couches post-extraction : bornes / fenêtre prompt (anti-hallucination index) / verbatim trouvable dans fenêtre ±10s.
 - Pipeline résout `segment_index → timestamps Whisper réels` côté serveur. Output public inchangé (backward-compat Phase 6/7a).
-- **Bonus** : passage `PROMPT_TRANSCRIPT_CHAR_LIMIT` 50 000 → 250 000 chars résout aussi un bug pré-existant de truncation massive (Plais GDIY perdait 76% du transcript = 188 min réduites à 24 min vues par le LLM, Boissenot/Doolaeghe ~30%). Cette dette était silencieuse avant l'audit Phase 7b.
-- 657/657 tests verts (baseline 638 + 19 nets), 0 régression.
+- **Bonus** : passage `PROMPT_TRANSCRIPT_CHAR_LIMIT` 50 000 → 250 000 chars résout aussi un bug pré-existant de truncation massive (Plais GDIY perdait 76% du transcript = 188 min réduites à 24 min vues par le LLM, Boissenot/Doolaeghe ~30%). **Voir entrée séparée "Truncation prompt 50k chars (RÉSOLU Phase 8)"**.
+- 660/660 tests verts (baseline 638 + 22 nets), 0 régression.
 
-**Statut original** : BLOQUANT envoi pilote 17/05. Phase 7b vidéo en pause tant que non résolu.
+**Régénération Phase 8.3** : 4 épisodes pilote, $0.555 LLM total, 16/20 quotes valides (80% — Plais 3/5, Boissenot 5/5, Doolaeghe 4/5, Veyrat 4/5). 0 hors-borne. Les 4 quotes rejetées par les 3 couches de validation sont des hallucinations Sonnet (verbatim INTROUVABLE) ou paraphrase verbale, attrapées proprement.
+
+**Pack final Phase 8.4** : produit via pipeline `produceClientPack` standard (pas de format ad-hoc, pas de warnings auto-éval ni footer dev — garde-fou test `output-formatters.test.ts` "L2 quotes rendered markdown contains NO dev metadata"). Audit final 35/35 = 100% intégrité timestamp.
+
+---
+
+## ✅ Truncation prompt extractQuotes 50k chars — RÉSOLU Phase 8 (28/04/26)
+
+**Bug pré-existant** silencieux découvert pendant Phase 8.1 : `PROMPT_TRANSCRIPT_CHAR_LIMIT = 50_000` dans `engine/primitives/extractQuotes.ts` tronquait **massivement** les transcripts longs avant envoi à Sonnet :
+- **Plais GDIY #266** (188 min) : 210k → 50k chars = **76% du transcript perdu**, le LLM ne voyait que les 24 premières minutes.
+- **Boissenot LM #174** (67 min) : 70k → 50k = **29% perdu**.
+- **Doolaeghe LP #128** (76 min) : 79k → 50k = **37% perdu**.
+- Veyrat (31 min) : 35k → 50k = pas de truncation.
+
+**Symptôme observé** : impossibilité structurelle d'extraire des quotes de la 2e moitié des épisodes longs. Probablement contributeur au cluster début Plais (1/5 OK pré-fix).
+
+**Résolution** : passage à `PROMPT_TRANSCRIPT_CHAR_LIMIT = 250_000` (commit `b335b34`). Couvre intégralement les 4 épisodes pilote (max Plais 233k). Coût input single-call Plais Sonnet 4.6 = $0.275 — bien sous le cap budget Phase 8.
+
+---
+
+## Biais primauté long-contexte Sonnet 4.6 sur épisodes >180min (NEW P2, 28/04/26)
+
+**Constat** : Phase 8.3, audit pack pilote V3, Plais GDIY #266 (188 min). Sonnet retourne 5 raw quotes mais 2 sont des hallucinations (verbatim INTROUVABLE) attrapées par le verbatim guard → 3/5 quotes valides. Les 3 timestamps valides : 25:38, 64:35, 73:55 — **toutes dans la première heure** (94 min). Aucune quote entre 74min et 188min. `temporal_spread = 0.111` < seuil clustering 0.20 défini Phase 8.
+
+**Cause probable** : biais primauté connu des LLM sur long contexte. Sonnet "voit" 3h05 mais préfère sélectionner dans le début du transcript. Pas un bug `extractQuotes` (le fix passe l'audit 100% sur les 16 quotes valides livrées) — c'est une limite du modèle sur très long contexte.
+
+**Décision Phase 8** : ACCEPT 3/5 sur Plais, livré tel quel. Posture Polish (mieux 3 solides que 5 dont 2 fausses). Pack v3-final 16/20 = 80% intégrité, 0 hors-borne.
+
+**À traiter V2 SEULEMENT si signal Stefani** : si Stefani note "pourquoi seulement 3 quotes Plais ?" ou "pourquoi rien après 1h ?", follow-up commit chunking conditionnel (split Plais en 2-3 fenêtres temporelles, top-N final). Branchement Option C écartée Phase 8.2 — la complexité chunking était précisément ce qu'on a refusé pour la qualité du fix architectural. Réactivable post-démo si besoin réel.
+
+**Trade-off connu** : Option A (single-call partout) accepté Phase 8.2 explicitement. Le clustering primauté Plais est l'effet de bord prévu, pas une régression.
+
+---
 
 **Constat** : audit déclenché pendant test bout-en-bout Phase 7b sur Veyrat (yt-dlp + ffmpeg + `produceClientPack`). Le test a planté côté `validateSpec` sur 2 quotes Veyrat dont les timestamps (`38:30`, `38:50`) dépassent la durée du transcript (1896s = 31:36). Audit étendu aux 4 épisodes pilote → **15/19 quotes L2 ont un timestamp erroné**.
 
