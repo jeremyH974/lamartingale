@@ -37,6 +37,15 @@ function extractSession(req: Request): Session | null {
  * Les endpoints avec scoping par tenant appellent getAccessScope côté handler.
  */
 export async function requireHubAuth(req: Request, res: Response, next: NextFunction): Promise<void> {
+  // Phase Scénario B M1 validation (2026-04-28) — bypass auth hub temporaire
+  // sur preview Vercel pour itérer le visuel sans flow magic-link à chaque
+  // redeploy. Set env var AUTH_BYPASS_PREVIEW=true SEULEMENT sur Preview.
+  // À RETIRER post-validation (commit séparé). Ne PAS setter en Production.
+  if (process.env.AUTH_BYPASS_PREVIEW === 'true') {
+    req.session = { email: 'preview-bypass@scenario-b.local' } as any;
+    req.accessScope = { isRoot: true, tenantIds: [] } as any;
+    return next();
+  }
   const sess = extractSession(req);
   if (!sess) {
     res.status(401).json({ error: 'auth_required', message: 'Connexion requise' });
