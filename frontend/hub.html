@@ -622,6 +622,11 @@
 
   footerProducers.textContent = 'Producteurs · ' + data.universe.producers.join(' · ');
 
+  // Index tenant → primaryColor (pour les badges) — défini AVANT les render
+  // qui en dépendent (renderCrossMini, renderPairRow plus bas).
+  const pcById = {};
+  for (const p of data.podcasts) pcById[p.id] = p.branding.primaryColor;
+
   // Brief inline Larchevêque (Scénario B M1.2) — fetch en parallèle, public endpoint
   renderBriefInline().catch(e => {
     const target = document.getElementById('brief-inline-card');
@@ -629,11 +634,15 @@
   });
 
   // Cross-mini grid (Scénario B M1.3) — top 3 cross-tenant 3+ podcasts
-  renderCrossMini(data);
-
-  // Index tenant → primaryColor (pour les badges)
-  const pcById = {};
-  for (const p of data.podcasts) pcById[p.id] = p.branding.primaryColor;
+  // try/catch défensif : si erreur ici, ne PAS casser le rendu des sections
+  // suivantes (PODCASTS / GUESTS / PAIR STATS).
+  try {
+    renderCrossMini(data);
+  } catch (e) {
+    console.error('[hub-v2] renderCrossMini error:', e);
+    const target = document.getElementById('cross-mini-grid');
+    if (target) target.innerHTML = `<div class="fallback">Aperçu cross-corpus temporairement indisponible.</div>`;
+  }
 
   // PODCASTS GRID
   // Affichage : on préfixe `#NUM ` côté UI, donc on retire tout `#NUM` initial du title
@@ -800,6 +809,9 @@
 
           ${quotes.length ? `<div>
             <h3>Citations clés</h3>
+            <div style="font-size:11px;color:var(--fg-3);font-style:italic;margin:-4px 0 8px;line-height:1.5;">
+              Punchlines extraites du contenu éditorial publié — pas de transcript audio indexé sur ce périmètre.
+            </div>
             <div class="quotes">
               ${quotes.map(q => `<div class="quote-row">${esc(q.text || '')}</div>`).join('')}
             </div>

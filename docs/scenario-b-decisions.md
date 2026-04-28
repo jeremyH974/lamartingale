@@ -23,3 +23,9 @@ choix internes CC sans avoir à demander.
 [2026-04-28 PM] [M1.3] [Niveau A] Cross-mini : sélection auto top 3 cross-tenant count >= 3 podcasts. Tri nb_eps desc puis nb_pods desc. 3e guest sélectionné par tri éditorial (pas de hardcode), candidats observés : Choueifaty, Delacour, Chiche, Morizot, Damien Morin, Beigbeder. Slug calculé front via NFD lower + non-alphanum→tiret. Badges --pc Phase L pattern. Grid auto-fit minmax(260px,1fr).
 
 [2026-04-28 PM] [M1] [Niveau A] Nav top enrichie : "Exemple" ajouté en 1er. PODCASTS / GUESTS / REFS sections conservées intactes (M3/M4 futures). Filtre 5 questions vert avant commit (5/5 OK).
+
+[2026-04-28 PM] [M1 validation] [Niveau C] AUTH_BASE_URL Preview patché TEMPORAIREMENT via API Vercel direct (CLI bouclait sur git_branch_required avec project sans Git connect). Valeur Preview = URL preview courante "https://ms-ea4y4i63t-jeremyh974s-projects.vercel.app" pour que le magic-link mail pointe bien sur preview au lieu de prod. À RESTAURER post-validation : Preview AUTH_BASE_URL = "https://ms-hub.vercel.app" (état initial supposé puisque mail pointait sur prod avant patch). Production AUTH_BASE_URL aussi restaurée à "https://ms-hub.vercel.app" après que le rm preview --yes l'ait effacée par effet de bord.
+
+[2026-04-28 PM] [M1 validation] [Niveau A] Pour M2-M5 : envisager alias Vercel custom stable "ms-hub-v2-preview.vercel.app" pointant sur dernier deploy de feat/hub-v2-scenario-b. Set AUTH_BASE_URL Preview une fois sur cet alias = patch one-shot vs répété. À évaluer post-M1.
+
+[2026-04-28 PM] [M1 validation] [Niveau A] Side-effect sécu : .audit-hub/.env.preview-snapshot et .audit-hub/.env.prod-snapshot2 contiennent secrets en clair (Anthropic key, OpenAI key, DATABASE_URL creds). Gitignored .audit-hub/. À supprimer post-validation pour hygiène.
