@@ -45,3 +45,19 @@ choix internes CC sans avoir à demander.
 [2026-04-28 PM] [M1 cleanup] [Niveau A] .audit-hub/.env.preview-snapshot + .env.prod-snapshot + .env.prod-snapshot2 supprimés (contenaient secrets en clair). Gitignored .audit-hub/ donc jamais committé.
 
 [2026-04-28 PM] [M1 closed pré-validation] [Niveau A] M1 fonctionnellement prêt sur https://ms-hub-v2-preview.vercel.app après login Vercel SSO. Tests 715/715, audit-timestamps 35/35 préservé. ATTENTE retest visuel + screenshots Jérémy.
+
+[2026-04-28 PM] [M2.0] [Niveau C] Pré-check RAG : /api/cross/chat actif, fallback gpt-4o-mini (au lieu Sonnet 4.6 attendu — investigation V2). Latence 6-17s avg 11.2s (dépasse cap 5s). Sources OK (6/req, scores 0.46-0.65). Modèle obsolète prompt mentionne "LM+GDIY uniquement" alors que 11 tenants. Décision Jérémy = Option C "showcase passif" (3 Q/R pré-générées, pas de live RAG). Cap LLM consommé Phase A→M2 reste $1.84 (3¢ ajoutés sur showcase gen).
+
+[2026-04-28 PM] [M2.1] [Niveau A] Q3 sélectionnée : "Quels sont les défis récurrents que rencontrent les entrepreneurs dans l'écosystème ?" (sources Finscale + GDIY + diversité cross-tenant max). 3 réponses générées via crossChat → frontend/data/showcase-rag-responses.json (14KB, gpt-4o-mini, sources 6 chacune).
+
+[2026-04-28 PM] [M2.1] [Niveau A] Frontend section RAG showcase ajoutée : 3 cards Q/R en accordion (1ère ouverte par défaut), markdown bold rendering, sources cliquables avec pod-badge brand colors. Disclaimer honnête "moteur conversationnelle complet activé sur signal positif". Nav top "Démo" ajouté entre "Exemple" et "Podcasts".
+
+[2026-04-28 PM] [M2 dette V2] [Niveau A] Notes pour DETTE.md V2 (post-pilote, conditionnel signal Stefani) :
+- Switcher gpt-4o-mini → Sonnet 4.6 (pourquoi fallback ? config getLLM ?)
+- Update system prompt cross-queries.ts:793 "LM+GDIY" → "11 podcasts écosystème"
+- UI loading state explicite > 5s pour live RAG
+- Rate limiting global IP/h
+- Fix Passion Patrimoine #null episode_number rendering
+- Tests qualité 10 prompts variés post-fixes
+- Coût budget activation : $5-15 selon volume démos prévues
+- À ajouter dans docs/DETTE.md section axe pipeline-brief Phase Scénario B V2.

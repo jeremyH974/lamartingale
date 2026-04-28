@@ -297,6 +297,84 @@
     .brief-inline .head .tags { justify-content: center; }
   }
 
+  /* ============ RAG SHOWCASE (Scénario B M2) ============ */
+  .rag-showcase-grid {
+    display: flex; flex-direction: column; gap: 16px;
+    max-width: 880px; margin: 32px auto 0;
+  }
+  .rag-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+    overflow: hidden; transition: border-color 0.2s;
+  }
+  .rag-card:hover { border-color: var(--accent); }
+  .rag-card .question-bar {
+    padding: 18px 22px; cursor: pointer;
+    display: flex; gap: 14px; align-items: flex-start;
+    border-bottom: 1px solid transparent; transition: border-color 0.15s;
+  }
+  .rag-card[open] .question-bar { border-bottom-color: var(--border); }
+  .rag-card .q-marker {
+    flex: 0 0 auto; font-size: 12px; font-weight: 700;
+    color: var(--accent); letter-spacing: 0.1em;
+    padding-top: 2px;
+  }
+  .rag-card .q-text {
+    flex: 1; font-size: 16px; font-weight: 600; line-height: 1.4;
+    color: var(--fg);
+  }
+  .rag-card .q-toggle {
+    flex: 0 0 auto; color: var(--fg-3); font-size: 14px;
+    transition: transform 0.2s;
+  }
+  .rag-card[open] .q-toggle { transform: rotate(180deg); }
+  .rag-card .answer-body {
+    padding: 18px 22px 22px;
+    display: flex; flex-direction: column; gap: 16px;
+  }
+  .rag-card .answer-text {
+    font-size: 14px; color: var(--fg-2); line-height: 1.65;
+  }
+  .rag-card .answer-text strong { color: var(--fg); }
+  .rag-card .sources-block {
+    display: flex; flex-direction: column; gap: 8px;
+    padding-top: 14px; border-top: 1px solid var(--border);
+  }
+  .rag-card .sources-label {
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--fg-3); font-weight: 700;
+  }
+  .rag-card .source-row {
+    display: flex; gap: 10px; align-items: center;
+    font-size: 13px; padding: 6px 10px; background: var(--bg-2);
+    border-radius: 8px;
+  }
+  .rag-card .source-row .pod-badge {
+    flex: 0 0 auto; font-size: 10px; font-weight: 700; padding: 2px 8px;
+    border-radius: 99px; border: 1px solid var(--pc); color: var(--fg);
+    text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  .rag-card .source-row .ep-num { flex: 0 0 auto; color: var(--fg-3); font-weight: 600; }
+  .rag-card .source-row .ep-title {
+    flex: 1; color: var(--fg-2); white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis;
+  }
+  .rag-card .source-row .score {
+    flex: 0 0 auto; font-size: 11px; color: var(--fg-3);
+    font-variant-numeric: tabular-nums;
+  }
+  .rag-disclaimer {
+    text-align: center; max-width: 720px; margin: 28px auto 0;
+    font-size: 12px; color: var(--fg-3); font-style: italic; line-height: 1.6;
+    padding: 16px 20px; background: var(--bg-2);
+    border: 1px solid var(--border); border-radius: 10px;
+  }
+  .rag-disclaimer .accent { color: var(--accent); font-style: normal; }
+  @media (max-width: 600px) {
+    .rag-card .question-bar { padding: 14px 16px; }
+    .rag-card .q-text { font-size: 14px; }
+    .rag-card .answer-body { padding: 14px 16px 16px; }
+  }
+
   /* ============ CROSS-GUEST MINI (Scénario B M1.3) ============ */
   .cross-mini-grid {
     display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -385,6 +463,7 @@
     </div>
     <div class="nav-right">
       <a href="#brief-example">Exemple</a>
+      <a href="#rag-showcase">Démo</a>
       <a href="#podcasts">Podcasts</a>
       <a href="#guests">Invités partagés</a>
       <div id="session-box" class="session-box" style="display:none">
@@ -423,6 +502,25 @@
       </div>
       <div class="brief-inline-cta">
         <a href="/guest-brief/eric-larcheveque">Voir le brief complet <span>→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- RAG SHOWCASE (Scénario B M2) -->
+  <section class="block" id="rag-showcase">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">Démo recherche cross-corpus</div>
+        <div class="section-title">Le catalogue répond à vos questions</div>
+        <div class="section-sub">Sillon connecte les épisodes par thème et synthétise des réponses
+          en citant ses sources. Voici 3 exemples concrets sur les 11 podcasts indexés.</div>
+      </div>
+      <div class="rag-showcase-grid" id="rag-showcase-grid">
+        <div class="loading">Chargement de la démo…</div>
+      </div>
+      <div class="rag-disclaimer">
+        Ces 3 réponses ont été générées par Sillon en pré-démo sur le catalogue indexé.
+        <span class="accent">Le moteur de recherche conversationnelle complet sera activé sur signal positif.</span>
       </div>
     </div>
   </section>
@@ -643,6 +741,13 @@
     const target = document.getElementById('cross-mini-grid');
     if (target) target.innerHTML = `<div class="fallback">Aperçu cross-corpus temporairement indisponible.</div>`;
   }
+
+  // RAG showcase pré-cuit (Scénario B M2) — fetch JSON statique
+  renderRagShowcase().catch(e => {
+    console.error('[hub-v2] renderRagShowcase error:', e);
+    const target = document.getElementById('rag-showcase-grid');
+    if (target) target.innerHTML = `<div class="fallback">Démo cross-corpus temporairement indisponible.</div>`;
+  });
 
   // PODCASTS GRID
   // Affichage : on préfixe `#NUM ` côté UI, donc on retire tout `#NUM` initial du title
@@ -874,6 +979,60 @@
         <div class="badges">${badges}</div>
         <div class="cta">Voir le brief →</div>
       </a>`;
+    }).join('');
+  }
+
+  // ──────────────────────────────────────────────────────────────────────
+  // Scénario B M2 — RAG showcase pré-cuit (3 cards Q/R accordion)
+  // Pas de RAG live (cf. scenario-b-decisions.md M2.0 décision Option C) :
+  // les réponses sont pré-générées + JSON statique servi par Vercel.
+  // À régénérer si nouveaux ingest signifiants via .audit-hub/M2-1-generate-showcase.ts.
+  // ──────────────────────────────────────────────────────────────────────
+  async function renderRagShowcase() {
+    const target = document.getElementById('rag-showcase-grid');
+    if (!target) return;
+    const res = await fetch('/data/showcase-rag-responses.json', { cache: 'no-cache' });
+    if (!res.ok) throw new Error(`showcase HTTP ${res.status}`);
+    const data = await res.json();
+    const items = data.items || [];
+    if (items.length === 0) {
+      target.innerHTML = `<div class="fallback">Aucune démo disponible.</div>`;
+      return;
+    }
+    // Première carte ouverte par défaut, autres fermées (accordion)
+    target.innerHTML = items.map((item, idx) => {
+      const isOpen = idx === 0;
+      // Render markdown light : **bold** uniquement, conserver \n\n→ paragraphes
+      const responseHtml = (item.response || '')
+        .split(/\n\n+/)
+        .map(p => `<p style="margin:0 0 12px;">${
+          esc(p).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        }</p>`)
+        .join('');
+      const sourcesHtml = (item.sources || []).slice(0, 6).map(s => {
+        const pc = pcById[s.podcast] || 'var(--fg-3)';
+        const podLabel = (s.podcast_name || prettyTenant(s.podcast));
+        return `<div class="source-row">
+          <span class="pod-badge" style="--pc:${esc(pc)}">${esc(podLabel)}</span>
+          <span class="ep-num">#${s.episode_number ?? '?'}</span>
+          <span class="ep-title" title="${esc(s.title || '')}">${esc(s.title || '')}</span>
+          <span class="score">${(s.score || 0).toFixed(2)}</span>
+        </div>`;
+      }).join('');
+      return `<details class="rag-card" ${isOpen ? 'open' : ''}>
+        <summary class="question-bar">
+          <span class="q-marker">Q${idx + 1}</span>
+          <span class="q-text">${esc(item.question)}</span>
+          <span class="q-toggle">▾</span>
+        </summary>
+        <div class="answer-body">
+          <div class="answer-text">${responseHtml}</div>
+          ${sourcesHtml ? `<div class="sources-block">
+            <div class="sources-label">Sources · ${item.sources.length} épisodes cités</div>
+            ${sourcesHtml}
+          </div>` : ''}
+        </div>
+      </details>`;
     }).join('');
   }
 
