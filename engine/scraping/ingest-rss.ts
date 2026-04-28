@@ -22,6 +22,7 @@ import { XMLParser } from 'fast-xml-parser';
 import { neon } from '@neondatabase/serverless';
 import { getConfig } from '@engine/config';
 import { extractItem, extractChannelMetadata, computePublishFrequencyDays, websiteHostFromUrl } from './rss/extractors';
+import { classifyEditorialType } from '../util/classify-editorial-type';
 
 const sql = neon(process.env.DATABASE_URL!);
 const cfg = getConfig();
@@ -180,6 +181,12 @@ async function main() {
     const epNumForRow = isFull ? parsed.episodeNumber : null;
     const parentEpNum = isFull ? null : parsed.episodeNumber;
 
+    // editorial_type — orthogonal à episode_type (iTunes RSS) :
+    // classifie le titre RSS pour distinguer extraits/teasers/HS/rediffs/bonus
+    // éditoriaux des full episodes côté hub queries. Source de vérité unique
+    // engine/util/classify-editorial-type.ts (mêmes regex que le backfill).
+    const editorialType = classifyEditorialType(parsed.title);
+
     const slug = sluggify(parsed.title);
     const dateCreated = parsed.pubDate ? new Date(parsed.pubDate) : null;
 
@@ -204,13 +211,13 @@ async function main() {
       await sql`
         INSERT INTO episodes (
           tenant_id, episode_number, parent_episode_number, title, slug, pillar, date_created,
-          guid, season, episode_type, explicit,
+          guid, season, episode_type, editorial_type, explicit,
           duration_seconds, audio_url, audio_size_bytes, episode_image_url,
           rss_description, rss_content_encoded, guest_from_title,
           sponsors, rss_links, cross_refs, publish_frequency_days
         ) VALUES (
           ${TENANT}, ${epNumForRow}, NULL, ${parsed.title}, ${slug}, ${pillarPlaceholder}, ${dateCreated},
-          ${parsed.guid}, ${parsed.season}, ${parsed.episodeType}, ${parsed.explicit},
+          ${parsed.guid}, ${parsed.season}, ${parsed.episodeType}, ${editorialType}, ${parsed.explicit},
           ${parsed.durationSeconds}, ${parsed.audioUrl}, ${parsed.audioSizeBytes}, ${parsed.episodeImageUrl},
           ${parsed.description}, ${parsed.rssContentEncoded}, ${parsed.guestFromTitle.name},
           ${JSON.stringify(parsed.sponsors)}::jsonb,
@@ -225,6 +232,7 @@ async function main() {
           guid                 = COALESCE(EXCLUDED.guid, episodes.guid),
           season               = COALESCE(EXCLUDED.season, episodes.season),
           episode_type         = COALESCE(EXCLUDED.episode_type, episodes.episode_type),
+          editorial_type       = EXCLUDED.editorial_type,
           explicit             = COALESCE(EXCLUDED.explicit, episodes.explicit),
           duration_seconds     = COALESCE(EXCLUDED.duration_seconds, episodes.duration_seconds),
           audio_url            = COALESCE(EXCLUDED.audio_url, episodes.audio_url),
@@ -244,13 +252,13 @@ async function main() {
       await sql`
         INSERT INTO episodes (
           tenant_id, episode_number, parent_episode_number, title, slug, pillar, date_created,
-          guid, season, episode_type, explicit,
+          guid, season, episode_type, editorial_type, explicit,
           duration_seconds, audio_url, audio_size_bytes, episode_image_url,
           rss_description, rss_content_encoded, guest_from_title,
           sponsors, rss_links, cross_refs, publish_frequency_days
         ) VALUES (
           ${TENANT}, NULL, ${parentEpNum}, ${parsed.title}, ${slug}, ${pillarPlaceholder}, ${dateCreated},
-          ${parsed.guid}, ${parsed.season}, ${parsed.episodeType}, ${parsed.explicit},
+          ${parsed.guid}, ${parsed.season}, ${parsed.episodeType}, ${editorialType}, ${parsed.explicit},
           ${parsed.durationSeconds}, ${parsed.audioUrl}, ${parsed.audioSizeBytes}, ${parsed.episodeImageUrl},
           ${parsed.description}, ${parsed.rssContentEncoded}, ${parsed.guestFromTitle.name},
           ${JSON.stringify(parsed.sponsors)}::jsonb,
@@ -262,6 +270,7 @@ async function main() {
           title                = EXCLUDED.title,
           parent_episode_number= COALESCE(EXCLUDED.parent_episode_number, episodes.parent_episode_number),
           episode_type         = EXCLUDED.episode_type,
+          editorial_type       = EXCLUDED.editorial_type,
           duration_seconds     = COALESCE(EXCLUDED.duration_seconds, episodes.duration_seconds),
           audio_url            = COALESCE(EXCLUDED.audio_url, episodes.audio_url),
           episode_image_url    = COALESCE(EXCLUDED.episode_image_url, episodes.episode_image_url),
