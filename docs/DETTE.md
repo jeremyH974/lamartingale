@@ -1,8 +1,127 @@
 # Dette technique — Podcast Engine
 
-État au **24 avril 2026**, après audit live univers MS (`docs/audit-univers-live.md`) + Phase B quick wins.
+État au **28 avril 2026**, après Phase A→C pré-pilote Stefani (audit hub UI 360°, extension périmètre 11 tenants, editorial_type, cleanup data quality, briefs cross-tenant bulk).
 
 Classement par priorité décroissante. **P0 = bloquant / P1 = forte valeur / P2 = améliorations / P3 = moyen terme**.
+
+---
+
+## Phase C V2 — Brief invité, brancher transcripts dans la cascade source (P1)
+
+**Constat** (découvert 2026-04-28 pendant Phase C bulk briefs review qualité) :
+le pipeline `engine/agents/wrappers/persistGuestBrief.ts` ne consomme PAS
+les transcripts audio. La cascade `sourceSelector.ts:35-42` priorise
+`article_content > chapters_takeaways > rss_description`. La ligne
+`{ type: 'transcript', priority: 100, minLength: 5000 }` est commentée
+"FUTURE — décommenter quand le pipeline transcript audio arrivera".
+
+**Conséquence mécanique** : la section "Verbatims" (renommée Phase C2.5
+en "Citations clés") du frontend `/guest-brief/:slug` n'a jamais accès au
+verbatim oral. Le LLM extrait des paraphrases plausibles depuis le
+contenu éditorial publié (article post-prod Orso, résumés). Pas du
+verbatim authentique.
+
+**Mitigation appliquée Phase C2.5** : renommage frontend "Verbatims" →
+"Citations clés" + disclaimer italic sous le titre :
+> Punchlines extraites du contenu éditorial publié par les producteurs
+> (articles, résumés). Pas de transcript audio indexé sur ce périmètre — V2.
+
+Pas de modif logique, pas de regen briefs (les 51 briefs Phase C restent
+utilisables avec la sémantique "citation curée" honnête).
+
+**Plan fix V2** (conditionnel signal Stefani positif post-pilote) :
+1. Décommenter `engine/agents/wrappers/sourceSelector.ts:37` pour
+   inclure transcripts en priorité 100 dans la cascade.
+2. Générer transcripts Whisper sur les ~50-100 guests les plus partagés
+   uniquement (ciblé top cross-tenant, pas bulk). Coût estimé sur top
+   50 cross-guests × moy 4 eps × 60min = 200h × $0.006/min ≈ **$72**.
+   Plus modeste : top 10 cross-guests 3-pods × 4 eps × 60min = 40h
+   ≈ **$14.40**.
+3. Régénérer les briefs concernés via `scripts/bulk-guest-briefs.ts
+   --force` pour reprendre les vraies quotes verbatim. Coût Sonnet
+   ≈ $0.04/brief × 50 = **$2**.
+4. Retirer le disclaimer "pas de transcript indexé" du frontend.
+5. Brancher la validation post-extract verbatim (style Phase 8
+   `extractQuotes` segmentId pattern) pour bloquer toute hallucination
+   LLM résiduelle.
+
+**Cap budget V2 estimé** : $30-100 LLM Whisper + $2-5 Sonnet selon
+ambition (ciblé top 10 cross-tenant ou top 50 entier).
+
+**Décision A.5.5b confirmée** : skip massif Whisper bulk (~$1047 sur
+2488 true-full eps) tant que pas de signal explicite Stefani sur la
+valeur de recherche audio cross-corpus.
+
+---
+
+## Discipline scripts audit — DEFAULT paths à suivre les commits structurants (P2)
+
+**Constat** (découvert Phase A.5 Étape A 2026-04-28) :
+`scripts/audit-timestamps.js` avait `DEFAULT_PACK = 'experiments/.../
+pack-pilote-stefani-orso'` (pack Phase 6 pré-fix Phase 8) au lieu de
+`pack-pilote-stefani-orso-v3-final-md-audit` (post-Phase 8, baseline 35/35).
+Le run sans args retournait **23/39 OK (59%)** au lieu des 35/35 attendus,
+suggérant à tort une régression Phase A.5 alors qu'aucun fichier audit
+ni transcript n'avait bougé.
+
+**Fix appliqué** (commit `3576242`) : update `DEFAULT_PACK` vers
+`pack-pilote-stefani-orso-v3-final-md-audit`.
+
+**Règle générale post-pilote V2** :
+- Tout commit structurant qui crée un nouveau pack/snapshot/référence
+  (ex. Phase 7a output formats créant `v3-final/`) doit auditer les
+  scripts qui pointent vers la version précédente (DEFAULT_PACK,
+  DEFAULT_TRANSCRIPTS, etc.).
+- Idéalement : checklist "scripts à mettre à jour" dans le commit
+  template.
+
+---
+
+## Cycle de vie cross_podcast_guests — soft-delete is_active (P2)
+
+**Constat** (suite Phase B0 fix TRUNCATE 2026-04-28) :
+le retrait du `TRUNCATE cross_podcast_guests RESTART IDENTITY` dans
+`match-guests.ts` (B0, commit `dcc6ab3`) préserve `brief_md` à travers
+les re-runs MAIS introduit le risque d'**entries orphelines** : un guest
+dont le `canonical_name` change après re-extraction (ex. accent normalisé
+différemment, fix titre RSS amont) crée un nouveau row sans supprimer
+l'ancien.
+
+**Mitigation phase pilote** : 30 entries pollution + 1 jean-sebastien +
+6 ré-créés ont été supprimés en B2/B3/B4. Le filtre `isValidPersonName`
+B3 empêche la pollution future à l'INSERT, mais ne gère pas les rows
+orphelines anciennes.
+
+**Plan fix V2** :
+- Ajouter colonne `is_active BOOLEAN DEFAULT true` sur cross_podcast_guests
+- Soft-delete (`is_active = false`) au lieu de DELETE pour les rows non
+  vues lors d'un match-guests run
+- Cleanup périodique conditionné sur is_active = false ET updated_at < now() - 30j
+- Hub queries filtrent `WHERE is_active = true`
+
+**Cap budget V2 estimé** : $0 LLM, ~30min wall (migration ALTER + script
+cleanup + adaptation match-guests).
+
+---
+
+## B5b — Accents perdus dans canonical_name / display_name (P3)
+
+**Constat** (Phase B5 2026-04-28) : noms comme "frederic" sans é,
+"helene" sans è, "stephane" sans é, "geraldine" sans é présents en DB.
+Cosmétique mais lisibilité.
+
+**Pourquoi pas fixé en Phase B5** : risque de régression ambiguë.
+"Stephane Bern" (nom propre sans accent valide) vs "Stéphane Mailfert"
+(accent légitime perdu lors de l'extraction RSS) — pas distinguable
+auto sans contexte par-row. Auto-correct via regex aveugle = risqué.
+
+**Plan fix V2** :
+- Cross-référencer avec une table d'orthographe française (Wikipedia
+  noms propres) ou un service NER + hint accent
+- Sample manuel sur 20 noms ambigus pour calibrer
+- Ou simplement : afficher accents quand `display_name` les a (déjà
+  partiellement le cas) et accepter que `canonical_name` ASCII reste
+  pour le slug
 
 ---
 
