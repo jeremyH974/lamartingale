@@ -9,6 +9,8 @@
     { "source": "/", "destination": "/frontend/hub.html" },
     { "source": "/index.html", "destination": "/frontend/hub.html" },
     { "source": "/login", "destination": "/frontend/login.html" },
+    { "source": "/privacy", "destination": "/frontend/privacy.html" },
+    { "source": "/legal", "destination": "/frontend/legal.html" },
     { "source": "/guest/:name", "destination": "/frontend/hub.html" },
     { "source": "/guest-brief/:slug", "destination": "/frontend/guest-brief.html" },
     { "source": "/(.*)", "destination": "/frontend/$1" }

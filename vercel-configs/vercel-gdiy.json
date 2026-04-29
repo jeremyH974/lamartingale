@@ -11,6 +11,8 @@
     { "source": "/episode/:id", "destination": "/frontend/episode.html" },
     { "source": "/episode", "destination": "/frontend/episode.html" },
     { "source": "/dashboard", "destination": "/frontend/v2-dashboard.html" },
+    { "source": "/privacy", "destination": "/frontend/privacy.html" },
+    { "source": "/legal", "destination": "/frontend/legal.html" },
     { "source": "/(.*)", "destination": "/frontend/$1" }
   ]
 }
