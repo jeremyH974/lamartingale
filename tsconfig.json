@@ -19,5 +19,12 @@
     "ignoreDeprecations": "6.0"
   },
   "include": ["engine/**/*", "instances/**/*", "clients/**/*", "cli/**/*", "api/**/*", "scripts/**/*.ts", "src/**/*"],
-  "exclude": ["node_modules", "dist", "graphify-out"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "graphify-out",
+    "**/__tests__/**",
+    "**/*.test.ts",
+    "**/*.spec.ts"
+  ]
 }

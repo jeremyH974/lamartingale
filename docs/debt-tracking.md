@@ -9,46 +9,47 @@ Ici : dette **outillage / build / config** uniquement.
 
 ---
 
-## Dette TS strict mode pre-existante (détectée Phase 7b 27/04)
+## Dette typage strict des fichiers de tests (Phase 7b 27/04 + audit 29/04)
 
-`npm run build` strict échoue avec 13 erreurs pré-existantes :
+**Statut au 29/04 PM** : NON BLOQUANT BUILD PROD depuis l'exclusion
+`__tests__/` du `tsconfig.json` (commit feat/phase-alpha — fix Vercel
+Production redeploy fail). À fixer en Phase Beta 1 ou opportuniste.
 
-- `engine/__tests__/cross-reference-episode.test.ts` : TS18048/TS2493 sur `args[0]`
-- `engine/__tests__/transcribe-audio.test.ts` : TS18048/TS2493 sur `args[0]`
+### Contexte
 
-Pre-Phase 7a et Phase 7b (confirmé via `git stash` — les erreurs persistent
-sur master `1a80846` sans aucun fichier Phase 7b appliqué).
+`tsc` strict (= `npm run build`) échouait sur **14 erreurs** localisées
+exclusivement dans des fichiers de tests :
 
-Vitest passe en transpile, donc tests OK (`npm test` → 670/670 verts), mais
-build strict KO.
+- `engine/__tests__/cross-reference-episode.test.ts` (×2) — TS18048/TS2493 sur `args[0]` (depuis Phase 7b 27/04).
+- `engine/__tests__/transcribe-audio.test.ts` (×11) — idem (depuis Phase 7b 27/04).
+- `engine/__tests__/output-formatters.test.ts:131` (×1) — TS2345 `Buffer<ArrayBufferLike>` (Node 24, depuis 28/04).
 
-**Impact** :
+Vitest a sa propre config (`vitest.config.ts` + transpile esbuild) et
+reste 732/732 vert. Les erreurs n'ont jamais bloqué `npm test` ni le
+runtime applicatif (engine/, cli/, api/, frontend/).
 
-- Aucun en dev (vitest fonctionne)
-- Bloquant si déploiement nécessitant `npm run build` strict (CI build pipeline,
-  `tsc --noEmit` de validation, génération `dist/` typée)
+### Action 29/04 PM (Phase Alpha)
 
-**À fixer** : avant tout déploiement prod ou intégration CI build strict.
-Estimation : **~30 min** (typage défensif sur `args[0]` — soit assertion
-non-null `args[0]!`, soit guard `if (!args[0]) throw ...`).
+`tsconfig.json` clé `exclude` étendue avec :
 
-**Status** : OPEN. Détectée 27/04 pendant Phase 7b Étape 3.
+```json
+"**/__tests__/**", "**/*.test.ts", "**/*.spec.ts"
+```
 
----
+Conséquences :
 
-## Dette TS strict mode +1 erreur (détectée audit 29/04)
+- Build prod (`npm run build` → `tsc`) = **0 erreur** ✓
+- Vercel Production redeploy débloqué.
+- Vitest inchangé : 732/732 vert (sa config compile les tests indépendamment).
+- Aucun fichier applicatif n'importe depuis `__tests__/` (vérifié : seuls 3 commentaires de documentation pointent vers les fichiers de test).
 
-Baseline mise à jour de 13 → **14 erreurs** depuis le 27/04.
+### À fixer plus tard
 
-Nouvelle erreur :
+**Estimation cumulée : ~40 min** (typage défensif `args[0]!` / `Buffer.from(buf as any)`).
 
-- `engine/__tests__/output-formatters.test.ts:131` : TS2345 — `Buffer<ArrayBufferLike>` incompatible avec `Buffer` (typage Node 24 / `Symbol.toStringTag` divergent).
+**Bénéfice** : permettre l'intégration d'un job CI `tsc --noEmit` sur tout le repo (tests inclus) qui détecterait les régressions de typage côté tests.
 
-**Impact** : aucun en dev (`npm test` reste vert). Bloquant CI `tsc` strict.
-
-**À fixer** : ~10 min (cast explicite ou helper `Buffer.from(buf as any)`).
-
-**Status** : OPEN. Détectée audit Phase Alpha 29/04. Baseline gelée à 14 erreurs jusqu'à fin Phase Alpha.
+**Status** : OPEN, requalifié non-bloquant. À planifier Phase Beta 1 ou ticket opportuniste.
 
 ---
 
