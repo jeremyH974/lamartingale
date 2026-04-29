@@ -79,10 +79,10 @@
     <li><strong>Neon Inc.</strong> (base de données PostgreSQL) — données : sessions auth + email pilote. Localisation : Europe (Francfort).</li>
     <li><strong>Resend</strong> (envoi des emails de magic-link) — données : email du destinataire + contenu du lien magique. Localisation : États-Unis. Sous-traitement RGPD-compatible.</li>
     <li><strong>Anthropic, OpenAI</strong> (génération de briefs et embeddings) — <strong>aucune donnée personnelle envoyée</strong>. Seuls les contenus podcast publics (titres, descriptions, transcripts publics) transitent vers ces services.</li>
-    <li><strong>Google Fonts</strong> (Inter, Poppins) — chargement des polices via <code>fonts.googleapis.com</code>. Cette ressource tierce envoie votre IP à Google. <strong>Dette identifiée</strong> : self-hosting prévu Phase Beta 1.</li>
+    <li><strong>Google Fonts</strong> (Inter, Poppins) — les polices sont chargées depuis <code>fonts.googleapis.com</code> et <code>fonts.gstatic.com</code>. Ce chargement transmet votre adresse IP à Google LLC, qui agit en tant que responsable de traitement indépendant pour cette opération. Au regard de la décision de la <em>Landgericht München I</em> du 20 janvier 2022 qualifiant ce transfert d'IP de traitement nécessitant une base juridique distincte, <strong>Sillon a planifié le passage à un hébergement local des polices (self-hosting) en Phase Beta 1</strong>. Cette dette est suivie dans <code>docs/debt-tracking.md</code>.</li>
   </ul>
 
-  <h2>4. Cookies et traceurs</h2>
+  <h2 id="4-cookies-et-traceurs">4. Cookies et traceurs</h2>
   <p>Sillon utilise <strong>un seul cookie strictement fonctionnel</strong> :</p>
   <ul>
     <li><code>hub_session</code> — cookie HMAC-signé, posé après authentification preview pilote, expire 14 jours après le dernier login. <strong>Pas de consentement requis</strong> (cookie strictement nécessaire au fonctionnement, art. 82 LIL).</li>

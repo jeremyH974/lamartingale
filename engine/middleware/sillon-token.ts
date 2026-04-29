@@ -5,6 +5,15 @@
  * en Phase Beta 1). Header `X-Sillon-Token` validé contre la liste CSV
  * `SILLON_PREVIEW_TOKENS` (env var).
  *
+ * SÉCURITÉ — le token doit être transmis EXCLUSIVEMENT via le header
+ * HTTP `X-Sillon-Token`, JAMAIS en query string. Une transmission
+ * en query string fuite le secret dans :
+ *   - les logs Vercel/Nginx/CDN (URL loggées en clair),
+ *   - le header Referer envoyé aux pages tierces et à Google Fonts,
+ *   - l'historique navigateur,
+ *   - les bookmarks et le copier-coller d'URL.
+ * Aucun fallback query string n'est implémenté ni ne doit l'être.
+ *
  * Patterns :
  *  - identifySillonToken : soft-check, set req.sillonToken si valide,
  *    next() inconditionnel. À chaîner AVANT le rate-limit pour

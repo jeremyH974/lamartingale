@@ -73,9 +73,10 @@
     banner.setAttribute('aria-label', 'Information cookies');
     banner.innerHTML = [
       '<h4>Cookies</h4>',
-      '<p>Sillon utilise un unique cookie fonctionnel (<code>hub_session</code>) ',
-      'nécessaire à l\'authentification de la preview pilote. Aucun cookie ',
-      'publicitaire ni analytique. Détails dans la ',
+      '<p>Sillon n\'utilise qu\'un seul cookie : <code>hub_session</code>, ',
+      'strictement nécessaire à l\'authentification de la preview pilote. ',
+      '<strong>Aucun traceur publicitaire, analytique ou tiers n\'est posé ',
+      'par Sillon.</strong> Détails dans la ',
       '<a href="/privacy">politique de confidentialité</a>.</p>',
       '<div class="actions">',
       '<button type="button" data-sillon-action="dismiss">J\'ai compris</button>',
