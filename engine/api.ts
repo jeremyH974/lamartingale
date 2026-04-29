@@ -14,6 +14,8 @@ import { createMagicLink, consumeMagicLink } from './auth/magic-link';
 import { sign as signSession, cookieSetHeader, cookieClearHeader } from './auth/session';
 import { getAccessScope } from './auth/access';
 import { requireHubAuth, optionalHubAuth, requireRoot } from './auth/middleware';
+import { identifySillonToken, requireSillonToken } from './middleware/sillon-token';
+import { createRateLimit } from './middleware/rate-limit';
 import { decidePairStatsRendering } from './cross/pair-stats-rendering';
 
 const app = express();
@@ -954,7 +956,18 @@ app.get('/api/cross/guests/:slug/brief', async (req, res) => {
   }
 });
 
-app.get('/api/cross/search', async (req, res) => {
+// Phase Alpha T1.3 — sécurisation /api/cross/search :
+//  1. identifySillonToken : soft-check (ne bloque pas, set req.sillonToken)
+//  2. createRateLimit     : 60 req/h IP non-trusted, 200 req/h par token trusted
+//  3. requireSillonToken  : 401 si pas de token valide
+//  4. cache existant      : getCached('cross:search:...', 3600s)
+const crossSearchRateLimit = createRateLimit({
+  keyPrefix: 'cross-search',
+  windowSec: 3600,
+  defaultLimit: 60,
+  trustedLimit: 200,
+});
+app.get('/api/cross/search', identifySillonToken, crossSearchRateLimit, requireSillonToken, async (req, res) => {
   try {
     if (!process.env.DATABASE_URL) return res.status(503).json({ error: 'DB required' });
     const q = req.query.q as string;
