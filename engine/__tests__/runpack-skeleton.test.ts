@@ -4,13 +4,14 @@ import type { PackDefinition, AgentRegistry } from '@engine/pipelines/runPack';
 import { renderPackToMarkdown } from '@engine/pipelines/renderer';
 import { stefaniOrsoConfig } from '../../clients/stefani-orso.config';
 
-// Tests squelette — vérifient que runPack et renderPackToMarkdown
-// throw explicitement "not implemented yet" tant que les agents n'existent
-// pas. Une fois implémentés (lundi-mardi), ces tests seront remplacés par
-// des cas réels.
+// Tests squelette — initialement écrits quand runPack throw "not
+// implemented". Phase Alpha S2 T2.2 (29/04/2026) a implémenté runPack
+// comme orchestrateur générique step-based ; ce test vérifie désormais
+// le contrat de base (empty steps → PackOutput vide). Les cas plus
+// riches d'orchestration vivent dans `engine/__tests__/run-pack.test.ts`.
 
-describe('runPack skeleton', () => {
-  it('throws "not implemented" until agents land', async () => {
+describe('runPack contract (post-T2.2 implementation)', () => {
+  it('returns an empty PackOutput when steps[] is empty', async () => {
     const packDef: PackDefinition = {
       pack_id: 'pack-1',
       display_name: 'Test pack',
@@ -18,11 +19,14 @@ describe('runPack skeleton', () => {
       output_format: 'markdown',
       beneficiary_type: 'creator',
     };
-    const registry: AgentRegistry = { get: () => null };
+    const registry: AgentRegistry = { get: () => undefined };
 
-    await expect(
-      runPack(packDef, 'source-test', stefaniOrsoConfig, registry),
-    ).rejects.toThrow(/not implemented/i);
+    const out = await runPack(packDef, 'source-test', stefaniOrsoConfig, registry);
+    expect(out.pack_id).toBe('pack-1');
+    expect(out.source_id).toBe('source-test');
+    expect(out.steps_results).toEqual([]);
+    expect(out.metadata.total_cost_estimate_cents).toBe(0);
+    expect(out.metadata.output_format).toBe('markdown');
   });
 
   it('PackDefinition output_format type accepts markdown', () => {

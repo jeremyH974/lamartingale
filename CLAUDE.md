@@ -96,6 +96,55 @@ Arborescence détaillée : voir [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 - `GET /api/search/hybrid?q=...&depth=chapter` — search avec snippet chapitre
 - `GET /api/cache/stats` · `POST /api/cache/clear?prefix=X` (protection via `ADMIN_TOKEN` header `x-admin-token`)
 
+## Pipeline runPack (Phase Alpha S2 T2.2 — 29/04/2026)
+
+Orchestrateur générique step-based pour les livrables Sillon — utilisable
+podcast aujourd'hui, cross-corpus (cinéma, talent) sans modif d'engine
+demain. Localisation : `engine/pipelines/runPack.ts`.
+
+```ts
+import { runPack, createMapAgentRegistry, type PackDefinition, type AgentFn } from '@engine/pipelines/runPack';
+
+const pack: PackDefinition = {
+  pack_id: 'pack-stefani-l1-l5',
+  display_name: 'Stefani-Orso 5 livrables',
+  output_format: 'markdown',
+  beneficiary_type: 'creator',
+  steps: [
+    { step_id: 'L1', agent_id: 'extract-key-moments', required: true },
+    { step_id: 'L2', agent_id: 'extract-quotes',      required: true },
+    { step_id: 'L3', agent_id: 'cross-reference',     required: true },
+    { step_id: 'L4', agent_id: 'build-newsletter',    required: true },
+    { step_id: 'L5', agent_id: 'build-brief-annexe',  required: true },
+  ],
+};
+
+const registry = createMapAgentRegistry(new Map<string, AgentFn>([
+  ['extract-key-moments', wrapKeyMoments],
+  ['extract-quotes',      wrapQuotes],
+  // ...
+]));
+
+const out = await runPack(pack, episodeId, clientConfig, registry, {
+  budgetCapCents: 150, // = $1.50 cap par épisode (cf. EPISODE_BUDGET_CAP phase6-runner)
+});
+```
+
+**Garanties** : steps séquentielles, propagation `prior[step_id]` aux
+agents avals, capture exceptions → `StepResult.failed`, agents required
+stoppent le pack en échec, agents non-required → skipped + on continue,
+budget cap → skip restantes une fois dépassé. **Idempotent** côté
+runPack (pas de side-effect persistant ; les agents gèrent leurs effets).
+
+**Pattern documenté** : `docs/patterns-emergents.md` (P1).
+
+**Implémentation de référence pour les agents réels** :
+`experiments/autonomy-session-2026-04-28/phase6-runner.ts` reste l'orchestration
+historique non-déclarative ; les wrappers d'agents concrets autour des
+primitives (extractKeyMoments, extractQuotes, crossReferenceEpisode,
+buildL4Newsletter, buildL5BriefAnnexe) y vivent et seront branchés au
+registry quand un caller industriel utilisera `runPack`.
+
 ## LLM — provider centralisé
 
 - **RAG / chat** : Anthropic Claude Sonnet 4.6 (`claude-sonnet-4-6`) via `@ai-sdk/anthropic`
