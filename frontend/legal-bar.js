@@ -40,7 +40,24 @@
     'border-color:#00F5A0}',
     '.sillon-cookie-banner button:hover{border-color:#00F5A0;color:#00F5A0}',
     '.sillon-cookie-banner button.primary:hover{filter:brightness(1.08);color:#0a0a0a}',
-    '@media(max-width:520px){.sillon-cookie-banner{left:12px;right:12px;max-width:none;bottom:48px}}'
+    '@media(max-width:520px){.sillon-cookie-banner{left:12px;right:12px;max-width:none;bottom:48px}}',
+    /* Mention IA contextuelle (article 50 AI Act). Inline-bloc à placer
+     * juste avant le premier composant IA-interactif d\'une section. */
+    '.sillon-ai-notice{display:flex;align-items:flex-start;gap:8px;',
+    'padding:10px 12px;margin:0 0 16px;border-radius:8px;',
+    'background:rgba(0,245,160,0.06);border:1px solid rgba(0,245,160,0.18);',
+    'font-family:Inter,system-ui,-apple-system,sans-serif;font-size:12px;',
+    'line-height:1.5;color:#7a7a7a}',
+    '.sillon-ai-notice svg{flex-shrink:0;width:14px;height:14px;margin-top:1px;color:#00F5A0}',
+    '.sillon-ai-notice a{color:#00F5A0;text-decoration:underline}',
+    '.sillon-ai-notice a:hover{color:#00F5A0;filter:brightness(1.1)}',
+    '.sillon-ai-notice strong{color:#b5b5b5;font-weight:600}',
+    /* Adaptation pour fonds clairs (frontend v2.html — La Martingale, Le Panier) */
+    '.sillon-ai-notice.light{background:rgba(0,76,255,0.04);',
+    'border:1px solid rgba(0,76,255,0.18);color:#5a6577}',
+    '.sillon-ai-notice.light svg{color:#004cff}',
+    '.sillon-ai-notice.light a{color:#004cff}',
+    '.sillon-ai-notice.light strong{color:#1f2330}'
   ].join('');
 
   var style = document.createElement('style');

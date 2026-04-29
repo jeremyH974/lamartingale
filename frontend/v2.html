@@ -1473,6 +1473,10 @@
       <section class="section">
         <div class="section-title" style="margin-bottom:4px">Recherche sémantique</div>
         <div class="section-subtitle" style="margin-bottom:20px">Trouvez les épisodes par sens, pas seulement par mots-clés</div>
+        <div class="sillon-ai-notice light" role="note">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v4"/><path d="M12 18v4"/><path d="m4.93 4.93 2.83 2.83"/><path d="m16.24 16.24 2.83 2.83"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="m4.93 19.07 2.83-2.83"/><path d="m16.24 7.76 2.83-2.83"/></svg>
+          <div><strong>Recherche assistée par intelligence artificielle.</strong> Vos requêtes sont interprétées par un modèle d'embeddings pour retrouver les épisodes par sens. Détails dans la <a href="/privacy">politique de confidentialité</a>.</div>
+        </div>
         <div class="search-wrap">
           <span class="search-icon">🔍</span>
           <input class="search-input" type="text" placeholder="Ex: comment investir en SCPI quand on débute..." id="hybrid-search-input" onkeydown="if(event.key==='Enter')doHybridSearch()">
@@ -1489,6 +1493,10 @@
       <section class="section">
         <div class="section-title" id="chat-title" style="margin-bottom:4px">Assistant</div>
         <div class="section-subtitle" id="chat-subtitle" style="margin-bottom:20px">Posez vos questions. L'assistant repond en citant les episodes pertinents.</div>
+        <div class="sillon-ai-notice light" role="note">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <div><strong>Vous interagissez avec un système d'intelligence artificielle</strong> (article 50 AI Act). Les réponses sont générées par un grand modèle de langage à partir des contenus podcast indexés et peuvent contenir des erreurs. Détails dans la <a href="/privacy">politique de confidentialité</a>.</div>
+        </div>
         <div class="chat-container">
           <div class="chat-messages" id="chat-messages">
             <div class="chat-msg assistant" id="chat-greeting">
@@ -1508,9 +1516,13 @@
       <section class="section">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
           <div class="section-title">Quiz adaptatif</div>
-          <span title="Les questions de ce quiz sont générées par intelligence artificielle à partir du contenu des épisodes. Corrigez-moi si vous repérez une erreur." style="display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:999px;background:var(--blue-50);color:var(--blue);font-size:10.5px;font-weight:600;letter-spacing:0.4px;text-transform:uppercase;border:1px solid var(--blue-100);cursor:help">⚡ Généré par IA</span>
+          <span title="Les questions de ce quiz sont générées par intelligence artificielle à partir du contenu des épisodes." style="display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:999px;background:var(--blue-50);color:var(--blue);font-size:10.5px;font-weight:600;letter-spacing:0.4px;text-transform:uppercase;border:1px solid var(--blue-100);cursor:help">⚡ Généré par IA</span>
         </div>
         <div class="section-subtitle" style="margin-bottom:20px">L'IA adapte la difficulté et le thème à votre niveau. Plus vous répondez, plus les questions sont pertinentes.</div>
+        <div class="sillon-ai-notice light" role="note">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+          <div><strong>Quiz généré par intelligence artificielle</strong> à partir du contenu des épisodes. Les questions et explications sont produites automatiquement et peuvent contenir des erreurs ou approximations. Signalements bienvenus. Détails dans la <a href="/privacy">politique de confidentialité</a>.</div>
+        </div>
         <div class="quiz-wrap" id="quiz-area"></div>
       </section>
     </div>
