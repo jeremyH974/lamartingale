@@ -9,6 +9,62 @@ Ici : dette **outillage / build / config** uniquement.
 
 ---
 
+## finscale.cross_podcast_ref — diagnostic T2.3 (29/04 PM, deferred S4/Beta 1)
+
+**Statut** : OPEN, deferred S4/Beta 1. Diagnostic clair, fix non-trivial.
+
+### Contexte
+
+L'audit du 29/04 matin (`docs/audit-2026-04-29.md` §Bugs détectés #2) avait remonté :
+
+> **`finscale.cross_refs` peuplé à 2 %** (8/338 vs ~100 % ailleurs).
+> Criticité : moyenne (graph cross-refs incomplet).
+
+T2.3 a investigué et remonté que ce constat est un **faux positif** :
+
+1. Les **8 finscale `cross_refs` JSONB peuplés** ne sont PAS des cross-références éditoriales. Ce sont des artefacts du parser RSS qui ont catché le footer `audiomeans.fr/politique-de-confidentialite` (présent dans la description RSS de chaque épisode) comme `episode_ref`. Les autres tenants (gdiy, lamartingale, etc.) ont la **MÊME pollution** sur leurs 3 premiers épisodes — visible via query DB.
+2. Les **clés JSONB sont identiques** entre finscale et les autres : `{podcast, url, episode_ref}`.
+3. Les **cross_refs JSONB ne sont PAS la source de vérité éditoriale.** C'est un legacy parser. La vraie source de vérité = table `episode_links.link_type='cross_podcast_ref'`.
+
+### Vraie anomalie identifiée
+
+`episode_links.link_type='cross_podcast_ref'` par tenant :
+
+| tenant | cross_podcast_ref count |
+|---|---|
+| gdiy | 992 |
+| lepanier | 845 |
+| lamartingale | 788 |
+| passionpatrimoine | 195 |
+| combiencagagne | 104 |
+| **finscale** | **4** ← anomalie réelle |
+
+Finscale a 338 ép. donc devrait avoir ~200-300 cross_podcast_ref attendus (par extrapolation des autres tenants). Il en a 4. **Déficit de ~200-300 entrées**.
+
+### Root cause hypothèses (à confirmer en S4/Beta 1)
+
+1. **Pipeline classify-predefined non-couvrant** : `engine/ai/classify-predefined.ts` reclassifie les liens `episode_links` selon des patterns (URL contenant nom d'autre podcast MS, etc.). Possible que les patterns de détection cross-podcast manquent les variantes finscale (ex: `finscale.fr` n'est pas dans la liste cible si on cherche `gdiy.fr`).
+2. **Scrape finscale incomplet** : possible que `scrape-deep` n'ait pas enrichi finscale avec autant de liens que les autres podcasts (article_content moins riche → moins de liens extraits).
+3. **Pipeline classify pas tourné sur finscale** : tracker manque le run sur ce tenant.
+
+### Plan fix S4/Beta 1
+
+1. Lire `engine/ai/classify-predefined.ts` pour vérifier les patterns cross-podcast détectés.
+2. Run `PODCAST_ID=finscale npx tsx engine/ai/classify-predefined.ts --dry` pour estimer combien de re-classifications seraient faites.
+3. Si dry-run remonte 100+ matches → run avec `--write` (validation humaine d'abord).
+4. Si dry-run remonte <20 matches → investigation plus profonde (ingest RSS finscale, scrape-deep).
+
+**Effort estimé** : 1-2 h CC + 0 $ LLM (classify-predefined utilise Haiku batch, ~$0.10 sur finscale).
+
+### Action 29/04 PM
+
+- ❌ Pas de fix trivial appliqué (le "fix trivial 30 min" attendu T2.3 n'existe pas — l'investigation a redirigé vers une vraie anomalie hors scope T2.3).
+- ✅ Diagnostic documenté ici.
+- ✅ Faux positif "8/338 cross_refs JSONB" requalifié non-bug (legacy parser RSS).
+- ⏳ **Audit à corriger** : dans `docs/audit-2026-04-29.md` §Bugs détectés #2, requalifier en "faux positif legacy parser RSS — voir `docs/debt-tracking.md` section finscale". À faire opportuniste ou lors d'une prochaine session de polish docs.
+
+---
+
 ## Coverage embeddings 100 % — RESOLVED Phase Alpha T2.1 (29/04 PM)
 
 **Statut** : ✅ RESOLVED. Couverture passée de 70 % → **100 %** (3 354 / 3 354 ép. sur 11 tenants).
