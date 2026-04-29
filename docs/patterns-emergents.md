@@ -72,6 +72,35 @@ primitives Sonnet/Opus existantes) au registry, (b) éventuellement
 ajouter des features non-MVP (parallel steps, retry/backoff) si demande
 client validée.
 
+### Mise à jour 29/04 PM (T2.2 complément) — wrappers réels L1/L2 + stubs L3/L5
+
+Suite à la review T2.2 ("orchestrateur OK mais industrialisation
+incomplète"), des wrappers AgentFn réels ont été ajoutés :
+
+- ✅ `extract-key-moments` → primitive `extractKeyMoments` (Sonnet, ~$0.10/ép)
+- ✅ `extract-quotes` → primitive `extractQuotes` (Sonnet verbatim guard, ~$0.09/ép)
+- ⚠ `cross-reference-episode` (L3) → **stub deferred** (industrialisation
+  ~6-8 h CC + ~$0.50/ép + dépendances embedTextFn/vectorSearchFn vers
+  pgvector). Plan : Phase Beta 1 ou opportuniste S3.
+- ⚠ `build-newsletter` (L4) → **stub deferred** (port `buildL4Newsletter`
+  depuis phase6-runner avec qualityValidator + opusRewrite + style_corpus).
+- ⚠ `build-brief-annexe` (L5) → **stub deferred** (consomme L3+L4 outputs).
+
+**Smoke run RÉEL bout-en-bout validé** sur Boissenot LM #174 :
+`scripts/smoke-runpack-real.ts` — pack-stefani-l1-l5 5 steps,
+2 appels Sonnet réels (L1+L2), 3 stubs (L3-L5), $0.1885 LLM, 49 s wall clock.
+Sample sortie cohérent avec pack pilote existant
+(`experiments/.../pack-pilote-stefani-orso-v3-final/boissenot-pokemon`).
+
+**Dette explicite à reprendre** :
+- (a) Industrialiser L3/L4/L5 wrappers en réutilisant la logique
+  `experiments/autonomy-session-2026-04-28/phase6-runner.ts`
+  (build*L3-L5*, qualityValidator, opusRewrite, loadStyleCorpus). Estim
+  cumulé ~15 h CC + ~$2-3/ép. Phase Beta 1 ou ticket post-pilote Stefani.
+- (b) Loader transcript par sourceId (pour ne plus passer transcript via
+  `configOverrides`). S'appuie sur DB ou cache disque selon stratégie
+  product. Phase Beta 1.
+
 ---
 
 ## (à compléter au fil des sessions S2-S3-S4)
