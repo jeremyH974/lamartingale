@@ -259,6 +259,116 @@
 
   .loading { text-align: center; padding: 40px; color: var(--fg-3); font-size: 14px; }
   .err { padding: 24px; background: #2a0f14; border: 1px solid #7a1a2a; border-radius: 12px; color: #ffb3c1; }
+
+  /* ============ R1 — RECHERCHE CROSS-CORPUS (Phase Alpha T3.1) ============ */
+  .r1-search-wrap {
+    display: flex; gap: 12px; flex-wrap: wrap;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 8px 12px;
+    align-items: center;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .r1-search-wrap:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(0,245,160,0.18);
+  }
+  .r1-search-input {
+    flex: 1; min-width: 200px;
+    background: transparent; border: none; outline: none;
+    color: var(--fg); font-family: inherit; font-size: 15px;
+    padding: 12px 8px;
+  }
+  .r1-search-input::placeholder { color: var(--fg-3); }
+  .r1-search-btn {
+    padding: 12px 22px; border-radius: 99px;
+    background: var(--accent); color: #0a0a0a;
+    font-weight: 700; font-size: 14px; letter-spacing: 0.01em;
+    transition: filter 0.15s;
+  }
+  .r1-search-btn:hover { filter: brightness(1.08); }
+  .r1-search-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .r1-results { margin-top: 24px; display: flex; flex-direction: column; gap: 10px; }
+  .r1-result-card {
+    display: block; padding: 16px 18px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px;
+    text-decoration: none; color: inherit;
+    transition: border-color 0.15s, transform 0.15s;
+  }
+  .r1-result-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-1px);
+  }
+  .r1-result-head {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 8px;
+    font-size: 12px;
+  }
+  .r1-result-podcast {
+    padding: 2px 9px; border-radius: 99px;
+    border: 1px solid var(--border); color: var(--fg-2);
+    font-weight: 600; letter-spacing: 0.04em;
+  }
+  .r1-result-ep { color: var(--fg-3); }
+  .r1-result-score {
+    margin-left: auto; color: var(--accent); font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  .r1-result-title { font-size: 15px; font-weight: 600; line-height: 1.4; color: var(--fg); }
+  .r1-result-guest { font-size: 13px; color: var(--fg-2); margin-top: 4px; }
+  .r1-empty {
+    text-align: center; padding: 32px;
+    color: var(--fg-3); font-size: 14px;
+    border: 1px dashed var(--border); border-radius: 12px;
+  }
+  .r1-error {
+    padding: 16px 20px; border-radius: 12px;
+    background: rgba(239,71,111,0.08); border: 1px solid rgba(239,71,111,0.3);
+    color: #ff7a95; font-size: 14px; line-height: 1.5;
+  }
+  .r1-error a { color: #ff7a95; text-decoration: underline; }
+  .r1-error a:hover { color: #ffb3c1; }
+  /* Modal token preview pilote */
+  .r1-token-modal {
+    position: fixed; inset: 0; z-index: 200;
+    background: rgba(0,0,0,0.7); backdrop-filter: blur(6px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+  }
+  .r1-token-card {
+    max-width: 460px; width: 100%; background: var(--card);
+    border: 1px solid var(--border); border-radius: 16px;
+    padding: 28px;
+  }
+  .r1-token-card h3 {
+    font-size: 18px; font-weight: 800; margin-bottom: 12px;
+    letter-spacing: -0.01em;
+  }
+  .r1-token-card p {
+    color: var(--fg-2); font-size: 14px; line-height: 1.5;
+    margin-bottom: 18px;
+  }
+  .r1-token-card input {
+    width: 100%; padding: 11px 14px;
+    background: var(--bg-2); border: 1px solid var(--border);
+    border-radius: 10px; color: var(--fg); font-family: ui-monospace, monospace;
+    font-size: 13px; outline: none;
+    transition: border-color 0.15s;
+  }
+  .r1-token-card input:focus { border-color: var(--accent); }
+  .r1-token-actions {
+    display: flex; gap: 10px; margin-top: 18px; justify-content: flex-end;
+  }
+  .r1-token-actions button {
+    padding: 9px 18px; border-radius: 99px;
+    border: 1px solid var(--border); background: transparent;
+    color: var(--fg-2); font-weight: 600; font-size: 13px;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .r1-token-actions button:hover { border-color: var(--accent); color: var(--accent); }
+  .r1-token-actions button.primary {
+    background: var(--accent); color: #0a0a0a; border-color: var(--accent);
+  }
+  .r1-token-actions button.primary:hover { filter: brightness(1.08); color: #0a0a0a; }
 </style>
 </head>
 <body>
@@ -268,6 +378,7 @@
       <div>Univers<strong style="font-weight:900">MS</strong></div>
     </div>
     <div class="nav-right">
+      <a href="#r1-search">Recherche</a>
       <a href="#podcasts">Podcasts</a>
       <a href="#guests">Invités partagés</a>
       <div id="session-box" class="session-box" style="display:none">
@@ -287,6 +398,38 @@
     <p class="tagline" id="hero-tagline">Chargement de l'univers…</p>
     <div class="hero-stats" id="hero-stats"></div>
   </header>
+
+  <!-- R1 — RECHERCHE CROSS-CORPUS (Phase Alpha T3.1) -->
+  <section class="block" id="r1-search" data-sillon-flywheel-section="search">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">Recherche cross-corpus</div>
+        <div class="section-title">Cherchez par sens dans l'écosystème</div>
+        <div class="section-sub">Une recherche sémantique sur les <span id="r1-corpus-count">3 354</span> épisodes indexés des <span id="r1-pod-count">11</span> podcasts. Tapez une intention (ex : « lever des fonds en seed », « SCPI patrimoniales ») — Sillon trouve les épisodes pertinents même sans correspondance de mots.</div>
+      </div>
+      <div class="sillon-ai-notice" role="note">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v4"/><path d="M12 18v4"/><path d="m4.93 4.93 2.83 2.83"/><path d="m16.24 16.24 2.83 2.83"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="m4.93 19.07 2.83-2.83"/><path d="m16.24 7.76 2.83-2.83"/></svg>
+        <div><strong>Recherche assistée par intelligence artificielle.</strong> Vos requêtes sont analysées sémantiquement pour retrouver les épisodes les plus pertinents même sans correspondance de mots exacts. Détails dans la <a href="/privacy">politique de confidentialité</a>.</div>
+      </div>
+      <div class="r1-search-wrap" data-sillon-flywheel-event="search-form">
+        <input
+          type="text"
+          id="r1-search-input"
+          class="r1-search-input"
+          placeholder="Ex: comment lever en seed, SCPI patrimoniales, IA et productivité…"
+          data-sillon-flywheel-event="search-input"
+          aria-label="Recherche sémantique cross-corpus"
+        >
+        <button
+          type="button"
+          id="r1-search-btn"
+          class="r1-search-btn"
+          data-sillon-flywheel-event="search-launch"
+        >Rechercher</button>
+      </div>
+      <div id="r1-results" class="r1-results"></div>
+    </div>
+  </section>
 
   <!-- PODCASTS -->
   <section class="block" id="podcasts">
@@ -578,6 +721,211 @@
       pairList.innerHTML = '<div class="pair-list">' + pairs.map(renderPairRow).join('') + '</div>';
     }
   }
+})();
+</script>
+
+<!-- R1 — Recherche cross-corpus (Phase Alpha T3.1) =========================
+     Hooks data flywheel POINT 1 (cf. docs/strategy/sillon-defensibility-roadmap-2026-04-29.md §3.3).
+     Les events `sillon:flywheel` sont dispatchés sur `document` mais NON capturés
+     côté backend en S3 — capture activée Beta 1 S6-S7. Ne pas retirer ces dispatch
+     pendant S3-S4. ======================================================= -->
+<script>
+(() => {
+  'use strict';
+  const TOKEN_KEY = 'sillon-preview-token-v1';
+  const FLYWHEEL_EVENT = 'sillon:flywheel';
+
+  const $input = document.getElementById('r1-search-input');
+  const $btn = document.getElementById('r1-search-btn');
+  const $results = document.getElementById('r1-results');
+  if (!$input || !$btn || !$results) return; // section absente
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, ch => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    })[ch]);
+  }
+
+  function flywheel(eventName, payload) {
+    // Hook data flywheel POINT 1 — pas de capture backend en S3-S4 (Beta 1 S6-S7).
+    // CustomEvent = simple à intercepter en Beta 1 via document.addEventListener.
+    document.dispatchEvent(new CustomEvent(FLYWHEEL_EVENT, {
+      detail: { event: eventName, ts: Date.now(), ...payload }
+    }));
+  }
+
+  function getToken() {
+    try { return localStorage.getItem(TOKEN_KEY) || ''; } catch (e) { return ''; }
+  }
+  function setToken(t) {
+    try { localStorage.setItem(TOKEN_KEY, t); } catch (e) { /* ignore */ }
+  }
+
+  function showTokenModal(retryCb) {
+    const existing = document.querySelector('.r1-token-modal');
+    if (existing) existing.remove();
+    const modal = document.createElement('div');
+    modal.className = 'r1-token-modal';
+    modal.innerHTML = `
+      <div class="r1-token-card" role="dialog" aria-label="Token preview pilote">
+        <h3>Token preview pilote requis</h3>
+        <p>Cette recherche cross-corpus est gated par un token preview pilote.
+           Si tu as reçu un token, colle-le ci-dessous — il est gardé en local
+           dans ton navigateur (localStorage) et ne quitte jamais ta machine
+           sauf via l'en-tête HTTP <code>X-Sillon-Token</code>.</p>
+        <input type="password" placeholder="Ex: 84b54bd6bb37…" autocomplete="off" id="r1-token-input">
+        <div class="r1-token-actions">
+          <button type="button" data-r1-action="cancel">Annuler</button>
+          <button type="button" class="primary" data-r1-action="save">Sauvegarder</button>
+        </div>
+      </div>`;
+    document.body.appendChild(modal);
+    const input = modal.querySelector('#r1-token-input');
+    input.value = getToken();
+    setTimeout(() => input.focus(), 50);
+    modal.addEventListener('click', (ev) => {
+      const action = ev.target?.getAttribute?.('data-r1-action');
+      if (action === 'cancel' || ev.target === modal) {
+        modal.remove();
+      } else if (action === 'save') {
+        setToken(input.value.trim());
+        modal.remove();
+        flywheel('token-saved', {});
+        if (typeof retryCb === 'function') retryCb();
+      }
+    });
+    input.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Enter') {
+        setToken(input.value.trim());
+        modal.remove();
+        flywheel('token-saved', {});
+        if (typeof retryCb === 'function') retryCb();
+      } else if (ev.key === 'Escape') {
+        modal.remove();
+      }
+    });
+  }
+
+  const PODCAST_LABEL = {
+    lamartingale: 'La Martingale', gdiy: 'GDIY', lepanier: 'Le Panier',
+    finscale: 'Finscale', passionpatrimoine: 'Passion Patrimoine',
+    combiencagagne: 'Combien ça gagne', iftd: 'IFTTD',
+    demainvousappartient: 'Demain Vous Appartient', onlacherien: 'On Lâche Rien',
+    allolamartingale: 'Allo La Martingale', fleurons: 'Fleurons',
+  };
+
+  function renderResults(payload) {
+    const results = (payload && payload.results) || [];
+    if (results.length === 0) {
+      $results.innerHTML = '<div class="r1-empty">Aucun résultat pour cette requête. Reformulez ou élargissez.</div>';
+      return;
+    }
+    const cards = results.map(r => {
+      const podLabel = PODCAST_LABEL[r.podcast] || r.podcast;
+      const epPart = r.episode_number ? '#' + r.episode_number : 'Extrait';
+      const scorePct = Math.round((r.score || 0) * 100);
+      // Hook data flywheel POINT 1 — chaque carte porte les data-attributes
+      // qui permettront en Beta 1 d'enregistrer le résultat cliqué.
+      return `<a class="r1-result-card"
+        href="#"
+        data-sillon-flywheel-event="result-clicked"
+        data-podcast="${esc(r.podcast)}"
+        data-episode-number="${esc(r.episode_number || '')}"
+        data-score="${scorePct}">
+        <div class="r1-result-head">
+          <span class="r1-result-podcast">${esc(podLabel)}</span>
+          <span class="r1-result-ep">${esc(epPart)}</span>
+          <span class="r1-result-score">${scorePct}%</span>
+        </div>
+        <div class="r1-result-title">${esc(r.title || '(sans titre)')}</div>
+        ${r.guest ? `<div class="r1-result-guest">avec ${esc(r.guest)}</div>` : ''}
+      </a>`;
+    }).join('');
+    const timing = payload && payload.timing_ms ? ` · ${Math.round(payload.timing_ms)}ms` : '';
+    $results.innerHTML = cards + `<div style="text-align:center;color:var(--fg-3);font-size:12px;margin-top:8px;">${results.length} résultat${results.length > 1 ? 's' : ''}${timing}</div>`;
+  }
+
+  function renderError(html) {
+    $results.innerHTML = '<div class="r1-error">' + html + '</div>';
+  }
+
+  let inflight = 0;
+  async function doSearch() {
+    const q = $input.value.trim();
+    if (q.length < 2) {
+      renderError('Tapez au moins 2 caractères.');
+      return;
+    }
+    flywheel('search-launched', { query: q });
+    const myReq = ++inflight;
+    $btn.disabled = true;
+    $results.innerHTML = '<div class="loading">Recherche sémantique en cours…</div>';
+    try {
+      const headers = {};
+      const tok = getToken();
+      if (tok) headers['X-Sillon-Token'] = tok;
+      const res = await fetch('/api/cross/search?q=' + encodeURIComponent(q) + '&limit=20', { headers });
+      if (myReq !== inflight) return; // requête obsolète
+      if (res.status === 401) {
+        renderError('Recherche gated par un token preview pilote. <a href="#" data-r1-action="open-token-modal">Configurer le token</a>.');
+        return;
+      }
+      if (res.status === 429) {
+        renderError('Quota dépassé pour cette IP (60 req/h sans token, 200 req/h avec token). Réessayez dans quelques minutes.');
+        return;
+      }
+      if (!res.ok) {
+        renderError('Erreur ' + res.status + ' du serveur. Réessayez ou contactez l\'équipe.');
+        return;
+      }
+      const data = await res.json();
+      flywheel('search-completed', { query: q, n_results: (data.results || []).length });
+      renderResults(data);
+    } catch (e) {
+      if (myReq !== inflight) return;
+      renderError('Échec réseau : ' + esc(e && e.message ? e.message : String(e)));
+    } finally {
+      if (myReq === inflight) $btn.disabled = false;
+    }
+  }
+
+  $btn.addEventListener('click', doSearch);
+  $input.addEventListener('keydown', (ev) => { if (ev.key === 'Enter') doSearch(); });
+
+  // Délégation : clics sur résultats + lien "configurer token"
+  $results.addEventListener('click', (ev) => {
+    const action = ev.target?.closest?.('[data-r1-action]')?.getAttribute('data-r1-action');
+    if (action === 'open-token-modal') {
+      ev.preventDefault();
+      showTokenModal(doSearch);
+      return;
+    }
+    const card = ev.target?.closest?.('.r1-result-card');
+    if (card) {
+      flywheel('result-clicked', {
+        podcast: card.dataset.podcast,
+        episode_number: card.dataset.episodeNumber,
+        score: Number(card.dataset.score) || 0,
+      });
+      // Pas de navigation pour l'instant (S3 = preview résultats only).
+      // Beta 1 S6-S7 ajoutera le lien vers la page épisode tenant.
+      ev.preventDefault();
+    }
+  });
+
+  // Mise à jour des compteurs hero/section depuis /api/universe (cache 1h, pas de token requis).
+  fetch('/api/universe')
+    .then(r => r.ok ? r.json() : null)
+    .then(uv => {
+      if (!uv || !uv.universe) return;
+      const podCount = (uv.universe.podcasts || []).length;
+      const epsTotal = (uv.universe.podcasts || []).reduce((a, p) => a + (p.episodes_count || 0), 0);
+      const $podCount = document.getElementById('r1-pod-count');
+      const $corpusCount = document.getElementById('r1-corpus-count');
+      if ($podCount && podCount) $podCount.textContent = String(podCount);
+      if ($corpusCount && epsTotal) $corpusCount.textContent = epsTotal.toLocaleString('fr-FR');
+    })
+    .catch(() => { /* compteurs restent en valeurs par défaut */ });
 })();
 </script>
 <script defer src="/legal-bar.js"></script>
