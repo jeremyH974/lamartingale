@@ -9,6 +9,39 @@ Ici : dette **outillage / build / config** uniquement.
 
 ---
 
+## Coverage embeddings 100 % — RESOLVED Phase Alpha T2.1 (29/04 PM)
+
+**Statut** : ✅ RESOLVED. Couverture passée de 70 % → **100 %** (3 354 / 3 354 ép. sur 11 tenants).
+
+### Contexte
+
+L'audit du 29/04 matin (`docs/audit-2026-04-29.md`) avait remonté :
+
+- **5 tenants à 0 % embeddings** : iftd 706, dva 98, onlacherien 82, allolamartingale 58, fleurons 6 (= 950 ép.) — non-cherchables sémantiquement.
+- **6 tenants partiellement couverts** : 49 ép. supplémentaires sans embedding (lamartingale 35, finscale 6, gdiy 4, passionpatrimoine 3, combiencagagne 1).
+
+Total dette : **999 ép. à embed**.
+
+### Action 29/04 PM (Phase Alpha T2.1 + follow-up)
+
+Pipeline existant `engine/ai/embeddings.ts` lancé en boucle sur 10 tenants (PODCAST_ID env var) :
+
+- **T2.1 — 5 tenants à 0 %** : 950 ép. embedés en ~145 s, $0.0212.
+- **Follow-up — 6 tenants partiels** : 49 ép. embedés en ~10 s, $0.0011.
+- **TOTAL** : 999 ép., 170 570 tokens, **$0.0223** (vs estim 5 $, 224× sous budget).
+
+### Vérifications post-run
+
+- Couverture finale : 3 354 / 3 354 (100 %) sur 11 tenants — confirmée par query SQL.
+- Isolation tenant : 0 fuite (`episodes_enrichment.tenant_id` = `episodes.tenant_id` partout).
+- Dimensions vector : 3072 (text-embedding-3-large).
+- Tests Vitest : 732/732 verts (inchangé).
+- Build prod TS : 0 erreur (inchangé).
+
+Pipeline `engine/ai/embeddings.ts` couvre désormais 100 % du corpus indexé. Toute nouvelle ingestion d'épisode devra passer par ce pipeline pour rester à 100 %.
+
+---
+
 ## Dette typage strict des fichiers de tests (Phase 7b 27/04 + audit 29/04)
 
 **Statut au 29/04 PM** : NON BLOQUANT BUILD PROD depuis l'exclusion
